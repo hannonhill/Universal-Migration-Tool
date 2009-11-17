@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package example;
+package com.hannonhill.smt.struts;
 
 /**
  * <code>Set welcome message.</code>
@@ -31,14 +31,9 @@ public class HelloWorld extends ExampleSupport
     @Override
     public String execute() throws Exception
     {
-        setMessage(getText(MESSAGE));
+        setMessage("Struts is up and running ...");
         return SUCCESS;
     }
-
-    /**
-     * Provide default valuie for Message property.
-     */
-    public static final String MESSAGE = "HelloWorld.message";
 
     /**
      * Field for Message property.

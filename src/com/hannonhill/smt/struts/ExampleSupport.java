@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package example;
+package com.hannonhill.smt.struts;
 
 import com.opensymphony.xwork2.ActionSupport;
 

@@ -1,0 +1,27 @@
+<project name="SMT">
+
+    <description>Serena Migration Tool</description>
+
+    <!--+
+        | Default classpath
+        +-->
+    <path id="classpath">
+        <fileset dir="tomcat/webapps/ROOT/WEB-INF/lib">
+            <include name="**/*.jar" />
+        </fileset>
+        <pathelement path="${java.class.path}/" />
+    </path>
+    
+    <!--+
+        | Compiles the Java source files
+        +-->
+    <target name="compile" unless="compile.notrequired">
+        <echo>Compiling classes</echo>
+
+        <mkdir dir="tomcat/webapps/ROOT/WEB-INF/classes" />
+        <javac destdir="tomcat/webapps/ROOT/WEB-INF/classes" classpathref="classpath" source="1.5">
+            <src path="src" />
+        </javac>
+    </target>
+    
+</project>
