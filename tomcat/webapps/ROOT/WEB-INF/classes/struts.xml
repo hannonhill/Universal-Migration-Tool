@@ -10,8 +10,6 @@
 
     <include file="example.xml"/>
 
-
-
     <package name="default" namespace="/" extends="struts-default">
         <default-action-ref name="index" />
         <action name="index">
