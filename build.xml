@@ -9,19 +9,28 @@
         <fileset dir="tomcat/webapps/ROOT/WEB-INF/lib">
             <include name="**/*.jar" />
         </fileset>
+        <fileset dir="tomcat/lib">
+        <include name="**/*.jar" />
+        </fileset>
         <pathelement path="${java.class.path}/" />
     </path>
     
     <!--+
         | Compiles the Java source files
         +-->
-    <target name="compile" unless="compile.notrequired">
+    <target name="compile">
         <echo>Compiling classes</echo>
-
-        <mkdir dir="tomcat/webapps/ROOT/WEB-INF/classes" />
-        <javac destdir="tomcat/webapps/ROOT/WEB-INF/classes" classpathref="classpath" source="1.5">
+        <javac destdir="tomcat/webapps/ROOT/WEB-INF/classes" classpathref="classpath" source="1.5"  debug="on">
             <src path="src" />
         </javac>
     </target>
+    
+    <target name="clean">
+        <echo>Cleaning the project</echo>
+        <delete dir="tomcat/webapps/ROOT/WEB-INF/classes/com" />
+        <delete dir="tomcat/work" />
+        <delete dir="tomcat/wtpwebapps" />
+    </target>
+    
     
 </project>

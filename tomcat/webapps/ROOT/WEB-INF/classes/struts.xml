@@ -9,14 +9,21 @@
     <constant name="struts.devMode" value="false" />
 
     <package name="default" namespace="/" extends="struts-default">
-        <default-action-ref name="index" />
-        <action name="index">
-            <result type="redirectAction">
-                <param name="actionName">HelloWorld</param>
-            </result>
+        <default-action-ref name="ProjectProperties" />
+        
+        <action name="ProjectProperties" class="com.hannonhill.smt.struts.LoadProjectPropertiesAction" method="input">
+        	<result name="input">/jsps/ProjectProperties.jsp</result>
         </action>
-        <action name="HelloWorld" class="com.hannonhill.smt.struts.HelloWorld">
-            <result>/jsps/HelloWorld.jsp</result>
+        
+        <action name="SubmitProjectProperties" class="com.hannonhill.smt.struts.SubmitProjectPropertiesAction">
+        	<result name="input">/jsps/ProjectProperties.jsp</result>
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">UploadZip</param>
+        	</result>
+        </action>
+        
+        <action name="UploadZip" class="com.hannonhill.smt.struts.LoadUploadZipAction">
+        	<result>/jsps/UploadZip.jsp</result>
         </action>
     </package>
 
