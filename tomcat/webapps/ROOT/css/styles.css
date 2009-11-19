@@ -1,0 +1,18 @@
+h4
+{
+	color: red;
+}
+
+div.main
+{
+	border: 1px solid black;
+	padding: 5px;
+	background-color: #ddd;
+}
+
+form
+{
+	border: 1px groove gray;
+	background-color: #eee;
+	padding: 5px;
+}

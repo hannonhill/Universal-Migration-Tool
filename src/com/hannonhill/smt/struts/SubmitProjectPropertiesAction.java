@@ -5,9 +5,16 @@
  */
 package com.hannonhill.smt.struts;
 
+import java.net.MalformedURLException;
+import java.rmi.RemoteException;
+
+import javax.xml.rpc.ServiceException;
+
 import org.apache.commons.lang.xwork.StringUtils;
 
 import com.hannonhill.smt.ProjectInformation;
+import com.hannonhill.smt.service.WebServices;
+import com.hannonhill.www.ws.ns.AssetOperationService.Site;
 
 /**
  * Action that processes the information submitted in the project properties screen.
@@ -41,6 +48,10 @@ public class SubmitProjectPropertiesAction extends BaseAction
         if (!url.endsWith("/ws/services/AssetOperationService?wsdl"))
             url = url + "/ws/services/AssetOperationService?wsdl";
 
+        verifyConnectivity();
+        if (getActionErrors().size() > 0)
+            return INPUT;
+
         ProjectInformation projectInformation = getProjectInformation();
         projectInformation.setUrl(url);
         projectInformation.setUsername(username);
@@ -66,6 +77,47 @@ public class SubmitProjectPropertiesAction extends BaseAction
 
         if (StringUtils.isEmpty(siteName))
             addActionError("Site Name is required");
+    }
+
+    /**
+     * Verifies that:
+     * - the URL is a valid URL
+     * - it is possible to connect
+     * - the username and password authenticate
+     * - the user can read site objects
+     * - the site with given site name exists
+     * - the site can be actually read
+     */
+    private void verifyConnectivity()
+    {
+        Site site = null;
+        try
+        {
+            site = WebServices.readSite(username, password, url, siteName);
+        }
+        catch (MalformedURLException e)
+        {
+            addActionError("The given URL is malformed");
+            return;
+        }
+        catch (ServiceException e)
+        {
+            addActionError("Could not locate Cascade Server with given URL.");
+            return;
+        }
+        catch (RemoteException e)
+        {
+            addActionError("A problem occured when connecting to Cascade Server: " + e.getMessage());
+            return;
+        }
+        catch (Exception e)
+        {
+            addActionError("An error occured when reading a site with given Site Name: " + e.getMessage());
+            return;
+        }
+
+        if (site == null)
+            addActionError("Could not read a site for unknown reason");
     }
 
     /**

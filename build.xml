@@ -2,15 +2,20 @@
 
     <description>Serena Migration Tool</description>
 
+    <property name="src.dir" value="src"/>
+ 	<property name="lib.dir" value="tomcat/lib"/>
+ 	<property name="work.dir" value="tomcat/work"/>
+ 	<property name="wtpwebapps.dir" value="tomcat/wtpwebapps"/>
+ 	<property name="classes.dir" value="tomcat/webapps/ROOT/WEB-INF/classes"/>
+ 	<property name="classes.com.dir" value="${classes.dir}/com"/>
+ 	<property name="wsdl.dir" value="wsdl"/>	
+ 
     <!--+
         | Default classpath
         +-->
     <path id="classpath">
-        <fileset dir="tomcat/webapps/ROOT/WEB-INF/lib">
-            <include name="**/*.jar" />
-        </fileset>
-        <fileset dir="tomcat/lib">
-        <include name="**/*.jar" />
+        <fileset dir="${lib.dir}">
+        	<include name="**/*.jar" />
         </fileset>
         <pathelement path="${java.class.path}/" />
     </path>
@@ -18,18 +23,29 @@
     <!--+
         | Compiles the Java source files
         +-->
-    <target name="compile">
+    <target name="compile" depends="clean">
         <echo>Compiling classes</echo>
-        <javac destdir="tomcat/webapps/ROOT/WEB-INF/classes" classpathref="classpath" source="1.5"  debug="on">
+        <javac destdir="${classes.dir}" classpathref="classpath" source="1.5"  debug="on">
             <src path="src" />
         </javac>
     </target>
     
+    <target name="generate-stubs" depends="clean">
+		<taskdef name="wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask" classpathref="classpath" />
+		<mkdir dir="${src.dir}"/>
+		<wsdl2java
+			url="${wsdl.dir}/asset-operation.wsdl"
+			debug="false"
+			all="true"
+			output="${src.dir}"
+		/>
+	</target>
+    
     <target name="clean">
         <echo>Cleaning the project</echo>
-        <delete dir="tomcat/webapps/ROOT/WEB-INF/classes/com" />
-        <delete dir="tomcat/work" />
-        <delete dir="tomcat/wtpwebapps" />
+        <delete dir="${classes.com.dir}" />
+        <delete dir="${work.dir}" />
+        <delete dir="${wtpwebapps.dir}" />
     </target>
     
     
