@@ -5,9 +5,19 @@
  */
 package com.hannonhill.smt.struts;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.apache.commons.lang.xwork.StringUtils;
+
+import com.hannonhill.smt.ProjectInformation;
 
 /**
  * Action that displays and processes form with zip archive
@@ -46,9 +56,55 @@ public class UploadZipAction extends BaseAction
         if (getActionErrors().size() > 0)
             return INPUT;
 
-        // Unzip code goes here
+        ProjectInformation projectInformation = getProjectInformation();
+        String uploadDir = projectInformation.getUploadsDir() + zipFileName.substring(0, zipFileName.lastIndexOf('.')) + "/";
 
+        ZipFile zipFile;
+        Enumeration<? extends ZipEntry> entries;
+
+        try
+        {
+            zipFile = new ZipFile(zip);
+            entries = zipFile.entries();
+            while (entries.hasMoreElements())
+            {
+                ZipEntry entry = entries.nextElement();
+
+                if (entry.isDirectory())
+                    (new File(uploadDir + entry.getName())).mkdirs();
+                else if (entry.getName().endsWith(".xml"))
+                    copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + entry.getName())));
+            }
+
+            zipFile.close();
+        }
+        catch (IOException ioe)
+        {
+            addActionError("Unhandled exception: " + ioe);
+            return INPUT;
+        }
+
+        projectInformation.setXmlDirectory(uploadDir);
         return SUCCESS;
+    }
+
+    /**
+     * Copies the input stream
+     * 
+     * @param in
+     * @param out
+     * @throws IOException
+     */
+    public static final void copyInputStream(InputStream in, OutputStream out) throws IOException
+    {
+        byte[] buffer = new byte[1024];
+        int len;
+
+        while ((len = in.read(buffer)) >= 0)
+            out.write(buffer, 0, len);
+
+        in.close();
+        out.close();
     }
 
     /**

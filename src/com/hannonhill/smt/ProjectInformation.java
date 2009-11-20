@@ -18,6 +18,21 @@ public class ProjectInformation
     private String username;
     private String password;
     private String siteName;
+    private String xmlDirectory;
+
+    private final String uploadsDir;
+
+    /**
+     * Constructor
+     */
+    public ProjectInformation()
+    {
+        // this is supposed to be the bin folder (or eclipse folder if runnign from Eclipse)
+        String currentDir = System.getProperty("user.dir");
+        int lastSlash = currentDir.lastIndexOf('/') == -1 ? currentDir.lastIndexOf('\\') : currentDir.lastIndexOf('/');
+        String parentToCurrentDir = currentDir.substring(0, lastSlash);
+        uploadsDir = parentToCurrentDir + "/uploads/";
+    }
 
     /**
      * @return Returns the url.
@@ -81,5 +96,29 @@ public class ProjectInformation
     public void setSiteName(String siteName)
     {
         this.siteName = siteName;
+    }
+
+    /**
+     * @return Returns the uploadsDir.
+     */
+    public String getUploadsDir()
+    {
+        return uploadsDir;
+    }
+
+    /**
+     * @return Returns the xmlDirectory.
+     */
+    public String getXmlDirectory()
+    {
+        return xmlDirectory;
+    }
+
+    /**
+     * @param xmlDirectory the xmlDirectory to set
+     */
+    public void setXmlDirectory(String xmlDirectory)
+    {
+        this.xmlDirectory = xmlDirectory;
     }
 }
