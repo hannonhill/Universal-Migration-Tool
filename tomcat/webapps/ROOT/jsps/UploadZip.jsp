@@ -1,5 +1,23 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
-<H2>Hello <s:property value="firstName"/> <s:property value="lastName"/></H2>
-<p/>
-<a href="<s:url action="index"/>">Back to front page</a>
+<html>
+	<head>
+		<title>Serena Migration Tool</title>
+		<link href="/css/styles.css" type="text/css" rel="stylesheet" />
+	</head>
+	<body>
+		<h1>Serena Migration Tool</h1>
+		<div class="main">
+			<h2>Please upload the zip archive</h2>
+			<h4><s:actionerror /></h4>
+			<s:form action="UploadZip" method="POST" enctype="multipart/form-data">
+				<s:file label="Zip File" name="zip" />
+				<tr>
+					<td><button onclick="window.location='/ProjectProperties';return false;">Previous</button></td>
+					<td align="right"><input type="submit" value="Next" name="submitButton"/></td>
+				</tr>
+			</s:form>
+		</div>
+	</body>
+</html>
+		

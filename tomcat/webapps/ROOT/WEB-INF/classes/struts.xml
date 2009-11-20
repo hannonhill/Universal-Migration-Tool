@@ -11,19 +11,18 @@
     <package name="default" namespace="/" extends="struts-default">
         <default-action-ref name="ProjectProperties" />
         
-        <action name="ProjectProperties" class="com.hannonhill.smt.struts.LoadProjectPropertiesAction" method="input">
-        	<result name="input">/jsps/ProjectProperties.jsp</result>
-        </action>
-        
-        <action name="SubmitProjectProperties" class="com.hannonhill.smt.struts.SubmitProjectPropertiesAction">
+        <action name="ProjectProperties" class="com.hannonhill.smt.struts.ProjectPropertiesAction">
         	<result name="input">/jsps/ProjectProperties.jsp</result>
         	<result name="success" type="redirectAction">
         		<param name="actionName">UploadZip</param>
         	</result>
         </action>
         
-        <action name="UploadZip" class="com.hannonhill.smt.struts.LoadUploadZipAction">
-        	<result>/jsps/UploadZip.jsp</result>
+        <action name="UploadZip" class="com.hannonhill.smt.struts.UploadZipAction">
+        	<result name="input">/jsps/UploadZip.jsp</result>
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">AnalyzeInformation</param>
+        	</result>
         </action>
     </package>
 

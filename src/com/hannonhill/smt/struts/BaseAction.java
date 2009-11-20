@@ -22,6 +22,7 @@ public class BaseAction extends ActionSupport
 {
     private static final long serialVersionUID = 7366642925401627376L;
     private static final String PROJECT_INFORMATION = "projectInformation";
+    private String submitButton;
 
     /**
      * @return Returns the project information object
@@ -38,5 +39,29 @@ public class BaseAction extends ActionSupport
         }
 
         return (ProjectInformation) projectInformationObject;
+    }
+
+    /**
+     * @return Returns the submitButton.
+     */
+    public String getSubmitButton()
+    {
+        return submitButton;
+    }
+
+    /**
+     * @param submitButton the submitButton to set
+     */
+    public void setSubmitButton(String submitButton)
+    {
+        this.submitButton = submitButton;
+    }
+
+    /**
+     * @return Returns true if the action was submitted by a form
+     */
+    protected boolean isSubmit()
+    {
+        return submitButton != null;
     }
 }

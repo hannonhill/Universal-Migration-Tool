@@ -1,5 +1,5 @@
 /*
- * Created on Nov 17, 2009 by Artur Tomusiak
+ * Created on Nov 20, 2009 by Artur Tomusiak
  * 
  * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
  */
@@ -17,13 +17,13 @@ import com.hannonhill.smt.service.WebServices;
 import com.hannonhill.www.ws.ns.AssetOperationService.Site;
 
 /**
- * Action that processes the information submitted in the project properties screen.
+ * Action that displays and processes form with cascade url, username, password and site name
  * 
  * @author  Artur Tomusiak
  * @version $Id$
  * @since   1.0
  */
-public class SubmitProjectPropertiesAction extends BaseAction
+public class ProjectPropertiesAction extends BaseAction
 {
     private static final long serialVersionUID = -845484679818107782L;
 
@@ -37,6 +37,19 @@ public class SubmitProjectPropertiesAction extends BaseAction
      */
     @Override
     public String execute() throws Exception
+    {
+        if (isSubmit())
+            return processSubmit();
+
+        return processView();
+    }
+
+    /**
+     * Processes the form submission
+     * 
+     * @return
+     */
+    private String processSubmit()
     {
         validateForm();
         if (getActionErrors().size() > 0)
@@ -58,7 +71,22 @@ public class SubmitProjectPropertiesAction extends BaseAction
         projectInformation.setPassword(password);
         projectInformation.setSiteName(siteName);
 
-        return super.execute();
+        return SUCCESS;
+    }
+
+    /**
+     * Sets appropriate information to be able to display the form
+     * 
+     * @return
+     */
+    private String processView()
+    {
+        ProjectInformation projectInformation = getProjectInformation();
+        url = projectInformation.getUrl();
+        username = projectInformation.getUsername();
+        password = projectInformation.getPassword();
+        siteName = projectInformation.getSiteName();
+        return INPUT;
     }
 
     /**
@@ -183,5 +211,4 @@ public class SubmitProjectPropertiesAction extends BaseAction
     {
         this.siteName = siteName == null ? "" : siteName.trim();
     }
-
 }
