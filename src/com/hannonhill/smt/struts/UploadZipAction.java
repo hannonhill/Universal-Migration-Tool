@@ -11,7 +11,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -29,9 +31,13 @@ import com.hannonhill.smt.ProjectInformation;
 public class UploadZipAction extends BaseAction
 {
     private static final long serialVersionUID = 8203612105339164717L;
+    private static final String SELECTED_BELOW = "Selected Below";
 
     private File zip;
     private String zipFileName;
+    private String xmlDirectory;
+
+    private final List<String> availableFolders = new ArrayList<String>();
 
     /* (non-Javadoc)
      * @see com.opensymphony.xwork2.ActionSupport#execute()
@@ -42,7 +48,7 @@ public class UploadZipAction extends BaseAction
         if (isSubmit())
             return processSubmit();
 
-        return INPUT;
+        return processView();
     }
 
     /**
@@ -52,10 +58,32 @@ public class UploadZipAction extends BaseAction
      */
     private String processSubmit()
     {
+        // if user selected the xml directory, just set it in project information and go to next action
+        if (!xmlDirectory.equals(SELECTED_BELOW))
+        {
+            ProjectInformation projectInformation = getProjectInformation();
+            projectInformation.setXmlDirectory(projectInformation.getUploadsDir() + xmlDirectory);
+            return SUCCESS;
+        }
+
+        // if not, then validate the form, unzip to a new directory, and then set it in project information and go to next action
         validateForm();
         if (getActionErrors().size() > 0)
+        {
+            processView();
             return INPUT;
+        }
 
+        return unzip();
+    }
+
+    /**
+     * Unzips the contents of the uploaded zip file to a new directory and sets the directory in the project information.
+     * 
+     * @return
+     */
+    private String unzip()
+    {
         ProjectInformation projectInformation = getProjectInformation();
         String uploadDir = projectInformation.getUploadsDir() + zipFileName.substring(0, zipFileName.lastIndexOf('.')) + "/";
 
@@ -81,11 +109,31 @@ public class UploadZipAction extends BaseAction
         catch (IOException ioe)
         {
             addActionError("Unhandled exception: " + ioe);
+            processView();
             return INPUT;
         }
 
         projectInformation.setXmlDirectory(uploadDir);
         return SUCCESS;
+    }
+
+    /**
+     * Sets appropriate information to be able to display the form
+     * 
+     * @return
+     */
+    private String processView()
+    {
+        ProjectInformation projectInformation = getProjectInformation();
+        String uploadsDir = projectInformation.getUploadsDir();
+        File dir = new File(uploadsDir);
+        File[] childDirs = dir.listFiles();
+        for (File childDir : childDirs)
+            availableFolders.add(childDir.getName());
+        xmlDirectory = SELECTED_BELOW;
+        availableFolders.add(xmlDirectory);
+
+        return INPUT;
     }
 
     /**
@@ -95,7 +143,7 @@ public class UploadZipAction extends BaseAction
      * @param out
      * @throws IOException
      */
-    public static final void copyInputStream(InputStream in, OutputStream out) throws IOException
+    private void copyInputStream(InputStream in, OutputStream out) throws IOException
     {
         byte[] buffer = new byte[1024];
         int len;
@@ -152,5 +200,29 @@ public class UploadZipAction extends BaseAction
     public void setZipFileName(String zipFileName)
     {
         this.zipFileName = zipFileName;
+    }
+
+    /**
+     * @return Returns the xmlDirectory.
+     */
+    public String getXmlDirectory()
+    {
+        return xmlDirectory;
+    }
+
+    /**
+     * @param xmlDirectory the xmlDirectory to set
+     */
+    public void setXmlDirectory(String xmlDirectory)
+    {
+        this.xmlDirectory = xmlDirectory;
+    }
+
+    /**
+     * @return Returns the availableFolders.
+     */
+    public List<String> getAvailableFolders()
+    {
+        return availableFolders;
     }
 }
