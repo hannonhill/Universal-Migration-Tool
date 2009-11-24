@@ -26,7 +26,21 @@
         </action>
         
         <action name="AnalyzeInformation" class="com.hannonhill.smt.struts.AnalyzeInformationAction">
-        	<result>/jsps/AnalyzeInformation.jsp</result>
+        	<result name="input">/jsps/AnalyzeInformation.jsp</result>
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">AssignContentTypes</param>
+        	</result>
+        </action>
+        
+        <action name="AssignContentTypes" class="com.hannonhill.smt.struts.AssignContentTypesAction">
+        	<result name="input">/jsps/AssignContentTypes.jsp</result>
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">AssignFields</param>
+        	</result>
+        </action>
+        
+        <action name="AssignFields" class="com.hannonhill.smt.struts.AssignFieldsAction">
+        	<result>/jsps/AssignFields.jsp</result>
         </action>
     </package>
 

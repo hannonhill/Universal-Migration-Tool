@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<title>Serena Migration Tool</title>
-		<link href="/css/styles.css" type="text/css" rel="stylesheet" />
+		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
 		<h1>Serena Migration Tool</h1>

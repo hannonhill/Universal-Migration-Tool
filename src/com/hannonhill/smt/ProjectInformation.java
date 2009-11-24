@@ -5,7 +5,7 @@
  */
 package com.hannonhill.smt;
 
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,9 +25,13 @@ public class ProjectInformation
     private String password;
     private String siteName;
     private String xmlDirectory;
+    private Map<String, String> contentTypeMap;
 
     // analyzed information
-    private final Set<String> assetTypes = new HashSet<String>();
+    private Set<String> assetTypes;
+
+    // Cascade information
+    private Set<String> contentTypePaths;
 
     private final String uploadsDir;
 
@@ -137,5 +141,45 @@ public class ProjectInformation
     public Set<String> getAssetTypes()
     {
         return assetTypes;
+    }
+
+    /**
+     * @return Returns the contentTypePaths.
+     */
+    public Set<String> getContentTypePaths()
+    {
+        return contentTypePaths;
+    }
+
+    /**
+     * @return Returns the contentTypeMap.
+     */
+    public Map<String, String> getContentTypeMap()
+    {
+        return contentTypeMap;
+    }
+
+    /**
+     * @param contentTypeMap the contentTypeMap to set
+     */
+    public void setContentTypeMap(Map<String, String> contentTypeMap)
+    {
+        this.contentTypeMap = contentTypeMap;
+    }
+
+    /**
+     * @param assetTypes the assetTypes to set
+     */
+    public void setAssetTypes(Set<String> assetTypes)
+    {
+        this.assetTypes = assetTypes;
+    }
+
+    /**
+     * @param contentTypePaths the contentTypePaths to set
+     */
+    public void setContentTypePaths(Set<String> contentTypePaths)
+    {
+        this.contentTypePaths = contentTypePaths;
     }
 }

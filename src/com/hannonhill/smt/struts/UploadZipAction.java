@@ -85,7 +85,7 @@ public class UploadZipAction extends BaseAction
     private String unzip()
     {
         ProjectInformation projectInformation = getProjectInformation();
-        String uploadDir = projectInformation.getUploadsDir() + zipFileName.substring(0, zipFileName.lastIndexOf('.')) + "/";
+        String uploadDir = projectInformation.getUploadsDir() + zipFileName.substring(0, zipFileName.lastIndexOf('.'));
 
         ZipFile zipFile;
         Enumeration<? extends ZipEntry> entries;
@@ -99,9 +99,9 @@ public class UploadZipAction extends BaseAction
                 ZipEntry entry = entries.nextElement();
 
                 if (entry.isDirectory())
-                    (new File(uploadDir + entry.getName())).mkdirs();
+                    (new File(uploadDir + "/" + entry.getName())).mkdirs();
                 else if (entry.getName().endsWith(".xml"))
-                    copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + entry.getName())));
+                    copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + "/" + entry.getName())));
             }
 
             zipFile.close();
@@ -132,6 +132,12 @@ public class UploadZipAction extends BaseAction
             availableFolders.add(childDir.getName());
         xmlDirectory = SELECTED_BELOW;
         availableFolders.add(xmlDirectory);
+
+        // If the xml directory was already selected (for example we are going back using "Previous" button,
+        // get it from the project information and use it instead of using SELECTED_BELOW
+        String xmlDir = projectInformation.getXmlDirectory();
+        if (xmlDir != null)
+            xmlDirectory = xmlDir.substring(xmlDir.lastIndexOf('/') + 1);
 
         return INPUT;
     }

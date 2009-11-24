@@ -7,6 +7,7 @@ package com.hannonhill.smt.struts;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import com.hannonhill.smt.ProjectInformation;
@@ -35,11 +36,16 @@ public class AnalyzeInformationAction extends BaseAction
 
         // analyze folders recursively
         List<String> errorMessages = new ArrayList<String>();
+        projectInformation.setAssetTypes(new HashSet<String>()); // clear out the existing asset types
         XmlAnalyzer.analyzeFolder(new File(projectInformation.getXmlDirectory()), projectInformation, errorMessages);
 
-        // display all the error messages
-        for (String errorMessage : errorMessages)
-            addActionError(errorMessage);
+        if (errorMessages.size() > 0)
+        {
+            // display all the error messages
+            for (String errorMessage : errorMessages)
+                addActionError(errorMessage);
+            return INPUT;
+        }
 
         return SUCCESS;
     }

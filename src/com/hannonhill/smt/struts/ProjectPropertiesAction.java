@@ -7,6 +7,8 @@ package com.hannonhill.smt.struts;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
+import java.util.HashSet;
+import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
@@ -14,6 +16,7 @@ import org.apache.commons.lang.xwork.StringUtils;
 
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.service.WebServices;
+import com.hannonhill.www.ws.ns.AssetOperationService.ContentType;
 import com.hannonhill.www.ws.ns.AssetOperationService.Site;
 
 /**
@@ -71,7 +74,40 @@ public class ProjectPropertiesAction extends BaseAction
         projectInformation.setPassword(password);
         projectInformation.setSiteName(siteName);
 
+        loadContentTypes();
+        if (getActionErrors().size() > 0)
+            return INPUT;
+
         return SUCCESS;
+    }
+
+    /**
+     * Loads content types from site with a site name that is specified in the projectInformation
+     */
+    private void loadContentTypes()
+    {
+        ProjectInformation projectInformation = getProjectInformation();
+        List<ContentType> contentTypes = null;
+
+        try
+        {
+            contentTypes = WebServices.getContentTypesFromSite(projectInformation);
+        }
+        catch (Exception e)
+        {
+            addActionError(e.getMessage());
+            return;
+        }
+
+        if (contentTypes == null || contentTypes.size() == 0)
+        {
+            addActionError("Site with given name has no available Content Types");
+            return;
+        }
+
+        projectInformation.setContentTypePaths(new HashSet<String>());
+        for (ContentType contentType : contentTypes)
+            projectInformation.getContentTypePaths().add(contentType.getPath());
     }
 
     /**

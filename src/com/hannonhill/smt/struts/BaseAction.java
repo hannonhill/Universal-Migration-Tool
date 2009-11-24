@@ -64,4 +64,12 @@ public class BaseAction extends ActionSupport
     {
         return submitButton != null;
     }
+
+    /**
+     * @return Cache buster
+     */
+    public String getTime()
+    {
+        return "" + System.currentTimeMillis();
+    }
 }

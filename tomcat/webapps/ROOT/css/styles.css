@@ -16,3 +16,15 @@ form
 	background-color: #eee;
 	padding: 5px;
 }
+
+table table
+{
+	background-color: #fff;
+	padding: 5px;
+	border: 1px groove gray;
+}
+
+table table th
+{
+	text-decoration: underline;
+}
