@@ -24,6 +24,10 @@
         		<param name="actionName">AnalyzeInformation</param>
         	</result>
         </action>
+        
+        <action name="AnalyzeInformation" class="com.hannonhill.smt.struts.AnalyzeInformationAction">
+        	<result>/jsps/AnalyzeInformation.jsp</result>
+        </action>
     </package>
 
 </struts>

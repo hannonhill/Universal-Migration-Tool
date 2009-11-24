@@ -5,6 +5,9 @@
  */
 package com.hannonhill.smt;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * This object holds all the current project information
  * 
@@ -14,11 +17,17 @@ package com.hannonhill.smt;
  */
 public class ProjectInformation
 {
+    private static final String UPLOADS_DIR = "uploads";
+
+    // user entered information
     private String url;
     private String username;
     private String password;
     private String siteName;
     private String xmlDirectory;
+
+    // analyzed information
+    private final Set<String> assetTypes = new HashSet<String>();
 
     private final String uploadsDir;
 
@@ -31,7 +40,7 @@ public class ProjectInformation
         String currentDir = System.getProperty("user.dir");
         int lastSlash = currentDir.lastIndexOf('/') == -1 ? currentDir.lastIndexOf('\\') : currentDir.lastIndexOf('/');
         String parentToCurrentDir = currentDir.substring(0, lastSlash);
-        uploadsDir = parentToCurrentDir + "/uploads/";
+        uploadsDir = parentToCurrentDir + "/" + UPLOADS_DIR + "/";
     }
 
     /**
@@ -99,7 +108,7 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the uploadsDir.
+     * @return Returns the uploadsDir - this is the directory that contains multiple upload folders.
      */
     public String getUploadsDir()
     {
@@ -107,7 +116,7 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the xmlDirectory.
+     * @return Returns the xmlDirectory - this is the directory where the xml files reside for a specific folder.
      */
     public String getXmlDirectory()
     {
@@ -120,5 +129,13 @@ public class ProjectInformation
     public void setXmlDirectory(String xmlDirectory)
     {
         this.xmlDirectory = xmlDirectory;
+    }
+
+    /**
+     * @return Returns the assetTypes.
+     */
+    public Set<String> getAssetTypes()
+    {
+        return assetTypes;
     }
 }
