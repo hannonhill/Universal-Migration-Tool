@@ -61,7 +61,7 @@ public class ProjectPropertiesAction extends BaseAction
         if (!url.startsWith("http"))
             url = "http://" + url;
 
-        if (!url.endsWith("/ws/services/AssetOperationService?wsdl"))
+        if (!url.endsWith("/ws/services/AssetOperationService?wsdl") && !url.endsWith("/ws/services/AssetOperationService"))
             url = url + "/ws/services/AssetOperationService?wsdl";
 
         verifyConnectivity();

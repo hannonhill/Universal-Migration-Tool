@@ -73,7 +73,7 @@
 							if (tdEl.innerHTML==assetType)
 							{
 								tableEl.removeChild(trEl);
-								var assetTypesEl = document.getElementById("ProjectProperties_assetTypes");
+								var assetTypesEl = document.getElementById("AssignContentTypes_assetTypes");
 								assetTypesEl.options[assetTypesEl.options.length]=new Option(assetType);
 								return;
 							}		

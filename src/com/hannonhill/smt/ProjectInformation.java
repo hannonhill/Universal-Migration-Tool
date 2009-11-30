@@ -27,8 +27,8 @@ public class ProjectInformation
     private String xmlDirectory;
     private Map<String, String> contentTypeMap;
 
-    // analyzed information
-    private Set<String> assetTypes;
+    // analyzed information - asset type name and the actual asset type
+    private Map<String, AssetType> assetTypes;
 
     // Cascade information
     private Set<String> contentTypePaths;
@@ -136,14 +136,6 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the assetTypes.
-     */
-    public Set<String> getAssetTypes()
-    {
-        return assetTypes;
-    }
-
-    /**
      * @return Returns the contentTypePaths.
      */
     public Set<String> getContentTypePaths()
@@ -168,18 +160,26 @@ public class ProjectInformation
     }
 
     /**
-     * @param assetTypes the assetTypes to set
-     */
-    public void setAssetTypes(Set<String> assetTypes)
-    {
-        this.assetTypes = assetTypes;
-    }
-
-    /**
      * @param contentTypePaths the contentTypePaths to set
      */
     public void setContentTypePaths(Set<String> contentTypePaths)
     {
         this.contentTypePaths = contentTypePaths;
+    }
+
+    /**
+     * @return Returns the assetTypes.
+     */
+    public Map<String, AssetType> getAssetTypes()
+    {
+        return assetTypes;
+    }
+
+    /**
+     * @param assetTypes the assetTypes to set
+     */
+    public void setAssetTypes(Map<String, AssetType> assetTypes)
+    {
+        this.assetTypes = assetTypes;
     }
 }

@@ -71,7 +71,7 @@ public class AssignContentTypesAction extends BaseAction
     private String processView()
     {
         ProjectInformation projectInformation = getProjectInformation();
-        assetTypes.addAll(projectInformation.getAssetTypes());
+        assetTypes.addAll(projectInformation.getAssetTypes().keySet());
         contentTypes.addAll(projectInformation.getContentTypePaths());
         return INPUT;
     }

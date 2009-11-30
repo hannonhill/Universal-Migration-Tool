@@ -5,6 +5,7 @@
  */
 package com.hannonhill.smt;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,9 +18,9 @@ import java.util.List;
 public class XmlPageInformation
 {
     private final String localPath;
-    private String assetType;
-    private List<String> metadataFields;
-    private List<String> contentFields;
+    private String assetTypeName;
+    private final List<String> metadataFields = new ArrayList<String>();
+    private final List<String> contentFields = new ArrayList<String>();
 
     /**
      * Constructor
@@ -32,19 +33,19 @@ public class XmlPageInformation
     }
 
     /**
-     * @return Returns the assetType.
+     * @return Returns the assetTypeName.
      */
-    public String getAssetType()
+    public String getAssetTypeName()
     {
-        return assetType;
+        return assetTypeName;
     }
 
-    /**
-     * @param assetType the assetType to set
+    /** 
+     * @param assetTypeName the assetTypeName to set
      */
-    public void setAssetType(String assetType)
+    public void setAssetTypeName(String assetTypeName)
     {
-        this.assetType = assetType;
+        this.assetTypeName = assetTypeName;
     }
 
     /**
@@ -56,27 +57,11 @@ public class XmlPageInformation
     }
 
     /**
-     * @param metadataFields the metadataFields to set
-     */
-    public void setMetadataFields(List<String> metadataFields)
-    {
-        this.metadataFields = metadataFields;
-    }
-
-    /**
      * @return Returns the contentFields.
      */
     public List<String> getContentFields()
     {
         return contentFields;
-    }
-
-    /**
-     * @param contentFields the contentFields to set
-     */
-    public void setContentFields(List<String> contentFields)
-    {
-        this.contentFields = contentFields;
     }
 
     /**

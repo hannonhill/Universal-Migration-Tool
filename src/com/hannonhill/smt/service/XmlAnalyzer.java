@@ -10,10 +10,14 @@ import java.io.FileInputStream;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.XmlPageInformation;
 
@@ -27,6 +31,8 @@ import com.hannonhill.smt.XmlPageInformation;
 public class XmlAnalyzer
 {
     private static final String ASSET_TYPE_XPATH = "/asset/coreData/assetType/text()";
+    private static final String METADATA_FIELDS_XPATH = "/asset/metaData/field";
+    private static final String CONTENT_FIELDS_XPATH = "/asset/content/field";
     private static final String FILE_PROBLEM_MESSAGE = "There were problems with analyzing file ";
 
     /**
@@ -63,7 +69,18 @@ public class XmlAnalyzer
         try
         {
             XmlPageInformation xmlPageInformation = XmlAnalyzer.analyzeContentsOfXmlFile(file);
-            projectInformation.getAssetTypes().add(xmlPageInformation.getAssetType()); // this adds unique values only
+
+            // get existing asset type from the map or create a new one and add it to the map
+            AssetType assetType = projectInformation.getAssetTypes().get(xmlPageInformation.getAssetTypeName());
+            if (assetType == null)
+            {
+                String assetTypeName = xmlPageInformation.getAssetTypeName();
+                assetType = new AssetType(assetTypeName);
+                projectInformation.getAssetTypes().put(assetTypeName, assetType);
+            }
+
+            assetType.getMetadataFields().addAll(xmlPageInformation.getMetadataFields()); // adds unique field names only
+            assetType.getContentFields().addAll(xmlPageInformation.getContentFields()); // adds unique field names only
         }
         catch (Exception e)
         {
@@ -89,17 +106,79 @@ public class XmlAnalyzer
     {
         XmlPageInformation xmlPageInformation = new XmlPageInformation(file.getAbsolutePath());
 
+        findAssetType(file, xmlPageInformation);
+        findMetadataFields(file, xmlPageInformation);
+        findContentFields(file, xmlPageInformation);
+
+        return xmlPageInformation;
+    }
+
+    /**
+     * Analyzes the XML file and finds the Content Type name in it and assigns it to the XmlPageInformation object.
+     * 
+     * @param file
+     * @param xmlPageInformation
+     * @throws Exception
+     */
+    private static void findAssetType(File file, XmlPageInformation xmlPageInformation) throws Exception
+    {
         XPath xpath = XPathFactory.newInstance().newXPath();
 
         InputSource inputSource = new InputSource(new FileInputStream(file));
-        String assetType = xpath.evaluate(ASSET_TYPE_XPATH, inputSource);
+        String assetTypeName = xpath.evaluate(ASSET_TYPE_XPATH, inputSource);
 
-        if (assetType == null)
+        if (assetTypeName == null)
             throw new Exception("Asset type element could not be found");
 
-        assetType = assetType.trim();
-        xmlPageInformation.setAssetType(assetType);
+        assetTypeName = assetTypeName.trim();
+        xmlPageInformation.setAssetTypeName(assetTypeName);
+    }
 
-        return xmlPageInformation;
+    /**
+     * Analyzes the XML file and finds the Metadata field names in it and assigns them to the XmlPageInformation object.
+     * 
+     * @param file
+     * @param xmlPageInformation
+     * @throws Exception
+     */
+    private static void findMetadataFields(File file, XmlPageInformation xmlPageInformation) throws Exception
+    {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+
+        InputSource inputSource = new InputSource(new FileInputStream(file));
+        NodeList metadataFields = (NodeList) xpath.evaluate(METADATA_FIELDS_XPATH, inputSource, XPathConstants.NODESET);
+
+        for (int i = 0; i < metadataFields.getLength(); i++)
+        {
+            Node metadataFieldNameNode = metadataFields.item(i).getAttributes().getNamedItem("name");
+            if (metadataFieldNameNode == null)
+                throw new Exception("The metadata <field> tag has no \"name\" attribute.");
+
+            xmlPageInformation.getMetadataFields().add(metadataFieldNameNode.getNodeValue());
+        }
+    }
+
+    /**
+     * Analyzes the XML file and finds the Content filed names in it and assigns them to the XmlPageinformation object
+     * 
+     * @param file
+     * @param xmlPageInformation
+     * @throws Exception
+     */
+    private static void findContentFields(File file, XmlPageInformation xmlPageInformation) throws Exception
+    {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+
+        InputSource inputSource = new InputSource(new FileInputStream(file));
+        NodeList contentFields = (NodeList) xpath.evaluate(CONTENT_FIELDS_XPATH, inputSource, XPathConstants.NODESET);
+
+        for (int i = 0; i < contentFields.getLength(); i++)
+        {
+            Node contentFieldNameNode = contentFields.item(i).getAttributes().getNamedItem("name");
+            if (contentFieldNameNode == null)
+                throw new Exception("The content <field> tag has no \"name\" attribute.");
+
+            xmlPageInformation.getContentFields().add(contentFieldNameNode.getNodeValue());
+        }
     }
 }
