@@ -13,9 +13,9 @@
 			<s:form action="ProjectProperties" method="POST">
 			    <s:textfield label="Cascade Server 6.4.x URL" name="url" value="%{url}" size="50"/>
 			    <s:textfield label="Username" name="username" value="%{username}" size="50"/>
-			    <s:textfield label="Password" name="password" value="%{password}" size="50"/>
+			    <s:password label="Password" name="password" value="%{password}" size="50"/>
 			    <s:textfield label="Site Name" name="siteName" value="%{siteName}" size="50"/>	
-			    <s:submit value="Next" name="submitButton"/>
+			    <s:submit value="Save and Next" name="submitButton"/>
 			</s:form>
 		</div>
 	</body>

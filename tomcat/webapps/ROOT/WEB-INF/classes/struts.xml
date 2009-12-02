@@ -40,7 +40,14 @@
         </action>
         
         <action name="AssignFields" class="com.hannonhill.smt.struts.AssignFieldsAction">
-        	<result>/jsps/AssignFields.jsp</result>
+        	<result name="input">/jsps/AssignFields.jsp</result>
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">MigrationSummary</param>
+        	</result>
+        </action>
+
+        <action name="MigrationSummary" class="com.hannonhill.smt.struts.MigrationSummaryAction">
+        	<result name="input">/jsps/MigrationSummary.jsp</result>
         </action>
     </package>
 

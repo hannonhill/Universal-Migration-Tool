@@ -5,6 +5,7 @@
  */
 package com.hannonhill.smt;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ public class ProjectInformation
     private String siteName;
     private String xmlDirectory;
     private Map<String, String> contentTypeMap;
+    private List<String> assetTypeNames; // repeated information - an ordered list of asset type names (the map above holds things that are not ordered)
 
     // analyzed information - asset type name and the actual asset type
     private Map<String, AssetType> assetTypes;
@@ -181,5 +183,21 @@ public class ProjectInformation
     public void setAssetTypes(Map<String, AssetType> assetTypes)
     {
         this.assetTypes = assetTypes;
+    }
+
+    /**
+     * @return Returns the assetTypeNames.
+     */
+    public List<String> getAssetTypeNames()
+    {
+        return assetTypeNames;
+    }
+
+    /**
+     * @param assetTypeNames the assetTypeNames to set
+     */
+    public void setAssetTypeNames(List<String> assetTypeNames)
+    {
+        this.assetTypeNames = assetTypeNames;
     }
 }

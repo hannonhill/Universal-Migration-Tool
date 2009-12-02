@@ -5,7 +5,9 @@
  */
 package com.hannonhill.smt;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,9 +19,12 @@ import java.util.Set;
  */
 public class AssetType
 {
-    private String name;
-    private final Set<String> metadataFields = new HashSet<String>();
-    private final Set<String> contentFields = new HashSet<String>();
+    private String name; // name of the asset type
+    private final Set<String> metadataFields = new HashSet<String>(); // a set of metadata field names that are present in the xml for this asset type
+    private final Set<String> contentFields = new HashSet<String>(); // a set of content field names that are present in the xml for this asset type
+
+    private final Map<String, Field> metadataFieldMapping = new HashMap<String, Field>(); // a mapping from a metadata field name to a Cascade field
+    private final Map<String, Field> contentFieldMapping = new HashMap<String, Field>(); // a mapping from a content field name to a Cascade field 
 
     /**
      * Constructor
@@ -61,5 +66,21 @@ public class AssetType
     public Set<String> getContentFields()
     {
         return contentFields;
+    }
+
+    /**
+     * @return Returns the metadataFieldMapping.
+     */
+    public Map<String, Field> getMetadataFieldMapping()
+    {
+        return metadataFieldMapping;
+    }
+
+    /**
+     * @return Returns the contentFieldMapping.
+     */
+    public Map<String, Field> getContentFieldMapping()
+    {
+        return contentFieldMapping;
     }
 }

@@ -15,7 +15,7 @@
 				<s:file label="Zip File" name="zip" onchange="document.getElementById('UploadZip_xmlDirectorySelected Below').checked='checked';"/>
 				<tr>
 					<td><button onclick="window.location='/ProjectProperties';return false;">Previous</button></td>
-					<td align="right"><input type="submit" value="Next" name="submitButton"/></td>
+					<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>
 				</tr>
 			</s:form>
 		</div>

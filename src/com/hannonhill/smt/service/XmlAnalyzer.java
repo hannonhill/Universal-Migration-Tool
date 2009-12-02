@@ -7,17 +7,24 @@ package com.hannonhill.smt.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.hannonhill.smt.AssetType;
+import com.hannonhill.smt.Field;
+import com.hannonhill.smt.FieldType;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.XmlPageInformation;
 
@@ -53,6 +60,65 @@ public class XmlAnalyzer
                 analyzeFolder(file, projectInformation, errorMessages);
             else if (file.getName().endsWith(".xml"))
                 analyzeFile(file, projectInformation, errorMessages);
+        }
+    }
+
+    /**
+     * Analyzes the data definition xml and returns a list of text fields
+     * 
+     * @param xml
+     * @return
+     * @throws Exception
+     */
+    public static List<Field> analyzeDataDefinitionXml(String xml) throws Exception
+    {
+        List<Field> returnList = new ArrayList<Field>();
+        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+        Document doc = docBuilder.parse(new InputSource(new StringReader(xml)));
+        Node rootNode = doc.getChildNodes().item(0);
+        NodeList children = rootNode.getChildNodes();
+        analyzeDataDefinitionGroup(children, "", "", returnList);
+        return returnList;
+    }
+
+    /**
+     * Adds all the text fields to the returnList recursively
+     * 
+     * @param children
+     * @param identifierPrefix
+     * @param labelPrefix
+     * @param returnList
+     */
+    private static void analyzeDataDefinitionGroup(NodeList children, String identifierPrefix, String labelPrefix, List<Field> returnList)
+    {
+        for (int i = 0; i < children.getLength(); i++)
+        {
+            Node node = children.item(i);
+
+            // if node has no attributes, it must be a text node or comment node - ignore these
+            if (node.getAttributes() == null)
+                continue;
+
+            // figure out the identifier
+            String identifier = "";
+            Node identifierNode = node.getAttributes().getNamedItem("identifier");
+            if (identifierNode != null)
+                identifier = identifierNode.getTextContent();
+
+            // figure out the identifier - or use label if identifier doesn't exist
+            String label = "";
+            Node labelNode = node.getAttributes().getNamedItem("label");
+            if (labelNode != null)
+                label = labelNode.getTextContent();
+            else
+                label = identifier;
+
+            // If group - go recursively, if text - add to the field list. Ignore asset choosers.
+            if (node.getNodeName().equals("group"))
+                analyzeDataDefinitionGroup(node.getChildNodes(), identifierPrefix + identifier + "/", labelPrefix + label + "/", returnList);
+            else if (node.getNodeName().equals("text"))
+                returnList.add(new Field(identifierPrefix + identifier, labelPrefix + label, FieldType.DATA_DEFINITION));
         }
     }
 

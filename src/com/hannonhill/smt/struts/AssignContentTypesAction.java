@@ -60,6 +60,9 @@ public class AssignContentTypesAction extends BaseAction
         for (int i = 0; i < selectedAssetTypes.length; i++)
             projectInformation.getContentTypeMap().put(selectedAssetTypes[i], selectedContentTypes[i]);
 
+        // make the asset type names an ordered list because map keeps things out of order
+        projectInformation.setAssetTypeNames(new ArrayList<String>(projectInformation.getContentTypeMap().keySet()));
+
         return SUCCESS;
     }
 
