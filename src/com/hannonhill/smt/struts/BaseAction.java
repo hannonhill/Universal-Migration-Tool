@@ -27,7 +27,7 @@ public class BaseAction extends ActionSupport
     /**
      * @return Returns the project information object
      */
-    protected ProjectInformation getProjectInformation()
+    public ProjectInformation getProjectInformation()
     {
         Map<String, Object> session = ActionContext.getContext().getSession();
         Object projectInformationObject = session.get(PROJECT_INFORMATION);

@@ -22,6 +22,17 @@ public class MigrationSummaryAction extends BaseAction
     @Override
     public String execute() throws Exception
     {
+        if (isSubmit())
+            return SUCCESS;
+
         return INPUT;
+    }
+
+    /**
+     * @return Returns the number of asset types
+     */
+    public int getNAssetTypes()
+    {
+        return getProjectInformation().getAssetTypeNames().size();
     }
 }

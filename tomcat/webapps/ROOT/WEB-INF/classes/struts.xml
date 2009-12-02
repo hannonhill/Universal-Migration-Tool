@@ -48,6 +48,13 @@
 
         <action name="MigrationSummary" class="com.hannonhill.smt.struts.MigrationSummaryAction">
         	<result name="input">/jsps/MigrationSummary.jsp</result>
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">Migration</param>
+        	</result>
+        </action>
+
+        <action name="Migration" class="com.hannonhill.smt.struts.MigrationAction">
+        	<result>/jsps/Migration.jsp</result>
         </action>
     </package>
 

@@ -28,3 +28,19 @@ table table th
 {
 	text-decoration: underline;
 }
+
+table.mappingReport
+{
+	width: 100%;
+}
+
+table.mappingReport td
+{
+	width: 45%;
+	text-align: center;
+}
+
+table.mappingReport td.arrow
+{
+	width: 10%;
+}

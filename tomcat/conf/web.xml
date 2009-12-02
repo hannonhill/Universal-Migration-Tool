@@ -480,7 +480,7 @@
   <!-- created sessions by modifying the value below.                       -->
 
     <session-config>
-        <session-timeout>30</session-timeout>
+        <session-timeout>480</session-timeout>
     </session-config>
 
 
