@@ -19,6 +19,9 @@ import java.util.Set;
 public class ProjectInformation
 {
     private static final String UPLOADS_DIR = "uploads";
+    public static final String OVERWRITE_BEHAVIOR_KEEP_EXISTING = "Keep existing (adds numbers to the end of new asset names)";
+    public static final String OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING = "Overwrite existing (deletes and re-creates them)";
+    public static final String OVERWRITE_BEHAVIOR_UPDATE_EXISTING = "Update existing (edits existing assets)";
 
     // user entered information
     private String url;
@@ -28,6 +31,7 @@ public class ProjectInformation
     private String xmlDirectory;
     private Map<String, String> contentTypeMap;
     private List<String> assetTypeNames; // repeated information - an ordered list of asset type names (the map above holds things that are not ordered)
+    private String overwriteBehavior;
 
     // analyzed information - asset type name and the actual asset type
     private Map<String, AssetType> assetTypes;
@@ -47,6 +51,7 @@ public class ProjectInformation
         int lastSlash = currentDir.lastIndexOf('/') == -1 ? currentDir.lastIndexOf('\\') : currentDir.lastIndexOf('/');
         String parentToCurrentDir = currentDir.substring(0, lastSlash);
         uploadsDir = parentToCurrentDir + "/" + UPLOADS_DIR + "/";
+        overwriteBehavior = OVERWRITE_BEHAVIOR_KEEP_EXISTING;
     }
 
     /**
@@ -199,5 +204,21 @@ public class ProjectInformation
     public void setAssetTypeNames(List<String> assetTypeNames)
     {
         this.assetTypeNames = assetTypeNames;
+    }
+
+    /**
+     * @return Returns the overwriteBehavior.
+     */
+    public String getOverwriteBehavior()
+    {
+        return overwriteBehavior;
+    }
+
+    /**
+     * @param overwriteBehavior the overwriteBehavior to set
+     */
+    public void setOverwriteBehavior(String overwriteBehavior)
+    {
+        this.overwriteBehavior = overwriteBehavior;
     }
 }
