@@ -40,6 +40,17 @@ public class PathUtil
     }
 
     /**
+     * Truncates the extension of the file name. For example x.html will return x. If there is no extension, the full name will be returned.
+     * 
+     * @param name
+     * @return
+     */
+    public static String truncateExtension(String name)
+    {
+        return name.lastIndexOf('.') == -1 ? name : name.substring(0, name.lastIndexOf('.'));
+    }
+
+    /**
      * Parses the path and returns the parent folder path part of it or '/' if the path is a the root level.
      * 
      * @param path

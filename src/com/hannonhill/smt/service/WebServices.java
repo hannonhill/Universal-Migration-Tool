@@ -172,7 +172,7 @@ public class WebServices
 
         Page page = new Page();
         page.setContentTypePath(projectInformation.getContentTypePaths().iterator().next()); //TODO: make it figure out which content type to use
-        page.setName(PathUtil.getNameFromPath(path));
+        page.setName(PathUtil.truncateExtension(PathUtil.getNameFromPath(path)));
         page.setParentFolderPath(parentFolderPath);
         page.setSiteName(projectInformation.getSiteName());
         page.setXhtml("Test");
