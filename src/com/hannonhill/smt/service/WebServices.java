@@ -9,19 +9,25 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.FieldType;
 import com.hannonhill.smt.ProjectInformation;
+import com.hannonhill.smt.util.PathUtil;
+import com.hannonhill.www.ws.ns.AssetOperationService.Asset;
 import com.hannonhill.www.ws.ns.AssetOperationService.AssetOperationHandler;
 import com.hannonhill.www.ws.ns.AssetOperationService.AssetOperationHandlerServiceLocator;
 import com.hannonhill.www.ws.ns.AssetOperationService.Authentication;
 import com.hannonhill.www.ws.ns.AssetOperationService.ContentType;
 import com.hannonhill.www.ws.ns.AssetOperationService.ContentTypeContainer;
+import com.hannonhill.www.ws.ns.AssetOperationService.CreateResult;
 import com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinition;
 import com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString;
+import com.hannonhill.www.ws.ns.AssetOperationService.Folder;
 import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataSet;
+import com.hannonhill.www.ws.ns.AssetOperationService.Page;
 import com.hannonhill.www.ws.ns.AssetOperationService.Path;
 import com.hannonhill.www.ws.ns.AssetOperationService.ReadResult;
 import com.hannonhill.www.ws.ns.AssetOperationService.Site;
@@ -96,7 +102,7 @@ public class WebServices
      */
     public static List<Field> getMetadataFieldsForContentType(String contentTypePath, ProjectInformation projectInformation) throws Exception
     {
-        Authentication authentication = new Authentication(projectInformation.getPassword(), projectInformation.getUsername());
+        Authentication authentication = getAuthentication(projectInformation);
         ContentType contentType = readContentTypeByPath(projectInformation, contentTypePath);
         String metadataSetId = contentType.getMetadataSetId();
 
@@ -131,7 +137,7 @@ public class WebServices
     public static List<Field> getDataDefinitionFieldsForContentType(String contentTypePath, ProjectInformation projectInformation) throws Exception
     {
         List<Field> returnList = new ArrayList<Field>();
-        Authentication authentication = new Authentication(projectInformation.getPassword(), projectInformation.getUsername());
+        Authentication authentication = getAuthentication(projectInformation);
 
         // Check if data definition is assign. If it isn't - we just return the XHTML field.
         ContentType contentType = readContentTypeByPath(projectInformation, contentTypePath);
@@ -152,6 +158,72 @@ public class WebServices
     }
 
     /**
+     * Creates a page in Cascade Server using information provided in the DetailedXmlPageInformation object. If the parent folder cannot be found,
+     * it will create it.
+     * 
+     * @param xmlPage
+     * @param projectInformation
+     * @throws Exception
+     */
+    public static void createPage(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
+    {
+        String path = xmlPage.getDeployPath();
+        String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
+
+        Page page = new Page();
+        page.setContentTypePath(projectInformation.getContentTypePaths().iterator().next()); //TODO: make it figure out which content type to use
+        page.setName(PathUtil.getNameFromPath(path));
+        page.setParentFolderPath(parentFolderPath);
+        page.setSiteName(projectInformation.getSiteName());
+        page.setXhtml("Test");
+
+        Asset asset = new Asset();
+        asset.setPage(page);
+
+        Authentication authentication = getAuthentication(projectInformation);
+        CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
+
+        // If the page couldn't be create because parent folder doesn't exist, go ahead and create the parent folder and attempt to create the page again
+        if (!createResult.getSuccess().equals("true")
+                && createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+        {
+            createFolder(parentFolderPath, projectInformation);
+            createPage(xmlPage, projectInformation);
+        }
+    }
+
+    /**
+     * Creates a folder with given path. If the parent folder cannot be found, it will create it.
+     * 
+     * @param path
+     * @param projectInformation
+     * @throws Exception
+     */
+    private static void createFolder(String path, ProjectInformation projectInformation) throws Exception
+    {
+        String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
+
+        Folder folder = new Folder();
+        folder.setName(PathUtil.getNameFromPath(path));
+        folder.setParentFolderPath(parentFolderPath);
+        folder.setSiteName(projectInformation.getSiteName());
+
+        Asset asset = new Asset();
+        asset.setFolder(folder);
+
+        Authentication authentication = getAuthentication(projectInformation);
+        CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
+
+        // If the folder couldn't be create because parent folder doesn't exist, go ahead and create the parent folder and attempt to create the page again
+        if (!createResult.getSuccess().equals("true")
+                && createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+        {
+            createFolder(parentFolderPath, projectInformation);
+            createFolder(path, projectInformation);
+        }
+    }
+
+    /**
      * Adds all ancestor content types of content type container with given id to the contentTypes list
      * 
      * @param projectInformation
@@ -162,7 +234,7 @@ public class WebServices
     private static void collectContentTypes(ProjectInformation projectInformation, String containerId, List<ContentType> contentTypes)
             throws Exception
     {
-        Authentication authentication = new Authentication(projectInformation.getPassword(), projectInformation.getUsername());
+        Authentication authentication = getAuthentication(projectInformation);
         Identifier identifier = new Identifier(containerId, null, EntityTypeString.contenttypecontainer);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
@@ -187,7 +259,7 @@ public class WebServices
      */
     private static ContentType readContentType(ProjectInformation projectInformation, String contentTypeId) throws Exception
     {
-        Authentication authentication = new Authentication(projectInformation.getPassword(), projectInformation.getUsername());
+        Authentication authentication = getAuthentication(projectInformation);
         Identifier identifier = new Identifier(contentTypeId, null, EntityTypeString.contenttype);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
@@ -206,7 +278,7 @@ public class WebServices
      */
     private static ContentType readContentTypeByPath(ProjectInformation projectInformation, String contentTypePath) throws Exception
     {
-        Authentication authentication = new Authentication(projectInformation.getPassword(), projectInformation.getUsername());
+        Authentication authentication = getAuthentication(projectInformation);
         String siteName = projectInformation.getSiteName();
         Identifier identifier = new Identifier(null, new Path(contentTypePath, null, siteName), EntityTypeString.contenttype);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
@@ -229,4 +301,16 @@ public class WebServices
         URL url = new URL(urlString);
         return new AssetOperationHandlerServiceLocator().getAssetOperationService(url);
     }
+
+    /**
+     * Returns the Authentication object based on the project information provided
+     * 
+     * @param projectInformation
+     * @return
+     */
+    private static Authentication getAuthentication(ProjectInformation projectInformation)
+    {
+        return new Authentication(projectInformation.getPassword(), projectInformation.getUsername());
+    }
+
 }

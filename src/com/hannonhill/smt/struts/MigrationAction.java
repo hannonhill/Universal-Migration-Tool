@@ -5,6 +5,8 @@
  */
 package com.hannonhill.smt.struts;
 
+import com.hannonhill.smt.service.Migrator;
+
 /**
  * Action reponsible for starting the migration and for displaying an ajax-enabled log screen.
  * 
@@ -22,6 +24,7 @@ public class MigrationAction extends BaseAction
     @Override
     public String execute() throws Exception
     {
+        Migrator.startMigration(getProjectInformation());
         return super.execute();
     }
 }

@@ -5,6 +5,7 @@
  */
 package com.hannonhill.smt;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +40,8 @@ public class ProjectInformation
     // Cascade information
     private Set<String> contentTypePaths;
 
+    private final List<String> errors;
+
     private final String uploadsDir;
 
     /**
@@ -52,6 +55,7 @@ public class ProjectInformation
         String parentToCurrentDir = currentDir.substring(0, lastSlash);
         uploadsDir = parentToCurrentDir + "/" + UPLOADS_DIR + "/";
         overwriteBehavior = OVERWRITE_BEHAVIOR_KEEP_EXISTING;
+        errors = new ArrayList<String>();
     }
 
     /**
@@ -220,5 +224,13 @@ public class ProjectInformation
     public void setOverwriteBehavior(String overwriteBehavior)
     {
         this.overwriteBehavior = overwriteBehavior;
+    }
+
+    /**
+     * @return Returns the errors.
+     */
+    public List<String> getErrors()
+    {
+        return errors;
     }
 }

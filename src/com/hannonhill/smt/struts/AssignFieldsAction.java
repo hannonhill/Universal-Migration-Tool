@@ -64,6 +64,10 @@ public class AssignFieldsAction extends BaseAction
         ProjectInformation projectInformation = getProjectInformation();
         AssetType assetTypeObject = getCurrentAssetType();
 
+        // Clear out the old information
+        assetTypeObject.getMetadataFieldMapping().clear();
+        assetTypeObject.getContentFieldMapping().clear();
+
         // Go through each field assignment submitted by the form
         for (int i = 0; i < selectedXmlMetadataFields.length; i++)
         {

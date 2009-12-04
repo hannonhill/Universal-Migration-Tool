@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An object that stores information from an XML page
+ * An object that stores information from an XML page for scanning purposes. This helps in the process of content type assignment and field assignment.
  * 
  * @author  Artur Tomusiak
  * @version $Id$
@@ -17,20 +17,9 @@ import java.util.List;
  */
 public class XmlPageInformation
 {
-    private final String localPath;
     private String assetTypeName;
     private final List<String> metadataFields = new ArrayList<String>();
     private final List<String> contentFields = new ArrayList<String>();
-
-    /**
-     * Constructor
-     * 
-     * @param localPath
-     */
-    public XmlPageInformation(String localPath)
-    {
-        this.localPath = localPath;
-    }
 
     /**
      * @return Returns the assetTypeName.
@@ -62,13 +51,5 @@ public class XmlPageInformation
     public List<String> getContentFields()
     {
         return contentFields;
-    }
-
-    /**
-     * @return Returns the localPath.
-     */
-    public String getLocalPath()
-    {
-        return localPath;
     }
 }

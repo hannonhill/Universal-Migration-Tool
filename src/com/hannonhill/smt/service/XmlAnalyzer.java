@@ -23,10 +23,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.hannonhill.smt.AssetType;
+import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.FieldType;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.XmlPageInformation;
+import com.hannonhill.smt.util.PathUtil;
 
 /**
  * This class contains service methods for analyzing the xml file contents
@@ -52,15 +54,9 @@ public class XmlAnalyzer
      */
     public static void analyzeFolder(File folder, ProjectInformation projectInformation, List<String> errorMessages)
     {
-        for (String fileString : folder.list())
-        {
-            File file = new File(folder.getAbsolutePath() + "/" + fileString);
-
-            if (!file.isFile())
-                analyzeFolder(file, projectInformation, errorMessages);
-            else if (file.getName().endsWith(".xml"))
-                analyzeFile(file, projectInformation, errorMessages);
-        }
+        List<File> files = getAllFiles(folder);
+        for (File file : files)
+            analyzeFile(file, projectInformation, errorMessages);
     }
 
     /**
@@ -80,6 +76,94 @@ public class XmlAnalyzer
         NodeList children = rootNode.getChildNodes();
         analyzeDataDefinitionGroup(children, "", "", returnList);
         return returnList;
+    }
+
+    /**
+     * Returns all the xml files in the folder and all sub-folders
+     * 
+     * @param projectInformation
+     * @return
+     */
+    public static List<File> getAllFiles(File folder)
+    {
+        List<File> files = new ArrayList<File>();
+        for (String fileString : folder.list())
+        {
+            File file = new File(folder.getAbsolutePath() + "/" + fileString);
+
+            if (!file.isFile())
+                files.addAll(getAllFiles(file));
+            else if (file.getName().endsWith(".xml"))
+                files.add(file);
+        }
+        return files;
+    }
+
+    /**
+     * Parses an XML file and returns a Page object that contains all the necessary information for migration of that page into Cascade Server
+     * 
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public static DetailedXmlPageInformation parseXmlFile(File file) throws Exception
+    {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = builder.parse(new InputSource(new FileInputStream(file)));
+
+        DetailedXmlPageInformation page = new DetailedXmlPageInformation();
+
+        Node rootNode = document.getChildNodes().item(0);
+        NodeList rootChildNodes = rootNode.getChildNodes();
+        for (int i = 0; i < rootChildNodes.getLength(); i++)
+        {
+            Node rootChildNode = rootChildNodes.item(i);
+            String rootChildNodeName = rootChildNode.getNodeName();
+            if (rootChildNodeName.equals("coreData"))
+                parseCoreData(rootChildNode, page);
+        }
+
+        return page;
+    }
+
+    /**
+     * Parses the information contained in the xml file's &lt;coreData&gt; tag
+     * 
+     * @param coreDataNode
+     * @param page
+     */
+    private static void parseCoreData(Node coreDataNode, DetailedXmlPageInformation page)
+    {
+        NodeList nodes = coreDataNode.getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++)
+        {
+            Node node = nodes.item(i);
+            String nodeName = node.getNodeName();
+            if (nodeName.equals("deployPath"))
+                page.setDeployPath(getCDataContent(node));
+            else if (nodeName.equals("assetType"))
+                page.setAssetType(getCDataContent(node));
+        }
+    }
+
+    /**
+     * Returns contents of the CDATA section or an empty string if no CDATA section was found.
+     * 
+     * @param nodeWithCData
+     * @return
+     */
+    private static String getCDataContent(Node nodeWithCData)
+    {
+        NodeList nodes = nodeWithCData.getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++)
+        {
+            Node node = nodes.item(i);
+            String nodeName = node.getNodeName();
+            if (nodeName.equals("#cdata-section"))
+                return node.getNodeValue();
+        }
+        return "";
     }
 
     /**
@@ -151,7 +235,7 @@ public class XmlAnalyzer
         catch (Exception e)
         {
             // To build the file path that needs to be displayed, we show only the part of the abosute path after the xml directory 
-            String relativePath = file.getAbsolutePath().substring(projectInformation.getXmlDirectory().length());
+            String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
 
             // Sometimes the exception message is null, so we get the message from the parent exception
             String message = e.getMessage();
@@ -170,7 +254,7 @@ public class XmlAnalyzer
      */
     private static XmlPageInformation analyzeContentsOfXmlFile(File file) throws Exception
     {
-        XmlPageInformation xmlPageInformation = new XmlPageInformation(file.getAbsolutePath());
+        XmlPageInformation xmlPageInformation = new XmlPageInformation();
 
         findAssetType(file, xmlPageInformation);
         findMetadataFields(file, xmlPageInformation);
