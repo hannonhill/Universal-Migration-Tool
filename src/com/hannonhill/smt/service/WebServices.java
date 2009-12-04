@@ -170,8 +170,15 @@ public class WebServices
         String path = xmlPage.getDeployPath();
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
 
+        String assetType = xmlPage.getAssetType();
+        String contentTypePath = projectInformation.getContentTypeMap().get(assetType);
+
+        // Do not create a page for which the asset type wasn't mapped to content type
+        if (contentTypePath == null)
+            return;
+
         Page page = new Page();
-        page.setContentTypePath(projectInformation.getContentTypePaths().iterator().next()); //TODO: make it figure out which content type to use
+        page.setContentTypePath(contentTypePath);
         page.setName(PathUtil.truncateExtension(PathUtil.getNameFromPath(path)));
         page.setParentFolderPath(parentFolderPath);
         page.setSiteName(projectInformation.getSiteName());
