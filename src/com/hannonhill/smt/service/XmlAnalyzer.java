@@ -221,7 +221,8 @@ public class XmlAnalyzer
             Node node = nodes.item(i);
             String nodeName = node.getNodeName();
             if (nodeName.equals("#cdata-section"))
-                return node.getNodeValue();
+                // Always tidy cdata section. Trim because jtidy leaves a new line character at the end.
+                return JTidy.tidyContent(node.getNodeValue()).trim();
         }
         return "";
     }

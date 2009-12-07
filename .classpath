@@ -33,5 +33,6 @@
 	<classpathentry kind="lib" path="tomcat/lib/wsdl4j-1.5.1.jar"/>
 	<classpathentry kind="lib" path="tomcat/lib/xalan.jar"/>
 	<classpathentry kind="lib" path="tomcat/lib/serializer.jar"/>
+	<classpathentry kind="lib" path="tomcat/lib/jtidy-r938.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
