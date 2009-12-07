@@ -39,13 +39,13 @@
 								<s:if test="projectInformation.assetTypes.get(#assetTypeName).metadataFieldMapping.size()>0">
 									<tr><th colspan="3">Metadata</th></tr>
 									<s:iterator value="projectInformation.assetTypes.get(#assetTypeName).metadataFieldMapping.entrySet()">
-										<tr><td><s:property value="key"/></td><td class="arrow">-&gt;</td><td><s:property value="value.identifier"/></td></tr>
+										<tr><td><s:property value="key"/></td><td class="arrow">-&gt;</td><td><s:property value="value.label"/></td></tr>
 									</s:iterator>
 								</s:if>
 								<s:if test="projectInformation.assetTypes.get(#assetTypeName).contentFieldMapping.size()>0">
 									<tr><th colspan="3">Content</th></tr>
 									<s:iterator value="projectInformation.assetTypes.get(#assetTypeName).contentFieldMapping.entrySet()">
-										<tr><td><s:property value="key"/></td><td class="arrow">-&gt;</td><td><s:property value="value.identifier"/></td></tr>
+										<tr><td><s:property value="key"/></td><td class="arrow">-&gt;</td><td><s:property value="value.label"/></td></tr>
 									</s:iterator>
 								</s:if>
 							</table>

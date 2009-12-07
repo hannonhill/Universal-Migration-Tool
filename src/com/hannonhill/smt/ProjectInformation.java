@@ -34,8 +34,9 @@ public class ProjectInformation
     private List<String> assetTypeNames; // repeated information - an ordered list of asset type names (the map above holds things that are not ordered)
     private String overwriteBehavior;
 
-    // analyzed information - asset type name and the actual asset type
-    private Map<String, AssetType> assetTypes;
+    // analyzed information
+    private Map<String, AssetType> assetTypes; // asset type name and the actual asset type
+    private Map<String, ContentType> contentTypes; // content type path and the actual content type 
 
     // Cascade information
     private Set<String> contentTypePaths;
@@ -232,5 +233,21 @@ public class ProjectInformation
     public List<String> getErrors()
     {
         return errors;
+    }
+
+    /**
+     * @return Returns the contentTypes.
+     */
+    public Map<String, ContentType> getContentTypes()
+    {
+        return contentTypes;
+    }
+
+    /**
+     * @param contentTypes the contentTypes to set
+     */
+    public void setContentTypes(Map<String, ContentType> contentTypes)
+    {
+        this.contentTypes = contentTypes;
     }
 }

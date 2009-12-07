@@ -10,7 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hannonhill.smt.AssetType;
+import com.hannonhill.smt.ContentType;
 import com.hannonhill.smt.ProjectInformation;
+import com.hannonhill.smt.service.WebServices;
 
 /**
  * In this action user is assigning the asset types from xml to Content Types in Cascade
@@ -57,13 +60,43 @@ public class AssignContentTypesAction extends BaseAction
             return INPUT;
         }
 
-        for (int i = 0; i < selectedAssetTypes.length; i++)
-            projectInformation.getContentTypeMap().put(selectedAssetTypes[i], selectedContentTypes[i]);
+        try
+        {
+            projectInformation.setContentTypes(new HashMap<String, ContentType>()); // clear out the existing content types
+            for (int i = 0; i < selectedAssetTypes.length; i++)
+                createAndAddContentType(selectedContentTypes[i], selectedAssetTypes[i], projectInformation);
+        }
+        catch (Exception e)
+        {
+            addActionError("An error occured: " + e.getMessage());
+            return processView();
+        }
 
         // make the asset type names an ordered list because map keeps things out of order
         projectInformation.setAssetTypeNames(new ArrayList<String>(projectInformation.getContentTypeMap().keySet()));
 
+        // clear out the rest of previously entered information
+        clearOutUnusedContentTypeFieldMappings();
+
         return SUCCESS;
+    }
+
+    /**
+     * Creates a content type object, reads its fields through web services and adds it to the project information. Also adds a mapping
+     * to the content type map.
+     * 
+     * @param contentTypePath
+     * @param assetTypeName
+     * @param projectInformation
+     * @throws Exception
+     */
+    private void createAndAddContentType(String contentTypePath, String assetTypeName, ProjectInformation projectInformation) throws Exception
+    {
+        projectInformation.getContentTypeMap().put(assetTypeName, contentTypePath);
+        ContentType contentType = new ContentType(contentTypePath);
+        contentType.setMetadataFields(WebServices.getMetadataFieldsForContentType(contentTypePath, projectInformation));
+        contentType.setDataDefinitionFields(WebServices.getDataDefinitionFieldsForContentType(contentTypePath, projectInformation));
+        projectInformation.getContentTypes().put(contentTypePath, contentType);
     }
 
     /**
@@ -77,6 +110,21 @@ public class AssignContentTypesAction extends BaseAction
         assetTypes.addAll(projectInformation.getAssetTypes().keySet());
         contentTypes.addAll(projectInformation.getContentTypePaths());
         return INPUT;
+    }
+
+    /**
+     * To save the memory and avoid problems with unnecessary information that causes mess, the unused content types get
+     * their field mappings cleared out.
+     */
+    private void clearOutUnusedContentTypeFieldMappings()
+    {
+        ProjectInformation projectInformation = getProjectInformation();
+        for (AssetType assetType : projectInformation.getAssetTypes().values())
+            if (!projectInformation.getAssetTypeNames().contains(assetType.getName()))
+            {
+                assetType.getMetadataFieldMapping().clear();
+                assetType.getContentFieldMapping().clear();
+            }
     }
 
     /**

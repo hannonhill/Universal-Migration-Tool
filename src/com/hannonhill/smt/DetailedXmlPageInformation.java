@@ -5,6 +5,9 @@
  */
 package com.hannonhill.smt;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * An object containing detailed information about the XML page useful for migration of the page into Cascade Server.
  * 
@@ -16,6 +19,8 @@ public class DetailedXmlPageInformation
 {
     private String deployPath;
     private String assetType;
+    private final Map<String, String> metadataMap = new HashMap<String, String>();
+    private final Map<String, String> contentMap = new HashMap<String, String>();
 
     /**
      * @return Returns the deployPath.
@@ -47,5 +52,21 @@ public class DetailedXmlPageInformation
     public void setAssetType(String assetType)
     {
         this.assetType = assetType;
+    }
+
+    /**
+     * @return Returns the metadataMap.
+     */
+    public Map<String, String> getMetadataMap()
+    {
+        return metadataMap;
+    }
+
+    /**
+     * @return Returns the contentMap.
+     */
+    public Map<String, String> getContentMap()
+    {
+        return contentMap;
     }
 }

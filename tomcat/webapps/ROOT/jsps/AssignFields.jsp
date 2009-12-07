@@ -88,13 +88,13 @@
 				if (cascadeType=="METADATA")
 				{
 					for(var i=0; i<cascadeMetadataFieldNamesEl.options.length; i++)
-						if (cascadeMetadataFieldNamesEl.options[i].text==cascade)
+						if (cascadeMetadataFieldNamesEl.options[i].value==cascade)
 							cascadeMetadataIndex = i;
 				}
 				else
 				{
 					for(var i=0; i<cascadeDataDefinitionFieldNamesEl.options.length; i++)
-						if (cascadeDataDefinitionFieldNamesEl.options[i].text==cascade)
+						if (cascadeDataDefinitionFieldNamesEl.options[i].value==cascade)
 							cascadeDataDefinitionIndex = i;
 				}
 
@@ -110,8 +110,10 @@
 				var xmlContentFieldName = xmlContentFieldSelectedIndex==null?null:xmlContentFieldNamesEl.options[xmlContentFieldSelectedIndex].text;
 				var cascadeMetadataFieldNamesEl = document.getElementById("cascadeMetadataFieldNames");
 				var cascadeMetadataFieldName = cascadeMetadataFieldSelectedIndex==null?null:cascadeMetadataFieldNamesEl.options[cascadeMetadataFieldSelectedIndex].text;
+				var cascadeMetadataFieldIdentifier = cascadeMetadataFieldSelectedIndex==null?null:cascadeMetadataFieldNamesEl.options[cascadeMetadataFieldSelectedIndex].value;
 				var cascadeDataDefinitionFieldNamesEl = document.getElementById("cascadeDataDefinitionFieldNames");
 				var cascadeDataDefinitionFieldName = cascadeDataDefinitionFieldSelectedIndex==null?null:cascadeDataDefinitionFieldNamesEl.options[cascadeDataDefinitionFieldSelectedIndex].text;
+				var cascadeDataDefinitionFieldIdentifier = cascadeDataDefinitionFieldSelectedIndex==null?null:cascadeDataDefinitionFieldNamesEl.options[cascadeDataDefinitionFieldSelectedIndex].value;
 				var tableName = xmlMetadataFieldSelectedIndex==null ? "mappingsContent" : "mappingsMetadata";
 				var tableEl = document.getElementById(tableName);
 				var row = document.createElement("tr");
@@ -124,8 +126,8 @@
 				var cell4 = document.createElement("td");
 				var hiddenContent = "<input type=\"hidden\" name=\"selectedXmlMetadataFields\" value=\""+xmlMetadataFieldName+"\"/>";
 				hiddenContent += "<input type=\"hidden\" name=\"selectedXmlContentFields\" value=\""+xmlContentFieldName+"\"/>";				
-				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeMetadataFields\" value=\""+cascadeMetadataFieldName+"\"/>";				
-				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeDataDefinitionFields\" value=\"" + cascadeDataDefinitionFieldName + "\"/>";				
+				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeMetadataFields\" value=\""+cascadeMetadataFieldIdentifier+"\"/>";				
+				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeDataDefinitionFields\" value=\"" + cascadeDataDefinitionFieldIdentifier + "\"/>";				
 				cell4.innerHTML = hiddenContent+"<button onclick=\"removeMapping('" + xmlMetadataFieldName + "', '" + xmlContentFieldName + "');return false;\">Remove</button>";
 				
 				row.appendChild(cell1);
@@ -178,7 +180,7 @@
 					<td>
 						<select name="xmlMetadataFieldNames" id="xmlMetadataFieldNames" onfocus="document.getElementById('xmlFieldTypeMetadata').checked='checked'">
 							<s:iterator value="xmlMetadataFieldNames">
-								<option value="<s:property value="identifier"/>"><s:property/></option>
+								<option value="<s:property/>"><s:property/></option>
 							</s:iterator>
 						</select>
 					</td>
@@ -188,7 +190,7 @@
 					<td>
 						<select name="xmlContentFieldNames" id="xmlContentFieldNames" onfocus="document.getElementById('xmlFieldTypeContent').checked='checked'">
 							<s:iterator value="xmlContentFieldNames">
-								<option value="<s:property value="identifier"/>"><s:property/></option>
+								<option value="<s:property/>"><s:property/></option>
 							</s:iterator>
 						</select>
 					</td>

@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -60,22 +62,22 @@ public class XmlAnalyzer
     }
 
     /**
-     * Analyzes the data definition xml and returns a list of text fields
+     * Analyzes the data definition xml and returns a map of text fields
      * 
      * @param xml
      * @return
      * @throws Exception
      */
-    public static List<Field> analyzeDataDefinitionXml(String xml) throws Exception
+    public static Map<String, Field> analyzeDataDefinitionXml(String xml) throws Exception
     {
-        List<Field> returnList = new ArrayList<Field>();
+        Map<String, Field> returnMap = new HashMap<String, Field>();
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
         Document doc = docBuilder.parse(new InputSource(new StringReader(xml)));
         Node rootNode = doc.getChildNodes().item(0);
         NodeList children = rootNode.getChildNodes();
-        analyzeDataDefinitionGroup(children, "", "", returnList);
-        return returnList;
+        analyzeDataDefinitionGroup(children, "", "", returnMap);
+        return returnMap;
     }
 
     /**
@@ -122,13 +124,17 @@ public class XmlAnalyzer
             String rootChildNodeName = rootChildNode.getNodeName();
             if (rootChildNodeName.equals("coreData"))
                 parseCoreData(rootChildNode, page);
+            else if (rootChildNodeName.equals("metaData"))
+                parseMetaData(rootChildNode, page);
+            else if (rootChildNodeName.equals("content"))
+                parseContent(rootChildNode, page);
         }
 
         return page;
     }
 
     /**
-     * Parses the information contained in the xml file's &lt;coreData&gt; tag
+     * Parses the information contained in the xml file's &lt;coreData&gt; tag and assigns it to the page
      * 
      * @param coreDataNode
      * @param page
@@ -144,6 +150,60 @@ public class XmlAnalyzer
                 page.setDeployPath(getCDataContent(node));
             else if (nodeName.equals("assetType"))
                 page.setAssetType(getCDataContent(node));
+        }
+    }
+
+    /**
+     * Parses the information contained in the xml file's &lt;metaData&gt; tag and assigns it to the page
+     * 
+     * @param coreDataNode
+     * @param page
+     */
+    private static void parseMetaData(Node coreDataNode, DetailedXmlPageInformation page)
+    {
+        NodeList nodes = coreDataNode.getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++)
+        {
+            Node node = nodes.item(i);
+            String nodeName = node.getNodeName();
+
+            // Nodes without attributes are text and comments so we skip them
+            if (node.getAttributes() == null)
+                continue;
+
+            Node isUserMetadataAttribute = node.getAttributes().getNamedItem("isUserMetaData");
+            Node nameAttribute = node.getAttributes().getNamedItem("name");
+
+            // only <field> tags count and they must have "name" and "isUserMetaData" attributes the "isUserMetadata" attribute must say "true"
+            if (nodeName.equals("field") && nameAttribute != null && isUserMetadataAttribute != null
+                    && isUserMetadataAttribute.getNodeValue().equals("true"))
+                page.getMetadataMap().put(nameAttribute.getNodeValue(), XmlAnalyzer.getCDataContent(node));
+        }
+    }
+
+    /**
+     * Parses the information contained in the xml file's &lt;content&gt; tag and assigns it to the page
+     * 
+     * @param coreDataNode
+     * @param page
+     */
+    private static void parseContent(Node coreDataNode, DetailedXmlPageInformation page)
+    {
+        NodeList nodes = coreDataNode.getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++)
+        {
+            Node node = nodes.item(i);
+            String nodeName = node.getNodeName();
+
+            // Nodes without attributes are text and comments so we skip them
+            if (node.getAttributes() == null)
+                continue;
+
+            Node nameAttribute = node.getAttributes().getNamedItem("name");
+
+            // only <field> tags count and they must have "name" attribute the
+            if (nodeName.equals("field") && nameAttribute != null)
+                page.getContentMap().put(nameAttribute.getNodeValue(), XmlAnalyzer.getCDataContent(node));
         }
     }
 
@@ -167,14 +227,14 @@ public class XmlAnalyzer
     }
 
     /**
-     * Adds all the text fields to the returnList recursively
+     * Adds all the text fields to the returnMap recursively
      * 
      * @param children
      * @param identifierPrefix
      * @param labelPrefix
-     * @param returnList
+     * @param returnMap
      */
-    private static void analyzeDataDefinitionGroup(NodeList children, String identifierPrefix, String labelPrefix, List<Field> returnList)
+    private static void analyzeDataDefinitionGroup(NodeList children, String identifierPrefix, String labelPrefix, Map<String, Field> returnMap)
     {
         for (int i = 0; i < children.getLength(); i++)
         {
@@ -200,9 +260,13 @@ public class XmlAnalyzer
 
             // If group - go recursively, if text - add to the field list. Ignore asset choosers.
             if (node.getNodeName().equals("group"))
-                analyzeDataDefinitionGroup(node.getChildNodes(), identifierPrefix + identifier + "/", labelPrefix + label + "/", returnList);
+                analyzeDataDefinitionGroup(node.getChildNodes(), identifierPrefix + identifier + "/", labelPrefix + label + "/", returnMap);
             else if (node.getNodeName().equals("text"))
-                returnList.add(new Field(identifierPrefix + identifier, labelPrefix + label, FieldType.DATA_DEFINITION));
+            {
+                String newIdentifier = identifierPrefix + identifier;
+                String newLabel = labelPrefix + label;
+                returnMap.put(newIdentifier, new Field(newIdentifier, newLabel, FieldType.DATA_DEFINITION));
+            }
         }
     }
 

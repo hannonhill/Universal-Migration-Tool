@@ -7,8 +7,11 @@ package com.hannonhill.smt.service;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.FieldType;
@@ -21,10 +24,13 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Authentication;
 import com.hannonhill.www.ws.ns.AssetOperationService.ContentType;
 import com.hannonhill.www.ws.ns.AssetOperationService.ContentTypeContainer;
 import com.hannonhill.www.ws.ns.AssetOperationService.CreateResult;
+import com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataField;
 import com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinition;
 import com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString;
+import com.hannonhill.www.ws.ns.AssetOperationService.FieldValue;
 import com.hannonhill.www.ws.ns.AssetOperationService.Folder;
 import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
+import com.hannonhill.www.ws.ns.AssetOperationService.Metadata;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataSet;
 import com.hannonhill.www.ws.ns.AssetOperationService.Page;
@@ -51,6 +57,17 @@ public class WebServices
     };
 
     private static final Field XHTML_DATA_DEFINITION_FIELD = new Field("xhtml", "XHTML", FieldType.DATA_DEFINITION);
+
+    // Identifiers of the standard metadata fields
+    private static final List<String> STANDARD_METADATA_FIELD_IDENTIFIERS;
+
+    static
+    {
+        // Assign the identifiers
+        STANDARD_METADATA_FIELD_IDENTIFIERS = new ArrayList<String>();
+        for (Field standardMetadataField : STANDARD_METADATA_FIELDS)
+            STANDARD_METADATA_FIELD_IDENTIFIERS.add(standardMetadataField.getIdentifier());
+    }
 
     /**
      * Reads a site object
@@ -93,14 +110,14 @@ public class WebServices
     }
 
     /**
-     * Returns a list of metadata field names of a metadata set that is assigned to a content type with given contentTypePath
+     * Returns a map of metadata field identifiers to actual fields of a metadata set that is assigned to a content type with given contentTypePath
      * 
      * @param contentTypePath
      * @param projectInformation
      * @return
      * @throws Exception
      */
-    public static List<Field> getMetadataFieldsForContentType(String contentTypePath, ProjectInformation projectInformation) throws Exception
+    public static Map<String, Field> getMetadataFieldsForContentType(String contentTypePath, ProjectInformation projectInformation) throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
         ContentType contentType = readContentTypeByPath(projectInformation, contentTypePath);
@@ -114,29 +131,29 @@ public class WebServices
         MetadataSet metadataSet = readResult.getAsset().getMetadataSet();
 
         // add all the standard fields
-        List<Field> resultList = new ArrayList<Field>();
+        Map<String, Field> resultMap = new HashMap<String, Field>();
         for (Field field : STANDARD_METADATA_FIELDS)
-            resultList.add(field);
+            resultMap.put(field.getIdentifier(), field);
 
         // add the dynamic fields
         for (DynamicMetadataFieldDefinition definition : metadataSet.getDynamicMetadataFieldDefinitions())
             if (!definition.getVisibility().equals(MetadataFieldVisibility.hidden)) // skip hidden fields
-                resultList.add(new Field(definition.getName(), definition.getLabel(), FieldType.METADATA));
+                resultMap.put(definition.getName(), new Field(definition.getName(), definition.getLabel(), FieldType.METADATA));
 
-        return resultList;
+        return resultMap;
     }
 
     /**
-     * Returns a list of data definition field names of a data definition that is assigned to a content type with given contentTypePath
+     * Returns a map of data definition field identifier to actual fields of a data definition that is assigned to a content type with given contentTypePath
      * 
      * @param contentTypePath
      * @param projectInformation
      * @return
      * @throws Exception
      */
-    public static List<Field> getDataDefinitionFieldsForContentType(String contentTypePath, ProjectInformation projectInformation) throws Exception
+    public static Map<String, Field> getDataDefinitionFieldsForContentType(String contentTypePath, ProjectInformation projectInformation)
+            throws Exception
     {
-        List<Field> returnList = new ArrayList<Field>();
         Authentication authentication = getAuthentication(projectInformation);
 
         // Check if data definition is assign. If it isn't - we just return the XHTML field.
@@ -144,8 +161,9 @@ public class WebServices
         String dataDefinitionId = contentType.getStructuredDataDefinitionId();
         if (dataDefinitionId == null)
         {
-            returnList.add(XHTML_DATA_DEFINITION_FIELD);
-            return returnList;
+            Map<String, Field> returnMap = new HashMap<String, Field>();
+            returnMap.put(XHTML_DATA_DEFINITION_FIELD.getIdentifier(), XHTML_DATA_DEFINITION_FIELD);
+            return returnMap;
         }
 
         Identifier identifier = new Identifier(dataDefinitionId, null, EntityTypeString.structureddatadefinition);
@@ -170,8 +188,9 @@ public class WebServices
         String path = xmlPage.getDeployPath();
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
 
-        String assetType = xmlPage.getAssetType();
-        String contentTypePath = projectInformation.getContentTypeMap().get(assetType);
+        String assetTypeName = xmlPage.getAssetType();
+        AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
+        String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
 
         // Do not create a page for which the asset type wasn't mapped to content type
         if (contentTypePath == null)
@@ -183,6 +202,7 @@ public class WebServices
         page.setParentFolderPath(parentFolderPath);
         page.setSiteName(projectInformation.getSiteName());
         page.setXhtml("Test");
+        page.setMetadata(createPageMetadata(xmlPage, assetType));
 
         Asset asset = new Asset();
         asset.setPage(page);
@@ -197,6 +217,78 @@ public class WebServices
             createFolder(parentFolderPath, projectInformation);
             createPage(xmlPage, projectInformation);
         }
+    }
+
+    /**
+     * Creates the page's metadata object with the values from the xmlPage uses the mappings from the assetType. 
+     * 
+     * @param xmlPage
+     * @param assetType
+     * @return
+     * @throws Exception
+     */
+    private static Metadata createPageMetadata(DetailedXmlPageInformation xmlPage, AssetType assetType) throws Exception
+    {
+        // Create the metadata object and the list of dynamic fields
+        Metadata metadata = new Metadata();
+        List<DynamicMetadataField> dynamicFieldsList = new ArrayList<DynamicMetadataField>();
+
+        // For each xml metadata field, find a mapping and assign appropriate value in metadata
+        for (String xmlMetadataFieldName : xmlPage.getMetadataMap().keySet())
+        {
+            Field field = assetType.getMetadataFieldMapping().get(xmlMetadataFieldName);
+
+            if (field == null)
+                continue;
+
+            String fieldName = field.getIdentifier();
+            String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
+            if (field.getFieldType() == FieldType.METADATA)
+                assignAppropriateFieldValue(metadata, dynamicFieldsList, fieldName, fieldValue);
+        }
+
+        // For each xml content field, find a mapping and assign appropriate value in metadata
+        for (String xmlContentFieldName : xmlPage.getContentMap().keySet())
+        {
+            Field field = assetType.getContentFieldMapping().get(xmlContentFieldName);
+
+            if (field == null)
+                continue;
+
+            String fieldName = field.getIdentifier();
+            String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
+            if (field.getFieldType() == FieldType.METADATA)
+                assignAppropriateFieldValue(metadata, dynamicFieldsList, fieldName, fieldValue);
+        }
+
+        // Convert the list of dynamic field to an array and assign it to the metadata object
+        metadata.setDynamicFields(dynamicFieldsList.toArray(new DynamicMetadataField[dynamicFieldsList.size()]));
+        return metadata;
+    }
+
+    /**
+     * Assigns given fieldValue of given fieldName to metadata object if it is a standard metadata field or adds it to the list of
+     * dynamicFields.
+     * 
+     * @param metadata
+     * @param dynamicFields
+     * @param fieldName
+     * @param fieldValue
+     * @throws Exception
+     */
+    private static void assignAppropriateFieldValue(Metadata metadata, List<DynamicMetadataField> dynamicFields, String fieldName, String fieldValue)
+            throws Exception
+    {
+        // If it is a standard metadata field, call the appropriate setter
+        if (STANDARD_METADATA_FIELD_IDENTIFIERS.contains(fieldName))
+            Metadata.class.getMethod("set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1), String.class).invoke(metadata,
+                    fieldValue);
+        // If it is not a standard metadata field, add a dynamic field
+        else
+            dynamicFields.add(new DynamicMetadataField(fieldName, new FieldValue[]
+            {
+                new FieldValue(fieldValue)
+            }));
     }
 
     /**

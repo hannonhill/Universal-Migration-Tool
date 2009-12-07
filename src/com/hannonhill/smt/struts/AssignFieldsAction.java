@@ -10,10 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.hannonhill.smt.AssetType;
+import com.hannonhill.smt.ContentType;
 import com.hannonhill.smt.Field;
-import com.hannonhill.smt.FieldType;
 import com.hannonhill.smt.ProjectInformation;
-import com.hannonhill.smt.service.WebServices;
 
 /**
  * Action responsible for assigning metadata and structured data fields.
@@ -68,19 +67,19 @@ public class AssignFieldsAction extends BaseAction
         assetTypeObject.getMetadataFieldMapping().clear();
         assetTypeObject.getContentFieldMapping().clear();
 
-        // Go through each field assignment submitted by the form
-        for (int i = 0; i < selectedXmlMetadataFields.length; i++)
-        {
-            // JavaScript generates word "null" for null assignments, so we get the Cascade field name and field type by looking for the "null" word
-            String cascadeFieldName = selectedCascadeMetadataFields[i].equals("null") ? selectedCascadeDataDefinitionFields[i]
-                    : selectedCascadeMetadataFields[i];
-            FieldType fieldType = selectedCascadeMetadataFields[i].equals("null") ? FieldType.DATA_DEFINITION : FieldType.METADATA;
+        String contentTypePath = projectInformation.getContentTypeMap().get(projectInformation.getAssetTypeNames().get(assetType));
+        ContentType contentType = projectInformation.getContentTypes().get(contentTypePath);
 
-            // Similary way, by checking which field is "null", we can add the mapping to correct type of map
-            if (!selectedXmlMetadataFields[i].equals("null"))
-                assetTypeObject.getMetadataFieldMapping().put(selectedXmlMetadataFields[i], new Field(cascadeFieldName, null, fieldType));
-            else
-                assetTypeObject.getContentFieldMapping().put(selectedXmlContentFields[i], new Field(cascadeFieldName, null, fieldType));
+        // Go through each field assignment submitted by the form
+        try
+        {
+            for (int i = 0; i < selectedXmlMetadataFields.length; i++)
+                addFieldMapping(i, contentType, assetTypeObject);
+        }
+        catch (Exception e)
+        {
+            addActionError("An error occured: " + e.getMessage());
+            return processView();
         }
 
         // Increment the current asset type and prepare the view information
@@ -105,18 +104,49 @@ public class AssignFieldsAction extends BaseAction
 
         xmlMetadataFieldNames.addAll(projectInformation.getAssetTypes().get(assetTypeName).getMetadataFields());
         xmlContentFieldNames.addAll(projectInformation.getAssetTypes().get(assetTypeName).getContentFields());
-        try
-        {
-            cascadeMetadataFields.addAll(WebServices.getMetadataFieldsForContentType(contentTypePath, projectInformation));
-            cascadeDataDefinitionFields.addAll(WebServices.getDataDefinitionFieldsForContentType(contentTypePath, projectInformation));
-        }
-        catch (Exception e)
-        {
-            addActionError(e.getMessage());
-            return INPUT;
-        }
+
+        ContentType contentType = projectInformation.getContentTypes().get(contentTypePath);
+        cascadeMetadataFields.addAll(contentType.getMetadataFields().values());
+        cascadeDataDefinitionFields.addAll(contentType.getDataDefinitionFields().values());
 
         return INPUT;
+    }
+
+    /**
+     * Given field identifiers of fields with given index i (selectedXmlMetadataFields, selectedXmlContentFields, selectedCascadeMetadataFields,
+     * selectedCascadeDataDefinitionFields) it picks two that are not "null" and creates a mapping for them. The mapping is 
+     * xml field identifier -> cascade field. The cascade field is retrieved from the contentType. The created mapping is added to the
+     * assetTypeObject. 
+     * 
+     * @param i
+     * @param contentType
+     * @param assetTypeObject
+     * @throws Exception
+     */
+    private void addFieldMapping(int i, ContentType contentType, AssetType assetTypeObject) throws Exception
+    {
+        String xmlMetadataFieldIdentifier = selectedXmlMetadataFields[i];
+        String xmlContentFieldIdentifier = selectedXmlContentFields[i];
+        String cascadeMetadataFieldIdentifier = selectedCascadeMetadataFields[i];
+        String cascadeDataDefinitionFieldIdentifier = selectedCascadeDataDefinitionFields[i];
+
+        // JavaScript generates word "null" for null assignments, so we get the Cascade field name and field type by looking for the "null" word
+        boolean isDataDefinition = cascadeMetadataFieldIdentifier.equals("null");
+        boolean isContent = xmlMetadataFieldIdentifier.equals("null");
+        String cascadeFieldIdentifier = isDataDefinition ? cascadeDataDefinitionFieldIdentifier : cascadeMetadataFieldIdentifier;
+
+        // Get the actual field from the content type
+        Field field = isDataDefinition ? contentType.getDataDefinitionFields().get(cascadeFieldIdentifier) : contentType.getMetadataFields().get(
+                cascadeFieldIdentifier);
+
+        if (field == null)
+            throw new Exception("Data Definition or Metadata has been updated in meantime. Please re-assign Content Types again.");
+
+        // Similary way, by checking which field is "null", we can add the mapping to correct type of map
+        if (isContent)
+            assetTypeObject.getContentFieldMapping().put(xmlContentFieldIdentifier, field);
+        else
+            assetTypeObject.getMetadataFieldMapping().put(xmlMetadataFieldIdentifier, field);
     }
 
     /**
