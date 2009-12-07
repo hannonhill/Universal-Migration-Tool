@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.ContentType;
+import com.hannonhill.smt.Field;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.service.WebServices;
 
@@ -95,7 +96,20 @@ public class AssignContentTypesAction extends BaseAction
         projectInformation.getContentTypeMap().put(assetTypeName, contentTypePath);
         ContentType contentType = new ContentType(contentTypePath);
         contentType.setMetadataFields(WebServices.getMetadataFieldsForContentType(contentTypePath, projectInformation));
-        contentType.setDataDefinitionFields(WebServices.getDataDefinitionFieldsForContentType(contentTypePath, projectInformation));
+        Map<String, Field> dataDefinitionFields = WebServices.getDataDefinitionFieldsForContentType(contentTypePath, projectInformation);
+        if (dataDefinitionFields != null)
+        {
+            contentType.setDataDefinitionFields(dataDefinitionFields);
+            contentType.setUsesDataDefinition(true);
+        }
+        else
+        {
+            Map<String, Field> returnMap = new HashMap<String, Field>();
+            returnMap.put(WebServices.XHTML_DATA_DEFINITION_FIELD.getIdentifier(), WebServices.XHTML_DATA_DEFINITION_FIELD);
+            contentType.setDataDefinitionFields(returnMap);
+            contentType.setUsesDataDefinition(false);
+        }
+
         projectInformation.getContentTypes().put(contentTypePath, contentType);
     }
 

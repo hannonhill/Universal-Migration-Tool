@@ -19,6 +19,7 @@ public class ContentType
     private final String path;
     private Map<String, Field> metadataFields;
     private Map<String, Field> dataDefinitionFields;
+    private boolean usesDataDefinition;
 
     /**
      * Constructor
@@ -68,5 +69,21 @@ public class ContentType
     public void setDataDefinitionFields(Map<String, Field> dataDefinitionFields)
     {
         this.dataDefinitionFields = dataDefinitionFields;
+    }
+
+    /**
+     * @return Returns the usesDataDefinition.
+     */
+    public boolean isUsesDataDefinition()
+    {
+        return usesDataDefinition;
+    }
+
+    /**
+     * @param usesDataDefinition the usesDataDefinition to set
+     */
+    public void setUsesDataDefinition(boolean usesDataDefinition)
+    {
+        this.usesDataDefinition = usesDataDefinition;
     }
 }
