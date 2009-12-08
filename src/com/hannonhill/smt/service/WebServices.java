@@ -189,7 +189,7 @@ public class WebServices
         AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
         String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
 
-        // Do not create a page for which the asset type wasn't mapped to content type
+        // This should be caught before, but just a sanity check
         if (contentTypePath == null)
             return;
 

@@ -73,6 +73,14 @@ public class Migrator
                 try
                 {
                     DetailedXmlPageInformation page = XmlAnalyzer.parseXmlFile(file);
+
+                    // If the asset type wasn't mapped, skip this page
+                    String assetTypeName = page.getAssetType();
+                    String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
+                    if (contentTypePath == null)
+                        continue;
+
+                    LinkRewriter.rewriteFileLinks(page);
                     WebServices.createPage(page, projectInformation);
                 }
                 catch (Exception e)

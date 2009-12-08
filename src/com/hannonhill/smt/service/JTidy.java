@@ -33,10 +33,10 @@ public class JTidy
         try
         {
             Tidy tidy = getTidy();
-            StringBuffer StringBuffer1 = new StringBuffer(content);
-            ByteArrayInputStream Bis1 = new ByteArrayInputStream(StringBuffer1.toString().getBytes("UTF-8"));
+            StringBuffer stringBuffer = new StringBuffer(content);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(stringBuffer.toString().getBytes("UTF-8"));
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            tidy.parse(Bis1, outStream); // run tidy, providing an input and output stream
+            tidy.parse(inputStream, outStream); // run tidy, providing an input and output stream
             return outStream.toString();
         }
         catch (UnsupportedEncodingException e)
