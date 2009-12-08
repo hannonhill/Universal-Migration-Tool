@@ -6,6 +6,7 @@
 package com.hannonhill.smt.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hannonhill.smt.DetailedXmlPageInformation;
@@ -68,6 +69,8 @@ public class Migrator
         {
             File folder = new File(projectInformation.getXmlDirectory());
             List<File> files = XmlAnalyzer.getAllFiles(folder);
+            List<String> pageIds = new ArrayList<String>();
+
             for (File file : files)
             {
                 try
@@ -80,8 +83,11 @@ public class Migrator
                     if (contentTypePath == null)
                         continue;
 
-                    LinkRewriter.rewriteFileLinks(page);
-                    WebServices.createPage(page, projectInformation);
+                    LinkRewriter.rewriteLinks(page);
+                    String pageId = WebServices.createPage(page, projectInformation);
+
+                    // Add the path of the page to the list because links will need to be realigned.
+                    pageIds.add(pageId);
                 }
                 catch (Exception e)
                 {
@@ -95,6 +101,24 @@ public class Migrator
 
                     projectInformation.getErrors().add("Could not create page " + relativePath + ": " + message);
                 }
+            }
+
+            for (String pageId : pageIds)
+            {
+                try
+                {
+                    WebServices.realignLinks(pageId, projectInformation);
+                }
+                catch (Exception e)
+                {
+                    // Sometimes the exception message is null, so we get the message from the parent exception
+                    String message = e.getMessage();
+                    if (message == null && e.getCause() != null)
+                        message = e.getCause().getMessage();
+
+                    projectInformation.getErrors().add("Could realign link in page with id " + pageId + ": " + message);
+                }
+
             }
         }
     }

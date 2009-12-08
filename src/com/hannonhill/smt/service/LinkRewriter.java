@@ -22,6 +22,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.hannonhill.smt.DetailedXmlPageInformation;
+import com.hannonhill.smt.util.PathUtil;
 
 /**
  * A service responsible for link rewriting
@@ -33,44 +34,47 @@ import com.hannonhill.smt.DetailedXmlPageInformation;
 public class LinkRewriter
 {
     /**
-     * Rewrites all the file links in the content and metadata fields of the page.
+     * Rewrites all the file and page links in the content and metadata fields of the page. If it is a page link (ends with .html extension and is
+     * a relative), the .html extension will be stripped
      * 
      * @param page
      * @throws Exception
      */
-    public static void rewriteFileLinks(DetailedXmlPageInformation page) throws Exception
+    public static void rewriteLinks(DetailedXmlPageInformation page) throws Exception
     {
         String pagePath = page.getDeployPath();
-        rewriteFileLinks(page.getContentMap(), pagePath);
-        rewriteFileLinks(page.getMetadataMap(), pagePath);
+        rewriteLinks(page.getContentMap(), pagePath);
+        rewriteLinks(page.getMetadataMap(), pagePath);
     }
 
     /**
-     * Rewrites all the file links in each value of the map.
+     * Rewrites all the file and page links in each value of the map. If it is a page link (ends with .html extension and is
+     * a relative), the .html extension will be stripped
      * 
      * @param map
      * @param pagePath
      * @throws Exception
      */
-    private static void rewriteFileLinks(Map<String, String> map, String pagePath) throws Exception
+    private static void rewriteLinks(Map<String, String> map, String pagePath) throws Exception
     {
         for (String fieldIdentifier : map.keySet())
         {
             String content = map.get(fieldIdentifier);
-            String newContent = rewriteFileLinks(content, pagePath);
+            String newContent = rewriteLinks(content, pagePath);
             map.put(fieldIdentifier, newContent);
         }
     }
 
     /**
-     * Rewrites all the file links in the xml.
+     * Rewrites all the file and page links in the xml. If it is a page link (ends with .html extension and is
+     * a relative), the .html extension will be stripped
      * 
      * @param xml
      * @param pagePath
      * @return
      * @throws Exception
      */
-    private static String rewriteFileLinks(String xml, String pagePath) throws Exception
+    private static String rewriteLinks(String xml, String pagePath) throws Exception
     {
         // To make things faster, if it's an empty string, just quit
         if (xml == null || xml.equals(""))
@@ -87,7 +91,7 @@ public class LinkRewriter
         Document document = builder.parse(new InputSource(inputStream));
 
         Node rootNode = document.getChildNodes().item(0);
-        rewriteFileLink(rootNode, pagePath);
+        rewriteLink(rootNode, pagePath);
 
         // convert document to string
         DOMSource domSource = new DOMSource(document);
@@ -105,83 +109,52 @@ public class LinkRewriter
     }
 
     /**
-     * Rewrites the file link in the xml tag node and all ancestor nodes
+     * Rewrites the file and page link in the xml tag node and all ancestor nodes. If it is a page link (ends with .html extension and is
+     * a relative), the .html extension will be stripped
      * 
      * @param node
      * @param pagePath
      */
-    private static void rewriteFileLink(Node node, String pagePath)
+    private static void rewriteLink(Node node, String pagePath)
     {
         if (node.getNodeName().equals("img"))
-            rewriteFileLink(node, "src", pagePath);
+            rewriteLink(node, "src", pagePath);
         if (node.getNodeName().equals("script"))
-            rewriteFileLink(node, "src", pagePath);
+            rewriteLink(node, "src", pagePath);
         else if (node.getNodeName().equals("a"))
-            rewriteFileLink(node, "href", pagePath);
+            rewriteLink(node, "href", pagePath);
         else if (node.getNodeName().equals("link"))
-            rewriteFileLink(node, "href", pagePath);
+            rewriteLink(node, "href", pagePath);
 
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++)
-            rewriteFileLink(children.item(i), pagePath);
+            rewriteLink(children.item(i), pagePath);
     }
 
     /**
-     * Rewrites a file link in the xml tag node's attribute of given attributeName
+     * Rewrites a file or page link in the xml tag node's attribute of given attributeName. If it is a page link (ends with .html extension and is
+     * a relative), the .html extension will be stripped
      * 
      * @param element
      * @param attributeName
      * @param pagePath
      */
-    private static void rewriteFileLink(Node element, String attributeName, String pagePath)
+    private static void rewriteLink(Node element, String attributeName, String pagePath)
     {
         Node attribute = element.getAttributes().getNamedItem(attributeName);
         if (attribute == null)
             return;
 
         String oldPath = attribute.getNodeValue();
-        String newPath = convertRelativeToAbsolute(oldPath, pagePath);
-        attribute.setNodeValue(newPath);
-    }
 
-    /**
-     * Converts a relative path starting from currentLocation to an absolute path
-     * 
-     * @param relative
-     * @param currentLocation
-     * @return
-     */
-    private static String convertRelativeToAbsolute(String relative, String currentLocation)
-    {
-        // Don't convert empty strings
-        if (relative.equals(""))
-            return "";
-
-        // Divide the relative path and current location into parts by slashes
-        String[] oldParts = relative.split("/");
-        String[] correctParts = currentLocation.split("/");
-
-        StringBuilder newPath = new StringBuilder();
-        int correctPartsCounter = correctParts.length - 1; // The counter starts at the last location and goes down
-        int oldPartsIndex; // The index for the old parts starts at 0 and goes up
-
-        // For each "../" decrement the counter
-        for (oldPartsIndex = 0; oldPartsIndex < oldParts.length; oldPartsIndex++)
+        if (PathUtil.isLinkRelative(oldPath))
         {
-            if (!oldParts[oldPartsIndex].equals(".."))
-                break;
+            String newPath = PathUtil.convertRelativeToAbsolute(oldPath, pagePath);
 
-            correctPartsCounter--;
+            if (newPath.endsWith(".html"))
+                newPath = PathUtil.truncateExtension(newPath);
+
+            attribute.setNodeValue(newPath);
         }
-
-        // Once we know how many times we went to parent folder using "../", we know the common part of the absolute path so we can build it
-        for (int correctPartsIndex = 0; correctPartsIndex < correctPartsCounter; correctPartsIndex++)
-            newPath.append("/" + correctParts[correctPartsIndex]);
-
-        // After we have the common part, we get the rest of the relative part (after all the "../")
-        for (; oldPartsIndex < oldParts.length; oldPartsIndex++)
-            newPath.append("/" + oldParts[oldPartsIndex]);
-
-        return newPath.toString();
     }
 }

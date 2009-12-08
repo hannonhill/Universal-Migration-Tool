@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.DetailedXmlPageInformation;
@@ -31,6 +32,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Folder;
 import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataSet;
+import com.hannonhill.www.ws.ns.AssetOperationService.OperationResult;
 import com.hannonhill.www.ws.ns.AssetOperationService.Page;
 import com.hannonhill.www.ws.ns.AssetOperationService.Path;
 import com.hannonhill.www.ws.ns.AssetOperationService.ReadResult;
@@ -178,9 +180,10 @@ public class WebServices
      * 
      * @param xmlPage
      * @param projectInformation
+     * @return Returns the created page's id.
      * @throws Exception
      */
-    public static void createPage(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
+    public static String createPage(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
     {
         String path = xmlPage.getDeployPath();
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
@@ -188,23 +191,25 @@ public class WebServices
         String assetTypeName = xmlPage.getAssetType();
         AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
         String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
+        com.hannonhill.smt.ContentType contentType = projectInformation.getContentTypes().get(contentTypePath);
+        Set<String> metadataFieldNames = contentType.getMetadataFields().keySet();
 
         // This should be caught before, but just a sanity check
         if (contentTypePath == null)
-            return;
+            return null;
 
         Page page = new Page();
         page.setContentTypePath(contentTypePath);
         page.setName(PathUtil.truncateExtension(PathUtil.getNameFromPath(path)));
         page.setParentFolderPath(parentFolderPath);
         page.setSiteName(projectInformation.getSiteName());
-        page.setMetadata(WebServicesUtil.createPageMetadata(xmlPage, assetType));
+        page.setMetadata(WebServicesUtil.createPageMetadata(xmlPage, assetType, metadataFieldNames));
 
         // Create the structured data object with the tree of structured data nodes
         StructuredData structuredData = WebServicesUtil.createPageStructuredData(xmlPage, assetType);
 
         // If page uses data definition, assign it to the page object
-        if (projectInformation.getContentTypes().get(contentTypePath).isUsesDataDefinition())
+        if (contentType.isUsesDataDefinition())
             page.setStructuredData(structuredData);
         else
         {
@@ -229,8 +234,61 @@ public class WebServices
                 && createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
         {
             createFolder(parentFolderPath, projectInformation);
-            createPage(xmlPage, projectInformation);
+            return createPage(xmlPage, projectInformation);
         }
+
+        return createResult.getCreatedAssetId();
+    }
+
+    /**
+     * Reads and edits the page so that the links are realigned
+     * 
+     * @param id
+     * @param projectInformation
+     * @throws Exception
+     */
+    public static void realignLinks(String id, ProjectInformation projectInformation) throws Exception
+    {
+        Page page = readPage(id, projectInformation);
+        WebServicesUtil.nullPageValues(page);
+        editPage(page, projectInformation);
+    }
+
+    /**
+     * Reads a page with given id from Cascade Server
+     * 
+     * @param id
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    private static Page readPage(String id, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Identifier identifier = new Identifier(id, null, EntityTypeString.page);
+        ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
+        if (!readResult.getSuccess().equals("true"))
+            throw new Exception("Error occured when reading a Page with id '" + id + "': " + readResult.getMessage());
+
+        return readResult.getAsset().getPage();
+    }
+
+    /**
+     * Sends an edit request for given page through web services
+     * 
+     * @param page
+     * @param projectInformation
+     * @throws Exception
+     */
+    private static void editPage(Page page, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Asset asset = new Asset();
+        asset.setPage(page);
+        OperationResult operationResult = getServer(projectInformation.getUrl()).edit(authentication, asset);
+
+        if (!operationResult.getSuccess().equals("true"))
+            throw new Exception("Error occured when reading a Page with id '" + page.getId() + "': " + operationResult.getMessage());
     }
 
     /**

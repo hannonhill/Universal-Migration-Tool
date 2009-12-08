@@ -60,4 +60,66 @@ public class PathUtil
     {
         return path.lastIndexOf('/') == -1 ? "/" : path.substring(0, path.lastIndexOf('/'));
     }
+
+    /**
+     * Converts a relative path starting from currentLocation to an absolute path
+     * 
+     * @param relative
+     * @param currentLocation
+     * @return
+     */
+    public static String convertRelativeToAbsolute(String relative, String currentLocation)
+    {
+        // Don't convert empty strings
+        if (relative.equals(""))
+            return "";
+
+        // Divide the relative path and current location into parts by slashes
+        String[] oldParts = relative.split("/");
+        String[] correctParts = currentLocation.split("/");
+
+        StringBuilder newPath = new StringBuilder();
+        int correctPartsCounter = correctParts.length - 1; // The counter starts at the last location and goes down
+        int oldPartsIndex; // The index for the old parts starts at 0 and goes up
+
+        // For each "../" decrement the counter
+        for (oldPartsIndex = 0; oldPartsIndex < oldParts.length; oldPartsIndex++)
+        {
+            if (!oldParts[oldPartsIndex].equals(".."))
+                break;
+
+            correctPartsCounter--;
+        }
+
+        // Once we know how many times we went to parent folder using "../", we know the common part of the absolute path so we can build it
+        for (int correctPartsIndex = 0; correctPartsIndex < correctPartsCounter; correctPartsIndex++)
+            newPath.append("/" + correctParts[correctPartsIndex]);
+
+        // After we have the common part, we get the rest of the relative part (after all the "../")
+        for (; oldPartsIndex < oldParts.length; oldPartsIndex++)
+            newPath.append("/" + oldParts[oldPartsIndex]);
+
+        return newPath.toString();
+    }
+
+    /**
+     * Returns true if the link is relative, meaning it doesn't start with "/" or protocol (like "http://")
+     * 
+     * @param link
+     * @return
+     */
+    public static boolean isLinkRelative(String link)
+    {
+        // Ignore empty links 
+        if (link.equals(""))
+            return false;
+
+        if (link.startsWith("/"))
+            return false;
+
+        if (link.contains("://"))
+            return false;
+
+        return true;
+    }
 }
