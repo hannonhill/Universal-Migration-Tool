@@ -147,14 +147,19 @@ public class LinkRewriter
 
         String oldPath = attribute.getNodeValue();
 
-        if (PathUtil.isLinkRelative(oldPath))
+        // split between the link part and the anchor part
+        String withoutAnchor = PathUtil.getPartWithoutAnchor(oldPath);
+        String anchor = PathUtil.getAnchorPart(oldPath);
+
+        if (PathUtil.isLinkRelative(withoutAnchor))
         {
-            String newPath = PathUtil.convertRelativeToAbsolute(oldPath, pagePath);
+            String newPath = PathUtil.convertRelativeToAbsolute(withoutAnchor, pagePath);
 
             if (newPath.endsWith(".html"))
                 newPath = PathUtil.truncateExtension(newPath);
 
-            attribute.setNodeValue(newPath);
+            // add the anchor part
+            attribute.setNodeValue(newPath + anchor);
         }
     }
 }

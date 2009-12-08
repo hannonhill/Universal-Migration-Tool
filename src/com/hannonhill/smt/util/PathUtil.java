@@ -122,4 +122,26 @@ public class PathUtil
 
         return true;
     }
+
+    /**
+     * Returns the part of the link that does not include the anchor part
+     * 
+     * @param link
+     * @return
+     */
+    public static String getPartWithoutAnchor(String link)
+    {
+        return link.indexOf('#') == -1 ? link : link.substring(0, link.indexOf('#'));
+    }
+
+    /**
+     * Returns the anchor part of the link
+     * 
+     * @param link
+     * @return
+     */
+    public static String getAnchorPart(String link)
+    {
+        return link.indexOf('#') == -1 ? "" : link.substring(link.indexOf('#'));
+    }
 }
