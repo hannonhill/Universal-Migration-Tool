@@ -13,6 +13,7 @@ import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.FieldType;
+import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.StructuredDataGroup;
 import com.hannonhill.smt.StructuredDataText;
 import com.hannonhill.smt.service.WebServices;
@@ -42,107 +43,8 @@ import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataType;
 public class WebServicesUtil
 {
     /**
-     * Creates the page's metadata object with the values from the xmlPage uses the mappings from the assetType. 
+     * Code copied from the Web Services Test Suite.
      * 
-     * @param xmlPage
-     * @param assetType
-     * @param availableMetadataFieldNames
-     * @return
-     * @throws Exception
-     */
-    public static Metadata createPageMetadata(DetailedXmlPageInformation xmlPage, AssetType assetType, Set<String> availableMetadataFieldNames)
-            throws Exception
-    {
-        // Create the metadata object and the list of dynamic fields
-        Metadata metadata = new Metadata();
-        List<DynamicMetadataField> dynamicFieldsList = new ArrayList<DynamicMetadataField>();
-
-        // A web services bug work-around: supply all dynamic metadata field values as empty strings first
-        for (String metadataFieldName : availableMetadataFieldNames)
-            if (!WebServices.STANDARD_METADATA_FIELD_IDENTIFIERS.contains(metadataFieldName))
-                dynamicFieldsList.add(new DynamicMetadataField(metadataFieldName, new FieldValue[]
-                {
-                    new FieldValue("")
-                }));
-
-        // For each xml metadata field, find a mapping and assign appropriate value in metadata
-        for (String xmlMetadataFieldName : xmlPage.getMetadataMap().keySet())
-        {
-            Field field = assetType.getMetadataFieldMapping().get(xmlMetadataFieldName);
-
-            if (field == null)
-                continue;
-
-            String fieldName = field.getIdentifier();
-            String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
-            if (field.getFieldType() == FieldType.METADATA)
-                assignAppropriateFieldValue(metadata, dynamicFieldsList, fieldName, fieldValue);
-        }
-
-        // For each xml content field, find a mapping and assign appropriate value in metadata
-        for (String xmlContentFieldName : xmlPage.getContentMap().keySet())
-        {
-            Field field = assetType.getContentFieldMapping().get(xmlContentFieldName);
-
-            if (field == null)
-                continue;
-
-            String fieldName = field.getIdentifier();
-            String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
-            if (field.getFieldType() == FieldType.METADATA)
-                assignAppropriateFieldValue(metadata, dynamicFieldsList, fieldName, fieldValue);
-        }
-
-        // Convert the list of dynamic field to an array and assign it to the metadata object
-        metadata.setDynamicFields(dynamicFieldsList.toArray(new DynamicMetadataField[dynamicFieldsList.size()]));
-        return metadata;
-    }
-
-    /**
-     * Creates the page's structured data object with the values from the xmlPage uses the mappings from the assetType. 
-     * 
-     * @param xmlPage
-     * @param assetType
-     * @return
-     * @throws Exception
-     */
-    public static StructuredData createPageStructuredData(DetailedXmlPageInformation xmlPage, AssetType assetType) throws Exception
-    {
-        // Create the root group object to which all the information will be attached
-        StructuredDataGroup rootGroup = new StructuredDataGroup("root");
-
-        // For each xml metadata field, find a mapping and assign appropriate value in structured data
-        for (String xmlMetadataFieldName : xmlPage.getMetadataMap().keySet())
-        {
-            Field field = assetType.getMetadataFieldMapping().get(xmlMetadataFieldName);
-
-            if (field == null)
-                continue;
-
-            String fieldName = field.getIdentifier();
-            String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
-            if (field.getFieldType() == FieldType.DATA_DEFINITION)
-                assignAppropriateFieldValue(rootGroup, fieldName, fieldValue);
-        }
-
-        // For each xml content field, find a mapping and assign appropriate value in metadata
-        for (String xmlContentFieldName : xmlPage.getContentMap().keySet())
-        {
-            Field field = assetType.getContentFieldMapping().get(xmlContentFieldName);
-
-            if (field == null)
-                continue;
-
-            String fieldName = field.getIdentifier();
-            String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
-            if (field.getFieldType() == FieldType.DATA_DEFINITION)
-                assignAppropriateFieldValue(rootGroup, fieldName, fieldValue);
-        }
-
-        return convertToStructuredData(rootGroup);
-    }
-
-    /**
      * Because of a limitation with Apache Axis, the data received when doing
      * a read on an asset is not able to be directly sent back to the server
      * as-is because the server actually sends more data than necessary. This
@@ -190,6 +92,155 @@ public class WebServicesUtil
         }
 
         nullPageConfigurationValues(page.getPageConfigurations());
+    }
+
+    /**
+     * Creates a page object based on the information provided in the xmlPage and the mappings in projectInformation.
+     * 
+     * @param xmlPage
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    public static Page setupPageObject(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
+    {
+        String path = xmlPage.getDeployPath();
+        String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
+        String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
+
+        String assetTypeName = xmlPage.getAssetType();
+        AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
+        String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
+        com.hannonhill.smt.ContentType contentType = projectInformation.getContentTypes().get(contentTypePath);
+        Set<String> metadataFieldNames = contentType.getMetadataFields().keySet();
+
+        Page page = new Page();
+        page.setContentTypePath(contentTypePath);
+        page.setName(pageName);
+        page.setParentFolderPath(parentFolderPath);
+        page.setSiteName(projectInformation.getSiteName());
+        page.setMetadata(createPageMetadata(xmlPage, assetType, metadataFieldNames));
+
+        // Create the structured data object with the tree of structured data nodes
+        StructuredData structuredData = createPageStructuredData(xmlPage, assetType);
+
+        // If page uses data definition, assign it to the page object
+        if (contentType.isUsesDataDefinition())
+            page.setStructuredData(structuredData);
+        else
+        {
+            // if page does not use data definition, the tree mapping should contain only a single xhtml field
+            StructuredDataNode[] xhtmlNodes = structuredData.getStructuredDataNodes();
+            if (xhtmlNodes.length == 1)
+                page.setXhtml(xhtmlNodes[0].getText());
+            else if (xhtmlNodes.length == 0)
+                ; // do nothing, no mappings
+            else
+                throw new Exception("The mappings for a page without Data Definition contains more than one field.");
+        }
+
+        return page;
+    }
+
+    /**
+     * Creates the page's structured data object with the values from the xmlPage uses the mappings from the assetType. 
+     * 
+     * @param xmlPage
+     * @param assetType
+     * @return
+     * @throws Exception
+     */
+    private static StructuredData createPageStructuredData(DetailedXmlPageInformation xmlPage, AssetType assetType) throws Exception
+    {
+        // Create the root group object to which all the information will be attached
+        StructuredDataGroup rootGroup = new StructuredDataGroup("root");
+
+        // For each xml metadata field, find a mapping and assign appropriate value in structured data
+        for (String xmlMetadataFieldName : xmlPage.getMetadataMap().keySet())
+        {
+            Field field = assetType.getMetadataFieldMapping().get(xmlMetadataFieldName);
+
+            if (field == null)
+                continue;
+
+            String fieldName = field.getIdentifier();
+            String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
+            if (field.getFieldType() == FieldType.DATA_DEFINITION)
+                assignAppropriateFieldValue(rootGroup, fieldName, fieldValue);
+        }
+
+        // For each xml content field, find a mapping and assign appropriate value in metadata
+        for (String xmlContentFieldName : xmlPage.getContentMap().keySet())
+        {
+            Field field = assetType.getContentFieldMapping().get(xmlContentFieldName);
+
+            if (field == null)
+                continue;
+
+            String fieldName = field.getIdentifier();
+            String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
+            if (field.getFieldType() == FieldType.DATA_DEFINITION)
+                assignAppropriateFieldValue(rootGroup, fieldName, fieldValue);
+        }
+
+        return convertToStructuredData(rootGroup);
+    }
+
+    /**
+     * Creates the page's metadata object with the values from the xmlPage uses the mappings from the assetType. 
+     * 
+     * @param xmlPage
+     * @param assetType
+     * @param availableMetadataFieldNames
+     * @return
+     * @throws Exception
+     */
+    private static Metadata createPageMetadata(DetailedXmlPageInformation xmlPage, AssetType assetType, Set<String> availableMetadataFieldNames)
+            throws Exception
+    {
+        // Create the metadata object and the list of dynamic fields
+        Metadata metadata = new Metadata();
+        List<DynamicMetadataField> dynamicFieldsList = new ArrayList<DynamicMetadataField>();
+
+        // A web services bug work-around: supply all dynamic metadata field values as empty strings first
+        for (String metadataFieldName : availableMetadataFieldNames)
+            if (!WebServices.STANDARD_METADATA_FIELD_IDENTIFIERS.contains(metadataFieldName))
+                dynamicFieldsList.add(new DynamicMetadataField(metadataFieldName, new FieldValue[]
+                {
+                    new FieldValue("")
+                }));
+
+        // For each xml metadata field, find a mapping and assign appropriate value in metadata
+        for (String xmlMetadataFieldName : xmlPage.getMetadataMap().keySet())
+        {
+            Field field = assetType.getMetadataFieldMapping().get(xmlMetadataFieldName);
+
+            if (field == null)
+                continue;
+
+            String fieldName = field.getIdentifier();
+            String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
+            if (field.getFieldType() == FieldType.METADATA)
+                assignAppropriateFieldValue(metadata, dynamicFieldsList, fieldName, fieldValue);
+        }
+
+        // For each xml content field, find a mapping and assign appropriate value in metadata
+        for (String xmlContentFieldName : xmlPage.getContentMap().keySet())
+        {
+            Field field = assetType.getContentFieldMapping().get(xmlContentFieldName);
+
+            if (field == null)
+                continue;
+
+            String fieldName = field.getIdentifier();
+            String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
+            if (field.getFieldType() == FieldType.METADATA)
+                assignAppropriateFieldValue(metadata, dynamicFieldsList, fieldName, fieldValue);
+        }
+
+        // Convert the list of dynamic field to an array and assign it to the metadata object
+        metadata.setDynamicFields(dynamicFieldsList.toArray(new DynamicMetadataField[dynamicFieldsList.size()]));
+        return metadata;
     }
 
     /**

@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.FieldType;
@@ -37,9 +35,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Page;
 import com.hannonhill.www.ws.ns.AssetOperationService.Path;
 import com.hannonhill.www.ws.ns.AssetOperationService.ReadResult;
 import com.hannonhill.www.ws.ns.AssetOperationService.Site;
-import com.hannonhill.www.ws.ns.AssetOperationService.StructuredData;
 import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinition;
-import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataNode;
 
 /**
  * This class contains service methods for web services
@@ -186,58 +182,51 @@ public class WebServices
     public static String createPage(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
     {
         String path = xmlPage.getDeployPath();
+        String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
-
+        String pagePath = parentFolderPath + "/" + pageName;
         String assetTypeName = xmlPage.getAssetType();
-        AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
         String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
-        com.hannonhill.smt.ContentType contentType = projectInformation.getContentTypes().get(contentTypePath);
-        Set<String> metadataFieldNames = contentType.getMetadataFields().keySet();
 
         // This should be caught before, but just a sanity check
         if (contentTypePath == null)
             return null;
 
-        Page page = new Page();
-        page.setContentTypePath(contentTypePath);
-        page.setName(PathUtil.truncateExtension(PathUtil.getNameFromPath(path)));
-        page.setParentFolderPath(parentFolderPath);
-        page.setSiteName(projectInformation.getSiteName());
-        page.setMetadata(WebServicesUtil.createPageMetadata(xmlPage, assetType, metadataFieldNames));
-
-        // Create the structured data object with the tree of structured data nodes
-        StructuredData structuredData = WebServicesUtil.createPageStructuredData(xmlPage, assetType);
-
-        // If page uses data definition, assign it to the page object
-        if (contentType.isUsesDataDefinition())
-            page.setStructuredData(structuredData);
-        else
-        {
-            // if page does not use data definition, the tree mapping should contain only a single xhtml field
-            StructuredDataNode[] xhtmlNodes = structuredData.getStructuredDataNodes();
-            if (xhtmlNodes.length == 1)
-                page.setXhtml(xhtmlNodes[0].getText());
-            else if (xhtmlNodes.length == 0)
-                ; // do nothing, no mappings
-            else
-                throw new Exception("The mappings for a page without Data Definition contains more than one field.");
-        }
-
+        // Set up the page object and assign it to the asset object
+        Page page = WebServicesUtil.setupPageObject(xmlPage, projectInformation);
         Asset asset = new Asset();
         asset.setPage(page);
 
-        Authentication authentication = getAuthentication(projectInformation);
-        CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
+        // Check overwrite behavior. If overwrite behavior is to update existing, check if page with given path exists and if so, get its id
+        String overwriteBehavior = projectInformation.getOverwriteBehavior();
+        String existingPageId = null;
+        if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_UPDATE_EXISTING))
+            existingPageId = getPageId(pagePath, projectInformation);
+        // If overwite existing is selected, we need to delete the existing page and ignore an error if it did not exists and we attempted to delete it
+        else if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING))
+            deletePage(pagePath, projectInformation);
 
-        // If the page couldn't be create because parent folder doesn't exist, go ahead and create the parent folder and attempt to create the page again
-        if (!createResult.getSuccess().equals("true")
-                && createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+        // If page doesn't exist or overwrite behavior is not to update existing, create the page and ancestor folders if necessary
+        if (existingPageId == null)
         {
-            createFolder(parentFolderPath, projectInformation);
-            return createPage(xmlPage, projectInformation);
+            Authentication authentication = getAuthentication(projectInformation);
+            CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
+
+            // If the page couldn't be created because parent folder doesn't exist, go ahead and create the parent folder and attempt to create the page again
+            if (!createResult.getSuccess().equals("true")
+                    && createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+            {
+                createFolder(parentFolderPath, projectInformation);
+                return createPage(xmlPage, projectInformation);
+            }
+
+            return createResult.getCreatedAssetId();
         }
 
-        return createResult.getCreatedAssetId();
+        // If page exists, edit it
+        page.setId(existingPageId);
+        editPage(page, projectInformation);
+        return existingPageId;
     }
 
     /**
@@ -252,6 +241,23 @@ public class WebServices
         Page page = readPage(id, projectInformation);
         WebServicesUtil.nullPageValues(page);
         editPage(page, projectInformation);
+    }
+
+    /**
+     * Reads a page with given path and returns its id. If the page doesn't exist, returns null.
+     * 
+     * @param path
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    private static String getPageId(String path, ProjectInformation projectInformation) throws Exception
+    {
+        Page existingPage = readPageByPath(path, projectInformation);
+        if (existingPage != null)
+            return existingPage.getId();
+
+        return null;
     }
 
     /**
@@ -274,6 +280,27 @@ public class WebServices
     }
 
     /**
+     * Reads a page with given path from Cascade Server. If the page doesn't exist, returns null.
+     * 
+     * @param path
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    private static Page readPageByPath(String path, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.page);
+        ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
+        if (!readResult.getSuccess().equals("true")
+                && (readResult.getMessage() == null || !readResult.getMessage().equals(
+                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'page'")))
+            throw new Exception("Error occured when reading a Page with path '" + path + "': " + readResult.getMessage());
+
+        return readResult.getSuccess().equals("true") ? readResult.getAsset().getPage() : null;
+    }
+
+    /**
      * Sends an edit request for given page through web services
      * 
      * @param page
@@ -289,6 +316,26 @@ public class WebServices
 
         if (!operationResult.getSuccess().equals("true"))
             throw new Exception("Error occured when reading a Page with id '" + page.getId() + "': " + operationResult.getMessage());
+    }
+
+    /**
+     * Asks Cascade Server to delete a page with given path. If page didn't exist, the error will be ignored. If 
+     * some other problem occured, an exception will be thrown.
+     * 
+     * @param path
+     * @param projectInformation
+     * @throws Exception
+     */
+    private static void deletePage(String path, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.page);
+        OperationResult deleteResult = getServer(projectInformation.getUrl()).delete(authentication, identifier);
+
+        if (!deleteResult.getSuccess().equals("true")
+                && (deleteResult.getMessage() == null || !deleteResult.getMessage().equals(
+                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'page'")))
+            throw new Exception("Error occured when deleting a Page with path '" + path + "': " + deleteResult.getMessage());
     }
 
     /**

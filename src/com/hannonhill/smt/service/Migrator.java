@@ -59,13 +59,16 @@ public class Migrator
         @Override
         public void run()
         {
-            createPages();
+            List<String> pageIds = createPages();
+            alignLinks(pageIds);
         }
 
         /**
-         * Creates the pages and their parent folders if needed 
+         * Creates the pages and their parent folders if needed
+         * 
+         * @return Returns the created page ids
          */
-        private void createPages()
+        private List<String> createPages()
         {
             File folder = new File(projectInformation.getXmlDirectory());
             List<File> files = XmlAnalyzer.getAllFiles(folder);
@@ -103,6 +106,16 @@ public class Migrator
                 }
             }
 
+            return pageIds;
+        }
+
+        /**
+         * Re-edits each page to align the links to make them tracked by Cascade Server
+         * 
+         * @param pageIds
+         */
+        private void alignLinks(List<String> pageIds)
+        {
             for (String pageId : pageIds)
             {
                 try
@@ -118,7 +131,6 @@ public class Migrator
 
                     projectInformation.getErrors().add("Could realign link in page with id " + pageId + ": " + message);
                 }
-
             }
         }
     }
