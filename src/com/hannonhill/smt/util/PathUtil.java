@@ -144,4 +144,34 @@ public class PathUtil
     {
         return link.indexOf('#') == -1 ? "" : link.substring(link.indexOf('#'));
     }
+
+    /**
+     * Adds "http://" in front if necessary and "/ws/services/AssetOperationService?wsdl" at the end if necessary
+     * 
+     * @param url a url in format "localhost:8080" or "http://localhost:8080" or "localhost:8080/ws/services/AssetOperationService"
+     *            or "localhost:8080/ws/services/AssetOperationService?wsdl" or "http://localhost:8080/ws/services/AssetOperationService"
+     *            or "http://localhost:8080/ws/services/AssetOperationService?wsdl"
+     * @return a url in format "http://localhost:8080/ws/services/AssetOperationService?wsdl" or "http://localhost:8080/ws/services/AssetOperationService"
+     */
+    public static String convertToFullAssetOperationURL(String url)
+    {
+        if (!url.startsWith("http"))
+            url = "http://" + url;
+
+        if (!url.endsWith("/ws/services/AssetOperationService?wsdl") && !url.endsWith("/ws/services/AssetOperationService"))
+            url = url + "/ws/services/AssetOperationService?wsdl";
+
+        return url;
+    }
+
+    /**
+     * Returns a link to the Cascade Server based on the url with the AssetOperationService part
+     * 
+     * @param url a url in format "http://localhost:8080/ws/services/AssetOperationService?wsdl" or "http://localhost:8080/ws/services/AssetOperationService"
+     * @return a url in format "http://localhost:8080"
+     */
+    public static String getURLWithoutAssetOperationPart(String url)
+    {
+        return url.substring(0, url.indexOf("/ws/services/AssetOperationService"));
+    }
 }

@@ -105,3 +105,8 @@ table.status td #notAligned
 {
 	color:red;
 }
+
+a 
+{
+	font-style: italic;
+}

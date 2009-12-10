@@ -16,6 +16,7 @@ import org.apache.commons.lang.xwork.StringUtils;
 
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.service.WebServices;
+import com.hannonhill.smt.util.PathUtil;
 import com.hannonhill.www.ws.ns.AssetOperationService.ContentType;
 import com.hannonhill.www.ws.ns.AssetOperationService.Site;
 
@@ -58,11 +59,7 @@ public class ProjectPropertiesAction extends BaseAction
         if (getActionErrors().size() > 0)
             return INPUT;
 
-        if (!url.startsWith("http"))
-            url = "http://" + url;
-
-        if (!url.endsWith("/ws/services/AssetOperationService?wsdl") && !url.endsWith("/ws/services/AssetOperationService"))
-            url = url + "/ws/services/AssetOperationService?wsdl";
+        url = PathUtil.convertToFullAssetOperationURL(url);
 
         verifyConnectivity();
         if (getActionErrors().size() > 0)

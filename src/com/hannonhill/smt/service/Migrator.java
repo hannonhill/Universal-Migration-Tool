@@ -61,8 +61,8 @@ public class Migrator
         @Override
         public void run()
         {
-            List<CascadePageInformation> pageIds = createPages();
-            alignLinks(pageIds);
+            List<CascadePageInformation> pages = createPages();
+            alignLinks(pages);
             projectInformation.getMigrationStatus().setCompleted(true);
         }
 
@@ -104,7 +104,9 @@ public class Migrator
                     LinkRewriter.rewriteLinks(page);
                     CascadePageInformation cascadePage = WebServices.createPage(page, projectInformation);
 
-                    // Add the path of the page to the list because links will need to be realigned.
+                    migrationStatus.getLog().append(generatePageLink(cascadePage));
+
+                    // Add the page to the list because links will need to be realigned.
                     pages.add(cascadePage);
                     migrationStatus.incrementProgress(1);
                     migrationStatus.incrementPagesCreated();
@@ -143,7 +145,7 @@ public class Migrator
             {
                 try
                 {
-                    migrationStatus.getLog().append("Aligning links in page " + page.getPath() + "... ");
+                    migrationStatus.getLog().append("Aligning links in page " + generatePageLink(page) + "... ");
                     WebServices.realignLinks(page.getId(), projectInformation);
                     migrationStatus.incrementProgress(1);
                     migrationStatus.incrementPagesAligned();
@@ -162,6 +164,18 @@ public class Migrator
                     e.printStackTrace();
                 }
             }
+        }
+
+        /**
+         * Generates a link to the page in Cascade Server
+         * 
+         * @param cascadePage
+         * @return
+         */
+        private String generatePageLink(CascadePageInformation cascadePage)
+        {
+            return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(projectInformation.getUrl()) + "/entity/open.act?id="
+                    + cascadePage.getId() + "&amp;type=page\" target=\"_blank\">/" + cascadePage.getPath() + "</a> ";
         }
     }
 }
