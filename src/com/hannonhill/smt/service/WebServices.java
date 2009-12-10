@@ -14,6 +14,7 @@ import java.util.Map;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.FieldType;
+import com.hannonhill.smt.CascadePageInformation;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
 import com.hannonhill.smt.util.WebServicesUtil;
@@ -179,7 +180,7 @@ public class WebServices
      * @return Returns the created page's id.
      * @throws Exception
      */
-    public static String createPage(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
+    public static CascadePageInformation createPage(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
     {
         String path = xmlPage.getDeployPath();
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
@@ -213,20 +214,23 @@ public class WebServices
             CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
 
             // If the page couldn't be created because parent folder doesn't exist, go ahead and create the parent folder and attempt to create the page again
-            if (!createResult.getSuccess().equals("true")
-                    && createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+            if (!createResult.getSuccess().equals("true"))
             {
-                createFolder(parentFolderPath, projectInformation);
-                return createPage(xmlPage, projectInformation);
-            }
+                if (createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+                {
+                    createFolder(parentFolderPath, projectInformation);
+                    return createPage(xmlPage, projectInformation);
+                }
 
-            return createResult.getCreatedAssetId();
+                throw new Exception("Page " + pagePath + " could not be created: " + createResult.getMessage());
+            }
+            return new CascadePageInformation(createResult.getCreatedAssetId(), pagePath);
         }
 
         // If page exists, edit it
         page.setId(existingPageId);
         editPage(page, projectInformation);
-        return existingPageId;
+        return new CascadePageInformation(existingPageId, pagePath);
     }
 
     /**
@@ -361,11 +365,15 @@ public class WebServices
         CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
 
         // If the folder couldn't be create because parent folder doesn't exist, go ahead and create the parent folder and attempt to create the page again
-        if (!createResult.getSuccess().equals("true")
-                && createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+        if (!createResult.getSuccess().equals("true"))
         {
-            createFolder(parentFolderPath, projectInformation);
-            createFolder(path, projectInformation);
+            if (createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+            {
+                createFolder(parentFolderPath, projectInformation);
+                createFolder(path, projectInformation);
+            }
+            else
+                throw new Exception("Parent folder " + parentFolderPath + " could not be created.");
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package com.hannonhill.smt;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,12 +37,13 @@ public class ProjectInformation
 
     // analyzed information
     private Map<String, AssetType> assetTypes; // asset type name and the actual asset type
-    private Map<String, ContentType> contentTypes; // content type path and the actual content type 
+    private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type 
+    private final List<File> filesToProcess; // the files that need to be processed    
 
     // Cascade information
     private Set<String> contentTypePaths;
 
-    private final List<String> errors;
+    private MigrationStatus migrationStatus;
 
     private final String uploadsDir;
 
@@ -56,7 +58,8 @@ public class ProjectInformation
         String parentToCurrentDir = currentDir.substring(0, lastSlash);
         uploadsDir = parentToCurrentDir + "/" + UPLOADS_DIR + "/";
         overwriteBehavior = OVERWRITE_BEHAVIOR_KEEP_EXISTING;
-        errors = new ArrayList<String>();
+        migrationStatus = new MigrationStatus();
+        filesToProcess = new ArrayList<File>();
     }
 
     /**
@@ -228,17 +231,9 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the errors.
-     */
-    public List<String> getErrors()
-    {
-        return errors;
-    }
-
-    /**
      * @return Returns the contentTypes.
      */
-    public Map<String, ContentType> getContentTypes()
+    public Map<String, ContentTypeInformation> getContentTypes()
     {
         return contentTypes;
     }
@@ -246,8 +241,32 @@ public class ProjectInformation
     /**
      * @param contentTypes the contentTypes to set
      */
-    public void setContentTypes(Map<String, ContentType> contentTypes)
+    public void setContentTypes(Map<String, ContentTypeInformation> contentTypes)
     {
         this.contentTypes = contentTypes;
+    }
+
+    /**
+     * @return Returns the migrationStatus.
+     */
+    public MigrationStatus getMigrationStatus()
+    {
+        return migrationStatus;
+    }
+
+    /**
+     * @return Returns the filesToProcess.
+     */
+    public List<File> getFilesToProcess()
+    {
+        return filesToProcess;
+    }
+
+    /**
+     * @param migrationStatus the migrationStatus to set
+     */
+    public void setMigrationStatus(MigrationStatus migrationStatus)
+    {
+        this.migrationStatus = migrationStatus;
     }
 }

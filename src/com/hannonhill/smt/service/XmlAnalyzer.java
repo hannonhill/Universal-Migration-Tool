@@ -296,6 +296,7 @@ public class XmlAnalyzer
 
             assetType.getMetadataFields().addAll(xmlPageInformation.getMetadataFields()); // adds unique field names only
             assetType.getContentFields().addAll(xmlPageInformation.getContentFields()); // adds unique field names only
+            projectInformation.getFilesToProcess().add(file); // add only if no exception was thrown, 
         }
         catch (Exception e)
         {

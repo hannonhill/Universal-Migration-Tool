@@ -9,7 +9,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hannonhill.smt.CascadePageInformation;
 import com.hannonhill.smt.DetailedXmlPageInformation;
+import com.hannonhill.smt.MigrationStatus;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
 
@@ -59,8 +61,9 @@ public class Migrator
         @Override
         public void run()
         {
-            List<String> pageIds = createPages();
+            List<CascadePageInformation> pageIds = createPages();
             alignLinks(pageIds);
+            projectInformation.getMigrationStatus().setCompleted(true);
         }
 
         /**
@@ -68,45 +71,63 @@ public class Migrator
          * 
          * @return Returns the created page ids
          */
-        private List<String> createPages()
+        private List<CascadePageInformation> createPages()
         {
-            File folder = new File(projectInformation.getXmlDirectory());
-            List<File> files = XmlAnalyzer.getAllFiles(folder);
-            List<String> pageIds = new ArrayList<String>();
+            List<File> files = projectInformation.getFilesToProcess();
+            List<CascadePageInformation> pages = new ArrayList<CascadePageInformation>();
+            MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
 
             for (File file : files)
             {
                 try
                 {
+                    // To build the file path that needs to be displayed, we show only the part of the abosute path after the xml directory 
+                    String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
+
+                    migrationStatus.getLog().append("Creating a page from file " + relativePath.replaceAll("\\\\", "\\\\\\\\") + "... ");
                     DetailedXmlPageInformation page = XmlAnalyzer.parseXmlFile(file);
 
                     // If the asset type wasn't mapped, skip this page
                     String assetTypeName = page.getAssetType();
                     String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
                     if (contentTypePath == null)
+                    {
+                        migrationStatus.getLog().append(
+                                "<span style=\"color: blue;\">Asset type " + page.getAssetType() + " was not mapped. Skipping the file.</span><br/>");
+
+                        // Increment progress by 2, because no link alignment will be needed for it
+                        migrationStatus.incrementProgress(2);
+                        migrationStatus.incrementPagesSkipped();
                         continue;
+                    }
 
                     LinkRewriter.rewriteLinks(page);
-                    String pageId = WebServices.createPage(page, projectInformation);
+                    CascadePageInformation cascadePage = WebServices.createPage(page, projectInformation);
 
                     // Add the path of the page to the list because links will need to be realigned.
-                    pageIds.add(pageId);
+                    pages.add(cascadePage);
+                    migrationStatus.incrementProgress(1);
+                    migrationStatus.incrementPagesCreated();
+                    migrationStatus.getLog().append("<span style=\"color: green;\">success.</span><br/>");
                 }
                 catch (Exception e)
                 {
-                    // To build the file path that needs to be displayed, we show only the part of the abosute path after the xml directory 
-                    String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
-
                     // Sometimes the exception message is null, so we get the message from the parent exception
                     String message = e.getMessage();
                     if (message == null && e.getCause() != null)
                         message = e.getCause().getMessage();
 
-                    projectInformation.getErrors().add("Could not create page " + relativePath + ": " + message);
+                    migrationStatus.getLog().append("<span style=\"color: red;\">Error: " + message + "</span><br/>");
+
+                    // Increment progress by 2, because no link alignment will be needed for it
+                    migrationStatus.incrementProgress(2);
+                    migrationStatus.incrementPagesWithErrors();
+
+                    e.printStackTrace();
                 }
             }
 
-            return pageIds;
+            return pages;
         }
 
         /**
@@ -114,13 +135,19 @@ public class Migrator
          * 
          * @param pageIds
          */
-        private void alignLinks(List<String> pageIds)
+        private void alignLinks(List<CascadePageInformation> pages)
         {
-            for (String pageId : pageIds)
+            MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
+
+            for (CascadePageInformation page : pages)
             {
                 try
                 {
-                    WebServices.realignLinks(pageId, projectInformation);
+                    migrationStatus.getLog().append("Aligning links in page " + page.getPath() + "... ");
+                    WebServices.realignLinks(page.getId(), projectInformation);
+                    migrationStatus.incrementProgress(1);
+                    migrationStatus.incrementPagesAligned();
+                    migrationStatus.getLog().append("<span style=\"color: green;\">success.</span><br/>");
                 }
                 catch (Exception e)
                 {
@@ -129,7 +156,10 @@ public class Migrator
                     if (message == null && e.getCause() != null)
                         message = e.getCause().getMessage();
 
-                    projectInformation.getErrors().add("Could realign link in page with id " + pageId + ": " + message);
+                    migrationStatus.incrementProgress(1);
+                    migrationStatus.incrementPagesNotAligned();
+                    migrationStatus.getLog().append("<span style=\"color: red;\">Error: " + message + "</span><br/>");
+                    e.printStackTrace();
                 }
             }
         }

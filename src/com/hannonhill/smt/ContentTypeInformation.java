@@ -14,7 +14,7 @@ import java.util.Map;
  * @version $Id$
  * @since   6.0
  */
-public class ContentType
+public class ContentTypeInformation
 {
     private final String path;
     private Map<String, Field> metadataFields;
@@ -26,7 +26,7 @@ public class ContentType
      * 
      * @param path
      */
-    public ContentType(String path)
+    public ContentTypeInformation(String path)
     {
         this.path = path;
     }

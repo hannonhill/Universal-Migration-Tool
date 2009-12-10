@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hannonhill.smt.AssetType;
-import com.hannonhill.smt.ContentType;
+import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.service.WebServices;
@@ -63,7 +63,7 @@ public class AssignContentTypesAction extends BaseAction
 
         try
         {
-            projectInformation.setContentTypes(new HashMap<String, ContentType>()); // clear out the existing content types
+            projectInformation.setContentTypes(new HashMap<String, ContentTypeInformation>()); // clear out the existing content types
             for (int i = 0; i < selectedAssetTypes.length; i++)
                 createAndAddContentType(selectedContentTypes[i], selectedAssetTypes[i], projectInformation);
         }
@@ -94,7 +94,7 @@ public class AssignContentTypesAction extends BaseAction
     private void createAndAddContentType(String contentTypePath, String assetTypeName, ProjectInformation projectInformation) throws Exception
     {
         projectInformation.getContentTypeMap().put(assetTypeName, contentTypePath);
-        ContentType contentType = new ContentType(contentTypePath);
+        ContentTypeInformation contentType = new ContentTypeInformation(contentTypePath);
         contentType.setMetadataFields(WebServices.getMetadataFieldsForContentType(contentTypePath, projectInformation));
         Map<String, Field> dataDefinitionFields = WebServices.getDataDefinitionFieldsForContentType(contentTypePath, projectInformation);
         if (dataDefinitionFields != null)

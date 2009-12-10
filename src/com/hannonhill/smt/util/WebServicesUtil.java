@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.hannonhill.smt.AssetType;
+import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.FieldType;
@@ -111,7 +112,7 @@ public class WebServicesUtil
         String assetTypeName = xmlPage.getAssetType();
         AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
         String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
-        com.hannonhill.smt.ContentType contentType = projectInformation.getContentTypes().get(contentTypePath);
+        ContentTypeInformation contentType = projectInformation.getContentTypes().get(contentTypePath);
         Set<String> metadataFieldNames = contentType.getMetadataFields().keySet();
 
         Page page = new Page();

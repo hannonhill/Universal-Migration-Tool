@@ -44,3 +44,64 @@ table.mappingReport td.arrow
 {
 	width: 10%;
 }
+
+#log
+{
+	height: 70%;overflow: auto;
+}
+
+div.progress
+{
+	width:100%;
+	background-color: #eee;
+	border: 1px solid gray;
+}
+
+#progress-bar
+{
+	width:0%; 
+	background-color: aaf;
+}
+
+#progress-percent
+{
+	position:absolute;
+	width:100%;
+	text-align: center;
+}
+
+table.status
+{
+	width: 100%;
+	background-color: eee;
+}
+
+table.status td
+{
+	width:20%;
+}
+
+table.status td #created
+{
+	color:green;
+}
+
+table.status td #skipped
+{
+	color:blue;
+}
+
+table.status td #errors
+{
+	color:red;
+}
+
+table.status td #aligned
+{
+	color:green;
+}
+
+table.status td #notAligned
+{
+	color:red;
+}

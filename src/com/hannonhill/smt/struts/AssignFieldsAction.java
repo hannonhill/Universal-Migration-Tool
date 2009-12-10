@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hannonhill.smt.AssetType;
-import com.hannonhill.smt.ContentType;
+import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.ProjectInformation;
 
@@ -68,7 +68,7 @@ public class AssignFieldsAction extends BaseAction
         assetTypeObject.getContentFieldMapping().clear();
 
         String contentTypePath = projectInformation.getContentTypeMap().get(projectInformation.getAssetTypeNames().get(assetType));
-        ContentType contentType = projectInformation.getContentTypes().get(contentTypePath);
+        ContentTypeInformation contentType = projectInformation.getContentTypes().get(contentTypePath);
 
         // Go through each field assignment submitted by the form
         try
@@ -105,7 +105,7 @@ public class AssignFieldsAction extends BaseAction
         xmlMetadataFieldNames.addAll(projectInformation.getAssetTypes().get(assetTypeName).getMetadataFields());
         xmlContentFieldNames.addAll(projectInformation.getAssetTypes().get(assetTypeName).getContentFields());
 
-        ContentType contentType = projectInformation.getContentTypes().get(contentTypePath);
+        ContentTypeInformation contentType = projectInformation.getContentTypes().get(contentTypePath);
         cascadeMetadataFields.addAll(contentType.getMetadataFields().values());
         cascadeDataDefinitionFields.addAll(contentType.getDataDefinitionFields().values());
 
@@ -123,7 +123,7 @@ public class AssignFieldsAction extends BaseAction
      * @param assetTypeObject
      * @throws Exception
      */
-    private void addFieldMapping(int i, ContentType contentType, AssetType assetTypeObject) throws Exception
+    private void addFieldMapping(int i, ContentTypeInformation contentType, AssetType assetTypeObject) throws Exception
     {
         String xmlMetadataFieldIdentifier = selectedXmlMetadataFields[i];
         String xmlContentFieldIdentifier = selectedXmlContentFields[i];
