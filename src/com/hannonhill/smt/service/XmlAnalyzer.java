@@ -8,7 +8,6 @@ package com.hannonhill.smt.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +55,7 @@ public class XmlAnalyzer
      */
     public static void analyzeFolder(File folder, ProjectInformation projectInformation, List<String> errorMessages)
     {
-        List<File> files = getAllFiles(folder);
+        List<File> files = FileSystem.getAllXmlFiles(folder);
         for (File file : files)
             analyzeFile(file, projectInformation, errorMessages);
     }
@@ -78,27 +77,6 @@ public class XmlAnalyzer
         NodeList children = rootNode.getChildNodes();
         analyzeDataDefinitionGroup(children, "", "", returnMap);
         return returnMap;
-    }
-
-    /**
-     * Returns all the xml files in the folder and all sub-folders
-     * 
-     * @param projectInformation
-     * @return
-     */
-    public static List<File> getAllFiles(File folder)
-    {
-        List<File> files = new ArrayList<File>();
-        for (String fileString : folder.list())
-        {
-            File file = new File(folder.getAbsolutePath() + "/" + fileString);
-
-            if (!file.isFile())
-                files.addAll(getAllFiles(file));
-            else if (file.getName().endsWith(".xml"))
-                files.add(file);
-        }
-        return files;
     }
 
     /**

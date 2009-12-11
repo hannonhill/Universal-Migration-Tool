@@ -5,21 +5,14 @@
  */
 package com.hannonhill.smt.struts;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import org.apache.commons.lang.xwork.StringUtils;
 
 import com.hannonhill.smt.ProjectInformation;
+import com.hannonhill.smt.service.FileSystem;
 
 /**
  * Action that displays and processes form with zip archive
@@ -78,6 +71,38 @@ public class UploadZipAction extends BaseAction
     }
 
     /**
+     * Sets appropriate information to be able to display the form
+     * 
+     * @return
+     */
+    private String processView()
+    {
+        try
+        {
+            ProjectInformation projectInformation = getProjectInformation();
+            String uploadsDir = projectInformation.getUploadsDir();
+            File dir = new File(uploadsDir);
+            FileSystem.createFolderIfDoesNotExist(uploadsDir);
+            File[] childDirs = dir.listFiles();
+            for (File childDir : childDirs)
+                availableFolders.add(childDir.getName());
+            xmlDirectory = SELECTED_BELOW;
+            availableFolders.add(xmlDirectory);
+
+            // If the xml directory was already selected (for example we are going back using "Previous" button,
+            // get it from the project information and use it instead of using SELECTED_BELOW
+            String xmlDir = projectInformation.getXmlDirectory();
+            if (xmlDir != null)
+                xmlDirectory = xmlDir.substring(xmlDir.lastIndexOf('/') + 1);
+        }
+        catch (Exception e)
+        {
+            addActionError("An error occured: " + e.getMessage());
+        }
+        return INPUT;
+    }
+
+    /**
      * Unzips the contents of the uploaded zip file to a new directory and sets the directory in the project information.
      * 
      * @return
@@ -85,80 +110,20 @@ public class UploadZipAction extends BaseAction
     private String unzip()
     {
         ProjectInformation projectInformation = getProjectInformation();
-        String uploadDir = projectInformation.getUploadsDir() + zipFileName.substring(0, zipFileName.lastIndexOf('.'));
-
-        ZipFile zipFile;
-        Enumeration<? extends ZipEntry> entries;
 
         try
         {
-            zipFile = new ZipFile(zip);
-            entries = zipFile.entries();
-            while (entries.hasMoreElements())
-            {
-                ZipEntry entry = entries.nextElement();
-
-                if (entry.isDirectory())
-                    (new File(uploadDir + "/" + entry.getName())).mkdirs();
-                else if (entry.getName().endsWith(".xml"))
-                    copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + "/" + entry.getName())));
-            }
-
-            zipFile.close();
+            String uploadDir = FileSystem.unzip(zip, zipFileName, projectInformation);
+            projectInformation.setXmlDirectory(uploadDir);
         }
-        catch (IOException ioe)
+        catch (Exception e)
         {
-            addActionError("Unhandled exception: " + ioe);
+            addActionError("Unhandled exception: " + e);
             processView();
             return INPUT;
         }
 
-        projectInformation.setXmlDirectory(uploadDir);
         return SUCCESS;
-    }
-
-    /**
-     * Sets appropriate information to be able to display the form
-     * 
-     * @return
-     */
-    private String processView()
-    {
-        ProjectInformation projectInformation = getProjectInformation();
-        String uploadsDir = projectInformation.getUploadsDir();
-        File dir = new File(uploadsDir);
-        File[] childDirs = dir.listFiles();
-        for (File childDir : childDirs)
-            availableFolders.add(childDir.getName());
-        xmlDirectory = SELECTED_BELOW;
-        availableFolders.add(xmlDirectory);
-
-        // If the xml directory was already selected (for example we are going back using "Previous" button,
-        // get it from the project information and use it instead of using SELECTED_BELOW
-        String xmlDir = projectInformation.getXmlDirectory();
-        if (xmlDir != null)
-            xmlDirectory = xmlDir.substring(xmlDir.lastIndexOf('/') + 1);
-
-        return INPUT;
-    }
-
-    /**
-     * Copies the input stream
-     * 
-     * @param in
-     * @param out
-     * @throws IOException
-     */
-    private void copyInputStream(InputStream in, OutputStream out) throws IOException
-    {
-        byte[] buffer = new byte[1024];
-        int len;
-
-        while ((len = in.read(buffer)) >= 0)
-            out.write(buffer, 0, len);
-
-        in.close();
-        out.close();
     }
 
     /**
