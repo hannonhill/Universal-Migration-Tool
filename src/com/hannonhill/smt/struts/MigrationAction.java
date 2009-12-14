@@ -83,4 +83,15 @@ public class MigrationAction extends BaseAction
         }
         return SUCCESS;
     }
+
+    /**
+     * Stops the migration. Should be called through AJAX.
+     * 
+     * @return
+     */
+    public String stopMigrationByAjax()
+    {
+        getProjectInformation().getMigrationStatus().setShouldStop(true);
+        return SUCCESS;
+    }
 }

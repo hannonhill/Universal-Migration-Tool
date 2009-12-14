@@ -11,10 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hannonhill.smt.CascadePageInformation;
+import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
-import com.hannonhill.smt.FieldType;
-import com.hannonhill.smt.CascadePageInformation;
+import com.hannonhill.smt.MetadataSetField;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
 import com.hannonhill.smt.util.WebServicesUtil;
@@ -47,15 +48,15 @@ import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinition;
  */
 public class WebServices
 {
-    private static final Field[] STANDARD_METADATA_FIELDS = new Field[]
+    private static final MetadataSetField[] STANDARD_METADATA_FIELDS = new MetadataSetField[]
     {
-            new Field("displayName", "Display Name", FieldType.METADATA), new Field("title", "Title", FieldType.METADATA),
-            new Field("summary", "Summary", FieldType.METADATA), new Field("teaser", "Teaser", FieldType.METADATA),
-            new Field("keywords", "Keywords", FieldType.METADATA), new Field("metaDescription", "Description", FieldType.METADATA),
-            new Field("author", "Author", FieldType.METADATA)
+            new MetadataSetField("displayName", "Display Name", false), new MetadataSetField("title", "Title", false),
+            new MetadataSetField("summary", "Summary", false), new MetadataSetField("teaser", "Teaser", false),
+            new MetadataSetField("keywords", "Keywords", false), new MetadataSetField("metaDescription", "Description", false),
+            new MetadataSetField("author", "Author", false)
     };
 
-    public static final Field XHTML_DATA_DEFINITION_FIELD = new Field("xhtml", "XHTML", FieldType.DATA_DEFINITION);
+    public static final DataDefinitionField XHTML_DATA_DEFINITION_FIELD = new DataDefinitionField("xhtml", "XHTML", false);
 
     // Identifiers of the standard metadata fields
     public static final List<String> STANDARD_METADATA_FIELD_IDENTIFIERS;
@@ -116,7 +117,8 @@ public class WebServices
      * @return
      * @throws Exception
      */
-    public static Map<String, Field> getMetadataFieldsForContentType(String contentTypePath, ProjectInformation projectInformation) throws Exception
+    public static Map<String, MetadataSetField> getMetadataFieldsForContentType(String contentTypePath, ProjectInformation projectInformation)
+            throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
         ContentType contentType = readContentTypeByPath(projectInformation, contentTypePath);
@@ -130,14 +132,14 @@ public class WebServices
         MetadataSet metadataSet = readResult.getAsset().getMetadataSet();
 
         // add all the standard fields
-        Map<String, Field> resultMap = new HashMap<String, Field>();
-        for (Field field : STANDARD_METADATA_FIELDS)
+        Map<String, MetadataSetField> resultMap = new HashMap<String, MetadataSetField>();
+        for (MetadataSetField field : STANDARD_METADATA_FIELDS)
             resultMap.put(field.getIdentifier(), field);
 
         // add the dynamic fields
         for (DynamicMetadataFieldDefinition definition : metadataSet.getDynamicMetadataFieldDefinitions())
             if (!definition.getVisibility().equals(MetadataFieldVisibility.hidden)) // skip hidden fields
-                resultMap.put(definition.getName(), new Field(definition.getName(), definition.getLabel(), FieldType.METADATA));
+                resultMap.put(definition.getName(), new MetadataSetField(definition.getName(), definition.getLabel(), true));
 
         return resultMap;
     }
@@ -151,7 +153,7 @@ public class WebServices
      * @return
      * @throws Exception
      */
-    public static Map<String, Field> getDataDefinitionFieldsForContentType(String contentTypePath, ProjectInformation projectInformation)
+    public static Map<String, DataDefinitionField> getDataDefinitionFieldsForContentType(String contentTypePath, ProjectInformation projectInformation)
             throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);

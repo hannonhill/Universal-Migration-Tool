@@ -23,6 +23,7 @@ import org.xml.sax.InputSource;
 
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.util.PathUtil;
+import com.hannonhill.smt.util.XmlUtil;
 
 /**
  * A service responsible for link rewriting
@@ -81,7 +82,7 @@ public class LinkRewriter
             return "";
 
         // Wrap content in the root tag so that it is always a valid xml
-        xml = "<root>" + xml + "</root>";
+        xml = XmlUtil.addRootTag(xml);
 
         StringBuffer stringBuffer = new StringBuffer(xml);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(stringBuffer.toString().getBytes("UTF-8"));
@@ -103,8 +104,8 @@ public class LinkRewriter
         transformer.transform(domSource, result);
         String resultWithRoot = writer.toString();
 
-        // Remove the root tags
-        String resultWithoutRoot = resultWithRoot.substring(6, resultWithRoot.length() - 7);
+        // Remove the root tag
+        String resultWithoutRoot = XmlUtil.removeRootTag(resultWithRoot);
         return resultWithoutRoot;
     }
 

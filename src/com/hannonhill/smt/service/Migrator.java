@@ -63,6 +63,8 @@ public class Migrator
         {
             List<CascadePageInformation> pages = createPages();
             alignLinks(pages);
+            if (projectInformation.getMigrationStatus().isShouldStop())
+                addToLog("<br/>Migration stopped by the user.<br/>");
             projectInformation.getMigrationStatus().setCompleted(true);
         }
 
@@ -79,12 +81,15 @@ public class Migrator
 
             for (File file : files)
             {
+                if (migrationStatus.isShouldStop())
+                    return new ArrayList<CascadePageInformation>();
+
                 try
                 {
                     // To build the file path that needs to be displayed, we show only the part of the abosute path after the xml directory 
                     String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
 
-                    migrationStatus.getLog().append("Creating a page from file " + relativePath.replaceAll("\\\\", "\\\\\\\\") + "... ");
+                    addToLog("Creating a page from file " + relativePath + "... ");
                     DetailedXmlPageInformation page = XmlAnalyzer.parseXmlFile(file);
 
                     // If the asset type wasn't mapped, skip this page
@@ -92,8 +97,7 @@ public class Migrator
                     String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
                     if (contentTypePath == null)
                     {
-                        migrationStatus.getLog().append(
-                                "<span style=\"color: blue;\">Asset type " + page.getAssetType() + " was not mapped. Skipping the file.</span><br/>");
+                        addToLog("<span style=\"color: blue;\">Asset type " + page.getAssetType() + " was not mapped. Skipping the file.</span><br/>");
 
                         // Increment progress by 2, because no link alignment will be needed for it
                         migrationStatus.incrementProgress(2);
@@ -104,13 +108,13 @@ public class Migrator
                     LinkRewriter.rewriteLinks(page);
                     CascadePageInformation cascadePage = WebServices.createPage(page, projectInformation);
 
-                    migrationStatus.getLog().append(generatePageLink(cascadePage));
+                    addToLog(generatePageLink(cascadePage));
 
                     // Add the page to the list because links will need to be realigned.
                     pages.add(cascadePage);
                     migrationStatus.incrementProgress(1);
                     migrationStatus.incrementPagesCreated();
-                    migrationStatus.getLog().append("<span style=\"color: green;\">success.</span><br/>");
+                    addToLog("<span style=\"color: green;\">success.</span><br/>");
                 }
                 catch (Exception e)
                 {
@@ -119,7 +123,7 @@ public class Migrator
                     if (message == null && e.getCause() != null)
                         message = e.getCause().getMessage();
 
-                    migrationStatus.getLog().append("<span style=\"color: red;\">Error: " + message + "</span><br/>");
+                    addToLog("<span style=\"color: red;\">Error: " + message + "</span><br/>");
 
                     // Increment progress by 2, because no link alignment will be needed for it
                     migrationStatus.incrementProgress(2);
@@ -143,13 +147,16 @@ public class Migrator
 
             for (CascadePageInformation page : pages)
             {
+                if (migrationStatus.isShouldStop())
+                    return;
+
                 try
                 {
-                    migrationStatus.getLog().append("Aligning links in page " + generatePageLink(page) + "... ");
+                    addToLog("Aligning links in page " + generatePageLink(page) + "... ");
                     WebServices.realignLinks(page.getId(), projectInformation);
                     migrationStatus.incrementProgress(1);
                     migrationStatus.incrementPagesAligned();
-                    migrationStatus.getLog().append("<span style=\"color: green;\">success.</span><br/>");
+                    addToLog("<span style=\"color: green;\">success.</span><br/>");
                 }
                 catch (Exception e)
                 {
@@ -160,7 +167,7 @@ public class Migrator
 
                     migrationStatus.incrementProgress(1);
                     migrationStatus.incrementPagesNotAligned();
-                    migrationStatus.getLog().append("<span style=\"color: red;\">Error: " + message + "</span><br/>");
+                    addToLog("<span style=\"color: red;\">Error: " + message + "</span><br/>");
                     e.printStackTrace();
                 }
             }
@@ -176,6 +183,18 @@ public class Migrator
         {
             return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(projectInformation.getUrl()) + "/entity/open.act?id="
                     + cascadePage.getId() + "&amp;type=page\" target=\"_blank\">/" + cascadePage.getPath() + "</a> ";
+        }
+
+        /**
+         * Escapes \ and ' characters in the logMessage and adds that message to the log.
+         * 
+         * @param logMessage
+         */
+        private void addToLog(String logMessage)
+        {
+            logMessage = logMessage.replaceAll("\\\\", "\\\\\\\\");
+            logMessage = logMessage.replaceAll("'", "\\\\'");
+            projectInformation.getMigrationStatus().getLog().append(logMessage);
         }
     }
 }

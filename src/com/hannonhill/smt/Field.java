@@ -12,24 +12,21 @@ package com.hannonhill.smt;
  * @version $Id$
  * @since   1.0
  */
-public class Field
+public abstract class Field
 {
     private final String identifier;
     private final String label;
-    private final FieldType fieldType;
 
     /**
      * Constructor
      * 
      * @param identifier
      * @param label
-     * @param fieldType
      */
-    public Field(String identifier, String label, FieldType fieldType)
+    public Field(String identifier, String label)
     {
         this.identifier = identifier;
         this.label = label;
-        this.fieldType = fieldType;
     }
 
     /**
@@ -48,11 +45,4 @@ public class Field
         return label;
     }
 
-    /**
-     * @return Returns the fieldType.
-     */
-    public FieldType getFieldType()
-    {
-        return fieldType;
-    }
 }

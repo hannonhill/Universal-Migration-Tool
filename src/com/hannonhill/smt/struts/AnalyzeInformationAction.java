@@ -35,9 +35,13 @@ public class AnalyzeInformationAction extends BaseAction
     {
         ProjectInformation projectInformation = getProjectInformation();
 
+        // clear out previous data
+        projectInformation.getFilesToProcess().clear();
+
         // analyze folders recursively
         List<String> errorMessages = new ArrayList<String>();
         projectInformation.setAssetTypes(new HashMap<String, AssetType>()); // clear out the existing asset types
+        projectInformation.setAssetTypeNames(new ArrayList<String>());
         XmlAnalyzer.analyzeFolder(new File(projectInformation.getXmlDirectory()), projectInformation, errorMessages);
 
         if (errorMessages.size() > 0)
@@ -50,5 +54,4 @@ public class AnalyzeInformationAction extends BaseAction
 
         return SUCCESS;
     }
-
 }

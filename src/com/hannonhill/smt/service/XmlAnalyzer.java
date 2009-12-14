@@ -12,24 +12,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.hannonhill.smt.AssetType;
+import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.DetailedXmlPageInformation;
-import com.hannonhill.smt.Field;
-import com.hannonhill.smt.FieldType;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.XmlPageInformation;
 import com.hannonhill.smt.util.PathUtil;
+import com.hannonhill.smt.util.XmlUtil;
 
 /**
  * This class contains service methods for analyzing the xml file contents
@@ -61,19 +58,16 @@ public class XmlAnalyzer
     }
 
     /**
-     * Analyzes the data definition xml and returns a map of text fields
+     * Analyzes the data definition xml and returns a map of text fields and file chooser fields
      * 
      * @param xml
      * @return
      * @throws Exception
      */
-    public static Map<String, Field> analyzeDataDefinitionXml(String xml) throws Exception
+    public static Map<String, DataDefinitionField> analyzeDataDefinitionXml(String xml) throws Exception
     {
-        Map<String, Field> returnMap = new HashMap<String, Field>();
-        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-        Document doc = docBuilder.parse(new InputSource(new StringReader(xml)));
-        Node rootNode = doc.getChildNodes().item(0);
+        Map<String, DataDefinitionField> returnMap = new HashMap<String, DataDefinitionField>();
+        Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(xml)));
         NodeList children = rootNode.getChildNodes();
         analyzeDataDefinitionGroup(children, "", "", returnMap);
         return returnMap;
@@ -88,13 +82,8 @@ public class XmlAnalyzer
      */
     public static DetailedXmlPageInformation parseXmlFile(File file) throws Exception
     {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document document = builder.parse(new InputSource(new FileInputStream(file)));
-
         DetailedXmlPageInformation page = new DetailedXmlPageInformation();
-
-        Node rootNode = document.getChildNodes().item(0);
+        Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new FileInputStream(file)));
         NodeList rootChildNodes = rootNode.getChildNodes();
         for (int i = 0; i < rootChildNodes.getLength(); i++)
         {
@@ -109,6 +98,44 @@ public class XmlAnalyzer
         }
 
         return page;
+    }
+
+    /**
+     * Returns the value of the first "src" attribute found in given xml
+     * 
+     * @param xml
+     * @return
+     * @throws Exception
+     */
+    public static String getFirstSrcAttribute(String xml) throws Exception
+    {
+        // Add root tag to make it a valid xml
+        String xmlWithRoot = XmlUtil.addRootTag(xml);
+        Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(xmlWithRoot)));
+        return getFirstSrcAttribute(rootNode);
+    }
+
+    /**
+     * Checks if current node contains an src attribute and if not, then recursively checks all the ancestor nodes and returns
+     * the values first one that contains.
+     * 
+     * @param node
+     * @return
+     */
+    private static String getFirstSrcAttribute(Node node)
+    {
+        if (node.getAttributes() != null && node.getAttributes().getNamedItem("src") != null)
+            return node.getAttributes().getNamedItem("src").getTextContent();
+
+        if (node.getChildNodes() != null)
+            for (int i = 0; i < node.getChildNodes().getLength(); i++)
+            {
+                String src = getFirstSrcAttribute(node.getChildNodes().item(i));
+                if (src != null)
+                    return src;
+            }
+
+        return null;
     }
 
     /**
@@ -213,7 +240,8 @@ public class XmlAnalyzer
      * @param labelPrefix
      * @param returnMap
      */
-    private static void analyzeDataDefinitionGroup(NodeList children, String identifierPrefix, String labelPrefix, Map<String, Field> returnMap)
+    private static void analyzeDataDefinitionGroup(NodeList children, String identifierPrefix, String labelPrefix,
+            Map<String, DataDefinitionField> returnMap)
     {
         for (int i = 0; i < children.getLength(); i++)
         {
@@ -244,7 +272,14 @@ public class XmlAnalyzer
             {
                 String newIdentifier = identifierPrefix + identifier;
                 String newLabel = labelPrefix + label;
-                returnMap.put(newIdentifier, new Field(newIdentifier, newLabel, FieldType.DATA_DEFINITION));
+                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, false));
+            }
+            else if (node.getNodeName().equals("asset") && node.getAttributes().getNamedItem("type") != null
+                    && node.getAttributes().getNamedItem("type").getTextContent().equals("file"))
+            {
+                String newIdentifier = identifierPrefix + identifier;
+                String newLabel = labelPrefix + label;
+                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, true));
             }
         }
     }

@@ -12,6 +12,17 @@
 			var currentAligned = 0;
 			var currentNotAligned = 0;			
 			var currentId = 0;
+
+			function callStop()
+			{
+				var url = "/MigrationStopAjax";
+			    var request = GetXmlHttpObject();    
+			    request.open("POST", url, true);    
+			    if (request.overrideMimeType)
+			        request.overrideMimeType('application/json');
+			    request.setRequestHeader('Content-Type', 'application/json');
+			    request.send();
+			}
 			
 			function sendAjaxRequestForProgress()
 			{
@@ -73,7 +84,15 @@
 				if (!completed)
 					setTimeout("sendAjaxRequestForProgress()", 1000);
 				else
-					setTimeout("document.getElementById('progress-percent').innerHTML = 'Migration Completed'", 1000);
+					setTimeout("completed()", 1000);
+			}
+
+			function completed()
+			{
+				document.getElementById('progress-percent').innerHTML = 'Migration Completed';
+				var stopMigrationEl = document.getElementById('stopMigration');
+				stopMigrationEl.innerHTML = "Start Over";
+				stopMigrationEl.onclick = function() { window.location="/ProjectProperties"; }
 			}
 	
 			function animateProgreeBar(log, nextProgress, nextCreated, nextSkipped, nextErrors, nextAligned, nextNotAligned)
@@ -153,7 +172,8 @@
 						<td>Aligning errors: <span id="notAligned">0</span></td>
 					</tr>
 				</table>
-			</div>			
+			</div>
+			<div style="text-align: center;"><button onclick="callStop();return false;" id="stopMigration">Stop Migration</button></div>	
 		</div>
 		<script type="text/javascript">sendAjaxRequestForProgress()</script>
 	</body>

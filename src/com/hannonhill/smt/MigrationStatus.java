@@ -17,6 +17,7 @@ public class MigrationStatus
     private StringBuilder log;
     private int progress; // this means number of files that need to be migrated times 2 (one for migration, one for link alignment)
     private boolean completed;
+    private boolean shouldStop;
 
     private int pagesCreated;
     private int pagesSkipped;
@@ -33,6 +34,7 @@ public class MigrationStatus
         log = new StringBuilder();
         progress = 0;
         completed = false;
+        shouldStop = false;
 
         pagesCreated = 0;
         pagesSkipped = 0;
@@ -170,5 +172,21 @@ public class MigrationStatus
     public void incrementPagesNotAligned()
     {
         pagesNotAligned++;
+    }
+
+    /**
+     * @return Returns the shouldStop.
+     */
+    public boolean isShouldStop()
+    {
+        return shouldStop;
+    }
+
+    /**
+     * @param shouldStop the shouldStop to set
+     */
+    public void setShouldStop(boolean shouldStop)
+    {
+        this.shouldStop = shouldStop;
     }
 }

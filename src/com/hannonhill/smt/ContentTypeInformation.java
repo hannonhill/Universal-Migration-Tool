@@ -17,8 +17,8 @@ import java.util.Map;
 public class ContentTypeInformation
 {
     private final String path;
-    private Map<String, Field> metadataFields;
-    private Map<String, Field> dataDefinitionFields;
+    private Map<String, MetadataSetField> metadataFields;
+    private Map<String, DataDefinitionField> dataDefinitionFields;
     private boolean usesDataDefinition;
 
     /**
@@ -42,7 +42,7 @@ public class ContentTypeInformation
     /**
      * @return Returns the metadataFields.
      */
-    public Map<String, Field> getMetadataFields()
+    public Map<String, MetadataSetField> getMetadataFields()
     {
         return metadataFields;
     }
@@ -50,7 +50,7 @@ public class ContentTypeInformation
     /**
      * @return Returns the dataDefinitionFields.
      */
-    public Map<String, Field> getDataDefinitionFields()
+    public Map<String, DataDefinitionField> getDataDefinitionFields()
     {
         return dataDefinitionFields;
     }
@@ -58,7 +58,7 @@ public class ContentTypeInformation
     /**
      * @param metadataFields the metadataFields to set
      */
-    public void setMetadataFields(Map<String, Field> metadataFields)
+    public void setMetadataFields(Map<String, MetadataSetField> metadataFields)
     {
         this.metadataFields = metadataFields;
     }
@@ -66,7 +66,7 @@ public class ContentTypeInformation
     /**
      * @param dataDefinitionFields the dataDefinitionFields to set
      */
-    public void setDataDefinitionFields(Map<String, Field> dataDefinitionFields)
+    public void setDataDefinitionFields(Map<String, DataDefinitionField> dataDefinitionFields)
     {
         this.dataDefinitionFields = dataDefinitionFields;
     }

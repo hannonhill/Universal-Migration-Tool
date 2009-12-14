@@ -6,18 +6,20 @@
 package com.hannonhill.smt.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.ContentTypeInformation;
+import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
-import com.hannonhill.smt.FieldType;
+import com.hannonhill.smt.MetadataSetField;
 import com.hannonhill.smt.ProjectInformation;
-import com.hannonhill.smt.StructuredDataGroup;
-import com.hannonhill.smt.StructuredDataText;
 import com.hannonhill.smt.service.WebServices;
+import com.hannonhill.smt.service.XmlAnalyzer;
 import com.hannonhill.www.ws.ns.AssetOperationService.BaseAsset;
 import com.hannonhill.www.ws.ns.AssetOperationService.DublinAwareAsset;
 import com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataField;
@@ -164,10 +166,9 @@ public class WebServicesUtil
             if (field == null)
                 continue;
 
-            String fieldName = field.getIdentifier();
             String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
-            if (field.getFieldType() == FieldType.DATA_DEFINITION)
-                assignAppropriateFieldValue(rootGroup, fieldName, fieldValue);
+            if (field instanceof DataDefinitionField)
+                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue);
         }
 
         // For each xml content field, find a mapping and assign appropriate value in metadata
@@ -178,10 +179,9 @@ public class WebServicesUtil
             if (field == null)
                 continue;
 
-            String fieldName = field.getIdentifier();
             String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
-            if (field.getFieldType() == FieldType.DATA_DEFINITION)
-                assignAppropriateFieldValue(rootGroup, fieldName, fieldValue);
+            if (field instanceof DataDefinitionField)
+                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue);
         }
 
         return convertToStructuredData(rootGroup);
@@ -219,10 +219,9 @@ public class WebServicesUtil
             if (field == null)
                 continue;
 
-            String fieldName = field.getIdentifier();
             String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
-            if (field.getFieldType() == FieldType.METADATA)
-                assignAppropriateFieldValue(metadata, dynamicFieldsList, fieldName, fieldValue);
+            if (field instanceof MetadataSetField)
+                assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
         }
 
         // For each xml content field, find a mapping and assign appropriate value in metadata
@@ -233,10 +232,9 @@ public class WebServicesUtil
             if (field == null)
                 continue;
 
-            String fieldName = field.getIdentifier();
             String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
-            if (field.getFieldType() == FieldType.METADATA)
-                assignAppropriateFieldValue(metadata, dynamicFieldsList, fieldName, fieldValue);
+            if (field instanceof MetadataSetField)
+                assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
         }
 
         // Convert the list of dynamic field to an array and assign it to the metadata object
@@ -444,25 +442,27 @@ public class WebServicesUtil
      * 
      * @param metadata
      * @param dynamicFields
-     * @param fieldName
+     * @param field
      * @param fieldValue
      * @throws Exception
      */
-    private static void assignAppropriateFieldValue(Metadata metadata, List<DynamicMetadataField> dynamicFields, String fieldName, String fieldValue)
-            throws Exception
+    private static void assignAppropriateFieldValue(Metadata metadata, List<DynamicMetadataField> dynamicFields, MetadataSetField field,
+            String fieldValue) throws Exception
     {
+        String fieldName = field.getIdentifier();
+
         // If it is a standard metadata field, call the appropriate setter
-        if (WebServices.STANDARD_METADATA_FIELD_IDENTIFIERS.contains(fieldName))
+        if (!field.isDynamic())
             Metadata.class.getMethod("set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1), String.class).invoke(metadata,
                     fieldValue);
         // If it is not a standard metadata field, add a dynamic field
         else
         {
             // Remove the previous assignment
-            for (DynamicMetadataField field : dynamicFields)
-                if (field.getName().equals(fieldName))
+            for (DynamicMetadataField dynamicField : dynamicFields)
+                if (dynamicField.getName().equals(fieldName))
                 {
-                    dynamicFields.remove(field);
+                    dynamicFields.remove(dynamicField);
                     break;
                 }
 
@@ -479,11 +479,12 @@ public class WebServicesUtil
      * a structural tree if necessary. 
      * 
      * @param rootGroup
-     * @param fieldName
+     * @param field
      * @param fieldValue
      */
-    private static void assignAppropriateFieldValue(StructuredDataGroup rootGroup, String fieldName, String fieldValue)
+    private static void assignAppropriateFieldValue(StructuredDataGroup rootGroup, DataDefinitionField field, String fieldValue) throws Exception
     {
+        String fieldName = field.getIdentifier();
         int lastSlashIdx = fieldName.lastIndexOf('/');
         String identifier = lastSlashIdx == -1 ? fieldName : fieldName.substring(lastSlashIdx + 1);
         String groupsPath = lastSlashIdx == -1 ? "" : fieldName.substring(0, lastSlashIdx);
@@ -505,7 +506,24 @@ public class WebServicesUtil
             }
         }
 
-        currentNode.getTextFields().put(identifier, new StructuredDataText(identifier, fieldValue));
+        if (!field.isFileChooser())
+        {
+            StructuredDataNode textNode = new StructuredDataNode();
+            textNode.setIdentifier(identifier);
+            textNode.setText(fieldValue);
+            textNode.setType(StructuredDataType.text);
+            currentNode.getContentFields().put(identifier, textNode);
+        }
+        else
+        {
+            String path = XmlAnalyzer.getFirstSrcAttribute(fieldValue);
+            StructuredDataNode fileNode = new StructuredDataNode();
+            fileNode.setIdentifier(identifier);
+            fileNode.setFilePath(path);
+            fileNode.setType(StructuredDataType.asset);
+            fileNode.setAssetType(StructuredDataAssetType.file);
+            currentNode.getContentFields().put(identifier, fileNode);
+        }
     }
 
     /**
@@ -529,14 +547,11 @@ public class WebServicesUtil
      */
     private static StructuredDataNode[] convertToStructuredDataNodes(StructuredDataGroup group)
     {
-        StructuredDataNode[] structuredDataNodes = new StructuredDataNode[group.getGroups().size() + group.getTextFields().size()];
+        StructuredDataNode[] structuredDataNodes = new StructuredDataNode[group.getGroups().size() + group.getContentFields().size()];
         int index = 0;
-        for (String textFieldIdentifier : group.getTextFields().keySet())
+        for (String contentFieldIdentifier : group.getContentFields().keySet())
         {
-            structuredDataNodes[index] = new StructuredDataNode();
-            structuredDataNodes[index].setIdentifier(textFieldIdentifier);
-            structuredDataNodes[index].setText(group.getTextFields().get(textFieldIdentifier).getValue());
-            structuredDataNodes[index].setType(StructuredDataType.text);
+            structuredDataNodes[index] = group.getContentFields().get(contentFieldIdentifier);
             index++;
         }
 
@@ -550,5 +565,54 @@ public class WebServicesUtil
             index++;
         }
         return structuredDataNodes;
+    }
+
+    /**
+     * Represents a StructuredDataNode of type group. Using this instead of StructuredDataNode of type group because we want to deal with
+     * Maps instead of arrays for easy and fast insert and search.
+     * 
+     * @author  Artur Tomusiak
+     * @version $Id$
+     * @since   1.0
+     */
+    private static class StructuredDataGroup
+    {
+        private final String identifier;
+        private final Map<String, StructuredDataNode> contentFields = new HashMap<String, StructuredDataNode>(); // the fields in the group with their values
+        private final Map<String, StructuredDataGroup> groups = new HashMap<String, StructuredDataGroup>(); // other groups in the group
+
+        /**
+         * Constructor
+         * 
+         * @param identifier
+         */
+        public StructuredDataGroup(String identifier)
+        {
+            this.identifier = identifier;
+        }
+
+        /**
+         * @return Returns the identifier.
+         */
+        public String getIdentifier()
+        {
+            return identifier;
+        }
+
+        /**
+         * @return Returns the groups.
+         */
+        public Map<String, StructuredDataGroup> getGroups()
+        {
+            return groups;
+        }
+
+        /**
+         * @return Returns the contentFields.
+         */
+        public Map<String, StructuredDataNode> getContentFields()
+        {
+            return contentFields;
+        }
     }
 }
