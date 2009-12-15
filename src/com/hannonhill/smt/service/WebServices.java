@@ -369,13 +369,14 @@ public class WebServices
         // If the folder couldn't be create because parent folder doesn't exist, go ahead and create the parent folder and attempt to create the page again
         if (!createResult.getSuccess().equals("true"))
         {
-            if (createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+            if (createResult.getMessage() != null
+                    && createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
             {
                 createFolder(parentFolderPath, projectInformation);
                 createFolder(path, projectInformation);
             }
             else
-                throw new Exception("Parent folder " + parentFolderPath + " could not be created.");
+                throw new Exception("Parent folder " + path + " could not be created: " + createResult.getMessage());
         }
     }
 

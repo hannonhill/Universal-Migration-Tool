@@ -35,9 +35,10 @@ public class AssignFieldsAction extends BaseAction
     private final List<Field> cascadeMetadataFields = new ArrayList<Field>();
     private final List<Field> cascadeDataDefinitionFields = new ArrayList<Field>();
 
-    // These are the hidden fields that are generated automatically by javascript. For each assignment, all 4 arrays have one element added.
+    // These are the hidden fields that are generated automatically by javascript. For each assignment, all 5 arrays have one element added.
     private String[] selectedXmlMetadataFields = new String[0];
     private String[] selectedXmlContentFields = new String[0];
+    private String[] staticValues = new String[0];
     private String[] selectedCascadeMetadataFields = new String[0];
     private String[] selectedCascadeDataDefinitionFields = new String[0];
 
@@ -127,12 +128,14 @@ public class AssignFieldsAction extends BaseAction
     {
         String xmlMetadataFieldIdentifier = selectedXmlMetadataFields[i];
         String xmlContentFieldIdentifier = selectedXmlContentFields[i];
+        String staticValue = staticValues[i];
         String cascadeMetadataFieldIdentifier = selectedCascadeMetadataFields[i];
         String cascadeDataDefinitionFieldIdentifier = selectedCascadeDataDefinitionFields[i];
 
         // JavaScript generates word "null" for null assignments, so we get the Cascade field name and field type by looking for the "null" word
         boolean isDataDefinition = cascadeMetadataFieldIdentifier.equals("null");
-        boolean isContent = xmlMetadataFieldIdentifier.equals("null");
+        boolean isContent = !xmlContentFieldIdentifier.equals("null");
+        boolean isMetadata = !xmlMetadataFieldIdentifier.equals("null");
         String cascadeFieldIdentifier = isDataDefinition ? cascadeDataDefinitionFieldIdentifier : cascadeMetadataFieldIdentifier;
 
         // Get the actual field from the content type
@@ -142,11 +145,13 @@ public class AssignFieldsAction extends BaseAction
         if (field == null)
             throw new Exception("Data Definition or Metadata has been updated in meantime. Please re-assign Content Types again.");
 
-        // Similary way, by checking which field is "null", we can add the mapping to correct type of map
+        // Similar way, by checking which field is "null", we can add the mapping to correct type of map
         if (isContent)
             assetTypeObject.getContentFieldMapping().put(xmlContentFieldIdentifier, field);
-        else
+        else if (isMetadata)
             assetTypeObject.getMetadataFieldMapping().put(xmlMetadataFieldIdentifier, field);
+        else
+            assetTypeObject.getStaticValueMapping().put(field, staticValue);
     }
 
     /**
@@ -307,6 +312,30 @@ public class AssignFieldsAction extends BaseAction
     public Map<String, Field> getContentFieldMap()
     {
         return getCurrentAssetType().getContentFieldMapping();
+    }
+
+    /**
+     * @return Returns the staticValueMap
+     */
+    public Map<Field, String> getStaticValueMap()
+    {
+        return getCurrentAssetType().getStaticValueMapping();
+    }
+
+    /**
+     * @return Returns the staticValues.
+     */
+    public String[] getStaticValues()
+    {
+        return staticValues;
+    }
+
+    /**
+     * @param staticValues the staticValues to set
+     */
+    public void setStaticValues(String[] staticValues)
+    {
+        this.staticValues = staticValues;
     }
 
     /**

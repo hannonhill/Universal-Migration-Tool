@@ -24,7 +24,8 @@ public class AssetType
     private final Set<String> contentFields = new HashSet<String>(); // a set of content field names that are present in the xml for this asset type
 
     private final Map<String, Field> metadataFieldMapping = new HashMap<String, Field>(); // a mapping from a metadata field name to a Cascade field
-    private final Map<String, Field> contentFieldMapping = new HashMap<String, Field>(); // a mapping from a content field name to a Cascade field 
+    private final Map<String, Field> contentFieldMapping = new HashMap<String, Field>(); // a mapping from a content field name to a Cascade field
+    private final Map<Field, String> staticValueMapping = new HashMap<Field, String>(); // this mapping maps from a Cascade field to its static value it should get 
 
     /**
      * Constructor
@@ -82,5 +83,13 @@ public class AssetType
     public Map<String, Field> getContentFieldMapping()
     {
         return contentFieldMapping;
+    }
+
+    /**
+     * @return Returns the staticValueMapping.
+     */
+    public Map<Field, String> getStaticValueMapping()
+    {
+        return staticValueMapping;
     }
 }

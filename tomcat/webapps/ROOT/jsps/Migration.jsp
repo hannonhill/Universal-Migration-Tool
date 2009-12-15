@@ -4,6 +4,7 @@
 	<head>
 		<title>Serena Migration Tool</title>
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="/javascript/json2.js?t=<s:property value="time"/>"></script>
 		<script type="text/javascript">
 			var currentProgress = 0;
 			var currentCreated = 0;
@@ -21,7 +22,7 @@
 			    if (request.overrideMimeType)
 			        request.overrideMimeType('application/json');
 			    request.setRequestHeader('Content-Type', 'application/json');
-			    request.send();
+			    request.send(null);
 			}
 			
 			function sendAjaxRequestForProgress()
@@ -55,7 +56,7 @@
 			            request = null;
 			        }
 			    };       
-			    request.send();
+			    request.send(null);
 			}
 	
 			function updateProgressReturn(response)

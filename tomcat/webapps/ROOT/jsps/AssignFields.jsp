@@ -9,12 +9,13 @@
 			{
 				var xmlFieldTypeMetadataEl = document.getElementById("xmlFieldTypeMetadata");
 				var xmlFieldTypeContentEl = document.getElementById("xmlFieldTypeContent");
+				var xmlFieldTypeStaticEl = document.getElementById("xmlFieldTypeStatic");
 				var cascadeFieldTypeMetadataEl = document.getElementById("cascadeFieldTypeMetadata");
 				var cascadeFieldTypeDataDefinitionEl = document.getElementById("cascadeFieldTypeDataDefinition");
 
-				if (!xmlFieldTypeMetadataEl.checked && !xmlFieldTypeContentEl.checked)
+				if (!xmlFieldTypeMetadataEl.checked && !xmlFieldTypeContentEl.checked && !xmlFieldTypeStaticEl.checked)
 				{
-					alert("Please select either a XML Metadata Field or XML Content Field");
+					alert("Please select either a XML Metadata Field or XML Content Field or a Static value");
 					return;
 				}
 
@@ -26,6 +27,7 @@
 
 				var xmlMetadataFieldNamesEl = document.getElementById("xmlMetadataFieldNames");
 				var xmlContentFieldNamesEl = document.getElementById("xmlContentFieldNames");
+				var xmlStaticValueEl = document.getElementById("xmlStaticValue");
 				var cascadeMetadataFieldNamesEl = document.getElementById("cascadeMetadataFieldNames");
 				var cascadeDataDefinitionFieldNamesEl = document.getElementById("cascadeDataDefinitionFieldNames");
 
@@ -55,13 +57,14 @@
 
 				var xmlMetadataFieldSelectedIndex = xmlFieldTypeMetadataEl.checked?xmlMetadataFieldNamesEl.selectedIndex:null;
 				var xmlContentFieldSelectedIndex = xmlFieldTypeContentEl.checked?xmlContentFieldNamesEl.selectedIndex:null;
+				var xmlStaticValue = xmlStaticValueEl.value; 
 				var cascadeMetadataFieldSelectedIndex = cascadeFieldTypeMetadataEl.checked?cascadeMetadataFieldNamesEl.selectedIndex:null;
 				var cascadeDataDefinitionFieldSelectedIndex = cascadeFieldTypeDataDefinitionEl.checked?cascadeDataDefinitionFieldNamesEl.selectedIndex:null;
 				
-				addMappingForGivenIndex(xmlMetadataFieldSelectedIndex, xmlContentFieldSelectedIndex, cascadeMetadataFieldSelectedIndex, cascadeDataDefinitionFieldSelectedIndex);
+				addMappingForGivenIndex(xmlMetadataFieldSelectedIndex, xmlContentFieldSelectedIndex, xmlStaticValue, cascadeMetadataFieldSelectedIndex, cascadeDataDefinitionFieldSelectedIndex);
 			}
 
-			function addMappingByName(xmlMetadata, xmlContent, cascade, cascadeType)
+			function addMappingByName(xmlMetadata, xmlContent, staticValue, cascade, cascadeType)
 			{
 				var xmlMetadataIndex = null;
 				var xmlContentIndex = null;
@@ -85,7 +88,7 @@
 
 				var cascadeMetadataFieldNamesEl = document.getElementById("cascadeMetadataFieldNames");
 				var cascadeDataDefinitionFieldNamesEl = document.getElementById("cascadeDataDefinitionFieldNames");
-				if (cascadeType=="METADATA")
+				if (cascadeType=="com.hannonhill.smt.MetadataSetField")
 				{
 					for(var i=0; i<cascadeMetadataFieldNamesEl.options.length; i++)
 						if (cascadeMetadataFieldNamesEl.options[i].value==cascade)
@@ -99,10 +102,10 @@
 				}
 
 				
-				addMappingForGivenIndex(xmlMetadataIndex, xmlContentIndex, cascadeMetadataIndex, cascadeDataDefinitionIndex);
+				addMappingForGivenIndex(xmlMetadataIndex, xmlContentIndex, staticValue, cascadeMetadataIndex, cascadeDataDefinitionIndex);
 			}
 
-			function addMappingForGivenIndex(xmlMetadataFieldSelectedIndex, xmlContentFieldSelectedIndex, cascadeMetadataFieldSelectedIndex, cascadeDataDefinitionFieldSelectedIndex)
+			function addMappingForGivenIndex(xmlMetadataFieldSelectedIndex, xmlContentFieldSelectedIndex, staticValue, cascadeMetadataFieldSelectedIndex, cascadeDataDefinitionFieldSelectedIndex)
 			{
 				var xmlMetadataFieldNamesEl = document.getElementById("xmlMetadataFieldNames");
 				var xmlMetadataFieldName = xmlMetadataFieldSelectedIndex==null?null:xmlMetadataFieldNamesEl.options[xmlMetadataFieldSelectedIndex].text;
@@ -114,38 +117,52 @@
 				var cascadeDataDefinitionFieldNamesEl = document.getElementById("cascadeDataDefinitionFieldNames");
 				var cascadeDataDefinitionFieldName = cascadeDataDefinitionFieldSelectedIndex==null?null:cascadeDataDefinitionFieldNamesEl.options[cascadeDataDefinitionFieldSelectedIndex].text;
 				var cascadeDataDefinitionFieldIdentifier = cascadeDataDefinitionFieldSelectedIndex==null?null:cascadeDataDefinitionFieldNamesEl.options[cascadeDataDefinitionFieldSelectedIndex].value;
-				var tableName = xmlMetadataFieldSelectedIndex==null ? "mappingsContent" : "mappingsMetadata";
+				var tableName = xmlMetadataFieldSelectedIndex != null ? "mappingsMetadata" : xmlContentFieldSelectedIndex != null ? "mappingsContent" : "mappingsStatic";
 				var tableEl = document.getElementById(tableName);
 				var row = document.createElement("tr");
 				var cell1 = document.createElement("td");
-				cell1.appendChild(document.createTextNode(xmlMetadataFieldName==null ? xmlContentFieldName : xmlMetadataFieldName));
+				cell1.appendChild(document.createTextNode(xmlMetadataFieldName!=null ? xmlMetadataFieldName : xmlContentFieldName != null ? xmlContentFieldName : staticValue ));
 				var cell2 = document.createElement("td");
 				cell2.appendChild(document.createTextNode(cascadeMetadataFieldName));
 				var cell3 = document.createElement("td");
 				cell3.appendChild(document.createTextNode(cascadeDataDefinitionFieldName));
 				var cell4 = document.createElement("td");
 				var hiddenContent = "<input type=\"hidden\" name=\"selectedXmlMetadataFields\" value=\""+xmlMetadataFieldName+"\"/>";
-				hiddenContent += "<input type=\"hidden\" name=\"selectedXmlContentFields\" value=\""+xmlContentFieldName+"\"/>";				
+				hiddenContent += "<input type=\"hidden\" name=\"selectedXmlContentFields\" value=\""+xmlContentFieldName+"\"/>";
+				hiddenContent += "<input type=\"hidden\" name=\"staticValues\" value=\""+staticValue+"\"/>";				
 				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeMetadataFields\" value=\""+cascadeMetadataFieldIdentifier+"\"/>";				
 				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeDataDefinitionFields\" value=\"" + cascadeDataDefinitionFieldIdentifier + "\"/>";				
-				cell4.innerHTML = hiddenContent+"<button onclick=\"removeMapping('" + xmlMetadataFieldName + "', '" + xmlContentFieldName + "');return false;\">Remove</button>";
+				cell4.innerHTML = hiddenContent+"<button onclick=\"removeMapping('" + xmlMetadataFieldName + "', '" + xmlContentFieldName + "', '" + staticValue + "');return false;\">Remove</button>";
+
+				// static value has a different order of columns
+				if (staticValue==null)
+				{
+					row.appendChild(cell1);
+					row.appendChild(cell2);
+					row.appendChild(cell3);
+				}
+				else
+				{
+					row.appendChild(cell2);
+					row.appendChild(cell3);
+					row.appendChild(cell1);
+				}
 				
-				row.appendChild(cell1);
-				row.appendChild(cell2);
-				row.appendChild(cell3);
 				row.appendChild(cell4);
 				tableEl.appendChild(row);
 
-				var dropdownEl = xmlMetadataFieldSelectedIndex==null ? xmlContentFieldNamesEl : xmlMetadataFieldNamesEl;
-				dropdownEl.remove(xmlMetadataFieldSelectedIndex==null ? xmlContentFieldSelectedIndex : xmlMetadataFieldSelectedIndex);
+				var dropdownEl = xmlMetadataFieldSelectedIndex!=null ? xmlMetadataFieldNamesEl : xmlContentFieldSelectedIndex!=null ? xmlContentFieldNamesEl : null;
+				if (dropdownEl != null)
+					dropdownEl.remove(xmlMetadataFieldSelectedIndex==null ? xmlContentFieldSelectedIndex : xmlMetadataFieldSelectedIndex);
 			}
 
-			function removeMapping(metadataFieldName, contentFieldName)
+			function removeMapping(metadataFieldName, contentFieldName, staticValue)
 			{
-				var isContent = metadataFieldName=='null';
-				var tableName = isContent ? "mappingsContent" : "mappingsMetadata";				
+				var isContent = contentFieldName!='null';
+				var isMetadata = metadataFieldName!='null'; 
+				var tableName = isContent ? "mappingsContent" : isMetadata ? "mappingsMetadata" : "mappingsStatic";				
 				var tableEl = document.getElementById(tableName);
-				var fieldValue = isContent ? contentFieldName : metadataFieldName;
+				var fieldValue = isContent ? contentFieldName : isMetadata ? metadataFieldName : staticValue;
 				
 				for(var i = 0; i < tableEl.childNodes.length; i++)
 				{
@@ -157,6 +174,9 @@
 							if (tdEl.innerHTML==fieldValue)
 							{
 								tableEl.removeChild(trEl);
+								if (!isContent && !isMetadata)
+									return;
+
 								var dropdownName = isContent ? "xmlContentFieldNames" : "xmlMetadataFieldNames";
 								var dropdownEl = document.getElementById(dropdownName);
 								dropdownEl.options[dropdownEl.options.length]=new Option(fieldValue);
@@ -196,6 +216,10 @@
 					</td>
 				</tr>
 				<tr>
+					<td><input type="radio" name="xmlFieldType" id="xmlFieldTypeStatic"/> Static Value</td>
+					<td><input type="text" name="xmlStaticValue" id="xmlStaticValue" onfocus="document.getElementById('xmlFieldTypeStatic').checked='checked'"/></td>
+				</tr>
+				<tr>
 					<td><input type="radio" name="cascadeFieldType" id="cascadeFieldTypeMetadata"/> Cascade Metadata Field</td>
 					<td>
 						<select name="cascadeMetadataFieldNames" id="cascadeMetadataFieldNames" onfocus="document.getElementById('cascadeFieldTypeMetadata').checked='checked'">
@@ -223,7 +247,7 @@
 				<tr>
 					<td colspan="2">
 						<table summary="Mappings" id="mappingsMetadata">
-							<tr><th>Xml Metadata Field</th><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th></tr>
+							<tr><th>XML Metadata Field</th><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th></tr>
 						</table>
 					</td>
 				</tr>
@@ -231,6 +255,13 @@
 					<td colspan="2">
 						<table summary="Mappings" id="mappingsContent">
 							<tr><th>XML Content Field</th><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th></tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<table summary="Mappings" id="mappingsStatic">
+							<tr><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th><th>Static Value</th></tr>
 						</table>
 					</td>
 				</tr>
@@ -250,10 +281,13 @@
 		</div>
 		<script type="text/javascript">
 		<s:iterator value="metadataFieldMap.entrySet()">
-			addMappingByName("<s:property value="key"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.fieldType"/>");
+			addMappingByName("<s:property value="key"/>", null, null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
 		</s:iterator>
 		<s:iterator value="contentFieldMap.entrySet()">
-			addMappingByName(null, "<s:property value="key"/>", "<s:property value="value.identifier"/>", "<s:property value="value.fieldType"/>");
+			addMappingByName(null, "<s:property value="key"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
+		</s:iterator>
+		<s:iterator value="staticValueMap.entrySet()">
+			addMappingByName(null, null, "<s:property value="value"/>", "<s:property value="key.identifier"/>", "<s:property value="key.class.name"/>");
 		</s:iterator>
 		</script>
 	</body>

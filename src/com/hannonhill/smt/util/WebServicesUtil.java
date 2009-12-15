@@ -134,12 +134,14 @@ public class WebServicesUtil
         {
             // if page does not use data definition, the tree mapping should contain only a single xhtml field
             StructuredDataNode[] xhtmlNodes = structuredData.getStructuredDataNodes();
+            String xhtml = null;
             if (xhtmlNodes.length == 1)
-                page.setXhtml(xhtmlNodes[0].getText());
+                xhtml = xhtmlNodes[0].getText();
             else if (xhtmlNodes.length == 0)
                 ; // do nothing, no mappings
             else
                 throw new Exception("The mappings for a page without Data Definition contains more than one field.");
+            page.setXhtml(xhtml == null ? "" : xhtml);
         }
 
         return page;
@@ -171,7 +173,7 @@ public class WebServicesUtil
                 assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue);
         }
 
-        // For each xml content field, find a mapping and assign appropriate value in metadata
+        // For each xml content field, find a mapping and assign appropriate value in structured data
         for (String xmlContentFieldName : xmlPage.getContentMap().keySet())
         {
             Field field = assetType.getContentFieldMapping().get(xmlContentFieldName);
@@ -183,6 +185,14 @@ public class WebServicesUtil
             if (field instanceof DataDefinitionField)
                 assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue);
         }
+
+        // For each static value field, assign the static value in structured data
+        for (Field field : assetType.getStaticValueMapping().keySet())
+            if (field instanceof DataDefinitionField)
+            {
+                String fieldValue = assetType.getStaticValueMapping().get(field);
+                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue);
+            }
 
         return convertToStructuredData(rootGroup);
     }
@@ -236,6 +246,14 @@ public class WebServicesUtil
             if (field instanceof MetadataSetField)
                 assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
         }
+
+        // For each static value field, assign the static value in the metadata
+        for (Field field : assetType.getStaticValueMapping().keySet())
+            if (field instanceof MetadataSetField)
+            {
+                String fieldValue = assetType.getStaticValueMapping().get(field);
+                assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
+            }
 
         // Convert the list of dynamic field to an array and assign it to the metadata object
         metadata.setDynamicFields(dynamicFieldsList.toArray(new DynamicMetadataField[dynamicFieldsList.size()]));

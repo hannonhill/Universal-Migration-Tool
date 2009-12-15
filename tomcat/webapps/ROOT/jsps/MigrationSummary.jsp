@@ -48,6 +48,12 @@
 										<tr><td><s:property value="key"/></td><td class="arrow">-&gt;</td><td><s:property value="value.label"/></td></tr>
 									</s:iterator>
 								</s:if>
+								<s:if test="projectInformation.assetTypes.get(#assetTypeName).staticValueMapping.size()>0">
+									<tr><th colspan="3">Static Value</th></tr>
+									<s:iterator value="projectInformation.assetTypes.get(#assetTypeName).staticValueMapping.entrySet()">
+										<tr><td><s:property value="key.label"/></td><td class="arrow">-&gt;</td><td><s:property value="value"/></td></tr>
+									</s:iterator>
+								</s:if>
 							</table>
 						</td>
 					</tr>
