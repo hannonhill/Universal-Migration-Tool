@@ -12,9 +12,8 @@ import java.util.Map;
 
 import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.ContentTypeInformation;
-import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.ProjectInformation;
-import com.hannonhill.smt.service.WebServices;
+import com.hannonhill.smt.service.MappingPersister;
 
 /**
  * In this action user is assigning the asset types from xml to Content Types in Cascade
@@ -66,6 +65,7 @@ public class AssignContentTypesAction extends BaseAction
             projectInformation.setContentTypes(new HashMap<String, ContentTypeInformation>()); // clear out the existing content types
             for (int i = 0; i < selectedAssetTypes.length; i++)
                 createAndAddContentType(selectedContentTypes[i], selectedAssetTypes[i], projectInformation);
+            MappingPersister.persistMappings(projectInformation);
         }
         catch (Exception e)
         {
@@ -94,24 +94,9 @@ public class AssignContentTypesAction extends BaseAction
     private void createAndAddContentType(String contentTypePath, String assetTypeName, ProjectInformation projectInformation) throws Exception
     {
         projectInformation.getContentTypeMap().put(assetTypeName, contentTypePath);
-        ContentTypeInformation contentType = new ContentTypeInformation(contentTypePath);
-        contentType.setMetadataFields(WebServices.getMetadataFieldsForContentType(contentTypePath, projectInformation));
-        Map<String, DataDefinitionField> dataDefinitionFields = WebServices
-                .getDataDefinitionFieldsForContentType(contentTypePath, projectInformation);
-        if (dataDefinitionFields != null)
-        {
-            contentType.setDataDefinitionFields(dataDefinitionFields);
-            contentType.setUsesDataDefinition(true);
-        }
-        else
-        {
-            Map<String, DataDefinitionField> returnMap = new HashMap<String, DataDefinitionField>();
-            returnMap.put(WebServices.XHTML_DATA_DEFINITION_FIELD.getIdentifier(), WebServices.XHTML_DATA_DEFINITION_FIELD);
-            contentType.setDataDefinitionFields(returnMap);
-            contentType.setUsesDataDefinition(false);
-        }
-
-        projectInformation.getContentTypes().put(contentTypePath, contentType);
+        ContentTypeInformation contentType = ContentTypeInformation.get(contentTypePath, projectInformation);
+        if (contentType == null)
+            throw new Exception("Content type with path " + contentTypePath + " could not be found.");
     }
 
     /**
@@ -122,6 +107,7 @@ public class AssignContentTypesAction extends BaseAction
     private String processView()
     {
         ProjectInformation projectInformation = getProjectInformation();
+        MappingPersister.loadMappings(projectInformation);
         assetTypes.addAll(projectInformation.getAssetTypes().keySet());
         contentTypes.addAll(projectInformation.getContentTypePaths());
         return INPUT;

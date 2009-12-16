@@ -85,7 +85,8 @@ public class UploadZipAction extends BaseAction
             FileSystem.createFolderIfDoesNotExist(uploadsDir);
             File[] childDirs = dir.listFiles();
             for (File childDir : childDirs)
-                availableFolders.add(childDir.getName());
+                if (childDir.isDirectory())
+                    availableFolders.add(childDir.getName());
             xmlDirectory = SELECTED_BELOW;
             availableFolders.add(xmlDirectory);
 

@@ -7,6 +7,7 @@ package com.hannonhill.smt;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class ProjectInformation
     private String overwriteBehavior;
 
     // analyzed information
-    private Map<String, AssetType> assetTypes; // asset type name and the actual asset type
+    private Map<String, AssetType> assetTypes; // asset type name and the actual asset type which contains user entered field mappings
     private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type 
     private final List<File> filesToProcess; // the files that need to be processed
     private Set<String> gatheredExtensions; // a set of extensions found for pages (for example ".html", ".htm")
@@ -63,6 +64,8 @@ public class ProjectInformation
         migrationStatus = new MigrationStatus();
         filesToProcess = new ArrayList<File>();
         gatheredExtensions = new HashSet<String>();
+        contentTypes = new HashMap<String, ContentTypeInformation>();
+        contentTypeMap = new HashMap<String, String>();
     }
 
     /**

@@ -13,6 +13,7 @@ import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.ProjectInformation;
+import com.hannonhill.smt.service.MappingPersister;
 
 /**
  * Action responsible for assigning metadata and structured data fields.
@@ -77,6 +78,7 @@ public class AssignFieldsAction extends BaseAction
         {
             for (int i = 0; i < selectedXmlMetadataFields.length; i++)
                 addFieldMapping(i, contentType, assetTypeObject);
+            MappingPersister.persistMappings(projectInformation);
         }
         catch (Exception e)
         {

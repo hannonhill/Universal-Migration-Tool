@@ -70,6 +70,7 @@
 				var nextNotAligned = responseObject["pagesNotAligned"];
 
 				var log = responseObject["log"];
+				log = log.replace(/[\n\r\t]/g,''); // Remove any new line or tab characters from the log 
 				var newspan = document.createElement('SPAN');
 				currentId++;
 				newspan.setAttribute('id', 'span'+currentId);

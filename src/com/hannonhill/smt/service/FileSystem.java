@@ -8,9 +8,11 @@ package com.hannonhill.smt.service;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -92,6 +94,21 @@ public class FileSystem
     {
         File f = new File(path);
         f.mkdir();
+    }
+
+    /**
+     * Saves the contents to a file with given path
+     * 
+     * @param filePath
+     * @param contents
+     * @throws Exception
+     */
+    public static void saveFile(String filePath, String contents) throws Exception
+    {
+        FileWriter outFile = new FileWriter(filePath);
+        PrintWriter out = new PrintWriter(outFile);
+        out.print(contents);
+        out.close();
     }
 
     /**
