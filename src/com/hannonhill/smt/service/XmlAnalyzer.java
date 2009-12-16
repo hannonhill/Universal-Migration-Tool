@@ -298,6 +298,10 @@ public class XmlAnalyzer
         {
             XmlPageInformation xmlPageInformation = XmlAnalyzer.analyzeContentsOfXmlFile(file);
 
+            String fileNameWihtoutXmlExtension = PathUtil.truncateExtension(file.getName());
+            String extension = PathUtil.getExtension(fileNameWihtoutXmlExtension);
+            projectInformation.getGatheredExtensions().add(extension);
+
             // get existing asset type from the map or create a new one and add it to the map
             AssetType assetType = projectInformation.getAssetTypes().get(xmlPageInformation.getAssetTypeName());
             if (assetType == null)

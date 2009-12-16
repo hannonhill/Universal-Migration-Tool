@@ -51,6 +51,17 @@ public class PathUtil
     }
 
     /**
+     * Returns the extension of the file name. For example x.html will return .html. If there is no extension, an empty string will be returned.
+     * 
+     * @param name
+     * @return
+     */
+    public static String getExtension(String name)
+    {
+        return name.lastIndexOf('.') == -1 ? "" : name.substring(name.lastIndexOf('.'));
+    }
+
+    /**
      * Parses the path and returns the parent folder path part of it or '/' if the path is a the root level.
      * 
      * @param path

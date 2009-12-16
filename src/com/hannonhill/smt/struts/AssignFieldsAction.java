@@ -67,6 +67,7 @@ public class AssignFieldsAction extends BaseAction
         // Clear out the old information
         assetTypeObject.getMetadataFieldMapping().clear();
         assetTypeObject.getContentFieldMapping().clear();
+        assetTypeObject.getStaticValueMapping().clear();
 
         String contentTypePath = projectInformation.getContentTypeMap().get(projectInformation.getAssetTypeNames().get(assetType));
         ContentTypeInformation contentType = projectInformation.getContentTypes().get(contentTypePath);

@@ -7,6 +7,7 @@ package com.hannonhill.smt;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,7 +39,8 @@ public class ProjectInformation
     // analyzed information
     private Map<String, AssetType> assetTypes; // asset type name and the actual asset type
     private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type 
-    private final List<File> filesToProcess; // the files that need to be processed    
+    private final List<File> filesToProcess; // the files that need to be processed
+    private Set<String> gatheredExtensions; // a set of extensions found for pages (for example ".html", ".htm")
 
     // Cascade information
     private Set<String> contentTypePaths;
@@ -60,6 +62,7 @@ public class ProjectInformation
         overwriteBehavior = OVERWRITE_BEHAVIOR_KEEP_EXISTING;
         migrationStatus = new MigrationStatus();
         filesToProcess = new ArrayList<File>();
+        gatheredExtensions = new HashSet<String>();
     }
 
     /**
@@ -268,5 +271,21 @@ public class ProjectInformation
     public void setMigrationStatus(MigrationStatus migrationStatus)
     {
         this.migrationStatus = migrationStatus;
+    }
+
+    /**
+     * @return Returns the gatheredExtensions.
+     */
+    public Set<String> getGatheredExtensions()
+    {
+        return gatheredExtensions;
+    }
+
+    /**
+     * @param gatheredExtensions the gatheredExtensions to set
+     */
+    public void setGatheredExtensions(Set<String> gatheredExtensions)
+    {
+        this.gatheredExtensions = gatheredExtensions;
     }
 }

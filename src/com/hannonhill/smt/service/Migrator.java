@@ -105,7 +105,7 @@ public class Migrator
                         continue;
                     }
 
-                    LinkRewriter.rewriteLinks(page);
+                    LinkRewriter.rewriteLinks(page, projectInformation.getGatheredExtensions());
                     CascadePageInformation cascadePage = WebServices.createPage(page, projectInformation);
 
                     addToLog(generatePageLink(cascadePage));

@@ -8,6 +8,7 @@ package com.hannonhill.smt.service;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,17 +36,18 @@ import com.hannonhill.smt.util.XmlUtil;
 public class LinkRewriter
 {
     /**
-     * Rewrites all the file and page links in the content and metadata fields of the page. If it is a page link (ends with .html extension and is
-     * a relative), the .html extension will be stripped
+     * Rewrites all the file and page links in the content and metadata fields of the page. If it is a page link (ends with any extension of the 
+     * extensions in possibleExtensions set and is relative), the extension will be stripped
      * 
      * @param page
+     * @param possibleExtensions
      * @throws Exception
      */
-    public static void rewriteLinks(DetailedXmlPageInformation page) throws Exception
+    public static void rewriteLinks(DetailedXmlPageInformation page, Set<String> possibleExtensions) throws Exception
     {
         String pagePath = page.getDeployPath();
-        rewriteLinks(page.getContentMap(), pagePath);
-        rewriteLinks(page.getMetadataMap(), pagePath);
+        rewriteLinks(page.getContentMap(), pagePath, possibleExtensions);
+        rewriteLinks(page.getMetadataMap(), pagePath, possibleExtensions);
     }
 
     /**
@@ -54,14 +56,15 @@ public class LinkRewriter
      * 
      * @param map
      * @param pagePath
+     * @param possibleExtensions
      * @throws Exception
      */
-    private static void rewriteLinks(Map<String, String> map, String pagePath) throws Exception
+    private static void rewriteLinks(Map<String, String> map, String pagePath, Set<String> possibleExtensions) throws Exception
     {
         for (String fieldIdentifier : map.keySet())
         {
             String content = map.get(fieldIdentifier);
-            String newContent = rewriteLinks(content, pagePath);
+            String newContent = rewriteLinks(content, pagePath, possibleExtensions);
             map.put(fieldIdentifier, newContent);
         }
     }
@@ -72,10 +75,11 @@ public class LinkRewriter
      * 
      * @param xml
      * @param pagePath
+     * @param possibleExtensions
      * @return
      * @throws Exception
      */
-    private static String rewriteLinks(String xml, String pagePath) throws Exception
+    private static String rewriteLinks(String xml, String pagePath, Set<String> possibleExtensions) throws Exception
     {
         // To make things faster, if it's an empty string, just quit
         if (xml == null || xml.equals(""))
@@ -92,7 +96,7 @@ public class LinkRewriter
         Document document = builder.parse(new InputSource(inputStream));
 
         Node rootNode = document.getChildNodes().item(0);
-        rewriteLink(rootNode, pagePath);
+        rewriteLink(rootNode, pagePath, possibleExtensions);
 
         // convert document to string
         DOMSource domSource = new DOMSource(document);
@@ -115,21 +119,22 @@ public class LinkRewriter
      * 
      * @param node
      * @param pagePath
+     * @param possibleExtensions
      */
-    private static void rewriteLink(Node node, String pagePath)
+    private static void rewriteLink(Node node, String pagePath, Set<String> possibleExtensions)
     {
         if (node.getNodeName().equals("img"))
-            rewriteLink(node, "src", pagePath);
+            rewriteLink(node, "src", pagePath, possibleExtensions);
         if (node.getNodeName().equals("script"))
-            rewriteLink(node, "src", pagePath);
+            rewriteLink(node, "src", pagePath, possibleExtensions);
         else if (node.getNodeName().equals("a"))
-            rewriteLink(node, "href", pagePath);
+            rewriteLink(node, "href", pagePath, possibleExtensions);
         else if (node.getNodeName().equals("link"))
-            rewriteLink(node, "href", pagePath);
+            rewriteLink(node, "href", pagePath, possibleExtensions);
 
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++)
-            rewriteLink(children.item(i), pagePath);
+            rewriteLink(children.item(i), pagePath, possibleExtensions);
     }
 
     /**
@@ -139,8 +144,9 @@ public class LinkRewriter
      * @param element
      * @param attributeName
      * @param pagePath
+     * @param possibleExtensions
      */
-    private static void rewriteLink(Node element, String attributeName, String pagePath)
+    private static void rewriteLink(Node element, String attributeName, String pagePath, Set<String> possibleExtensions)
     {
         Node attribute = element.getAttributes().getNamedItem(attributeName);
         if (attribute == null)
@@ -156,7 +162,10 @@ public class LinkRewriter
         {
             String newPath = PathUtil.convertRelativeToAbsolute(withoutAnchor, pagePath);
 
-            if (newPath.endsWith(".html"))
+            // If the link links to a file with extension that is one of the possible extensions used, that means it is a link to a page
+            // and therefore, the extension in the link needs to be stripped
+            String extension = PathUtil.getExtension(newPath);
+            if (possibleExtensions.contains(extension))
                 newPath = PathUtil.truncateExtension(newPath);
 
             // add the anchor part

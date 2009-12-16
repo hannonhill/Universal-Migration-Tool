@@ -42,6 +42,12 @@
 					alert("No XML Content Field selected");
 					return;
 				}
+
+				if (xmlFieldTypeStaticEl.checked && xmlStaticValueEl.value=='')
+				{
+					alert("Sorry, but you can't select and empty static value");
+					return;
+				}
 				 
 				if (cascadeFieldTypeMetadataEl.checked && cascadeMetadataFieldNamesEl.selectedIndex==-1)
 				{
@@ -129,13 +135,12 @@
 				var cell4 = document.createElement("td");
 				var hiddenContent = "<input type=\"hidden\" name=\"selectedXmlMetadataFields\" value=\""+xmlMetadataFieldName+"\"/>";
 				hiddenContent += "<input type=\"hidden\" name=\"selectedXmlContentFields\" value=\""+xmlContentFieldName+"\"/>";
-				hiddenContent += "<input type=\"hidden\" name=\"staticValues\" value=\""+staticValue+"\"/>";				
+				hiddenContent += "<input type=\"hidden\" name=\"staticValues\" value=\""+(staticValue==null?null:staticValue.replace(/\"/g, '&quot;').replace(/&/g, '&amp;'))+"\"/>";				
 				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeMetadataFields\" value=\""+cascadeMetadataFieldIdentifier+"\"/>";				
 				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeDataDefinitionFields\" value=\"" + cascadeDataDefinitionFieldIdentifier + "\"/>";				
 				cell4.innerHTML = hiddenContent+"<button onclick=\"removeMapping('" + xmlMetadataFieldName + "', '" + xmlContentFieldName + "', '" + staticValue + "');return false;\">Remove</button>";
-
-				// static value has a different order of columns
-				if (staticValue==null)
+				// static value has a different order of columns				
+				if (staticValue==null || staticValue=="")
 				{
 					row.appendChild(cell1);
 					row.appendChild(cell2);
@@ -171,7 +176,7 @@
 						for(var j = 0; j < trEl.childNodes.length; j++)
 						{
 							var tdEl = trEl.childNodes[j];
-							if (tdEl.innerHTML==fieldValue)
+							if (tdEl.innerHTML.replace(/&amp;/g, '&')==fieldValue)
 							{
 								tableEl.removeChild(trEl);
 								if (!isContent && !isMetadata)
@@ -287,7 +292,7 @@
 			addMappingByName(null, "<s:property value="key"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
 		</s:iterator>
 		<s:iterator value="staticValueMap.entrySet()">
-			addMappingByName(null, null, "<s:property value="value"/>", "<s:property value="key.identifier"/>", "<s:property value="key.class.name"/>");
+			addMappingByName(null, null, "<s:property value="value" escapeJavaScript="true" escape="false"/>", "<s:property value="key.identifier"/>", "<s:property value="key.class.name"/>");
 		</s:iterator>
 		</script>
 	</body>
