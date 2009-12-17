@@ -91,6 +91,7 @@
 
 			function completed()
 			{
+				window.onbeforeunload = null;
 				document.getElementById('progress-percent').innerHTML = 'Migration Completed';
 				var stopMigrationEl = document.getElementById('stopMigration');
 				stopMigrationEl.innerHTML = "Start Over";
@@ -152,6 +153,13 @@
 				}
 				return xmlHttp;
 			}
+
+			function closeEditorWarning()
+			{
+				return 'If you navigate away, you will not be able to see the migration progress or the log but the migration will continue running.'
+			}
+			
+			window.onbeforeunload = closeEditorWarning
 		</script>
 	</head>
 	<body>

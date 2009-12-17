@@ -93,8 +93,10 @@
 				<tr><td colspan="2"><button onclick="addMapping();return false;"/>Add Mapping</button></td></tr>
 				<tr>
 					<td colspan="2">
-						<table summary="Mappings" id="mappings">
-							<tr><th>XML Asset Type</th><th>Cascade Content Type</th></tr>
+						<table summary="Mappings">
+							<tbody id="mappings">
+								<tr><th>XML Asset Type</th><th>Cascade Content Type</th></tr>
+							</tbody>
 						</table>
 					</td>
 				</tr>

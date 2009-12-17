@@ -47,7 +47,7 @@ table.mappingReport td.arrow
 
 #log
 {
-	height: 70%;overflow: auto;
+	height: 500px;overflow: auto;
 }
 
 div.progress

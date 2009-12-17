@@ -118,10 +118,10 @@
 				var xmlContentFieldNamesEl = document.getElementById("xmlContentFieldNames");
 				var xmlContentFieldName = xmlContentFieldSelectedIndex==null?null:xmlContentFieldNamesEl.options[xmlContentFieldSelectedIndex].text;
 				var cascadeMetadataFieldNamesEl = document.getElementById("cascadeMetadataFieldNames");
-				var cascadeMetadataFieldName = cascadeMetadataFieldSelectedIndex==null?null:cascadeMetadataFieldNamesEl.options[cascadeMetadataFieldSelectedIndex].text;
+				var cascadeMetadataFieldName = cascadeMetadataFieldSelectedIndex==null?"":cascadeMetadataFieldNamesEl.options[cascadeMetadataFieldSelectedIndex].text;
 				var cascadeMetadataFieldIdentifier = cascadeMetadataFieldSelectedIndex==null?null:cascadeMetadataFieldNamesEl.options[cascadeMetadataFieldSelectedIndex].value;
 				var cascadeDataDefinitionFieldNamesEl = document.getElementById("cascadeDataDefinitionFieldNames");
-				var cascadeDataDefinitionFieldName = cascadeDataDefinitionFieldSelectedIndex==null?null:cascadeDataDefinitionFieldNamesEl.options[cascadeDataDefinitionFieldSelectedIndex].text;
+				var cascadeDataDefinitionFieldName = cascadeDataDefinitionFieldSelectedIndex==null?"":cascadeDataDefinitionFieldNamesEl.options[cascadeDataDefinitionFieldSelectedIndex].text;
 				var cascadeDataDefinitionFieldIdentifier = cascadeDataDefinitionFieldSelectedIndex==null?null:cascadeDataDefinitionFieldNamesEl.options[cascadeDataDefinitionFieldSelectedIndex].value;
 				var tableName = xmlMetadataFieldSelectedIndex != null ? "mappingsMetadata" : xmlContentFieldSelectedIndex != null ? "mappingsContent" : "mappingsStatic";
 				var tableEl = document.getElementById(tableName);
@@ -251,22 +251,28 @@
 				<tr><td colspan="2"><button onclick="addMapping();return false;"/>Add Mapping</button></td></tr>
 				<tr>
 					<td colspan="2">
-						<table summary="Mappings" id="mappingsMetadata">
-							<tr><th>XML Metadata Field</th><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th></tr>
+						<table summary="Mappings">
+							<tbody id="mappingsMetadata">
+								<tr><th>XML Metadata Field</th><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th></tr>
+							</tbody>
 						</table>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
-						<table summary="Mappings" id="mappingsContent">
-							<tr><th>XML Content Field</th><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th></tr>
+						<table summary="Mappings">
+							<tbody id="mappingsContent">
+								<tr><th>XML Content Field</th><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th></tr>
+							</tbody>
 						</table>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
-						<table summary="Mappings" id="mappingsStatic">
-							<tr><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th><th>Static Value</th></tr>
+						<table summary="Mappings">
+							<tbody id="mappingsStatic">
+								<tr><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th><th>Static Value</th></tr>
+							</tbody>
 						</table>
 					</td>
 				</tr>
