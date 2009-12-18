@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.hannonhill.smt.service.WebServices;
+import com.hannonhill.www.ws.ns.AssetOperationService.ContentType;
 
 /**
  * Stores necessary information about Cascade Content Type. Also, reads that information through web services when initialized.
@@ -20,51 +21,25 @@ import com.hannonhill.smt.service.WebServices;
 public class ContentTypeInformation
 {
     private final String path;
-    private final Map<String, MetadataSetField> metadataFields;
-    private final Map<String, DataDefinitionField> dataDefinitionFields;
+    private final Map<String, MetadataSetField> metadataFields; // mapping from the metadata field identifier to the actual field
+    private final Map<String, DataDefinitionField> dataDefinitionFields; // mapping from the data definition field "path" to actual field
     private final boolean usesDataDefinition;
 
     /**
-     * Returns either a pre-loaded content type with given path or loads a new content type through web services and returns it.
-     * 
-     * @param path
-     * @param projectInformation
-     * @return
-     */
-    public static ContentTypeInformation get(String path, ProjectInformation projectInformation)
-    {
-        ContentTypeInformation existing = projectInformation.getContentTypes().get(path);
-        if (existing != null)
-            return existing;
-
-        try
-        {
-            ContentTypeInformation newContentType = new ContentTypeInformation(path, projectInformation);
-            projectInformation.getContentTypes().put(path, newContentType);
-            return newContentType;
-        }
-        catch (Exception e)
-        {
-            // content type with given path could not be found
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Private constructor. Reads the necessary information of a content type with given path through web services and 
+     * Constructor. Reads the necessary information of given content type (Metadata Set, Data Definition) through web services and 
      * populates necessary fields
      * 
-     * @param path
+     * @param contentType
      * @param projectInformation
      * @throws Exception
      */
-    private ContentTypeInformation(String path, ProjectInformation projectInformation) throws Exception
+    public ContentTypeInformation(ContentType contentType, ProjectInformation projectInformation) throws Exception
     {
-        this.path = path;
+        this.path = contentType.getPath();
 
-        metadataFields = WebServices.getMetadataFieldsForContentType(path, projectInformation);
-        Map<String, DataDefinitionField> dataDefinitionFields = WebServices.getDataDefinitionFieldsForContentType(path, projectInformation);
+        metadataFields = WebServices.getMetadataFieldsForContentType(path, projectInformation, contentType);
+        Map<String, DataDefinitionField> dataDefinitionFields = WebServices.getDataDefinitionFieldsForContentType(path, projectInformation,
+                contentType);
         if (dataDefinitionFields != null)
         {
             this.dataDefinitionFields = dataDefinitionFields;

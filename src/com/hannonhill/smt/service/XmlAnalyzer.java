@@ -347,7 +347,7 @@ public class XmlAnalyzer
     }
 
     /**
-     * Analyzes the XML file and finds the Content Type name in it and assigns it to the XmlPageInformation object.
+     * Analyzes the XML file and finds the Asset Type name in it and assigns it to the XmlPageInformation object.
      * 
      * @param file
      * @param xmlPageInformation

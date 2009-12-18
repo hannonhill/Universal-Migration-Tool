@@ -113,6 +113,7 @@
 
 			function addMappingForGivenIndex(xmlMetadataFieldSelectedIndex, xmlContentFieldSelectedIndex, staticValue, cascadeMetadataFieldSelectedIndex, cascadeDataDefinitionFieldSelectedIndex)
 			{
+				var staticValueEscaped = staticValue==null?null:staticValue.replace(/&/g, '&amp;').replace(/\"/g, '&quot;');
 				var xmlMetadataFieldNamesEl = document.getElementById("xmlMetadataFieldNames");
 				var xmlMetadataFieldName = xmlMetadataFieldSelectedIndex==null?null:xmlMetadataFieldNamesEl.options[xmlMetadataFieldSelectedIndex].text;
 				var xmlContentFieldNamesEl = document.getElementById("xmlContentFieldNames");
@@ -135,10 +136,10 @@
 				var cell4 = document.createElement("td");
 				var hiddenContent = "<input type=\"hidden\" name=\"selectedXmlMetadataFields\" value=\""+xmlMetadataFieldName+"\"/>";
 				hiddenContent += "<input type=\"hidden\" name=\"selectedXmlContentFields\" value=\""+xmlContentFieldName+"\"/>";
-				hiddenContent += "<input type=\"hidden\" name=\"staticValues\" value=\""+(staticValue==null?null:staticValue.replace(/\"/g, '&quot;').replace(/&/g, '&amp;'))+"\"/>";				
+				hiddenContent += "<input type=\"hidden\" name=\"staticValues\" value=\""+staticValueEscaped+"\"/>";				
 				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeMetadataFields\" value=\""+cascadeMetadataFieldIdentifier+"\"/>";				
 				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeDataDefinitionFields\" value=\"" + cascadeDataDefinitionFieldIdentifier + "\"/>";				
-				cell4.innerHTML = hiddenContent+"<button onclick=\"removeMapping('" + xmlMetadataFieldName + "', '" + xmlContentFieldName + "', '" + staticValue + "');return false;\">Remove</button>";
+				cell4.innerHTML = hiddenContent+"<button onclick=\"removeMapping('" + xmlMetadataFieldName + "', '" + xmlContentFieldName + "', '" + (staticValueEscaped==null?null:staticValueEscaped.replace(/\'/g, "\\'")) + "');return false;\">Remove</button>";
 				// static value has a different order of columns				
 				if (staticValue==null || staticValue=="")
 				{

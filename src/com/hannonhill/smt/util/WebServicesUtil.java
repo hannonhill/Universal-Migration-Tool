@@ -190,7 +190,8 @@ public class WebServicesUtil
         for (Field field : assetType.getStaticValueMapping().keySet())
             if (field instanceof DataDefinitionField)
             {
-                String fieldValue = assetType.getStaticValueMapping().get(field);
+                // Escape ampersands to make it a valid xml
+                String fieldValue = assetType.getStaticValueMapping().get(field).replaceAll("&", "&amp;");
                 assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue);
             }
 
@@ -251,7 +252,8 @@ public class WebServicesUtil
         for (Field field : assetType.getStaticValueMapping().keySet())
             if (field instanceof MetadataSetField)
             {
-                String fieldValue = assetType.getStaticValueMapping().get(field);
+                // Escape ampersands to make it a valid xml
+                String fieldValue = assetType.getStaticValueMapping().get(field).replaceAll("&", "&amp;");
                 assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
             }
 
@@ -558,7 +560,7 @@ public class WebServicesUtil
     }
 
     /**
-     * Converts group and ancestry with its contents to an array of StructuredDataNode objects recursively.
+     * Converts group and its descendants with its contents to an array of StructuredDataNode objects recursively.
      * 
      * @param group
      * @return
@@ -586,8 +588,8 @@ public class WebServicesUtil
     }
 
     /**
-     * Represents a StructuredDataNode of type group. Using this instead of StructuredDataNode of type group because we want to deal with
-     * Maps instead of arrays for easy and fast insert and search.
+     * Represents a StructuredDataNode of type group. Using this instead of {@link com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataNode} 
+     * of type group because we want to deal with Maps instead of arrays for easy and fast insert and search.
      * 
      * @author  Artur Tomusiak
      * @version $Id$

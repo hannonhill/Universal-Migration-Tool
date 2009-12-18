@@ -33,21 +33,18 @@ public class ProjectInformation
     private String password;
     private String siteName;
     private String xmlDirectory;
-    private Map<String, String> contentTypeMap;
-    private List<String> assetTypeNames; // repeated information - an ordered list of asset type names (the map above holds things that are not ordered)
-    private String overwriteBehavior;
+    private Map<String, String> contentTypeMap; // the mapping from XML Asset Type name to Cascade Content Type path
+    private List<String> assetTypeNames; // repeated information - an ordered list of XML Asset Type names (the map above holds things that are not ordered)
+    private Map<String, AssetType> assetTypes; // All XML Asset Type names and the actual XML Asset Type which contains user entered field mappings (if mapped)
+    private String overwriteBehavior; // Matches one of the constants ProjectInformation.OVERWRITE_BEHAVIOR_???
 
     // analyzed information
-    private Map<String, AssetType> assetTypes; // asset type name and the actual asset type which contains user entered field mappings
-    private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type 
-    private final List<File> filesToProcess; // the files that need to be processed
+    private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type information (with the available metadata and dd fields)
+    private final List<File> filesToProcess; // All the XML files that need to be processed during migration
     private Set<String> gatheredExtensions; // a set of extensions found for pages (for example ".html", ".htm")
 
-    // Cascade information
-    private Set<String> contentTypePaths;
-
+    // other useful information
     private MigrationStatus migrationStatus;
-
     private final String uploadsDir;
 
     /**
@@ -157,15 +154,7 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the contentTypePaths.
-     */
-    public Set<String> getContentTypePaths()
-    {
-        return contentTypePaths;
-    }
-
-    /**
-     * @return Returns the contentTypeMap.
+     * @return Returns the contentTypeMap - the mapping from XML Asset Type name to Cascade Content Type path
      */
     public Map<String, String> getContentTypeMap()
     {
@@ -173,19 +162,11 @@ public class ProjectInformation
     }
 
     /**
-     * @param contentTypeMap the contentTypeMap to set
+     * @param contentTypeMap the contentTypeMap to set - the mapping from XML Asset Type name to Cascade Content Type path
      */
     public void setContentTypeMap(Map<String, String> contentTypeMap)
     {
         this.contentTypeMap = contentTypeMap;
-    }
-
-    /**
-     * @param contentTypePaths the contentTypePaths to set
-     */
-    public void setContentTypePaths(Set<String> contentTypePaths)
-    {
-        this.contentTypePaths = contentTypePaths;
     }
 
     /**
@@ -205,7 +186,7 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the assetTypeNames.
+     * @return Returns the assetTypeNames - an ordered list of XML Asset Type names that exist in the contentTypeMap
      */
     public List<String> getAssetTypeNames()
     {
@@ -213,7 +194,7 @@ public class ProjectInformation
     }
 
     /**
-     * @param assetTypeNames the assetTypeNames to set
+     * @param assetTypeNames the assetTypeNames to set - an ordered list of XML Asset Type names that exist in the contentTypeMap
      */
     public void setAssetTypeNames(List<String> assetTypeNames)
     {

@@ -6,7 +6,7 @@
 package com.hannonhill.smt;
 
 /**
- * Object containing necessary information about page for logging - skipping rest of fields from {@link com.hannonhill.www.ws.ns.AssetOperationService.Page}
+ * Object containing necessary information about page for logging purposes - skipping rest of fields from {@link com.hannonhill.www.ws.ns.AssetOperationService.Page}
  * to save the memory.
  * 
  * @author  Artur Tomusiak

@@ -7,13 +7,14 @@ package com.hannonhill.smt.struts;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
 import org.apache.commons.lang.xwork.StringUtils;
 
+import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.service.WebServices;
 import com.hannonhill.smt.util.PathUtil;
@@ -86,6 +87,7 @@ public class ProjectPropertiesAction extends BaseAction
         ProjectInformation projectInformation = getProjectInformation();
         List<ContentType> contentTypes = null;
 
+        // Get all the content types from given site through web services
         try
         {
             contentTypes = WebServices.getContentTypesFromSite(projectInformation);
@@ -102,9 +104,18 @@ public class ProjectPropertiesAction extends BaseAction
             return;
         }
 
-        projectInformation.setContentTypePaths(new HashSet<String>());
+        // Clear the map in the projectInformation in case if it had some old data
+        projectInformation.setContentTypes(new HashMap<String, ContentTypeInformation>());
+        // Convert each ContentType to the ContentTypeInformation object and add to the map in the projectInformation
         for (ContentType contentType : contentTypes)
-            projectInformation.getContentTypePaths().add(contentType.getPath());
+            try
+            {
+                projectInformation.getContentTypes().put(contentType.getPath(), new ContentTypeInformation(contentType, projectInformation));
+            }
+            catch (Exception e)
+            {
+                addActionError(e.getMessage());
+            }
     }
 
     /**

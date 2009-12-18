@@ -136,7 +136,9 @@ public class MappingPersister
         // Check if the asset type and content type like that still exists (it's possible that the contents of the serena xml files changed 
         // and it doesn't exist anymore or Content Type in Cascade got deleted in meantime) and if it doesn't exist, then just ignore this mapping.
         AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
-        ContentTypeInformation contentType = ContentTypeInformation.get(mappedContentTypePath, projectInformation);
+        ContentTypeInformation contentType = projectInformation.getContentTypes().get(mappedContentTypePath);
+
+        // If either asset type or content type could not be found, it means that this mapping is invalid, so just ignore it
         if (assetType == null || contentType == null)
             return;
 
@@ -338,7 +340,8 @@ public class MappingPersister
     {
         content.append("<" + STATIC_VALUE_MAPPING_TAG + ">");
         persistCascadeField(content, field);
-        content.append("<" + STATIC_VALUE_TAG + ">" + mapping.get(field) + "</" + STATIC_VALUE_TAG + ">");
+        content.append("<" + STATIC_VALUE_TAG + ">" + mapping.get(field).replaceAll("&", "&amp;").replaceAll("<", "&lt;") + "</" + STATIC_VALUE_TAG
+                + ">");
         content.append("</" + STATIC_VALUE_MAPPING_TAG + ">");
     }
 

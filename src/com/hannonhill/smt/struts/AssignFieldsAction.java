@@ -31,10 +31,10 @@ public class AssignFieldsAction extends BaseAction
     private String contentTypePath;
 
     // These are the available xml and Cascade fields
-    private final List<String> xmlMetadataFieldNames = new ArrayList<String>();
-    private final List<String> xmlContentFieldNames = new ArrayList<String>();
-    private final List<Field> cascadeMetadataFields = new ArrayList<Field>();
-    private final List<Field> cascadeDataDefinitionFields = new ArrayList<Field>();
+    private final List<String> xmlMetadataFieldNames = new ArrayList<String>(); // a list of available XML Metadata field names
+    private final List<String> xmlContentFieldNames = new ArrayList<String>(); // a list of available XML Content field names
+    private final List<Field> cascadeMetadataFields = new ArrayList<Field>(); // a list of available Cascade Metadata Set field identifiers
+    private final List<Field> cascadeDataDefinitionFields = new ArrayList<Field>(); // a list of available Cascade Data Definitnion field paths
 
     // These are the hidden fields that are generated automatically by javascript. For each assignment, all 5 arrays have one element added.
     private String[] selectedXmlMetadataFields = new String[0];
@@ -119,8 +119,8 @@ public class AssignFieldsAction extends BaseAction
     /**
      * Given field identifiers of fields with given index i (selectedXmlMetadataFields, selectedXmlContentFields, selectedCascadeMetadataFields,
      * selectedCascadeDataDefinitionFields) it picks two that are not "null" and creates a mapping for them. The mapping is 
-     * xml field identifier -> cascade field. The cascade field is retrieved from the contentType. The created mapping is added to the
-     * assetTypeObject. 
+     * xml field identifier -> cascade field or cascade field -> static value. 
+     * The cascade field is retrieved from the contentType. The created mapping is added to the assetTypeObject. 
      * 
      * @param i
      * @param contentType

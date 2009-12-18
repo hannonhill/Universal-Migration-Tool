@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.hannonhill.smt.AssetType;
-import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.service.MappingPersister;
 
@@ -26,11 +25,11 @@ public class AssignContentTypesAction extends BaseAction
 {
     private static final long serialVersionUID = 3992252452526228826L;
 
-    private final List<String> assetTypes = new ArrayList<String>();
-    private final List<String> contentTypes = new ArrayList<String>();
+    private final List<String> assetTypes = new ArrayList<String>(); // a list of available XML Asset Type names
+    private final List<String> contentTypes = new ArrayList<String>(); // alist of available Cascade Content Type paths in given site
 
-    private String[] selectedAssetTypes;
-    private String[] selectedContentTypes;
+    private String[] selectedAssetTypes; // the XML Asset Type names selected by the user after the form submission
+    private String[] selectedContentTypes; // the Cascade Content Type paths selected by the user after the form submission
 
     /* (non-Javadoc)
      * @see com.opensymphony.xwork2.ActionSupport#execute()
@@ -52,19 +51,24 @@ public class AssignContentTypesAction extends BaseAction
     private String processSubmit()
     {
         ProjectInformation projectInformation = getProjectInformation();
-        projectInformation.setContentTypeMap(new HashMap<String, String>());
+
+        // Clear out the information
+        projectInformation.setContentTypeMap(new HashMap<String, String>()); // clear out the mappings
+
+        // Make sure that at least one mapping has been created
         if (selectedAssetTypes == null || selectedAssetTypes.length == 0)
         {
             addActionError("You must assign at least one Content Type mapping");
-            processView();
-            return INPUT;
+            return processView();
         }
 
         try
         {
-            projectInformation.setContentTypes(new HashMap<String, ContentTypeInformation>()); // clear out the existing content types
+            // For each mapping, add it to the project information and load the content type throgh web services
             for (int i = 0; i < selectedAssetTypes.length; i++)
-                createAndAddContentType(selectedContentTypes[i], selectedAssetTypes[i], projectInformation);
+                projectInformation.getContentTypeMap().put(selectedAssetTypes[i], selectedContentTypes[i]);
+
+            // After mappings are added to the project information, save it to the filesystem
             MappingPersister.persistMappings(projectInformation);
         }
         catch (Exception e)
@@ -76,27 +80,10 @@ public class AssignContentTypesAction extends BaseAction
         // make the asset type names an ordered list because map keeps things out of order
         projectInformation.setAssetTypeNames(new ArrayList<String>(projectInformation.getContentTypeMap().keySet()));
 
-        // clear out the rest of previously entered information
+        // clear out the rest of previously entered information that was stored in the session
         clearOutUnusedContentTypeFieldMappings();
 
         return SUCCESS;
-    }
-
-    /**
-     * Creates a content type object, reads its fields through web services and adds it to the project information. Also adds a mapping
-     * to the content type map.
-     * 
-     * @param contentTypePath
-     * @param assetTypeName
-     * @param projectInformation
-     * @throws Exception
-     */
-    private void createAndAddContentType(String contentTypePath, String assetTypeName, ProjectInformation projectInformation) throws Exception
-    {
-        projectInformation.getContentTypeMap().put(assetTypeName, contentTypePath);
-        ContentTypeInformation contentType = ContentTypeInformation.get(contentTypePath, projectInformation);
-        if (contentType == null)
-            throw new Exception("Content type with path " + contentTypePath + " could not be found.");
     }
 
     /**
@@ -109,7 +96,7 @@ public class AssignContentTypesAction extends BaseAction
         ProjectInformation projectInformation = getProjectInformation();
         MappingPersister.loadMappings(projectInformation);
         assetTypes.addAll(projectInformation.getAssetTypes().keySet());
-        contentTypes.addAll(projectInformation.getContentTypePaths());
+        contentTypes.addAll(projectInformation.getContentTypes().keySet());
         return INPUT;
     }
 

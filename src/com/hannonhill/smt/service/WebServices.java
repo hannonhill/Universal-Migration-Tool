@@ -114,14 +114,14 @@ public class WebServices
      * 
      * @param contentTypePath
      * @param projectInformation
+     * @param contentType
      * @return
      * @throws Exception
      */
-    public static Map<String, MetadataSetField> getMetadataFieldsForContentType(String contentTypePath, ProjectInformation projectInformation)
-            throws Exception
+    public static Map<String, MetadataSetField> getMetadataFieldsForContentType(String contentTypePath, ProjectInformation projectInformation,
+            ContentType contentType) throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
-        ContentType contentType = readContentTypeByPath(projectInformation, contentTypePath);
         String metadataSetId = contentType.getMetadataSetId();
 
         Identifier identifier = new Identifier(metadataSetId, null, EntityTypeString.metadataset);
@@ -150,16 +150,16 @@ public class WebServices
      * 
      * @param contentTypePath
      * @param projectInformation
+     * @param contentType
      * @return
      * @throws Exception
      */
-    public static Map<String, DataDefinitionField> getDataDefinitionFieldsForContentType(String contentTypePath, ProjectInformation projectInformation)
-            throws Exception
+    public static Map<String, DataDefinitionField> getDataDefinitionFieldsForContentType(String contentTypePath,
+            ProjectInformation projectInformation, ContentType contentType) throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
 
-        // Check if data definition is assign. If it isn't - we just return the XHTML field.
-        ContentType contentType = readContentTypeByPath(projectInformation, contentTypePath);
+        // Check if data definition is assigned. If it isn't, return null (we will just create the XHTML field).
         String dataDefinitionId = contentType.getStructuredDataDefinitionId();
         if (dataDefinitionId == null)
             return null;
@@ -421,27 +421,6 @@ public class WebServices
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
             throw new Exception("Error occured when reading a Content Type with id '" + contentTypeId + "': " + readResult.getMessage());
-
-        return readResult.getAsset().getContentType();
-    }
-
-    /**
-     * Reads a content type with given path from a site specified in the projectInformation
-     * 
-     * @param projectInformation
-     * @param contentTypePath
-     * @return
-     * @throws Exception
-     */
-    private static ContentType readContentTypeByPath(ProjectInformation projectInformation, String contentTypePath) throws Exception
-    {
-        Authentication authentication = getAuthentication(projectInformation);
-        String siteName = projectInformation.getSiteName();
-        Identifier identifier = new Identifier(null, new Path(contentTypePath, null, siteName), EntityTypeString.contenttype);
-        ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
-        if (!readResult.getSuccess().equals("true"))
-            throw new Exception("Error occured when reading a Content Type with path '" + contentTypePath + "' from site '" + siteName + "': "
-                    + readResult.getMessage());
 
         return readResult.getAsset().getContentType();
     }
