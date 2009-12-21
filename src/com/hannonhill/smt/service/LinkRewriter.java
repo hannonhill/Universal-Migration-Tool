@@ -18,6 +18,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -37,41 +38,43 @@ public class LinkRewriter
 {
     /**
      * Rewrites all the file and page links in the content and metadata fields of the page. If it is a page link (ends with any extension of the 
-     * extensions in possibleExtensions set and is relative), the extension will be stripped
+     * extensions in possibleExtensions set and is relative), the extension will be stripped. Also, removes the Serena specific attributes: 
+     * cmid and collagestyle from all tags.
      * 
      * @param page
      * @param possibleExtensions
      * @throws Exception
      */
-    public static void rewriteLinks(DetailedXmlPageInformation page, Set<String> possibleExtensions) throws Exception
+    public static void rewriteLinkAndRemoveSerenaAttributes(DetailedXmlPageInformation page, Set<String> possibleExtensions) throws Exception
     {
         String pagePath = page.getDeployPath();
-        rewriteLinks(page.getContentMap(), pagePath, possibleExtensions);
-        rewriteLinks(page.getMetadataMap(), pagePath, possibleExtensions);
+        rewriteLinkAndRemoveSerenaAttributes(page.getContentMap(), pagePath, possibleExtensions);
+        rewriteLinkAndRemoveSerenaAttributes(page.getMetadataMap(), pagePath, possibleExtensions);
     }
 
     /**
      * Rewrites all the file and page links in each value of the map. If it is a page link (ends with .html extension and is
-     * a relative), the .html extension will be stripped
+     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid and collagestyle from all tags.
      * 
      * @param map
      * @param pagePath
      * @param possibleExtensions
      * @throws Exception
      */
-    private static void rewriteLinks(Map<String, String> map, String pagePath, Set<String> possibleExtensions) throws Exception
+    private static void rewriteLinkAndRemoveSerenaAttributes(Map<String, String> map, String pagePath, Set<String> possibleExtensions)
+            throws Exception
     {
         for (String fieldIdentifier : map.keySet())
         {
             String content = map.get(fieldIdentifier);
-            String newContent = rewriteLinks(content, pagePath, possibleExtensions);
+            String newContent = rewriteLinkAndRemoveSerenaAttributes(content, pagePath, possibleExtensions);
             map.put(fieldIdentifier, newContent);
         }
     }
 
     /**
      * Rewrites all the file and page links in the xml. If it is a page link (ends with .html extension and is
-     * a relative), the .html extension will be stripped
+     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid and collagestyle from all tags.
      * 
      * @param xml
      * @param pagePath
@@ -79,7 +82,7 @@ public class LinkRewriter
      * @return
      * @throws Exception
      */
-    private static String rewriteLinks(String xml, String pagePath, Set<String> possibleExtensions) throws Exception
+    private static String rewriteLinkAndRemoveSerenaAttributes(String xml, String pagePath, Set<String> possibleExtensions) throws Exception
     {
         // To make things faster, if it's an empty string, just quit
         if (xml == null || xml.equals(""))
@@ -96,7 +99,7 @@ public class LinkRewriter
         Document document = builder.parse(new InputSource(inputStream));
 
         Node rootNode = document.getChildNodes().item(0);
-        rewriteLink(rootNode, pagePath, possibleExtensions);
+        rewriteLinkAndRemoveSerenaAttributes(rootNode, pagePath, possibleExtensions);
 
         // convert document to string
         DOMSource domSource = new DOMSource(document);
@@ -115,13 +118,13 @@ public class LinkRewriter
 
     /**
      * Rewrites the file and page link in the xml tag node and all ancestor nodes. If it is a page link (ends with .html extension and is
-     * a relative), the .html extension will be stripped
+     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid and collagestyle from all tags.
      * 
      * @param node
      * @param pagePath
      * @param possibleExtensions
      */
-    private static void rewriteLink(Node node, String pagePath, Set<String> possibleExtensions)
+    private static void rewriteLinkAndRemoveSerenaAttributes(Node node, String pagePath, Set<String> possibleExtensions)
     {
         if (node.getNodeName().equals("img"))
             rewriteLink(node, "src", pagePath, possibleExtensions);
@@ -132,9 +135,28 @@ public class LinkRewriter
         else if (node.getNodeName().equals("link"))
             rewriteLink(node, "href", pagePath, possibleExtensions);
 
+        removeSerenaAttributes(node);
+
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++)
-            rewriteLink(children.item(i), pagePath, possibleExtensions);
+            rewriteLinkAndRemoveSerenaAttributes(children.item(i), pagePath, possibleExtensions);
+    }
+
+    /**
+     * Removes Serena specific attributes from the node if they exist
+     * 
+     * @param element
+     */
+    private static void removeSerenaAttributes(Node node)
+    {
+        NamedNodeMap attributes = node.getAttributes();
+        if (attributes != null)
+        {
+            if (attributes.getNamedItem("cmid") != null)
+                attributes.removeNamedItem("cmid");
+            if (attributes.getNamedItem("collagestyle") != null)
+                attributes.removeNamedItem("collagestyle");
+        }
     }
 
     /**

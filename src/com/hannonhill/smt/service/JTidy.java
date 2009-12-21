@@ -5,11 +5,10 @@
  */
 package com.hannonhill.smt.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 
 import org.w3c.tidy.Tidy;
 
@@ -30,20 +29,10 @@ public class JTidy
      */
     public static String tidyContent(String content)
     {
-        try
-        {
-            Tidy tidy = getTidy();
-            StringBuffer stringBuffer = new StringBuffer(content);
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(stringBuffer.toString().getBytes("UTF-8"));
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            tidy.parse(inputStream, outStream); // run tidy, providing an input and output stream
-            return outStream.toString();
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            // this should never happen because UTF-8 should be always supported
-            return "";
-        }
+        Tidy tidy = getTidy();
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        tidy.parse(new StringReader(content), outStream); // run tidy, providing a string reader and output stream
+        return outStream.toString();
     }
 
     /**

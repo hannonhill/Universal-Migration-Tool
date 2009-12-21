@@ -144,7 +144,7 @@ public class Migrator
                         continue;
                     }
 
-                    LinkRewriter.rewriteLinks(page, projectInformation.getGatheredExtensions());
+                    LinkRewriter.rewriteLinkAndRemoveSerenaAttributes(page, projectInformation.getGatheredExtensions());
                     CascadePageInformation cascadePage = WebServices.createPage(page, projectInformation);
 
                     addToLog(generatePageLink(cascadePage));
