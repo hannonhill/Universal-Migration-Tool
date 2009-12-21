@@ -6,7 +6,11 @@
 package com.hannonhill.smt.service;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.hannonhill.smt.CascadePageInformation;
@@ -61,11 +65,46 @@ public class Migrator
         @Override
         public void run()
         {
+            createLogFile();
+
             List<CascadePageInformation> pages = createPages();
             alignLinks(pages);
             if (projectInformation.getMigrationStatus().isShouldStop())
                 addToLog("<br/>Migration stopped by the user.<br/>");
             projectInformation.getMigrationStatus().setCompleted(true);
+
+            // close the log writer
+            PrintWriter logWriter = projectInformation.getMigrationStatus().getLogWriter();
+            if (logWriter != null)
+                projectInformation.getMigrationStatus().getLogWriter().close();
+        }
+
+        /**
+         * Creates a log html file in the logs folder and assigns the log writer to the migration status object. Later on, the writer
+         * will need to be closed. 
+         * 
+         * If problem occurs, the eror message will be added to the log which will be only accessible through the web interface
+         * at this point. Also, the log writer will be null and at that point it won't need to be closed.
+         */
+        private void createLogFile()
+        {
+            String logFilePath = "";
+            try
+            {
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+                String datetime = sdf.format(cal.getTime());
+                logFilePath = projectInformation.getLogsDir() + datetime + ".log.html";
+
+                FileWriter outFile = new FileWriter(logFilePath);
+                PrintWriter printWriter = new PrintWriter(outFile);
+                projectInformation.getMigrationStatus().setLogWriter(printWriter);
+            }
+            catch (Exception e)
+            {
+                addToLog("<span style=\"color:red;\">Could not create the log file with path: " + logFilePath + ": " + e.getMessage()
+                        + "</span><br/>");
+            }
         }
 
         /**
@@ -195,6 +234,10 @@ public class Migrator
             logMessage = logMessage.replaceAll("\\\\", "\\\\\\\\");
             logMessage = logMessage.replaceAll("'", "\\\\'");
             projectInformation.getMigrationStatus().getLog().append(logMessage);
+
+            PrintWriter logWriter = projectInformation.getMigrationStatus().getLogWriter();
+            if (logWriter != null)
+                logWriter.print(logMessage);
         }
     }
 }

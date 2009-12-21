@@ -23,6 +23,7 @@ import java.util.Set;
 public class ProjectInformation
 {
     private static final String UPLOADS_DIR = "uploads";
+    private static final String LOGS_DIR = "logs";
     public static final String OVERWRITE_BEHAVIOR_KEEP_EXISTING = "Keep existing (adds numbers to the end of new asset names)";
     public static final String OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING = "Overwrite existing (deletes and re-creates them)";
     public static final String OVERWRITE_BEHAVIOR_UPDATE_EXISTING = "Update existing (edits existing assets)";
@@ -46,6 +47,7 @@ public class ProjectInformation
     // other useful information
     private MigrationStatus migrationStatus;
     private final String uploadsDir;
+    private final String logsDir;
 
     /**
      * Constructor
@@ -57,6 +59,7 @@ public class ProjectInformation
         int lastSlash = currentDir.lastIndexOf('/') == -1 ? currentDir.lastIndexOf('\\') : currentDir.lastIndexOf('/');
         String parentToCurrentDir = currentDir.substring(0, lastSlash);
         uploadsDir = parentToCurrentDir + "/" + UPLOADS_DIR + "/";
+        logsDir = parentToCurrentDir + "/" + LOGS_DIR + "/";
         overwriteBehavior = OVERWRITE_BEHAVIOR_KEEP_EXISTING;
         migrationStatus = new MigrationStatus();
         filesToProcess = new ArrayList<File>();
@@ -271,5 +274,13 @@ public class ProjectInformation
     public void setGatheredExtensions(Set<String> gatheredExtensions)
     {
         this.gatheredExtensions = gatheredExtensions;
+    }
+
+    /**
+     * @return Returns the logsDir.
+     */
+    public String getLogsDir()
+    {
+        return logsDir;
     }
 }

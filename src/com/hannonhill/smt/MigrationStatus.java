@@ -5,6 +5,8 @@
  */
 package com.hannonhill.smt;
 
+import java.io.PrintWriter;
+
 /**
  * An object containing information about the current status of the actual migration process
  * 
@@ -14,7 +16,8 @@ package com.hannonhill.smt;
  */
 public class MigrationStatus
 {
-    private StringBuilder log;
+    private StringBuilder log; // this is only the part of the log that did not get loaded through AJAX yet - it appears on the screen
+    private PrintWriter logWriter; // this is a log writer for the log html file saved to the logs folder on the file system
     private int progress; // this means number of files that need to be migrated times 2 (one for migration, one for link alignment)
     private boolean completed;
     private boolean shouldStop;
@@ -188,5 +191,21 @@ public class MigrationStatus
     public void setShouldStop(boolean shouldStop)
     {
         this.shouldStop = shouldStop;
+    }
+
+    /**
+     * @return Returns the logWriter.
+     */
+    public PrintWriter getLogWriter()
+    {
+        return logWriter;
+    }
+
+    /**
+     * @param logWriter the logWriter to set
+     */
+    public void setLogWriter(PrintWriter logWriter)
+    {
+        this.logWriter = logWriter;
     }
 }
