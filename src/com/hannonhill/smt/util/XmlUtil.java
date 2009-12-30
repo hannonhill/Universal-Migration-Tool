@@ -8,6 +8,7 @@ package com.hannonhill.smt.util;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
@@ -55,5 +56,29 @@ public class XmlUtil
     public static String removeRootTag(String xmlWithRoot)
     {
         return xmlWithRoot.substring(6, xmlWithRoot.length() - 7);
+    }
+
+    /**
+     * A safe way of getting attribute value of attribute with given name. If attribute with given name doesn't exist, returns null
+     * (instead of NPE).
+     * 
+     * @param node
+     * @param attributeName
+     * @return
+     */
+    public static String getAttribute(Node node, String attributeName)
+    {
+        if (node == null)
+            return null;
+
+        NamedNodeMap attributes = node.getAttributes();
+        if (attributes == null)
+            return null;
+
+        Node attribute = attributes.getNamedItem(attributeName);
+        if (attribute == null)
+            return null;
+
+        return attribute.getTextContent();
     }
 }

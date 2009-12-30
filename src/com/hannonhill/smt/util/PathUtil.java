@@ -7,6 +7,8 @@ package com.hannonhill.smt.util;
 
 import java.io.File;
 
+import com.hannonhill.smt.CascadePageInformation;
+
 /**
  * Utility methods related to path manipulations
  * 
@@ -131,7 +133,21 @@ public class PathUtil
         if (link.contains("://"))
             return false;
 
+        if (link.startsWith("mailto:"))
+            return false;
+
         return true;
+    }
+
+    /**
+     * Returns true if the link is Cascade type, meaning in a form of /path/to/asset (starts with "/")
+     * 
+     * @param link
+     * @return
+     */
+    public static boolean isLinkCascade(String link)
+    {
+        return link.startsWith("/");
     }
 
     /**
@@ -184,5 +200,18 @@ public class PathUtil
     public static String getURLWithoutAssetOperationPart(String url)
     {
         return url.substring(0, url.indexOf("/ws/services/AssetOperationService"));
+    }
+
+    /**
+     * Generates a link to the page in Cascade Server
+     * 
+     * @param cascadePage
+     * @param cascadeUrl
+     * @return
+     */
+    public static String generatePageLink(CascadePageInformation cascadePage, String cascadeUrl)
+    {
+        return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(cascadeUrl) + "/entity/open.act?id=" + cascadePage.getId()
+                + "&amp;type=page\" target=\"_blank\">/" + cascadePage.getPath() + "</a> ";
     }
 }

@@ -6,6 +6,7 @@
 package com.hannonhill.smt.struts;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +98,8 @@ public class AssignContentTypesAction extends BaseAction
         MappingPersister.loadMappings(projectInformation);
         assetTypes.addAll(projectInformation.getAssetTypes().keySet());
         contentTypes.addAll(projectInformation.getContentTypes().keySet());
+        Collections.sort(assetTypes);
+        Collections.sort(contentTypes);
         return INPUT;
     }
 

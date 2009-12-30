@@ -28,6 +28,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.ContentTypeContainer;
 import com.hannonhill.www.ws.ns.AssetOperationService.CreateResult;
 import com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinition;
 import com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString;
+import com.hannonhill.www.ws.ns.AssetOperationService.File;
 import com.hannonhill.www.ws.ns.AssetOperationService.Folder;
 import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility;
@@ -250,6 +251,44 @@ public class WebServices
     }
 
     /**
+     * Reads a page with given id from Cascade Server
+     * 
+     * @param id
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    public static Page readPage(String id, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Identifier identifier = new Identifier(id, null, EntityTypeString.page);
+        ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
+        if (!readResult.getSuccess().equals("true"))
+            throw new Exception("Error occured when reading a Page with id '" + id + "': " + readResult.getMessage());
+
+        return readResult.getAsset().getPage();
+    }
+
+    /**
+     * Returns true if either a page or file with given path exists in Cascade.
+     * 
+     * @param path
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    public static boolean doesAssetExist(String path, ProjectInformation projectInformation) throws Exception
+    {
+        if (readPageByPath(path, projectInformation) != null)
+            return true;
+
+        if (readFileByPath(path, projectInformation) != null)
+            return true;
+
+        return false;
+    }
+
+    /**
      * Reads a page with given path and returns its id. If the page doesn't exist, returns null.
      * 
      * @param path
@@ -264,25 +303,6 @@ public class WebServices
             return existingPage.getId();
 
         return null;
-    }
-
-    /**
-     * Reads a page with given id from Cascade Server
-     * 
-     * @param id
-     * @param projectInformation
-     * @return
-     * @throws Exception
-     */
-    private static Page readPage(String id, ProjectInformation projectInformation) throws Exception
-    {
-        Authentication authentication = getAuthentication(projectInformation);
-        Identifier identifier = new Identifier(id, null, EntityTypeString.page);
-        ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
-        if (!readResult.getSuccess().equals("true"))
-            throw new Exception("Error occured when reading a Page with id '" + id + "': " + readResult.getMessage());
-
-        return readResult.getAsset().getPage();
     }
 
     /**
@@ -304,6 +324,27 @@ public class WebServices
             throw new Exception("Error occured when reading a Page with path '" + path + "': " + readResult.getMessage());
 
         return readResult.getSuccess().equals("true") ? readResult.getAsset().getPage() : null;
+    }
+
+    /**
+     * Reads a file with given path from Cascade Server. If the file doesn't exist, returns null.
+     * 
+     * @param path
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    private static File readFileByPath(String path, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.file);
+        ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
+        if (!readResult.getSuccess().equals("true")
+                && (readResult.getMessage() == null || !readResult.getMessage().equals(
+                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'file'")))
+            throw new Exception("Error occured when reading a Page with path '" + path + "': " + readResult.getMessage());
+
+        return readResult.getSuccess().equals("true") ? readResult.getAsset().getFile() : null;
     }
 
     /**

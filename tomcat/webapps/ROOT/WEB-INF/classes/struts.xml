@@ -58,20 +58,38 @@
         	<result>/jsps/Migration.jsp</result>
         </action>
         
-        <action name="MigrationAjax" class="com.hannonhill.smt.struts.MigrationAction" method="handleAjax">
+        <action name="MigrationAjax" class="com.hannonhill.smt.struts.MigrationAction" method="getTaskStatusByAjax">
        		<result type="stream">
 		    	<param name="contentType">text/html</param>
 		    	<param name="inputName">inputStream</param>
 		  	</result>
         </action>
 
-        <action name="MigrationStopAjax" class="com.hannonhill.smt.struts.MigrationAction" method="stopMigrationByAjax">
+        <action name="MigrationStopTaskAjax" class="com.hannonhill.smt.struts.MigrationAction" method="stopTaskByAjax">
        		<result type="stream">
 		    	<param name="contentType">text/html</param>
 		    	<param name="inputName">inputStream</param>
 		  	</result>
         </action>
 
+        <action name="MigrationStartLinkCheckerAjax" class="com.hannonhill.smt.struts.MigrationAction" method="startLinkCheckerByAjax">
+       		<result type="stream">
+		    	<param name="contentType">text/html</param>
+		    	<param name="inputName">inputStream</param>
+		  	</result>
+        </action>
+
+        <action name="MigrationRestartMigrationAjax" class="com.hannonhill.smt.struts.MigrationAction" method="restartMigrationByAjax">
+       		<result type="stream">
+		    	<param name="contentType">text/html</param>
+		    	<param name="inputName">inputStream</param>
+		  	</result>
+        </action>
+        
+        <action name="StartFromBeginning" class="com.hannonhill.smt.struts.StartFromBeginningAction">
+        	<result name="success" type="redirectAction">
+        		<param name="actionName">ProjectProperties</param>
+        	</result>
+        </action>
     </package>
-
 </struts>

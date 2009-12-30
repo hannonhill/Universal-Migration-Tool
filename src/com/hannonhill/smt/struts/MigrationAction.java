@@ -10,9 +10,12 @@ import java.io.InputStream;
 
 import org.json.JSONObject;
 
+import com.hannonhill.smt.LinkCheckingStatus;
 import com.hannonhill.smt.MigrationStatus;
 import com.hannonhill.smt.ProjectInformation;
-import com.hannonhill.smt.service.Migrator;
+import com.hannonhill.smt.TaskStatus;
+import com.hannonhill.smt.task.LinkCheckingTask;
+import com.hannonhill.smt.task.MigrationTask;
 
 /**
  * Action reponsible for starting the migration and for displaying an ajax-enabled log screen.
@@ -32,8 +35,13 @@ public class MigrationAction extends BaseAction
     @Override
     public String execute() throws Exception
     {
-        getProjectInformation().setMigrationStatus(new MigrationStatus());
-        Migrator.startMigration(getProjectInformation());
+        ProjectInformation projectInformation = getProjectInformation();
+        String currentTaskName = projectInformation.getCurrentTask();
+        if (currentTaskName == null)
+        {
+            projectInformation.setMigrationStatus(new MigrationStatus());
+            new MigrationTask(getProjectInformation()).start();
+        }
         return super.execute();
     }
 
@@ -46,32 +54,45 @@ public class MigrationAction extends BaseAction
     }
 
     /**
-     * Handles an AJAX request and sends the information to the input stream
+     * Handles an AJAX request and sends the task status information to the input stream
      * 
      * @return
      */
-    public String handleAjax()
+    public String getTaskStatusByAjax()
     {
         try
         {
             ProjectInformation projectInformation = getProjectInformation();
-            int totalProgress = projectInformation.getFilesToProcess().size() * 2;
 
-            MigrationStatus migrationStatus = getProjectInformation().getMigrationStatus();
-            JSONObject object = new JSONObject();
-            object.put("log", migrationStatus.getLog().toString());
+            JSONObject object;
+            String currentTask = projectInformation.getCurrentTask();
+            if (MigrationTask.TASK_NAME.equals(currentTask))
+            {
+                MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
+                object = createJSONObject(migrationStatus, currentTask);
 
-            // clean up the log
-            migrationStatus.setLog(new StringBuilder());
+                int totalProgress = projectInformation.getFilesToProcess().size() * 2;
+                object.put("progress", 1000.0 * migrationStatus.getProgress() / totalProgress);
+                object.put("pagesCreated", migrationStatus.getPagesCreated());
+                object.put("pagesSkipped", migrationStatus.getPagesSkipped());
+                object.put("pagesWithErrors", migrationStatus.getPagesWithErrors());
+                object.put("pagesAligned", migrationStatus.getPagesAligned());
+                object.put("pagesNotAligned", migrationStatus.getPagesNotAligned());
+            }
+            else if (LinkCheckingTask.TASK_NAME.equals(currentTask))
+            {
+                LinkCheckingStatus linkCheckingStatus = projectInformation.getLinkCheckingStatus();
+                object = createJSONObject(linkCheckingStatus, currentTask);
 
-            object.put("progress", 1000.0 * migrationStatus.getProgress() / totalProgress);
-            object.put("completed", migrationStatus.isCompleted());
-
-            object.put("pagesCreated", migrationStatus.getPagesCreated());
-            object.put("pagesSkipped", migrationStatus.getPagesSkipped());
-            object.put("pagesWithErrors", migrationStatus.getPagesWithErrors());
-            object.put("pagesAligned", migrationStatus.getPagesAligned());
-            object.put("pagesNotAligned", migrationStatus.getPagesNotAligned());
+                int totalProgress = projectInformation.getMigrationStatus().getCreatedPages().size();
+                object.put("progress", 1000.0 * linkCheckingStatus.getProgress() / totalProgress);
+                object.put("pagesChecked", linkCheckingStatus.getPagesChecked());
+                object.put("pagesWithErrors", linkCheckingStatus.getPagesWithErrors());
+                object.put("correctLinks", linkCheckingStatus.getCorrectLinks());
+                object.put("brokenLinks", linkCheckingStatus.getBrokenLinks());
+            }
+            else
+                return SUCCESS;
 
             String returnString = object.toString();
             inputStream = new ByteArrayInputStream(returnString.getBytes("UTF-8"));
@@ -89,9 +110,66 @@ public class MigrationAction extends BaseAction
      * 
      * @return
      */
-    public String stopMigrationByAjax()
+    public String stopTaskByAjax()
     {
-        getProjectInformation().getMigrationStatus().setShouldStop(true);
+        ProjectInformation projectInformation = getProjectInformation();
+        String currentTask = projectInformation.getCurrentTask();
+        if (MigrationTask.TASK_NAME.equals(currentTask))
+            projectInformation.getMigrationStatus().setShouldStop(true);
+        else if (LinkCheckingTask.TASK_NAME.equals(currentTask))
+            projectInformation.getLinkCheckingStatus().setShouldStop(true);
         return SUCCESS;
+    }
+
+    /**
+     * Starts a link checker if it is not running. Should be called through AJAX.
+     * 
+     * @return
+     */
+    public String startLinkCheckerByAjax()
+    {
+        ProjectInformation projectInformation = getProjectInformation();
+        String currentTask = projectInformation.getCurrentTask();
+        if (!LinkCheckingTask.TASK_NAME.equals(currentTask) || projectInformation.getLinkCheckingStatus().isCompleted())
+            new LinkCheckingTask(getProjectInformation()).start();
+        return SUCCESS;
+    }
+
+    /**
+     * Restarts a migration if it is not running and if the link checker is not running. Should be called through AJAX.
+     * 
+     * @return
+     */
+    public String restartMigrationByAjax()
+    {
+        ProjectInformation projectInformation = getProjectInformation();
+        String currentTask = projectInformation.getCurrentTask();
+        if (LinkCheckingTask.TASK_NAME.equals(currentTask) && !projectInformation.getLinkCheckingStatus().isCompleted())
+            return SUCCESS;
+
+        if (MigrationTask.TASK_NAME.equals(currentTask) && !projectInformation.getMigrationStatus().isCompleted())
+            return SUCCESS;
+
+        new MigrationTask(getProjectInformation()).start();
+        return SUCCESS;
+    }
+
+    /**
+     * Creates a JSON object and fills it out with values from the TaskStatus
+     * 
+     * @param taskStatus
+     * @param currentTask
+     * @return
+     * @throws Exception
+     */
+    private JSONObject createJSONObject(TaskStatus taskStatus, String currentTask) throws Exception
+    {
+        JSONObject object = new JSONObject();
+        object.put("log", taskStatus.getLog().toString());
+        object.put("completed", taskStatus.isCompleted());
+        object.put("currentTask", currentTask);
+        // clean up the log
+        taskStatus.setLog(new StringBuilder());
+        return object;
     }
 }

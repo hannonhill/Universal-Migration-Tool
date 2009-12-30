@@ -21,7 +21,7 @@ import com.opensymphony.xwork2.ActionSupport;
 public class BaseAction extends ActionSupport
 {
     private static final long serialVersionUID = 7366642925401627376L;
-    private static final String PROJECT_INFORMATION = "projectInformation";
+    protected static final String PROJECT_INFORMATION = "projectInformation";
     private String submitButton;
 
     /**

@@ -169,6 +169,7 @@
 				var tableName = isContent ? "mappingsContent" : isMetadata ? "mappingsMetadata" : "mappingsStatic";				
 				var tableEl = document.getElementById(tableName);
 				var fieldValue = isContent ? contentFieldName : isMetadata ? metadataFieldName : staticValue;
+				fieldValue = fieldValue.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 				
 				for(var i = 0; i < tableEl.childNodes.length; i++)
 				{

@@ -61,7 +61,7 @@
 				<s:radio list="overwriteBehaviorList" name="overwriteBehavior" label="Overwrite Behavior"></s:radio>
 				<tr>
 					<td><button onclick="window.location='/AssignFields?assetType=<s:property value="nAssetTypes-1"/>';return false;">Previous</button></td>
-					<td align="right"><input type="submit" value="Start Migration" name="submitButton"/></td>
+					<td align="right"><input type="submit" value="Migration" name="submitButton"/></td>
 				</tr>
 			</s:form>
 		</div>

@@ -46,6 +46,8 @@ public class ProjectInformation
 
     // other useful information
     private MigrationStatus migrationStatus;
+    private LinkCheckingStatus linkCheckingStatus;
+    private String currentTask;
     private final String uploadsDir;
     private final String logsDir;
 
@@ -62,6 +64,8 @@ public class ProjectInformation
         logsDir = parentToCurrentDir + "/" + LOGS_DIR + "/";
         overwriteBehavior = OVERWRITE_BEHAVIOR_KEEP_EXISTING;
         migrationStatus = new MigrationStatus();
+        linkCheckingStatus = new LinkCheckingStatus();
+        currentTask = null;
         filesToProcess = new ArrayList<File>();
         gatheredExtensions = new HashSet<String>();
         contentTypes = new HashMap<String, ContentTypeInformation>();
@@ -282,5 +286,37 @@ public class ProjectInformation
     public String getLogsDir()
     {
         return logsDir;
+    }
+
+    /**
+     * @return Returns the linkCheckingStatus.
+     */
+    public LinkCheckingStatus getLinkCheckingStatus()
+    {
+        return linkCheckingStatus;
+    }
+
+    /**
+     * @param linkCheckingStatus the linkCheckingStatus to set
+     */
+    public void setLinkCheckingStatus(LinkCheckingStatus linkCheckingStatus)
+    {
+        this.linkCheckingStatus = linkCheckingStatus;
+    }
+
+    /**
+     * @return Returns the currentTask.
+     */
+    public String getCurrentTask()
+    {
+        return currentTask;
+    }
+
+    /**
+     * @param currentTask the currentTask to set
+     */
+    public void setCurrentTask(String currentTask)
+    {
+        this.currentTask = currentTask;
     }
 }

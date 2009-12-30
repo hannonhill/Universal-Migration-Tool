@@ -86,6 +86,11 @@ table.status td #created
 	color:green;
 }
 
+table.status td #checked
+{
+	color:green;
+}
+
 table.status td #skipped
 {
 	color:blue;
@@ -96,9 +101,24 @@ table.status td #errors
 	color:red;
 }
 
+table.status td #checkingErrors
+{
+	color: red;
+}
+
 table.status td #aligned
 {
 	color:green;
+}
+
+table.status td #correctLinks
+{
+	color:green;
+}
+
+table.status td #brokenLinks
+{
+	color:orange;
 }
 
 table.status td #notAligned

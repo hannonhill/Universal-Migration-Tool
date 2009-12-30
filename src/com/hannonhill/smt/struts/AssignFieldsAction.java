@@ -6,6 +6,7 @@
 package com.hannonhill.smt.struts;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -108,6 +109,8 @@ public class AssignFieldsAction extends BaseAction
 
         xmlMetadataFieldNames.addAll(projectInformation.getAssetTypes().get(assetTypeName).getMetadataFields());
         xmlContentFieldNames.addAll(projectInformation.getAssetTypes().get(assetTypeName).getContentFields());
+        Collections.sort(xmlMetadataFieldNames);
+        Collections.sort(xmlContentFieldNames);
 
         ContentTypeInformation contentType = projectInformation.getContentTypes().get(contentTypePath);
         cascadeMetadataFields.addAll(contentType.getMetadataFields().values());
