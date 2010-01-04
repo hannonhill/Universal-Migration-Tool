@@ -8,7 +8,6 @@ package com.hannonhill.smt.service;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,6 +23,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.hannonhill.smt.DetailedXmlPageInformation;
+import com.hannonhill.smt.ExternalRootLevelFolderAssignment;
+import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
 import com.hannonhill.smt.util.XmlUtil;
 
@@ -42,14 +43,14 @@ public class LinkRewriter
      * cmid and collagestyle from all tags.
      * 
      * @param page
-     * @param possibleExtensions
+     * @param projectInformation
      * @throws Exception
      */
-    public static void rewriteLinkAndRemoveSerenaAttributes(DetailedXmlPageInformation page, Set<String> possibleExtensions) throws Exception
+    public static void rewriteLinkAndRemoveSerenaAttributes(DetailedXmlPageInformation page, ProjectInformation projectInformation) throws Exception
     {
         String pagePath = page.getDeployPath();
-        rewriteLinkAndRemoveSerenaAttributes(page.getContentMap(), pagePath, possibleExtensions);
-        rewriteLinkAndRemoveSerenaAttributes(page.getMetadataMap(), pagePath, possibleExtensions);
+        rewriteLinkAndRemoveSerenaAttributes(page.getContentMap(), pagePath, projectInformation);
+        rewriteLinkAndRemoveSerenaAttributes(page.getMetadataMap(), pagePath, projectInformation);
     }
 
     /**
@@ -58,16 +59,16 @@ public class LinkRewriter
      * 
      * @param map
      * @param pagePath
-     * @param possibleExtensions
+     * @param projectInformation
      * @throws Exception
      */
-    private static void rewriteLinkAndRemoveSerenaAttributes(Map<String, String> map, String pagePath, Set<String> possibleExtensions)
+    private static void rewriteLinkAndRemoveSerenaAttributes(Map<String, String> map, String pagePath, ProjectInformation projectInformation)
             throws Exception
     {
         for (String fieldIdentifier : map.keySet())
         {
             String content = map.get(fieldIdentifier);
-            String newContent = rewriteLinkAndRemoveSerenaAttributes(content, pagePath, possibleExtensions);
+            String newContent = rewriteLinkAndRemoveSerenaAttributes(content, pagePath, projectInformation);
             map.put(fieldIdentifier, newContent);
         }
     }
@@ -78,11 +79,11 @@ public class LinkRewriter
      * 
      * @param xml
      * @param pagePath
-     * @param possibleExtensions
+     * @param projectInformation
      * @return
      * @throws Exception
      */
-    private static String rewriteLinkAndRemoveSerenaAttributes(String xml, String pagePath, Set<String> possibleExtensions) throws Exception
+    private static String rewriteLinkAndRemoveSerenaAttributes(String xml, String pagePath, ProjectInformation projectInformation) throws Exception
     {
         // To make things faster, if it's an empty string, just quit
         if (xml == null || xml.equals(""))
@@ -99,7 +100,7 @@ public class LinkRewriter
         Document document = builder.parse(new InputSource(inputStream));
 
         Node rootNode = document.getChildNodes().item(0);
-        rewriteLinkAndRemoveSerenaAttributes(rootNode, pagePath, possibleExtensions);
+        rewriteLinkAndRemoveSerenaAttributes(rootNode, pagePath, projectInformation);
 
         // convert document to string
         DOMSource domSource = new DOMSource(document);
@@ -122,24 +123,24 @@ public class LinkRewriter
      * 
      * @param node
      * @param pagePath
-     * @param possibleExtensions
+     * @param projectInformation
      */
-    private static void rewriteLinkAndRemoveSerenaAttributes(Node node, String pagePath, Set<String> possibleExtensions)
+    private static void rewriteLinkAndRemoveSerenaAttributes(Node node, String pagePath, ProjectInformation projectInformation)
     {
         if (node.getNodeName().equals("img"))
-            rewriteLink(node, "src", pagePath, possibleExtensions);
+            rewriteLink(node, "src", pagePath, projectInformation);
         if (node.getNodeName().equals("script"))
-            rewriteLink(node, "src", pagePath, possibleExtensions);
+            rewriteLink(node, "src", pagePath, projectInformation);
         else if (node.getNodeName().equals("a"))
-            rewriteLink(node, "href", pagePath, possibleExtensions);
+            rewriteLink(node, "href", pagePath, projectInformation);
         else if (node.getNodeName().equals("link"))
-            rewriteLink(node, "href", pagePath, possibleExtensions);
+            rewriteLink(node, "href", pagePath, projectInformation);
 
         removeSerenaAttributes(node);
 
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++)
-            rewriteLinkAndRemoveSerenaAttributes(children.item(i), pagePath, possibleExtensions);
+            rewriteLinkAndRemoveSerenaAttributes(children.item(i), pagePath, projectInformation);
     }
 
     /**
@@ -160,15 +161,15 @@ public class LinkRewriter
     }
 
     /**
-     * Rewrites a file or page link in the xml tag node's attribute of given attributeName. If it is a page link (ends with .html extension and is
-     * a relative), the .html extension will be stripped
+     * Rewrites a file or page link in the xml tag node's attribute of given attributeName if it is a relative link. 
+     * If it is a page link (ends with .html extension and is a relative), the .html extension will be stripped. Keeps the anchor.
      * 
      * @param element
      * @param attributeName
      * @param pagePath
-     * @param possibleExtensions
+     * @param projectInformation
      */
-    private static void rewriteLink(Node element, String attributeName, String pagePath, Set<String> possibleExtensions)
+    private static void rewriteLink(Node element, String attributeName, String pagePath, ProjectInformation projectInformation)
     {
         Node attribute = element.getAttributes().getNamedItem(attributeName);
         if (attribute == null)
@@ -180,18 +181,62 @@ public class LinkRewriter
         String withoutAnchor = PathUtil.getPartWithoutAnchor(oldPath);
         String anchor = PathUtil.getAnchorPart(oldPath);
 
-        if (PathUtil.isLinkRelative(withoutAnchor))
+        if (!PathUtil.isLinkRelative(withoutAnchor))
+            return;
+
+        String newPath = rewriteLink(withoutAnchor, pagePath, projectInformation);
+
+        // add the anchor part
+        attribute.setNodeValue(newPath + anchor);
+    }
+
+    /**
+     * Rewrites the prefix part of the link and if needed, trunkates the extension. 
+     * For example, for a page with path /folder/page and a link ../folder2/page2.html, the link will be rewritten to /folder2/page2.html.
+     * If it goes up to the root level (and example above does), it looks for the root level folder assignments and if it finds one, it rewrites it again
+     * with the assignment. For example if there is a site assignment of "folder2" to "site_a", the link will look like this: site://site_a/folder2/page2.html
+     * If it is not a external link, also trunkates extension if it is a link to a page, meaning the extension belongs to one of the gathered extensions 
+     * in project information. So the end result of the example above would be site://site_a/folder2/page2
+     * 
+     * @param link
+     * @param pagePath
+     * @param projectInformation
+     * @return
+     */
+    private static String rewriteLink(String link, String pagePath, ProjectInformation projectInformation)
+    {
+        String newPath = PathUtil.convertRelativeToAbsolute(link, pagePath);
+        int deployPathLevels = pagePath.split("/").length - 1;
+        int linkLevels = PathUtil.countLevelUps(link);
+        // if there are same many link levels as the page path levels, it means the link goes to root
+        boolean goesToRoot = linkLevels == deployPathLevels;
+
+        // if it doesn't go to root, nothing more needs to be done
+        if (goesToRoot)
         {
-            String newPath = PathUtil.convertRelativeToAbsolute(withoutAnchor, pagePath);
+            // check the root level folder and see if there is an assignment for it
+            String withoutLeadingSlash = newPath.substring(1);
+            String rootLevelFolder = withoutLeadingSlash.substring(0, withoutLeadingSlash.indexOf('/'));
+            ExternalRootLevelFolderAssignment assignment = projectInformation.getExternalRootLevelFolderAssignemnts().get(rootLevelFolder);
 
-            // If the link links to a file with extension that is one of the possible extensions used, that means it is a link to a page
-            // and therefore, the extension in the link needs to be stripped
-            String extension = PathUtil.getExtension(newPath);
-            if (possibleExtensions.contains(extension))
-                newPath = PathUtil.truncateExtension(newPath);
+            // if no assignment, leave it as it is, if there is an assignment, rewrite the link
+            if (assignment != null)
+            {
+                // if it is an external link, add the external url and return (skip adding extension)
+                if (assignment.getAssignmentType().equals(ExternalRootLevelFolderAssignment.ASSIGNMENT_TYPE_EXTERNAL_LINK))
+                    return assignment.getExternalLinkAssignment() + newPath; // converts link /folder/page to http://domain/com/folder/page
 
-            // add the anchor part
-            attribute.setNodeValue(newPath + anchor);
+                // if it is not an external link, do a cross site link and keep it for adding the extension
+                newPath = "site://" + assignment.getCrossSiteAssignment() + newPath; // converts link /folder/page to site://sitename/folder/page
+            }
         }
+
+        // If the link links to a file with extension that is one of the possible extensions used, that means it is a link to a page
+        // and therefore, the extension in the link needs to be stripped
+        String extension = PathUtil.getExtension(newPath);
+        if (projectInformation.getGatheredExtensions().contains(extension))
+            return PathUtil.truncateExtension(newPath);
+
+        return newPath;
     }
 }

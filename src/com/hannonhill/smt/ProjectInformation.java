@@ -38,11 +38,14 @@ public class ProjectInformation
     private List<String> assetTypeNames; // repeated information - an ordered list of XML Asset Type names (the map above holds things that are not ordered)
     private Map<String, AssetType> assetTypes; // All XML Asset Type names and the actual XML Asset Type which contains user entered field mappings (if mapped)
     private String overwriteBehavior; // Matches one of the constants ProjectInformation.OVERWRITE_BEHAVIOR_???
+    private Map<String, ExternalRootLevelFolderAssignment> externalRootLevelFolderAssignemnts;
 
     // analyzed information
     private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type information (with the available metadata and dd fields)
     private final List<File> filesToProcess; // All the XML files that need to be processed during migration
     private Set<String> gatheredExtensions; // a set of extensions found for pages (for example ".html", ".htm")
+    private Set<String> gatheredRootLevelFolders; // a set of root level folders of XML pages
+    private Set<String> gatheredLinkedRootLevelFolders; // a set of root level folders in links in the XML that link to assets
 
     // other useful information
     private MigrationStatus migrationStatus;
@@ -68,8 +71,11 @@ public class ProjectInformation
         currentTask = null;
         filesToProcess = new ArrayList<File>();
         gatheredExtensions = new HashSet<String>();
+        gatheredRootLevelFolders = new HashSet<String>();
+        gatheredLinkedRootLevelFolders = new HashSet<String>();
         contentTypes = new HashMap<String, ContentTypeInformation>();
         contentTypeMap = new HashMap<String, String>();
+        externalRootLevelFolderAssignemnts = new HashMap<String, ExternalRootLevelFolderAssignment>();
     }
 
     /**
@@ -318,5 +324,53 @@ public class ProjectInformation
     public void setCurrentTask(String currentTask)
     {
         this.currentTask = currentTask;
+    }
+
+    /**
+     * @return Returns the gatheredRootLevelFolders.
+     */
+    public Set<String> getGatheredRootLevelFolders()
+    {
+        return gatheredRootLevelFolders;
+    }
+
+    /**
+     * @param gatheredRootLevelFolders the gatheredRootLevelFolders to set
+     */
+    public void setGatheredRootLevelFolders(Set<String> gatheredRootLevelFolders)
+    {
+        this.gatheredRootLevelFolders = gatheredRootLevelFolders;
+    }
+
+    /**
+     * @return Returns the gatheredLinkedRootLevelFolders.
+     */
+    public Set<String> getGatheredLinkedRootLevelFolders()
+    {
+        return gatheredLinkedRootLevelFolders;
+    }
+
+    /**
+     * @param gatheredLinkedRootLevelFolders the gatheredLinkedRootLevelFolders to set
+     */
+    public void setGatheredLinkedRootLevelFolders(Set<String> gatheredLinkedRootLevelFolders)
+    {
+        this.gatheredLinkedRootLevelFolders = gatheredLinkedRootLevelFolders;
+    }
+
+    /**
+     * @return Returns the externalRootLevelFolderAssignemnts.
+     */
+    public Map<String, ExternalRootLevelFolderAssignment> getExternalRootLevelFolderAssignemnts()
+    {
+        return externalRootLevelFolderAssignemnts;
+    }
+
+    /**
+     * @param externalRootLevelFolderAssignemnts the externalRootLevelFolderAssignemnts to set
+     */
+    public void setExternalRootLevelFolderAssignemnts(Map<String, ExternalRootLevelFolderAssignment> externalRootLevelFolderAssignemnts)
+    {
+        this.externalRootLevelFolderAssignemnts = externalRootLevelFolderAssignemnts;
     }
 }

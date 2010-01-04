@@ -25,7 +25,6 @@ import com.hannonhill.smt.service.XmlAnalyzer;
  */
 public class AnalyzeInformationAction extends BaseAction
 {
-
     private static final long serialVersionUID = 7319925663582074871L;
 
     /* (non-Javadoc)
@@ -34,6 +33,29 @@ public class AnalyzeInformationAction extends BaseAction
     @Override
     public String execute() throws Exception
     {
+        if (isSubmit())
+            return processSubmit();
+
+        return processView();
+    }
+
+    /**
+     * Processes the form submission
+     * 
+     * @return
+     */
+    private String processSubmit()
+    {
+        return SUCCESS;
+    }
+
+    /**
+     * Sets appropriate information to be able to display the form
+     * 
+     * @return
+     */
+    private String processView()
+    {
         ProjectInformation projectInformation = getProjectInformation();
 
         // clear out previous data
@@ -41,6 +63,8 @@ public class AnalyzeInformationAction extends BaseAction
         projectInformation.setGatheredExtensions(new HashSet<String>()); // clear out existing extensions
         projectInformation.setAssetTypes(new HashMap<String, AssetType>()); // clear out the existing asset types
         projectInformation.setAssetTypeNames(new ArrayList<String>());
+        projectInformation.setGatheredRootLevelFolders(new HashSet<String>());
+        projectInformation.setGatheredLinkedRootLevelFolders(new HashSet<String>());
 
         // analyze folders recursively
         List<String> errorMessages = new ArrayList<String>();

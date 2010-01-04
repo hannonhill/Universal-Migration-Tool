@@ -101,7 +101,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><button onclick="window.location='/UploadZip';return false;">Previous</button></td>
+					<td><button onclick="window.location='/AssignRootLevelFolders';return false;">Previous</button></td>
 					<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>
 				</tr>
 			</s:form>

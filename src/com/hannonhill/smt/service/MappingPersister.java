@@ -15,6 +15,7 @@ import org.xml.sax.InputSource;
 import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.DataDefinitionField;
+import com.hannonhill.smt.ExternalRootLevelFolderAssignment;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.MetadataSetField;
 import com.hannonhill.smt.ProjectInformation;
@@ -30,6 +31,7 @@ import com.hannonhill.smt.util.XmlUtil;
 public class MappingPersister
 {
     private static final String PROJECT_INFORMATION_TAG = "projectInformation";
+    private static final String ASSET_TYPES_TAG = "assetTypes";
     private static final String ASSET_TYPE_TAG = "assetType";
     private static final String NAME_TAG = "name";
     private static final String MAPPED_CONTENT_TYPE_PATH_TAG = "mappedContentTypePath";
@@ -42,6 +44,11 @@ public class MappingPersister
     private static final String STATIC_VALUE_MAPPINGS_TAG = "staticValueMappings";
     private static final String STATIC_VALUE_MAPPING_TAG = "staticValueMapping";
     private static final String STATIC_VALUE_TAG = "staticValue";
+    private static final String ROOT_LEVEL_FOLDERS_TAG = "rootLevelFolders";
+    private static final String ROOT_LEVEL_FOLDER_TAG = "rootLevelFolder";
+    private static final String FOLDER_TAG = "folder";
+    private static final String CROSS_SITE_TAG = "crossSite";
+    private static final String EXTERNAL_LINK_TAG = "externalLink";
 
     /**
      * Saves the mappings from the projectInformation into the server's file system
@@ -53,8 +60,16 @@ public class MappingPersister
     {
         StringBuilder content = new StringBuilder();
         content.append("<" + PROJECT_INFORMATION_TAG + ">");
+
+        content.append("<" + ASSET_TYPES_TAG + ">");
         for (AssetType assetType : projectInformation.getAssetTypes().values())
             persistAssetType(content, projectInformation, assetType);
+        content.append("</" + ASSET_TYPES_TAG + ">");
+
+        content.append("<" + ROOT_LEVEL_FOLDERS_TAG + ">");
+        for (String folder : projectInformation.getExternalRootLevelFolderAssignemnts().keySet())
+            persistRootLevelFolder(content, projectInformation, projectInformation.getExternalRootLevelFolderAssignemnts().get(folder));
+        content.append("</" + ROOT_LEVEL_FOLDERS_TAG + ">");
 
         content.append("</" + PROJECT_INFORMATION_TAG + ">");
 
@@ -87,8 +102,10 @@ public class MappingPersister
             for (int i = 0; i < rootNode.getChildNodes().getLength(); i++)
             {
                 Node node = rootNode.getChildNodes().item(i);
-                if (node.getNodeName().equals(ASSET_TYPE_TAG))
-                    loadAssetType(projectInformation, node);
+                if (node.getNodeName().equals(ASSET_TYPES_TAG))
+                    loadAssetTypes(projectInformation, node);
+                if (node.getNodeName().equals(ROOT_LEVEL_FOLDERS_TAG))
+                    loadRootLevelFolders(projectInformation, node);
             }
         }
         catch (Exception e)
@@ -96,6 +113,65 @@ public class MappingPersister
             // If problem occured, don't do anything. Just show the stack trace.
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Loads the asset mappings which consist of field mappings as well
+     * 
+     * @param projectInformation
+     * @param assetTypesNode
+     */
+    private static void loadAssetTypes(ProjectInformation projectInformation, Node assetTypesNode)
+    {
+        for (int i = 0; i < assetTypesNode.getChildNodes().getLength(); i++)
+        {
+            Node node = assetTypesNode.getChildNodes().item(i);
+            if (node.getNodeName().equals(ASSET_TYPE_TAG))
+                loadAssetType(projectInformation, node);
+        }
+    }
+
+    /**
+     * Loads the root level folder mappings
+     * 
+     * @param projectInformation
+     * @param rootLevelFolderNode
+     */
+    private static void loadRootLevelFolders(ProjectInformation projectInformation, Node rootLevelFolderNode)
+    {
+        for (int i = 0; i < rootLevelFolderNode.getChildNodes().getLength(); i++)
+        {
+            Node node = rootLevelFolderNode.getChildNodes().item(i);
+            if (node.getNodeName().equals(ROOT_LEVEL_FOLDER_TAG))
+                loadRootLevelFolder(projectInformation, node);
+        }
+    }
+
+    /**
+     * Creates an assignment exactly as described in the XML
+     * 
+     * @param projectInformation
+     * @param rootLevelFolderNode
+     */
+    private static void loadRootLevelFolder(ProjectInformation projectInformation, Node rootLevelFolderNode)
+    {
+        String folder = null;
+        String crossSiteAssignment = null;
+        String externalLinkAssignment = null;
+
+        for (int i = 0; i < rootLevelFolderNode.getChildNodes().getLength(); i++)
+        {
+            Node node = rootLevelFolderNode.getChildNodes().item(i);
+            String nodeName = node.getNodeName();
+            if (nodeName.equals(FOLDER_TAG))
+                folder = node.getTextContent();
+            else if (nodeName.equals(CROSS_SITE_TAG))
+                crossSiteAssignment = node.getTextContent();
+            else if (nodeName.equals(EXTERNAL_LINK_TAG))
+                externalLinkAssignment = node.getTextContent();
+        }
+        ExternalRootLevelFolderAssignment assignment = new ExternalRootLevelFolderAssignment(folder, crossSiteAssignment, externalLinkAssignment);
+        projectInformation.getExternalRootLevelFolderAssignemnts().put(folder, assignment);
     }
 
     /**
@@ -312,6 +388,39 @@ public class MappingPersister
         content.append("</" + STATIC_VALUE_MAPPINGS_TAG + ">");
 
         content.append("</" + ASSET_TYPE_TAG + ">");
+    }
+
+    /**
+     * Adds the &lt;rootLevelFolder&gt; tag to the content with the root level folder assignment information that needs to be stored
+     * 
+     * @param content
+     * @param projectInformation
+     * @param assignment
+     */
+    private static void persistRootLevelFolder(StringBuilder content, ProjectInformation projectInformation,
+            ExternalRootLevelFolderAssignment assignment)
+    {
+        content.append("<" + ROOT_LEVEL_FOLDER_TAG + ">");
+
+        content.append("<" + FOLDER_TAG + ">");
+        content.append(assignment.getFolder());
+        content.append("</" + FOLDER_TAG + ">");
+
+        if (assignment.getCrossSiteAssignment() != null)
+        {
+            content.append("<" + CROSS_SITE_TAG + ">");
+            content.append(assignment.getCrossSiteAssignment());
+            content.append("</" + CROSS_SITE_TAG + ">");
+        }
+
+        if (assignment.getExternalLinkAssignment() != null)
+        {
+            content.append("<" + EXTERNAL_LINK_TAG + ">");
+            content.append(assignment.getExternalLinkAssignment());
+            content.append("</" + EXTERNAL_LINK_TAG + ">");
+        }
+
+        content.append("</" + ROOT_LEVEL_FOLDER_TAG + ">");
     }
 
     /**

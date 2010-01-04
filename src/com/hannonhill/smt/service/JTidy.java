@@ -9,6 +9,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.w3c.tidy.Tidy;
 
@@ -21,6 +23,8 @@ import org.w3c.tidy.Tidy;
  */
 public class JTidy
 {
+    private static final Pattern WORD_ELEMENTS_PATTERN = Pattern.compile("(<|\\s)[ovwx]:");
+
     /**
      * Runs JTidy on the provided content and returns the result
      * 
@@ -29,10 +33,25 @@ public class JTidy
      */
     public static String tidyContent(String content)
     {
+        content = cleanFromWord(content);
         Tidy tidy = getTidy();
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         tidy.parse(new StringReader(content), outStream); // run tidy, providing a string reader and output stream
         return outStream.toString();
+    }
+
+    /**
+     * Removes any xml declarations &lt;?xml /> created by word and also tags namespaces o, v, w and x. For example &lt;o:p> tag is converted to &lt;p> 
+     * 
+     * @param xml
+     * @return
+     */
+    private static String cleanFromWord(String xml)
+    {
+        Matcher wordNamespaceMatcher = WORD_ELEMENTS_PATTERN.matcher(xml);
+        xml = wordNamespaceMatcher.replaceAll("$1");
+        xml = xml.replaceAll("<\\?xml(.*)\\/>", "");
+        return xml;
     }
 
     /**

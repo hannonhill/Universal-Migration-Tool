@@ -10,7 +10,7 @@
 		<div class="main">
 			<h2>Errors occured</h2>
 			<h4><s:actionerror /></h4>
-			<s:form action="AssignContentTypes" method="POST">
+			<s:form action="AnalyzeInformation" method="POST">
 				<tr>
 					<td><button onclick="window.location='/UploadZip';return false;">Previous</button></td>
 					<td align="right"><input type="submit" value="Ignore These and Continue" name="submitButton"/></td>

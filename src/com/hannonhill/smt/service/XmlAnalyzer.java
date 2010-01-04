@@ -16,6 +16,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.lang.xwork.StringUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -41,6 +42,9 @@ public class XmlAnalyzer
     private static final String METADATA_FIELDS_XPATH = "/asset/metaData/field";
     private static final String CONTENT_FIELDS_XPATH = "/asset/content/field";
     private static final String FILE_PROBLEM_MESSAGE = "There were problems with analyzing file ";
+    private static final String LINK_XPATH = "//a/@href | //img/@src | //script/@src | //link/@href ";
+    private static final String DEPLOY_PATH_XPATH = "/asset/coreData/deployPath";
+    private static final String FIELDS_XPATH = "//field";
 
     /**
      * Analyzes a folder by going through each file in the folder and subfolders and calling {@link XmlAnalyzer#analyzeContentsOfXmlFile(File)}
@@ -297,6 +301,8 @@ public class XmlAnalyzer
         try
         {
             XmlPageInformation xmlPageInformation = XmlAnalyzer.analyzeContentsOfXmlFile(file);
+            if (xmlPageInformation == null)
+                return;
 
             String fileNameWihtoutXmlExtension = PathUtil.truncateExtension(file.getName());
             String extension = PathUtil.getExtension(fileNameWihtoutXmlExtension);
@@ -313,6 +319,8 @@ public class XmlAnalyzer
 
             assetType.getMetadataFields().addAll(xmlPageInformation.getMetadataFields()); // adds unique field names only
             assetType.getContentFields().addAll(xmlPageInformation.getContentFields()); // adds unique field names only
+            projectInformation.getGatheredRootLevelFolders().add(xmlPageInformation.getRootLevelFolder()); // adds unique folder name only
+            projectInformation.getGatheredLinkedRootLevelFolders().addAll(xmlPageInformation.getLinkedToRootLevelFolders()); // adds unique folder names only
             projectInformation.getFilesToProcess().add(file); // add only if no exception was thrown, 
         }
         catch (Exception e)
@@ -340,8 +348,14 @@ public class XmlAnalyzer
         XmlPageInformation xmlPageInformation = new XmlPageInformation();
 
         findAssetType(file, xmlPageInformation);
+
+        // Skip this file if the asset type couldn't be found
+        if (StringUtils.isEmpty(xmlPageInformation.getAssetTypeName()))
+            return null;
+
         findMetadataFields(file, xmlPageInformation);
         findContentFields(file, xmlPageInformation);
+        findLinkedRootLevelFolders(file, xmlPageInformation);
 
         return xmlPageInformation;
     }
@@ -413,5 +427,80 @@ public class XmlAnalyzer
 
             xmlPageInformation.getContentFields().add(contentFieldNameNode.getNodeValue());
         }
+    }
+
+    /**
+     * Analyzes the XML file and finds the linked to root level folders
+     * 
+     * @param file
+     * @param xmlPageInformation
+     * @throws Exception
+     */
+    private static void findLinkedRootLevelFolders(File file, XmlPageInformation xmlPageInformation) throws Exception
+    {
+        String deployPath = getDeployPath(file).trim();
+        xmlPageInformation.setRootLevelFolder(deployPath.substring(0, deployPath.indexOf('/')));
+        int deployPathLevels = deployPath.split("/").length - 1;
+
+        XPath xpath = XPathFactory.newInstance().newXPath();
+
+        InputSource inputSource = new InputSource(new FileInputStream(file));
+        NodeList fieldNodes = (NodeList) xpath.evaluate(FIELDS_XPATH, inputSource, XPathConstants.NODESET);
+
+        for (int i = 0; i < fieldNodes.getLength(); i++)
+            findLinkedRootLevelFolders(fieldNodes.item(i), deployPathLevels, xmlPageInformation);
+    }
+
+    /**
+     * Analyzes given field tag node, strips the cdata content and finds all link tags (a, img, link, script) and if these are root level
+     * folder links (go ../ as many times as the page is deep from deplyPathLevels), then the folder is added to the list
+     * linkedToRootLevelFolders in xmlPageInformation
+     * 
+     * @param fieldNode
+     * @param deployPathLevels
+     * @param xmlPageInformation
+     * @throws Exception
+     */
+    private static void findLinkedRootLevelFolders(Node fieldNode, int deployPathLevels, XmlPageInformation xmlPageInformation) throws Exception
+    {
+        String fieldXml = XmlUtil.addRootTag(getCDataContent(fieldNode));
+
+        XPath xpath = XPathFactory.newInstance().newXPath();
+
+        InputSource inputSource = new InputSource(new StringReader(fieldXml));
+        NodeList linkNodes = (NodeList) xpath.evaluate(LINK_XPATH, inputSource, XPathConstants.NODESET);
+
+        for (int i = 0; i < linkNodes.getLength(); i++)
+        {
+            Node linkNode = linkNodes.item(i);
+            String link = linkNode.getTextContent();
+
+            // If it doesn't start with ../ then it will never be a relative link that goes to the root level folder
+            if (!link.startsWith("../"))
+                continue;
+
+            int linkLevels = PathUtil.countLevelUps(link);
+            if (linkLevels == deployPathLevels)
+            {
+                String strippedLink = link.substring(link.lastIndexOf("../") + 3);
+                String rootLevelFolder = strippedLink.substring(0, strippedLink.indexOf('/'));
+                xmlPageInformation.getLinkedToRootLevelFolders().add(rootLevelFolder);
+            }
+        }
+    }
+
+    /**
+     * Analyzes an XML file and finds the &lt;deployPath&gt; tag and returns its contents.
+     * 
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    private static String getDeployPath(File file) throws Exception
+    {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        InputSource inputSource = new InputSource(new FileInputStream(file));
+        NodeList deployPathNodes = (NodeList) xpath.evaluate(DEPLOY_PATH_XPATH, inputSource, XPathConstants.NODESET);
+        return deployPathNodes.item(0).getTextContent();
     }
 }

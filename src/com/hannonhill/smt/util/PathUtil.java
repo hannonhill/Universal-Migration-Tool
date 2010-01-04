@@ -214,4 +214,21 @@ public class PathUtil
         return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(cascadeUrl) + "/entity/open.act?id=" + cascadePage.getId()
                 + "&amp;type=page\" target=\"_blank\">/" + cascadePage.getPath() + "</a> ";
     }
+
+    /**
+     * Checks how many ../ are there in the link
+     * 
+     * @param link
+     * @return
+     */
+    public static int countLevelUps(String link)
+    {
+        int counter = 0;
+        while (link.startsWith("../"))
+        {
+            counter++;
+            link = link.substring(3);
+        }
+        return counter;
+    }
 }

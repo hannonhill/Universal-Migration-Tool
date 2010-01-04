@@ -17,9 +17,11 @@ import java.util.List;
  */
 public class XmlPageInformation
 {
+    private String rootLevelFolder;
     private String assetTypeName;
     private final List<String> metadataFields = new ArrayList<String>();
     private final List<String> contentFields = new ArrayList<String>();
+    private final List<String> linkedToRootLevelFolders = new ArrayList<String>();
 
     /**
      * @return Returns the assetTypeName.
@@ -51,5 +53,29 @@ public class XmlPageInformation
     public List<String> getContentFields()
     {
         return contentFields;
+    }
+
+    /**
+     * @return Returns the linkedToRootLevelFolders.
+     */
+    public List<String> getLinkedToRootLevelFolders()
+    {
+        return linkedToRootLevelFolders;
+    }
+
+    /**
+     * @return Returns the rootLevelFolder.
+     */
+    public String getRootLevelFolder()
+    {
+        return rootLevelFolder;
+    }
+
+    /**
+     * @param rootLevelFolder the rootLevelFolder to set
+     */
+    public void setRootLevelFolder(String rootLevelFolder)
+    {
+        this.rootLevelFolder = rootLevelFolder;
     }
 }
