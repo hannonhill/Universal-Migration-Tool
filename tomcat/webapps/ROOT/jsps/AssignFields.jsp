@@ -200,35 +200,20 @@
 			<h2>Please assign field mappings</h2>
 			<h4><s:actionerror /></h4>
 			<s:form action="AssignFields" method="POST">
-				<div>Asset Type: <s:property value="assetTypeName"/></div>
-				<div>Content Type: <s:property value="contentTypePath"/></div>
+				<tr><td colspan="5">Asset Type: <s:property value="assetTypeName"/></td></tr>
+				<tr><td colspan="5">Content Type: <s:property value="contentTypePath"/></td></tr>
 				<tr>
-					<td><input type="radio" name="xmlFieldType" id="xmlFieldTypeMetadata"/> XML Metadata Field</td>
-					<td>
+					<td rowspan="2"><input type="radio" name="xmlFieldType" id="xmlFieldTypeMetadata"/> XML Metadata Field</td>
+					<td rowspan="2">
 						<select name="xmlMetadataFieldNames" id="xmlMetadataFieldNames" onfocus="document.getElementById('xmlFieldTypeMetadata').checked='checked'">
 							<s:iterator value="xmlMetadataFieldNames">
 								<option value="<s:property/>"><s:property/></option>
 							</s:iterator>
 						</select>
 					</td>
-				</tr>
-				<tr>
-					<td><input type="radio" name="xmlFieldType" id="xmlFieldTypeContent"/> XML Content Field</td>
-					<td>
-						<select name="xmlContentFieldNames" id="xmlContentFieldNames" onfocus="document.getElementById('xmlFieldTypeContent').checked='checked'">
-							<s:iterator value="xmlContentFieldNames">
-								<option value="<s:property/>"><s:property/></option>
-							</s:iterator>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td><input type="radio" name="xmlFieldType" id="xmlFieldTypeStatic"/> Static Value</td>
-					<td><input type="text" name="xmlStaticValue" id="xmlStaticValue" onfocus="document.getElementById('xmlFieldTypeStatic').checked='checked'"/></td>
-				</tr>
-				<tr>
-					<td><input type="radio" name="cascadeFieldType" id="cascadeFieldTypeMetadata"/> Cascade Metadata Field</td>
-					<td>
+					<td rowspan="6"><em>Map To:</em></td>
+					<td rowspan="3"><input type="radio" name="cascadeFieldType" id="cascadeFieldTypeMetadata"/> Cascade Metadata Field</td>
+					<td rowspan="3">
 						<select name="cascadeMetadataFieldNames" id="cascadeMetadataFieldNames" onfocus="document.getElementById('cascadeFieldTypeMetadata').checked='checked'">
 							<s:iterator value="cascadeMetadataFields">
 								<option value="<s:property value="identifier"/>">
@@ -238,9 +223,20 @@
 						</select>
 					</td>
 				</tr>
+				<tr><td></td></tr>
 				<tr>
-					<td><input type="radio" name="cascadeFieldType" id="cascadeFieldTypeDataDefinition"/> Cascade Data Definition Field</td>
-					<td>
+					<td rowspan="2"><input type="radio" name="xmlFieldType" id="xmlFieldTypeContent"/> XML Content Field</td>
+					<td rowspan="2">
+						<select name="xmlContentFieldNames" id="xmlContentFieldNames" onfocus="document.getElementById('xmlFieldTypeContent').checked='checked'">
+							<s:iterator value="xmlContentFieldNames">
+								<option value="<s:property/>"><s:property/></option>
+							</s:iterator>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td rowspan="3"><input type="radio" name="cascadeFieldType" id="cascadeFieldTypeDataDefinition"/> Cascade Data Definition Field</td>
+					<td rowspan="3">
 						<select name="cascadeDataDefinitionFieldNames" id="cascadeDataDefinitionFieldNames" onfocus="document.getElementById('cascadeFieldTypeDataDefinition').checked='checked'">
 							<s:iterator value="cascadeDataDefinitionFields">
 								<option value="<s:property value="identifier"/>">
@@ -250,10 +246,15 @@
 						</select>
 					</td>
 				</tr>
-				<tr><td colspan="2"><button onclick="addMapping();return false;"/>Add Mapping</button></td></tr>
 				<tr>
-					<td colspan="2">
-						<table summary="Mappings">
+					<td rowspan="2"><input type="radio" name="xmlFieldType" id="xmlFieldTypeStatic"/> Static Value</td>
+					<td rowspan="2"><input type="text" name="xmlStaticValue" id="xmlStaticValue" onfocus="document.getElementById('xmlFieldTypeStatic').checked='checked'"/></td>
+				</tr>
+				<tr><td></td></tr>
+				<tr><td colspan="5"><button onclick="addMapping();return false;"/>Add Mapping</button></td></tr>
+				<tr>
+					<td colspan="5">
+						<table summary="Mappings" style="width:100%">
 							<tbody id="mappingsMetadata">
 								<tr><th>XML Metadata Field</th><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th></tr>
 							</tbody>
@@ -261,8 +262,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
-						<table summary="Mappings">
+					<td colspan="5">
+						<table summary="Mappings" style="width:100%">
 							<tbody id="mappingsContent">
 								<tr><th>XML Content Field</th><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th></tr>
 							</tbody>
@@ -270,8 +271,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
-						<table summary="Mappings">
+					<td colspan="5">
+						<table summary="Mappings" style="width:100%">
 							<tbody id="mappingsStatic">
 								<tr><th>Cascade Metadata Field</th><th>Cascade Data Definition Field</th><th>Static Value</th></tr>
 							</tbody>
@@ -279,7 +280,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td colspan="2">
 						<input type="hidden" name="assetType" value="<s:property value="assetType"/>"/>
 						<s:if test="assetType==0">
 							<button onclick="window.location='/AssignContentTypes';return false;">Previous</button>
@@ -288,7 +289,7 @@
 							<button onclick="window.location='/AssignFields?assetType=<s:property value="assetType-1"/>';return false;">Previous</button>
 						</s:if>
 					</td>
-					<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>
+					<td align="right" colspan="3"><input type="submit" value="Save and Next" name="submitButton"/></td>
 				</tr>
 			</s:form>
 		</div>
