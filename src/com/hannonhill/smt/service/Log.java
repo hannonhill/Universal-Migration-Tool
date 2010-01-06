@@ -70,4 +70,16 @@ public class Log
                     projectInformation.getMigrationStatus());
         }
     }
+
+    /**
+     * Closes the log writer. Must be called at the end of the task.
+     * 
+     * @param taskStatus
+     */
+    public static void close(TaskStatus taskStatus)
+    {
+        PrintWriter logWriter = taskStatus.getLogWriter();
+        if (logWriter != null)
+            taskStatus.getLogWriter().close();
+    }
 }

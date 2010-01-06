@@ -5,8 +5,6 @@
  */
 package com.hannonhill.smt.task;
 
-import java.io.PrintWriter;
-
 import com.hannonhill.smt.LinkCheckingStatus;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.service.LinkChecker;
@@ -50,10 +48,21 @@ public class LinkCheckingTask extends Thread
             Log.add("<br/>Link checker stopped by the user.<br/>", status);
 
         status.setCompleted(true);
+        logLinkCheckingSummary();
+        Log.close(status);
+    }
 
-        // close the log writer
-        PrintWriter logWriter = status.getLogWriter();
-        if (logWriter != null)
-            status.getLogWriter().close();
+    /**
+     * Adds the summary information to the log.
+     */
+    private void logLinkCheckingSummary()
+    {
+        LinkCheckingStatus linkCheckingStatus = projectInformation.getLinkCheckingStatus();
+        Log.add("<br/><em>Link checking summary:<br/>", linkCheckingStatus);
+        Log.add("Checked: <span style=\"color: green;\">" + linkCheckingStatus.getPagesChecked() + "</span><br/>", linkCheckingStatus);
+        Log.add("Errors: <span style=\"color: red;\">" + linkCheckingStatus.getPagesWithErrors() + "</span><br/>", linkCheckingStatus);
+        Log.add("Correct Links: <span style=\"color: green;\">" + linkCheckingStatus.getCorrectLinks() + "</span><br/>", linkCheckingStatus);
+        Log.add("Broken Links: <span style=\"color: orange;\">" + linkCheckingStatus.getBrokenLinks() + "</span><br/>", linkCheckingStatus);
+        Log.add("</em><br/>Link checking completed.<br/><br/>", linkCheckingStatus);
     }
 }
