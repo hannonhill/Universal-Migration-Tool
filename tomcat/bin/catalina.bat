@@ -129,12 +129,12 @@ set LOGGING_CONFIG=-Dnop
 if not exist "%CATALINA_BASE%\conf\logging.properties" goto noJuliConfig
 set LOGGING_CONFIG=-Djava.util.logging.config.file="%CATALINA_BASE%\conf\logging.properties"
 :noJuliConfig
-set JAVA_OPTS=%JAVA_OPTS% %LOGGING_CONFIG%
+set JAVA_OPTS=%JAVA_OPTS% %LOGGING_CONFIG% -Xms1024M -Xmx1024M
 
 if not "%LOGGING_MANAGER%" == "" goto noJuliManager
 set LOGGING_MANAGER=-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
 :noJuliManager
-set JAVA_OPTS=%JAVA_OPTS% %LOGGING_MANAGER%
+set JAVA_OPTS=%JAVA_OPTS% %LOGGING_MANAGER% -Xms1024M -Xmx1024M
 
 rem ----- Execute The Requested Command ---------------------------------------
 
