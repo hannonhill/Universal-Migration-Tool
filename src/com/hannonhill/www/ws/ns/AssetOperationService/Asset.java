@@ -16,7 +16,7 @@ public class Asset  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.TextBlock textBlock;
 
-    private com.hannonhill.www.ws.ns.AssetOperationService.XhtmlBlock xhtmlBlock;
+    private com.hannonhill.www.ws.ns.AssetOperationService.XhtmlStructuredDataBlock xhtmlStructuredDataBlock;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.XmlBlock xmlBlock;
 
@@ -100,7 +100,7 @@ public class Asset  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.FeedBlock feedBlock,
            com.hannonhill.www.ws.ns.AssetOperationService.IndexBlock indexBlock,
            com.hannonhill.www.ws.ns.AssetOperationService.TextBlock textBlock,
-           com.hannonhill.www.ws.ns.AssetOperationService.XhtmlBlock xhtmlBlock,
+           com.hannonhill.www.ws.ns.AssetOperationService.XhtmlStructuredDataBlock xhtmlStructuredDataBlock,
            com.hannonhill.www.ws.ns.AssetOperationService.XmlBlock xmlBlock,
            com.hannonhill.www.ws.ns.AssetOperationService.File file,
            com.hannonhill.www.ws.ns.AssetOperationService.Folder folder,
@@ -142,7 +142,7 @@ public class Asset  implements java.io.Serializable {
            this.feedBlock = feedBlock;
            this.indexBlock = indexBlock;
            this.textBlock = textBlock;
-           this.xhtmlBlock = xhtmlBlock;
+           this.xhtmlStructuredDataBlock = xhtmlStructuredDataBlock;
            this.xmlBlock = xmlBlock;
            this.file = file;
            this.folder = folder;
@@ -264,22 +264,22 @@ public class Asset  implements java.io.Serializable {
 
 
     /**
-     * Gets the xhtmlBlock value for this Asset.
+     * Gets the xhtmlStructuredDataBlock value for this Asset.
      * 
-     * @return xhtmlBlock
+     * @return xhtmlStructuredDataBlock
      */
-    public com.hannonhill.www.ws.ns.AssetOperationService.XhtmlBlock getXhtmlBlock() {
-        return xhtmlBlock;
+    public com.hannonhill.www.ws.ns.AssetOperationService.XhtmlStructuredDataBlock getXhtmlStructuredDataBlock() {
+        return xhtmlStructuredDataBlock;
     }
 
 
     /**
-     * Sets the xhtmlBlock value for this Asset.
+     * Sets the xhtmlStructuredDataBlock value for this Asset.
      * 
-     * @param xhtmlBlock
+     * @param xhtmlStructuredDataBlock
      */
-    public void setXhtmlBlock(com.hannonhill.www.ws.ns.AssetOperationService.XhtmlBlock xhtmlBlock) {
-        this.xhtmlBlock = xhtmlBlock;
+    public void setXhtmlStructuredDataBlock(com.hannonhill.www.ws.ns.AssetOperationService.XhtmlStructuredDataBlock xhtmlStructuredDataBlock) {
+        this.xhtmlStructuredDataBlock = xhtmlStructuredDataBlock;
     }
 
 
@@ -1046,9 +1046,9 @@ public class Asset  implements java.io.Serializable {
             ((this.textBlock==null && other.getTextBlock()==null) || 
              (this.textBlock!=null &&
               this.textBlock.equals(other.getTextBlock()))) &&
-            ((this.xhtmlBlock==null && other.getXhtmlBlock()==null) || 
-             (this.xhtmlBlock!=null &&
-              this.xhtmlBlock.equals(other.getXhtmlBlock()))) &&
+            ((this.xhtmlStructuredDataBlock==null && other.getXhtmlStructuredDataBlock()==null) || 
+             (this.xhtmlStructuredDataBlock!=null &&
+              this.xhtmlStructuredDataBlock.equals(other.getXhtmlStructuredDataBlock()))) &&
             ((this.xmlBlock==null && other.getXmlBlock()==null) || 
              (this.xmlBlock!=null &&
               this.xmlBlock.equals(other.getXmlBlock()))) &&
@@ -1183,8 +1183,8 @@ public class Asset  implements java.io.Serializable {
         if (getTextBlock() != null) {
             _hashCode += getTextBlock().hashCode();
         }
-        if (getXhtmlBlock() != null) {
-            _hashCode += getXhtmlBlock().hashCode();
+        if (getXhtmlStructuredDataBlock() != null) {
+            _hashCode += getXhtmlStructuredDataBlock().hashCode();
         }
         if (getXmlBlock() != null) {
             _hashCode += getXmlBlock().hashCode();
@@ -1336,9 +1336,9 @@ public class Asset  implements java.io.Serializable {
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("xhtmlBlock");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlBlock"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlBlock"));
+        elemField.setFieldName("xhtmlStructuredDataBlock");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlStructuredDataBlock"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlStructuredDataBlock"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

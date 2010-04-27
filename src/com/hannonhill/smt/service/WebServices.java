@@ -84,7 +84,7 @@ public class WebServices
     {
         Authentication authentication = new Authentication(password, username);
         Path path = new Path(siteName, null, siteName);
-        Identifier identifier = new Identifier(null, path, EntityTypeString.site);
+        Identifier identifier = new Identifier(null, path, EntityTypeString.site, false);
         ReadResult readResult = getServer(url).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
             throw new Exception(readResult.getMessage());
@@ -125,7 +125,7 @@ public class WebServices
         Authentication authentication = getAuthentication(projectInformation);
         String metadataSetId = contentType.getMetadataSetId();
 
-        Identifier identifier = new Identifier(metadataSetId, null, EntityTypeString.metadataset);
+        Identifier identifier = new Identifier(metadataSetId, null, EntityTypeString.metadataset, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
             throw new Exception("Error occured when reading a Metadata Set with id '" + metadataSetId + "': " + readResult.getMessage());
@@ -165,7 +165,7 @@ public class WebServices
         if (dataDefinitionId == null)
             return null;
 
-        Identifier identifier = new Identifier(dataDefinitionId, null, EntityTypeString.structureddatadefinition);
+        Identifier identifier = new Identifier(dataDefinitionId, null, EntityTypeString.structureddatadefinition, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
             throw new Exception("Error occured when reading a Data Definition with id '" + dataDefinitionId + "': " + readResult.getMessage());
@@ -261,7 +261,7 @@ public class WebServices
     public static Page readPage(String id, ProjectInformation projectInformation) throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
-        Identifier identifier = new Identifier(id, null, EntityTypeString.page);
+        Identifier identifier = new Identifier(id, null, EntityTypeString.page, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
             throw new Exception("Error occured when reading a Page with id '" + id + "': " + readResult.getMessage());
@@ -316,7 +316,7 @@ public class WebServices
     private static Page readPageByPath(String path, ProjectInformation projectInformation) throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
-        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.page);
+        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.page, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true")
                 && (readResult.getMessage() == null || !readResult.getMessage().equals(
@@ -337,7 +337,7 @@ public class WebServices
     private static File readFileByPath(String path, ProjectInformation projectInformation) throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
-        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.file);
+        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.file, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true")
                 && (readResult.getMessage() == null || !readResult.getMessage().equals(
@@ -376,7 +376,7 @@ public class WebServices
     private static void deletePage(String path, ProjectInformation projectInformation) throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
-        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.page);
+        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.page, false);
         OperationResult deleteResult = getServer(projectInformation.getUrl()).delete(authentication, identifier);
 
         if (!deleteResult.getSuccess().equals("true")
@@ -433,7 +433,7 @@ public class WebServices
             throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
-        Identifier identifier = new Identifier(containerId, null, EntityTypeString.contenttypecontainer);
+        Identifier identifier = new Identifier(containerId, null, EntityTypeString.contenttypecontainer, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
             throw new Exception("Error occured when getting a list of available Content Types in the Site: " + readResult.getMessage());
@@ -458,7 +458,7 @@ public class WebServices
     private static ContentType readContentType(ProjectInformation projectInformation, String contentTypeId) throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
-        Identifier identifier = new Identifier(contentTypeId, null, EntityTypeString.contenttype);
+        Identifier identifier = new Identifier(contentTypeId, null, EntityTypeString.contenttype, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
             throw new Exception("Error occured when reading a Content Type with id '" + contentTypeId + "': " + readResult.getMessage());

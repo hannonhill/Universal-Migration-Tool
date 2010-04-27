@@ -35,6 +35,7 @@ public class PublishableAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
            java.lang.String metadataSetPath,
            java.lang.String expirationFolderId,
            java.lang.String expirationFolderPath,
+           java.lang.Boolean expirationFolderRecycled,
            java.lang.Boolean shouldBePublished,
            java.lang.Boolean shouldBeIndexed,
            java.util.Calendar lastPublishedDate,
@@ -54,7 +55,8 @@ public class PublishableAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
             metadataSetId,
             metadataSetPath,
             expirationFolderId,
-            expirationFolderPath);
+            expirationFolderPath,
+            expirationFolderRecycled);
         this.shouldBePublished = shouldBePublished;
         this.shouldBeIndexed = shouldBeIndexed;
         this.lastPublishedDate = lastPublishedDate;

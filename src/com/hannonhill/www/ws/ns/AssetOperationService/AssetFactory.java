@@ -16,9 +16,13 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
 
     private java.lang.String baseAssetPath;
 
+    private java.lang.Boolean baseAssetRecycled;
+
     private java.lang.String placementFolderId;
 
     private java.lang.String placementFolderPath;
+
+    private java.lang.Boolean placementFolderRecycled;
 
     private java.lang.Boolean allowSubfolderPlacement;
 
@@ -50,8 +54,10 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
            java.lang.String assetType,
            java.lang.String baseAssetId,
            java.lang.String baseAssetPath,
+           java.lang.Boolean baseAssetRecycled,
            java.lang.String placementFolderId,
            java.lang.String placementFolderPath,
+           java.lang.Boolean placementFolderRecycled,
            java.lang.Boolean allowSubfolderPlacement,
            org.apache.axis.types.NonNegativeInteger folderPlacementPosition,
            java.lang.Boolean overwrite,
@@ -72,8 +78,10 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
         this.assetType = assetType;
         this.baseAssetId = baseAssetId;
         this.baseAssetPath = baseAssetPath;
+        this.baseAssetRecycled = baseAssetRecycled;
         this.placementFolderId = placementFolderId;
         this.placementFolderPath = placementFolderPath;
+        this.placementFolderRecycled = placementFolderRecycled;
         this.allowSubfolderPlacement = allowSubfolderPlacement;
         this.folderPlacementPosition = folderPlacementPosition;
         this.overwrite = overwrite;
@@ -165,6 +173,26 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
 
 
     /**
+     * Gets the baseAssetRecycled value for this AssetFactory.
+     * 
+     * @return baseAssetRecycled
+     */
+    public java.lang.Boolean getBaseAssetRecycled() {
+        return baseAssetRecycled;
+    }
+
+
+    /**
+     * Sets the baseAssetRecycled value for this AssetFactory.
+     * 
+     * @param baseAssetRecycled
+     */
+    public void setBaseAssetRecycled(java.lang.Boolean baseAssetRecycled) {
+        this.baseAssetRecycled = baseAssetRecycled;
+    }
+
+
+    /**
      * Gets the placementFolderId value for this AssetFactory.
      * 
      * @return placementFolderId
@@ -201,6 +229,26 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
      */
     public void setPlacementFolderPath(java.lang.String placementFolderPath) {
         this.placementFolderPath = placementFolderPath;
+    }
+
+
+    /**
+     * Gets the placementFolderRecycled value for this AssetFactory.
+     * 
+     * @return placementFolderRecycled
+     */
+    public java.lang.Boolean getPlacementFolderRecycled() {
+        return placementFolderRecycled;
+    }
+
+
+    /**
+     * Sets the placementFolderRecycled value for this AssetFactory.
+     * 
+     * @param placementFolderRecycled
+     */
+    public void setPlacementFolderRecycled(java.lang.Boolean placementFolderRecycled) {
+        this.placementFolderRecycled = placementFolderRecycled;
     }
 
 
@@ -367,12 +415,18 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
             ((this.baseAssetPath==null && other.getBaseAssetPath()==null) || 
              (this.baseAssetPath!=null &&
               this.baseAssetPath.equals(other.getBaseAssetPath()))) &&
+            ((this.baseAssetRecycled==null && other.getBaseAssetRecycled()==null) || 
+             (this.baseAssetRecycled!=null &&
+              this.baseAssetRecycled.equals(other.getBaseAssetRecycled()))) &&
             ((this.placementFolderId==null && other.getPlacementFolderId()==null) || 
              (this.placementFolderId!=null &&
               this.placementFolderId.equals(other.getPlacementFolderId()))) &&
             ((this.placementFolderPath==null && other.getPlacementFolderPath()==null) || 
              (this.placementFolderPath!=null &&
               this.placementFolderPath.equals(other.getPlacementFolderPath()))) &&
+            ((this.placementFolderRecycled==null && other.getPlacementFolderRecycled()==null) || 
+             (this.placementFolderRecycled!=null &&
+              this.placementFolderRecycled.equals(other.getPlacementFolderRecycled()))) &&
             ((this.allowSubfolderPlacement==null && other.getAllowSubfolderPlacement()==null) || 
              (this.allowSubfolderPlacement!=null &&
               this.allowSubfolderPlacement.equals(other.getAllowSubfolderPlacement()))) &&
@@ -417,11 +471,17 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
         if (getBaseAssetPath() != null) {
             _hashCode += getBaseAssetPath().hashCode();
         }
+        if (getBaseAssetRecycled() != null) {
+            _hashCode += getBaseAssetRecycled().hashCode();
+        }
         if (getPlacementFolderId() != null) {
             _hashCode += getPlacementFolderId().hashCode();
         }
         if (getPlacementFolderPath() != null) {
             _hashCode += getPlacementFolderPath().hashCode();
+        }
+        if (getPlacementFolderRecycled() != null) {
+            _hashCode += getPlacementFolderRecycled().hashCode();
         }
         if (getAllowSubfolderPlacement() != null) {
             _hashCode += getAllowSubfolderPlacement().hashCode();
@@ -489,6 +549,13 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("baseAssetRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "baseAssetRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("placementFolderId");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "placementFolderId"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -499,6 +566,13 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
         elemField.setFieldName("placementFolderPath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "placementFolderPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("placementFolderRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "placementFolderRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

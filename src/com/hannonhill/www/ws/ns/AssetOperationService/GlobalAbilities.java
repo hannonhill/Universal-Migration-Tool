@@ -30,6 +30,8 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean editPageContentType;
 
+    private java.lang.Boolean editStructuredDataDefinition;
+
     private java.lang.Boolean publishReadableHomeAssets;
 
     private java.lang.Boolean publishWritableHomeAssets;
@@ -124,6 +126,12 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean broadcastMessages;
 
+    private java.lang.Boolean recycleBinViewRestoreUserAssets;
+
+    private java.lang.Boolean recycleBinDeleteAssets;
+
+    private java.lang.Boolean recycleBinViewRestoreAllAssets;
+
     private java.lang.Boolean viewUsersInMemberGroups;
 
     private java.lang.Boolean viewAllUsers;
@@ -156,6 +164,8 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean editMemberGroups;
 
+    private java.lang.Boolean moveRenameAssets;
+
     public GlobalAbilities() {
     }
 
@@ -171,6 +181,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean multiSelectDelete,
            java.lang.Boolean editPageLevelConfigurations,
            java.lang.Boolean editPageContentType,
+           java.lang.Boolean editStructuredDataDefinition,
            java.lang.Boolean publishReadableHomeAssets,
            java.lang.Boolean publishWritableHomeAssets,
            java.lang.Boolean viewPublishQueue,
@@ -218,6 +229,9 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean editSystemPreferences,
            java.lang.Boolean siteMigration,
            java.lang.Boolean broadcastMessages,
+           java.lang.Boolean recycleBinViewRestoreUserAssets,
+           java.lang.Boolean recycleBinDeleteAssets,
+           java.lang.Boolean recycleBinViewRestoreAllAssets,
            java.lang.Boolean viewUsersInMemberGroups,
            java.lang.Boolean viewAllUsers,
            java.lang.Boolean createUsers,
@@ -233,7 +247,8 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean editAnyUser,
            java.lang.Boolean editUsersInMemberGroups,
            java.lang.Boolean editAnyGroup,
-           java.lang.Boolean editMemberGroups) {
+           java.lang.Boolean editMemberGroups,
+           java.lang.Boolean moveRenameAssets) {
            this.globalAdmin = globalAdmin;
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.accessSiteManagement = accessSiteManagement;
@@ -245,6 +260,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.multiSelectDelete = multiSelectDelete;
            this.editPageLevelConfigurations = editPageLevelConfigurations;
            this.editPageContentType = editPageContentType;
+           this.editStructuredDataDefinition = editStructuredDataDefinition;
            this.publishReadableHomeAssets = publishReadableHomeAssets;
            this.publishWritableHomeAssets = publishWritableHomeAssets;
            this.viewPublishQueue = viewPublishQueue;
@@ -292,6 +308,9 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.editSystemPreferences = editSystemPreferences;
            this.siteMigration = siteMigration;
            this.broadcastMessages = broadcastMessages;
+           this.recycleBinViewRestoreUserAssets = recycleBinViewRestoreUserAssets;
+           this.recycleBinDeleteAssets = recycleBinDeleteAssets;
+           this.recycleBinViewRestoreAllAssets = recycleBinViewRestoreAllAssets;
            this.viewUsersInMemberGroups = viewUsersInMemberGroups;
            this.viewAllUsers = viewAllUsers;
            this.createUsers = createUsers;
@@ -308,6 +327,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.editUsersInMemberGroups = editUsersInMemberGroups;
            this.editAnyGroup = editAnyGroup;
            this.editMemberGroups = editMemberGroups;
+           this.moveRenameAssets = moveRenameAssets;
     }
 
 
@@ -528,6 +548,26 @@ public class GlobalAbilities  implements java.io.Serializable {
      */
     public void setEditPageContentType(java.lang.Boolean editPageContentType) {
         this.editPageContentType = editPageContentType;
+    }
+
+
+    /**
+     * Gets the editStructuredDataDefinition value for this GlobalAbilities.
+     * 
+     * @return editStructuredDataDefinition
+     */
+    public java.lang.Boolean getEditStructuredDataDefinition() {
+        return editStructuredDataDefinition;
+    }
+
+
+    /**
+     * Sets the editStructuredDataDefinition value for this GlobalAbilities.
+     * 
+     * @param editStructuredDataDefinition
+     */
+    public void setEditStructuredDataDefinition(java.lang.Boolean editStructuredDataDefinition) {
+        this.editStructuredDataDefinition = editStructuredDataDefinition;
     }
 
 
@@ -1472,6 +1512,66 @@ public class GlobalAbilities  implements java.io.Serializable {
 
 
     /**
+     * Gets the recycleBinViewRestoreUserAssets value for this GlobalAbilities.
+     * 
+     * @return recycleBinViewRestoreUserAssets
+     */
+    public java.lang.Boolean getRecycleBinViewRestoreUserAssets() {
+        return recycleBinViewRestoreUserAssets;
+    }
+
+
+    /**
+     * Sets the recycleBinViewRestoreUserAssets value for this GlobalAbilities.
+     * 
+     * @param recycleBinViewRestoreUserAssets
+     */
+    public void setRecycleBinViewRestoreUserAssets(java.lang.Boolean recycleBinViewRestoreUserAssets) {
+        this.recycleBinViewRestoreUserAssets = recycleBinViewRestoreUserAssets;
+    }
+
+
+    /**
+     * Gets the recycleBinDeleteAssets value for this GlobalAbilities.
+     * 
+     * @return recycleBinDeleteAssets
+     */
+    public java.lang.Boolean getRecycleBinDeleteAssets() {
+        return recycleBinDeleteAssets;
+    }
+
+
+    /**
+     * Sets the recycleBinDeleteAssets value for this GlobalAbilities.
+     * 
+     * @param recycleBinDeleteAssets
+     */
+    public void setRecycleBinDeleteAssets(java.lang.Boolean recycleBinDeleteAssets) {
+        this.recycleBinDeleteAssets = recycleBinDeleteAssets;
+    }
+
+
+    /**
+     * Gets the recycleBinViewRestoreAllAssets value for this GlobalAbilities.
+     * 
+     * @return recycleBinViewRestoreAllAssets
+     */
+    public java.lang.Boolean getRecycleBinViewRestoreAllAssets() {
+        return recycleBinViewRestoreAllAssets;
+    }
+
+
+    /**
+     * Sets the recycleBinViewRestoreAllAssets value for this GlobalAbilities.
+     * 
+     * @param recycleBinViewRestoreAllAssets
+     */
+    public void setRecycleBinViewRestoreAllAssets(java.lang.Boolean recycleBinViewRestoreAllAssets) {
+        this.recycleBinViewRestoreAllAssets = recycleBinViewRestoreAllAssets;
+    }
+
+
+    /**
      * Gets the viewUsersInMemberGroups value for this GlobalAbilities.
      * 
      * @return viewUsersInMemberGroups
@@ -1790,6 +1890,26 @@ public class GlobalAbilities  implements java.io.Serializable {
         this.editMemberGroups = editMemberGroups;
     }
 
+
+    /**
+     * Gets the moveRenameAssets value for this GlobalAbilities.
+     * 
+     * @return moveRenameAssets
+     */
+    public java.lang.Boolean getMoveRenameAssets() {
+        return moveRenameAssets;
+    }
+
+
+    /**
+     * Sets the moveRenameAssets value for this GlobalAbilities.
+     * 
+     * @param moveRenameAssets
+     */
+    public void setMoveRenameAssets(java.lang.Boolean moveRenameAssets) {
+        this.moveRenameAssets = moveRenameAssets;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof GlobalAbilities)) return false;
@@ -1835,6 +1955,9 @@ public class GlobalAbilities  implements java.io.Serializable {
             ((this.editPageContentType==null && other.getEditPageContentType()==null) || 
              (this.editPageContentType!=null &&
               this.editPageContentType.equals(other.getEditPageContentType()))) &&
+            ((this.editStructuredDataDefinition==null && other.getEditStructuredDataDefinition()==null) || 
+             (this.editStructuredDataDefinition!=null &&
+              this.editStructuredDataDefinition.equals(other.getEditStructuredDataDefinition()))) &&
             ((this.publishReadableHomeAssets==null && other.getPublishReadableHomeAssets()==null) || 
              (this.publishReadableHomeAssets!=null &&
               this.publishReadableHomeAssets.equals(other.getPublishReadableHomeAssets()))) &&
@@ -1976,6 +2099,15 @@ public class GlobalAbilities  implements java.io.Serializable {
             ((this.broadcastMessages==null && other.getBroadcastMessages()==null) || 
              (this.broadcastMessages!=null &&
               this.broadcastMessages.equals(other.getBroadcastMessages()))) &&
+            ((this.recycleBinViewRestoreUserAssets==null && other.getRecycleBinViewRestoreUserAssets()==null) || 
+             (this.recycleBinViewRestoreUserAssets!=null &&
+              this.recycleBinViewRestoreUserAssets.equals(other.getRecycleBinViewRestoreUserAssets()))) &&
+            ((this.recycleBinDeleteAssets==null && other.getRecycleBinDeleteAssets()==null) || 
+             (this.recycleBinDeleteAssets!=null &&
+              this.recycleBinDeleteAssets.equals(other.getRecycleBinDeleteAssets()))) &&
+            ((this.recycleBinViewRestoreAllAssets==null && other.getRecycleBinViewRestoreAllAssets()==null) || 
+             (this.recycleBinViewRestoreAllAssets!=null &&
+              this.recycleBinViewRestoreAllAssets.equals(other.getRecycleBinViewRestoreAllAssets()))) &&
             ((this.viewUsersInMemberGroups==null && other.getViewUsersInMemberGroups()==null) || 
              (this.viewUsersInMemberGroups!=null &&
               this.viewUsersInMemberGroups.equals(other.getViewUsersInMemberGroups()))) &&
@@ -2023,7 +2155,10 @@ public class GlobalAbilities  implements java.io.Serializable {
               this.editAnyGroup.equals(other.getEditAnyGroup()))) &&
             ((this.editMemberGroups==null && other.getEditMemberGroups()==null) || 
              (this.editMemberGroups!=null &&
-              this.editMemberGroups.equals(other.getEditMemberGroups())));
+              this.editMemberGroups.equals(other.getEditMemberGroups()))) &&
+            ((this.moveRenameAssets==null && other.getMoveRenameAssets()==null) || 
+             (this.moveRenameAssets!=null &&
+              this.moveRenameAssets.equals(other.getMoveRenameAssets())));
         __equalsCalc = null;
         return _equals;
     }
@@ -2067,6 +2202,9 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         if (getEditPageContentType() != null) {
             _hashCode += getEditPageContentType().hashCode();
+        }
+        if (getEditStructuredDataDefinition() != null) {
+            _hashCode += getEditStructuredDataDefinition().hashCode();
         }
         if (getPublishReadableHomeAssets() != null) {
             _hashCode += getPublishReadableHomeAssets().hashCode();
@@ -2209,6 +2347,15 @@ public class GlobalAbilities  implements java.io.Serializable {
         if (getBroadcastMessages() != null) {
             _hashCode += getBroadcastMessages().hashCode();
         }
+        if (getRecycleBinViewRestoreUserAssets() != null) {
+            _hashCode += getRecycleBinViewRestoreUserAssets().hashCode();
+        }
+        if (getRecycleBinDeleteAssets() != null) {
+            _hashCode += getRecycleBinDeleteAssets().hashCode();
+        }
+        if (getRecycleBinViewRestoreAllAssets() != null) {
+            _hashCode += getRecycleBinViewRestoreAllAssets().hashCode();
+        }
         if (getViewUsersInMemberGroups() != null) {
             _hashCode += getViewUsersInMemberGroups().hashCode();
         }
@@ -2256,6 +2403,9 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         if (getEditMemberGroups() != null) {
             _hashCode += getEditMemberGroups().hashCode();
+        }
+        if (getMoveRenameAssets() != null) {
+            _hashCode += getMoveRenameAssets().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -2340,6 +2490,13 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("editPageContentType");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editPageContentType"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("editStructuredDataDefinition");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editStructuredDataDefinition"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
@@ -2674,6 +2831,27 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("recycleBinViewRestoreUserAssets");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycleBinViewRestoreUserAssets"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("recycleBinDeleteAssets");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycleBinDeleteAssets"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("recycleBinViewRestoreAllAssets");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycleBinViewRestoreAllAssets"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("viewUsersInMemberGroups");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "viewUsersInMemberGroups"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
@@ -2781,6 +2959,13 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("editMemberGroups");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editMemberGroups"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("moveRenameAssets");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "moveRenameAssets"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

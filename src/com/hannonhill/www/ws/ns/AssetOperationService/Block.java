@@ -26,7 +26,8 @@ public class Block  extends com.hannonhill.www.ws.ns.AssetOperationService.Expir
            java.lang.String metadataSetId,
            java.lang.String metadataSetPath,
            java.lang.String expirationFolderId,
-           java.lang.String expirationFolderPath) {
+           java.lang.String expirationFolderPath,
+           java.lang.Boolean expirationFolderRecycled) {
         super(
             id,
             entityType,
@@ -42,7 +43,8 @@ public class Block  extends com.hannonhill.www.ws.ns.AssetOperationService.Expir
             metadataSetId,
             metadataSetPath,
             expirationFolderId,
-            expirationFolderPath);
+            expirationFolderPath,
+            expirationFolderRecycled);
     }
 
     private java.lang.Object __equalsCalc = null;

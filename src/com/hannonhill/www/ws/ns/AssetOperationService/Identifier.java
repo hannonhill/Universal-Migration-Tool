@@ -14,16 +14,20 @@ public class Identifier  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString type;
 
+    private java.lang.Boolean recycled;
+
     public Identifier() {
     }
 
     public Identifier(
            java.lang.String id,
            com.hannonhill.www.ws.ns.AssetOperationService.Path path,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString type) {
+           com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString type,
+           java.lang.Boolean recycled) {
            this.id = id;
            this.path = path;
            this.type = type;
+           this.recycled = recycled;
     }
 
 
@@ -86,6 +90,26 @@ public class Identifier  implements java.io.Serializable {
         this.type = type;
     }
 
+
+    /**
+     * Gets the recycled value for this Identifier.
+     * 
+     * @return recycled
+     */
+    public java.lang.Boolean getRecycled() {
+        return recycled;
+    }
+
+
+    /**
+     * Sets the recycled value for this Identifier.
+     * 
+     * @param recycled
+     */
+    public void setRecycled(java.lang.Boolean recycled) {
+        this.recycled = recycled;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Identifier)) return false;
@@ -106,7 +130,10 @@ public class Identifier  implements java.io.Serializable {
               this.path.equals(other.getPath()))) &&
             ((this.type==null && other.getType()==null) || 
              (this.type!=null &&
-              this.type.equals(other.getType())));
+              this.type.equals(other.getType()))) &&
+            ((this.recycled==null && other.getRecycled()==null) || 
+             (this.recycled!=null &&
+              this.recycled.equals(other.getRecycled())));
         __equalsCalc = null;
         return _equals;
     }
@@ -126,6 +153,9 @@ public class Identifier  implements java.io.Serializable {
         }
         if (getType() != null) {
             _hashCode += getType().hashCode();
+        }
+        if (getRecycled() != null) {
+            _hashCode += getRecycled().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -155,6 +185,13 @@ public class Identifier  implements java.io.Serializable {
         elemField.setFieldName("type");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "type"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "entityTypeString"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("recycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }

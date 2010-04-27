@@ -12,6 +12,8 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
 
     private java.lang.String expirationFolderPath;
 
+    private java.lang.Boolean expirationFolderRecycled;
+
     public ExpiringAsset() {
     }
 
@@ -30,7 +32,8 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
            java.lang.String metadataSetId,
            java.lang.String metadataSetPath,
            java.lang.String expirationFolderId,
-           java.lang.String expirationFolderPath) {
+           java.lang.String expirationFolderPath,
+           java.lang.Boolean expirationFolderRecycled) {
         super(
             id,
             entityType,
@@ -47,6 +50,7 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
             metadataSetPath);
         this.expirationFolderId = expirationFolderId;
         this.expirationFolderPath = expirationFolderPath;
+        this.expirationFolderRecycled = expirationFolderRecycled;
     }
 
 
@@ -89,6 +93,26 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
         this.expirationFolderPath = expirationFolderPath;
     }
 
+
+    /**
+     * Gets the expirationFolderRecycled value for this ExpiringAsset.
+     * 
+     * @return expirationFolderRecycled
+     */
+    public java.lang.Boolean getExpirationFolderRecycled() {
+        return expirationFolderRecycled;
+    }
+
+
+    /**
+     * Sets the expirationFolderRecycled value for this ExpiringAsset.
+     * 
+     * @param expirationFolderRecycled
+     */
+    public void setExpirationFolderRecycled(java.lang.Boolean expirationFolderRecycled) {
+        this.expirationFolderRecycled = expirationFolderRecycled;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ExpiringAsset)) return false;
@@ -106,7 +130,10 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
               this.expirationFolderId.equals(other.getExpirationFolderId()))) &&
             ((this.expirationFolderPath==null && other.getExpirationFolderPath()==null) || 
              (this.expirationFolderPath!=null &&
-              this.expirationFolderPath.equals(other.getExpirationFolderPath())));
+              this.expirationFolderPath.equals(other.getExpirationFolderPath()))) &&
+            ((this.expirationFolderRecycled==null && other.getExpirationFolderRecycled()==null) || 
+             (this.expirationFolderRecycled!=null &&
+              this.expirationFolderRecycled.equals(other.getExpirationFolderRecycled())));
         __equalsCalc = null;
         return _equals;
     }
@@ -123,6 +150,9 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
         }
         if (getExpirationFolderPath() != null) {
             _hashCode += getExpirationFolderPath().hashCode();
+        }
+        if (getExpirationFolderRecycled() != null) {
+            _hashCode += getExpirationFolderRecycled().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -145,6 +175,13 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
         elemField.setFieldName("expirationFolderPath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "expirationFolderPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("expirationFolderRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "expirationFolderRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

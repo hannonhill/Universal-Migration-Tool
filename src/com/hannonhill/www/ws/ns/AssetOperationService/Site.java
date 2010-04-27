@@ -18,6 +18,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     private java.lang.String cssFilePath;
 
+    private java.lang.Boolean cssFileRecycled;
+
     private java.lang.String siteAssetFactoryContainerId;
 
     private java.lang.String siteAssetFactoryContainerPath;
@@ -25,6 +27,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
     private java.lang.String siteStartingPageId;
 
     private java.lang.String siteStartingPagePath;
+
+    private java.lang.Boolean siteStartingPageRecycled;
 
     private java.lang.String cssClasses;
 
@@ -37,6 +41,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
     private org.apache.axis.types.NonNegativeInteger publishInterval;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.TimeUnits publishIntervalUnits;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration;
 
     private java.lang.String rootFolderId;
 
@@ -72,16 +78,19 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            java.lang.String defaultMetadataSetPath,
            java.lang.String cssFileId,
            java.lang.String cssFilePath,
+           java.lang.Boolean cssFileRecycled,
            java.lang.String siteAssetFactoryContainerId,
            java.lang.String siteAssetFactoryContainerPath,
            java.lang.String siteStartingPageId,
            java.lang.String siteStartingPagePath,
+           java.lang.Boolean siteStartingPageRecycled,
            java.lang.String cssClasses,
            com.hannonhill.www.ws.ns.AssetOperationService.RoleAssignment[] roleAssignments,
            java.lang.Boolean usesScheduledPublishing,
            org.apache.axis.types.Time timeToPublish,
            org.apache.axis.types.NonNegativeInteger publishInterval,
            com.hannonhill.www.ws.ns.AssetOperationService.TimeUnits publishIntervalUnits,
+           com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration,
            java.lang.String rootFolderId,
            java.lang.String rootAssetFactoryContainerId,
            java.lang.String rootPageConfigurationSetContainerId,
@@ -102,16 +111,19 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         this.defaultMetadataSetPath = defaultMetadataSetPath;
         this.cssFileId = cssFileId;
         this.cssFilePath = cssFilePath;
+        this.cssFileRecycled = cssFileRecycled;
         this.siteAssetFactoryContainerId = siteAssetFactoryContainerId;
         this.siteAssetFactoryContainerPath = siteAssetFactoryContainerPath;
         this.siteStartingPageId = siteStartingPageId;
         this.siteStartingPagePath = siteStartingPagePath;
+        this.siteStartingPageRecycled = siteStartingPageRecycled;
         this.cssClasses = cssClasses;
         this.roleAssignments = roleAssignments;
         this.usesScheduledPublishing = usesScheduledPublishing;
         this.timeToPublish = timeToPublish;
         this.publishInterval = publishInterval;
         this.publishIntervalUnits = publishIntervalUnits;
+        this.recycleBinExpiration = recycleBinExpiration;
         this.rootFolderId = rootFolderId;
         this.rootAssetFactoryContainerId = rootAssetFactoryContainerId;
         this.rootPageConfigurationSetContainerId = rootPageConfigurationSetContainerId;
@@ -227,6 +239,26 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
 
     /**
+     * Gets the cssFileRecycled value for this Site.
+     * 
+     * @return cssFileRecycled
+     */
+    public java.lang.Boolean getCssFileRecycled() {
+        return cssFileRecycled;
+    }
+
+
+    /**
+     * Sets the cssFileRecycled value for this Site.
+     * 
+     * @param cssFileRecycled
+     */
+    public void setCssFileRecycled(java.lang.Boolean cssFileRecycled) {
+        this.cssFileRecycled = cssFileRecycled;
+    }
+
+
+    /**
      * Gets the siteAssetFactoryContainerId value for this Site.
      * 
      * @return siteAssetFactoryContainerId
@@ -303,6 +335,26 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
      */
     public void setSiteStartingPagePath(java.lang.String siteStartingPagePath) {
         this.siteStartingPagePath = siteStartingPagePath;
+    }
+
+
+    /**
+     * Gets the siteStartingPageRecycled value for this Site.
+     * 
+     * @return siteStartingPageRecycled
+     */
+    public java.lang.Boolean getSiteStartingPageRecycled() {
+        return siteStartingPageRecycled;
+    }
+
+
+    /**
+     * Sets the siteStartingPageRecycled value for this Site.
+     * 
+     * @param siteStartingPageRecycled
+     */
+    public void setSiteStartingPageRecycled(java.lang.Boolean siteStartingPageRecycled) {
+        this.siteStartingPageRecycled = siteStartingPageRecycled;
     }
 
 
@@ -423,6 +475,26 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
      */
     public void setPublishIntervalUnits(com.hannonhill.www.ws.ns.AssetOperationService.TimeUnits publishIntervalUnits) {
         this.publishIntervalUnits = publishIntervalUnits;
+    }
+
+
+    /**
+     * Gets the recycleBinExpiration value for this Site.
+     * 
+     * @return recycleBinExpiration
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration getRecycleBinExpiration() {
+        return recycleBinExpiration;
+    }
+
+
+    /**
+     * Sets the recycleBinExpiration value for this Site.
+     * 
+     * @param recycleBinExpiration
+     */
+    public void setRecycleBinExpiration(com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration) {
+        this.recycleBinExpiration = recycleBinExpiration;
     }
 
 
@@ -672,6 +744,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.cssFilePath==null && other.getCssFilePath()==null) || 
              (this.cssFilePath!=null &&
               this.cssFilePath.equals(other.getCssFilePath()))) &&
+            ((this.cssFileRecycled==null && other.getCssFileRecycled()==null) || 
+             (this.cssFileRecycled!=null &&
+              this.cssFileRecycled.equals(other.getCssFileRecycled()))) &&
             ((this.siteAssetFactoryContainerId==null && other.getSiteAssetFactoryContainerId()==null) || 
              (this.siteAssetFactoryContainerId!=null &&
               this.siteAssetFactoryContainerId.equals(other.getSiteAssetFactoryContainerId()))) &&
@@ -684,6 +759,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.siteStartingPagePath==null && other.getSiteStartingPagePath()==null) || 
              (this.siteStartingPagePath!=null &&
               this.siteStartingPagePath.equals(other.getSiteStartingPagePath()))) &&
+            ((this.siteStartingPageRecycled==null && other.getSiteStartingPageRecycled()==null) || 
+             (this.siteStartingPageRecycled!=null &&
+              this.siteStartingPageRecycled.equals(other.getSiteStartingPageRecycled()))) &&
             ((this.cssClasses==null && other.getCssClasses()==null) || 
              (this.cssClasses!=null &&
               this.cssClasses.equals(other.getCssClasses()))) &&
@@ -702,6 +780,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.publishIntervalUnits==null && other.getPublishIntervalUnits()==null) || 
              (this.publishIntervalUnits!=null &&
               this.publishIntervalUnits.equals(other.getPublishIntervalUnits()))) &&
+            ((this.recycleBinExpiration==null && other.getRecycleBinExpiration()==null) || 
+             (this.recycleBinExpiration!=null &&
+              this.recycleBinExpiration.equals(other.getRecycleBinExpiration()))) &&
             ((this.rootFolderId==null && other.getRootFolderId()==null) || 
              (this.rootFolderId!=null &&
               this.rootFolderId.equals(other.getRootFolderId()))) &&
@@ -761,6 +842,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         if (getCssFilePath() != null) {
             _hashCode += getCssFilePath().hashCode();
         }
+        if (getCssFileRecycled() != null) {
+            _hashCode += getCssFileRecycled().hashCode();
+        }
         if (getSiteAssetFactoryContainerId() != null) {
             _hashCode += getSiteAssetFactoryContainerId().hashCode();
         }
@@ -772,6 +856,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         }
         if (getSiteStartingPagePath() != null) {
             _hashCode += getSiteStartingPagePath().hashCode();
+        }
+        if (getSiteStartingPageRecycled() != null) {
+            _hashCode += getSiteStartingPageRecycled().hashCode();
         }
         if (getCssClasses() != null) {
             _hashCode += getCssClasses().hashCode();
@@ -798,6 +885,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         }
         if (getPublishIntervalUnits() != null) {
             _hashCode += getPublishIntervalUnits().hashCode();
+        }
+        if (getRecycleBinExpiration() != null) {
+            _hashCode += getRecycleBinExpiration().hashCode();
         }
         if (getRootFolderId() != null) {
             _hashCode += getRootFolderId().hashCode();
@@ -877,6 +967,13 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("cssFileRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cssFileRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("siteAssetFactoryContainerId");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteAssetFactoryContainerId"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -901,6 +998,13 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setFieldName("siteStartingPagePath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteStartingPagePath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("siteStartingPageRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteStartingPageRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
@@ -945,6 +1049,12 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishIntervalUnits"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "timeUnits"));
         elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("recycleBinExpiration");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycleBinExpiration"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycleBinExpiration"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

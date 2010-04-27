@@ -14,11 +14,15 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
     private java.lang.String blockPath;
 
+    private java.lang.Boolean blockRecycled;
+
     private java.lang.Boolean noBlock;
 
     private java.lang.String formatId;
 
     private java.lang.String formatPath;
+
+    private java.lang.Boolean formatRecycled;
 
     private java.lang.Boolean noFormat;
 
@@ -31,9 +35,11 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.String name,
            java.lang.String blockId,
            java.lang.String blockPath,
+           java.lang.Boolean blockRecycled,
            java.lang.Boolean noBlock,
            java.lang.String formatId,
            java.lang.String formatPath,
+           java.lang.Boolean formatRecycled,
            java.lang.Boolean noFormat) {
         super(
             id,
@@ -41,9 +47,11 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
         this.name = name;
         this.blockId = blockId;
         this.blockPath = blockPath;
+        this.blockRecycled = blockRecycled;
         this.noBlock = noBlock;
         this.formatId = formatId;
         this.formatPath = formatPath;
+        this.formatRecycled = formatRecycled;
         this.noFormat = noFormat;
     }
 
@@ -109,6 +117,26 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
 
     /**
+     * Gets the blockRecycled value for this PageRegion.
+     * 
+     * @return blockRecycled
+     */
+    public java.lang.Boolean getBlockRecycled() {
+        return blockRecycled;
+    }
+
+
+    /**
+     * Sets the blockRecycled value for this PageRegion.
+     * 
+     * @param blockRecycled
+     */
+    public void setBlockRecycled(java.lang.Boolean blockRecycled) {
+        this.blockRecycled = blockRecycled;
+    }
+
+
+    /**
      * Gets the noBlock value for this PageRegion.
      * 
      * @return noBlock
@@ -169,6 +197,26 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
 
     /**
+     * Gets the formatRecycled value for this PageRegion.
+     * 
+     * @return formatRecycled
+     */
+    public java.lang.Boolean getFormatRecycled() {
+        return formatRecycled;
+    }
+
+
+    /**
+     * Sets the formatRecycled value for this PageRegion.
+     * 
+     * @param formatRecycled
+     */
+    public void setFormatRecycled(java.lang.Boolean formatRecycled) {
+        this.formatRecycled = formatRecycled;
+    }
+
+
+    /**
      * Gets the noFormat value for this PageRegion.
      * 
      * @return noFormat
@@ -208,6 +256,9 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
             ((this.blockPath==null && other.getBlockPath()==null) || 
              (this.blockPath!=null &&
               this.blockPath.equals(other.getBlockPath()))) &&
+            ((this.blockRecycled==null && other.getBlockRecycled()==null) || 
+             (this.blockRecycled!=null &&
+              this.blockRecycled.equals(other.getBlockRecycled()))) &&
             ((this.noBlock==null && other.getNoBlock()==null) || 
              (this.noBlock!=null &&
               this.noBlock.equals(other.getNoBlock()))) &&
@@ -217,6 +268,9 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
             ((this.formatPath==null && other.getFormatPath()==null) || 
              (this.formatPath!=null &&
               this.formatPath.equals(other.getFormatPath()))) &&
+            ((this.formatRecycled==null && other.getFormatRecycled()==null) || 
+             (this.formatRecycled!=null &&
+              this.formatRecycled.equals(other.getFormatRecycled()))) &&
             ((this.noFormat==null && other.getNoFormat()==null) || 
              (this.noFormat!=null &&
               this.noFormat.equals(other.getNoFormat())));
@@ -240,6 +294,9 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
         if (getBlockPath() != null) {
             _hashCode += getBlockPath().hashCode();
         }
+        if (getBlockRecycled() != null) {
+            _hashCode += getBlockRecycled().hashCode();
+        }
         if (getNoBlock() != null) {
             _hashCode += getNoBlock().hashCode();
         }
@@ -248,6 +305,9 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
         }
         if (getFormatPath() != null) {
             _hashCode += getFormatPath().hashCode();
+        }
+        if (getFormatRecycled() != null) {
+            _hashCode += getFormatRecycled().hashCode();
         }
         if (getNoFormat() != null) {
             _hashCode += getNoFormat().hashCode();
@@ -283,6 +343,13 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("blockRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "blockRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("noBlock");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "noBlock"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
@@ -300,6 +367,13 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
         elemField.setFieldName("formatPath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "formatPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("formatRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "formatRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

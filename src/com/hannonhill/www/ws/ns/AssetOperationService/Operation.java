@@ -14,6 +14,8 @@ public class Operation  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.Edit edit;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.Move move;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.Publish publish;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.Read read;
@@ -35,6 +37,7 @@ public class Operation  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.Create create,
            com.hannonhill.www.ws.ns.AssetOperationService.Delete delete,
            com.hannonhill.www.ws.ns.AssetOperationService.Edit edit,
+           com.hannonhill.www.ws.ns.AssetOperationService.Move move,
            com.hannonhill.www.ws.ns.AssetOperationService.Publish publish,
            com.hannonhill.www.ws.ns.AssetOperationService.Read read,
            com.hannonhill.www.ws.ns.AssetOperationService.ReadAccessRights readAccessRights,
@@ -45,6 +48,7 @@ public class Operation  implements java.io.Serializable {
            this.create = create;
            this.delete = delete;
            this.edit = edit;
+           this.move = move;
            this.publish = publish;
            this.read = read;
            this.readAccessRights = readAccessRights;
@@ -112,6 +116,26 @@ public class Operation  implements java.io.Serializable {
      */
     public void setEdit(com.hannonhill.www.ws.ns.AssetOperationService.Edit edit) {
         this.edit = edit;
+    }
+
+
+    /**
+     * Gets the move value for this Operation.
+     * 
+     * @return move
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.Move getMove() {
+        return move;
+    }
+
+
+    /**
+     * Sets the move value for this Operation.
+     * 
+     * @param move
+     */
+    public void setMove(com.hannonhill.www.ws.ns.AssetOperationService.Move move) {
+        this.move = move;
     }
 
 
@@ -275,6 +299,9 @@ public class Operation  implements java.io.Serializable {
             ((this.edit==null && other.getEdit()==null) || 
              (this.edit!=null &&
               this.edit.equals(other.getEdit()))) &&
+            ((this.move==null && other.getMove()==null) || 
+             (this.move!=null &&
+              this.move.equals(other.getMove()))) &&
             ((this.publish==null && other.getPublish()==null) || 
              (this.publish!=null &&
               this.publish.equals(other.getPublish()))) &&
@@ -315,6 +342,9 @@ public class Operation  implements java.io.Serializable {
         }
         if (getEdit() != null) {
             _hashCode += getEdit().hashCode();
+        }
+        if (getMove() != null) {
+            _hashCode += getMove().hashCode();
         }
         if (getPublish() != null) {
             _hashCode += getPublish().hashCode();
@@ -365,6 +395,13 @@ public class Operation  implements java.io.Serializable {
         elemField.setFieldName("edit");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "edit"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "edit"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("move");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "move"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "move"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

@@ -14,9 +14,13 @@ public class Group  implements java.io.Serializable {
 
     private java.lang.String groupStartingPagePath;
 
+    private java.lang.Boolean groupStartingPageRecycled;
+
     private java.lang.String groupBaseFolderId;
 
     private java.lang.String groupBaseFolderPath;
+
+    private java.lang.Boolean groupBaseFolderRecycled;
 
     private java.lang.String groupAssetFactoryContainerId;
 
@@ -49,8 +53,10 @@ public class Group  implements java.io.Serializable {
            java.lang.String groupName,
            java.lang.String groupStartingPageId,
            java.lang.String groupStartingPagePath,
+           java.lang.Boolean groupStartingPageRecycled,
            java.lang.String groupBaseFolderId,
            java.lang.String groupBaseFolderPath,
+           java.lang.Boolean groupBaseFolderRecycled,
            java.lang.String groupAssetFactoryContainerId,
            java.lang.String groupAssetFactoryContainerPath,
            java.lang.String cssClasses,
@@ -66,8 +72,10 @@ public class Group  implements java.io.Serializable {
            this.groupName = groupName;
            this.groupStartingPageId = groupStartingPageId;
            this.groupStartingPagePath = groupStartingPagePath;
+           this.groupStartingPageRecycled = groupStartingPageRecycled;
            this.groupBaseFolderId = groupBaseFolderId;
            this.groupBaseFolderPath = groupBaseFolderPath;
+           this.groupBaseFolderRecycled = groupBaseFolderRecycled;
            this.groupAssetFactoryContainerId = groupAssetFactoryContainerId;
            this.groupAssetFactoryContainerPath = groupAssetFactoryContainerPath;
            this.cssClasses = cssClasses;
@@ -144,6 +152,26 @@ public class Group  implements java.io.Serializable {
 
 
     /**
+     * Gets the groupStartingPageRecycled value for this Group.
+     * 
+     * @return groupStartingPageRecycled
+     */
+    public java.lang.Boolean getGroupStartingPageRecycled() {
+        return groupStartingPageRecycled;
+    }
+
+
+    /**
+     * Sets the groupStartingPageRecycled value for this Group.
+     * 
+     * @param groupStartingPageRecycled
+     */
+    public void setGroupStartingPageRecycled(java.lang.Boolean groupStartingPageRecycled) {
+        this.groupStartingPageRecycled = groupStartingPageRecycled;
+    }
+
+
+    /**
      * Gets the groupBaseFolderId value for this Group.
      * 
      * @return groupBaseFolderId
@@ -180,6 +208,26 @@ public class Group  implements java.io.Serializable {
      */
     public void setGroupBaseFolderPath(java.lang.String groupBaseFolderPath) {
         this.groupBaseFolderPath = groupBaseFolderPath;
+    }
+
+
+    /**
+     * Gets the groupBaseFolderRecycled value for this Group.
+     * 
+     * @return groupBaseFolderRecycled
+     */
+    public java.lang.Boolean getGroupBaseFolderRecycled() {
+        return groupBaseFolderRecycled;
+    }
+
+
+    /**
+     * Sets the groupBaseFolderRecycled value for this Group.
+     * 
+     * @param groupBaseFolderRecycled
+     */
+    public void setGroupBaseFolderRecycled(java.lang.Boolean groupBaseFolderRecycled) {
+        this.groupBaseFolderRecycled = groupBaseFolderRecycled;
     }
 
 
@@ -443,12 +491,18 @@ public class Group  implements java.io.Serializable {
             ((this.groupStartingPagePath==null && other.getGroupStartingPagePath()==null) || 
              (this.groupStartingPagePath!=null &&
               this.groupStartingPagePath.equals(other.getGroupStartingPagePath()))) &&
+            ((this.groupStartingPageRecycled==null && other.getGroupStartingPageRecycled()==null) || 
+             (this.groupStartingPageRecycled!=null &&
+              this.groupStartingPageRecycled.equals(other.getGroupStartingPageRecycled()))) &&
             ((this.groupBaseFolderId==null && other.getGroupBaseFolderId()==null) || 
              (this.groupBaseFolderId!=null &&
               this.groupBaseFolderId.equals(other.getGroupBaseFolderId()))) &&
             ((this.groupBaseFolderPath==null && other.getGroupBaseFolderPath()==null) || 
              (this.groupBaseFolderPath!=null &&
               this.groupBaseFolderPath.equals(other.getGroupBaseFolderPath()))) &&
+            ((this.groupBaseFolderRecycled==null && other.getGroupBaseFolderRecycled()==null) || 
+             (this.groupBaseFolderRecycled!=null &&
+              this.groupBaseFolderRecycled.equals(other.getGroupBaseFolderRecycled()))) &&
             ((this.groupAssetFactoryContainerId==null && other.getGroupAssetFactoryContainerId()==null) || 
              (this.groupAssetFactoryContainerId!=null &&
               this.groupAssetFactoryContainerId.equals(other.getGroupAssetFactoryContainerId()))) &&
@@ -505,11 +559,17 @@ public class Group  implements java.io.Serializable {
         if (getGroupStartingPagePath() != null) {
             _hashCode += getGroupStartingPagePath().hashCode();
         }
+        if (getGroupStartingPageRecycled() != null) {
+            _hashCode += getGroupStartingPageRecycled().hashCode();
+        }
         if (getGroupBaseFolderId() != null) {
             _hashCode += getGroupBaseFolderId().hashCode();
         }
         if (getGroupBaseFolderPath() != null) {
             _hashCode += getGroupBaseFolderPath().hashCode();
+        }
+        if (getGroupBaseFolderRecycled() != null) {
+            _hashCode += getGroupBaseFolderRecycled().hashCode();
         }
         if (getGroupAssetFactoryContainerId() != null) {
             _hashCode += getGroupAssetFactoryContainerId().hashCode();
@@ -578,6 +638,13 @@ public class Group  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("groupStartingPageRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "groupStartingPageRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("groupBaseFolderId");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "groupBaseFolderId"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -588,6 +655,13 @@ public class Group  implements java.io.Serializable {
         elemField.setFieldName("groupBaseFolderPath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "groupBaseFolderPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("groupBaseFolderRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "groupBaseFolderRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

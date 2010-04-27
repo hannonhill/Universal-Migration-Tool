@@ -23,7 +23,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final java.lang.String _block_FEED = "block_FEED";
     public static final java.lang.String _block_INDEX = "block_INDEX";
     public static final java.lang.String _block_TEXT = "block_TEXT";
-    public static final java.lang.String _block_XHTML = "block_XHTML";
+    public static final java.lang.String _block_XHTML_STRUCTUREDDATA = "block_XHTML_STRUCTUREDDATA";
     public static final java.lang.String _block_XML = "block_XML";
     public static final java.lang.String _connectorcontainer = "connectorcontainer";
     public static final java.lang.String _twitterconnector = "twitterconnector";
@@ -67,7 +67,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final EntityTypeString block_FEED = new EntityTypeString(_block_FEED);
     public static final EntityTypeString block_INDEX = new EntityTypeString(_block_INDEX);
     public static final EntityTypeString block_TEXT = new EntityTypeString(_block_TEXT);
-    public static final EntityTypeString block_XHTML = new EntityTypeString(_block_XHTML);
+    public static final EntityTypeString block_XHTML_STRUCTUREDDATA = new EntityTypeString(_block_XHTML_STRUCTUREDDATA);
     public static final EntityTypeString block_XML = new EntityTypeString(_block_XML);
     public static final EntityTypeString connectorcontainer = new EntityTypeString(_connectorcontainer);
     public static final EntityTypeString twitterconnector = new EntityTypeString(_twitterconnector);

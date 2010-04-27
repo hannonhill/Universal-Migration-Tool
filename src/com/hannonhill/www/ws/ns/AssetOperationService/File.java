@@ -12,6 +12,10 @@ public class File  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
 
     private byte[] data;
 
+    private java.lang.Boolean rewriteLinks;
+
+    private java.lang.Boolean maintainAbsoluteLinks;
+
     public File() {
     }
 
@@ -31,12 +35,15 @@ public class File  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
            java.lang.String metadataSetPath,
            java.lang.String expirationFolderId,
            java.lang.String expirationFolderPath,
+           java.lang.Boolean expirationFolderRecycled,
            java.lang.Boolean shouldBePublished,
            java.lang.Boolean shouldBeIndexed,
            java.util.Calendar lastPublishedDate,
            java.lang.String lastPublishedBy,
            java.lang.String text,
-           byte[] data) {
+           byte[] data,
+           java.lang.Boolean rewriteLinks,
+           java.lang.Boolean maintainAbsoluteLinks) {
         super(
             id,
             entityType,
@@ -53,12 +60,15 @@ public class File  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
             metadataSetPath,
             expirationFolderId,
             expirationFolderPath,
+            expirationFolderRecycled,
             shouldBePublished,
             shouldBeIndexed,
             lastPublishedDate,
             lastPublishedBy);
         this.text = text;
         this.data = data;
+        this.rewriteLinks = rewriteLinks;
+        this.maintainAbsoluteLinks = maintainAbsoluteLinks;
     }
 
 
@@ -101,6 +111,46 @@ public class File  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
         this.data = data;
     }
 
+
+    /**
+     * Gets the rewriteLinks value for this File.
+     * 
+     * @return rewriteLinks
+     */
+    public java.lang.Boolean getRewriteLinks() {
+        return rewriteLinks;
+    }
+
+
+    /**
+     * Sets the rewriteLinks value for this File.
+     * 
+     * @param rewriteLinks
+     */
+    public void setRewriteLinks(java.lang.Boolean rewriteLinks) {
+        this.rewriteLinks = rewriteLinks;
+    }
+
+
+    /**
+     * Gets the maintainAbsoluteLinks value for this File.
+     * 
+     * @return maintainAbsoluteLinks
+     */
+    public java.lang.Boolean getMaintainAbsoluteLinks() {
+        return maintainAbsoluteLinks;
+    }
+
+
+    /**
+     * Sets the maintainAbsoluteLinks value for this File.
+     * 
+     * @param maintainAbsoluteLinks
+     */
+    public void setMaintainAbsoluteLinks(java.lang.Boolean maintainAbsoluteLinks) {
+        this.maintainAbsoluteLinks = maintainAbsoluteLinks;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof File)) return false;
@@ -118,7 +168,13 @@ public class File  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
               this.text.equals(other.getText()))) &&
             ((this.data==null && other.getData()==null) || 
              (this.data!=null &&
-              java.util.Arrays.equals(this.data, other.getData())));
+              java.util.Arrays.equals(this.data, other.getData()))) &&
+            ((this.rewriteLinks==null && other.getRewriteLinks()==null) || 
+             (this.rewriteLinks!=null &&
+              this.rewriteLinks.equals(other.getRewriteLinks()))) &&
+            ((this.maintainAbsoluteLinks==null && other.getMaintainAbsoluteLinks()==null) || 
+             (this.maintainAbsoluteLinks!=null &&
+              this.maintainAbsoluteLinks.equals(other.getMaintainAbsoluteLinks())));
         __equalsCalc = null;
         return _equals;
     }
@@ -144,6 +200,12 @@ public class File  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
                 }
             }
         }
+        if (getRewriteLinks() != null) {
+            _hashCode += getRewriteLinks().hashCode();
+        }
+        if (getMaintainAbsoluteLinks() != null) {
+            _hashCode += getMaintainAbsoluteLinks().hashCode();
+        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -165,6 +227,20 @@ public class File  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
         elemField.setFieldName("data");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "data"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "base64Binary"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("rewriteLinks");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "rewriteLinks"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("maintainAbsoluteLinks");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "maintainAbsoluteLinks"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

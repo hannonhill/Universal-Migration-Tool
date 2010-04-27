@@ -34,6 +34,8 @@ public class StructuredDataNode  implements java.io.Serializable {
 
     private java.lang.String symlinkPath;
 
+    private java.lang.Boolean recycled;
+
     public StructuredDataNode() {
     }
 
@@ -50,7 +52,8 @@ public class StructuredDataNode  implements java.io.Serializable {
            java.lang.String pageId,
            java.lang.String pagePath,
            java.lang.String symlinkId,
-           java.lang.String symlinkPath) {
+           java.lang.String symlinkPath,
+           java.lang.Boolean recycled) {
            this.type = type;
            this.identifier = identifier;
            this.structuredDataNodes = structuredDataNodes;
@@ -64,6 +67,7 @@ public class StructuredDataNode  implements java.io.Serializable {
            this.pagePath = pagePath;
            this.symlinkId = symlinkId;
            this.symlinkPath = symlinkPath;
+           this.recycled = recycled;
     }
 
 
@@ -326,6 +330,26 @@ public class StructuredDataNode  implements java.io.Serializable {
         this.symlinkPath = symlinkPath;
     }
 
+
+    /**
+     * Gets the recycled value for this StructuredDataNode.
+     * 
+     * @return recycled
+     */
+    public java.lang.Boolean getRecycled() {
+        return recycled;
+    }
+
+
+    /**
+     * Sets the recycled value for this StructuredDataNode.
+     * 
+     * @param recycled
+     */
+    public void setRecycled(java.lang.Boolean recycled) {
+        this.recycled = recycled;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof StructuredDataNode)) return false;
@@ -376,7 +400,10 @@ public class StructuredDataNode  implements java.io.Serializable {
               this.symlinkId.equals(other.getSymlinkId()))) &&
             ((this.symlinkPath==null && other.getSymlinkPath()==null) || 
              (this.symlinkPath!=null &&
-              this.symlinkPath.equals(other.getSymlinkPath())));
+              this.symlinkPath.equals(other.getSymlinkPath()))) &&
+            ((this.recycled==null && other.getRecycled()==null) || 
+             (this.recycled!=null &&
+              this.recycled.equals(other.getRecycled())));
         __equalsCalc = null;
         return _equals;
     }
@@ -434,6 +461,9 @@ public class StructuredDataNode  implements java.io.Serializable {
         }
         if (getSymlinkPath() != null) {
             _hashCode += getSymlinkPath().hashCode();
+        }
+        if (getRecycled() != null) {
+            _hashCode += getRecycled().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -532,6 +562,13 @@ public class StructuredDataNode  implements java.io.Serializable {
         elemField.setFieldName("symlinkPath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "symlinkPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("recycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

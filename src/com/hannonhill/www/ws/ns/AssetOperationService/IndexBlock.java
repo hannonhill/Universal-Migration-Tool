@@ -18,6 +18,8 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
     private java.lang.String indexedContentTypePath;
 
+    private java.lang.Boolean indexedFolderRecycled;
+
     private org.apache.axis.types.NonNegativeInteger maxRenderedAssets;
 
     private org.apache.axis.types.NonNegativeInteger depthOfIndex;
@@ -75,11 +77,13 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.String metadataSetPath,
            java.lang.String expirationFolderId,
            java.lang.String expirationFolderPath,
+           java.lang.Boolean expirationFolderRecycled,
            com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockType indexBlockType,
            java.lang.String indexedFolderId,
            java.lang.String indexedFolderPath,
            java.lang.String indexedContentTypeId,
            java.lang.String indexedContentTypePath,
+           java.lang.Boolean indexedFolderRecycled,
            org.apache.axis.types.NonNegativeInteger maxRenderedAssets,
            org.apache.axis.types.NonNegativeInteger depthOfIndex,
            java.lang.Boolean includePageContent,
@@ -114,12 +118,14 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
             metadataSetId,
             metadataSetPath,
             expirationFolderId,
-            expirationFolderPath);
+            expirationFolderPath,
+            expirationFolderRecycled);
         this.indexBlockType = indexBlockType;
         this.indexedFolderId = indexedFolderId;
         this.indexedFolderPath = indexedFolderPath;
         this.indexedContentTypeId = indexedContentTypeId;
         this.indexedContentTypePath = indexedContentTypePath;
+        this.indexedFolderRecycled = indexedFolderRecycled;
         this.maxRenderedAssets = maxRenderedAssets;
         this.depthOfIndex = depthOfIndex;
         this.includePageContent = includePageContent;
@@ -239,6 +245,26 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
      */
     public void setIndexedContentTypePath(java.lang.String indexedContentTypePath) {
         this.indexedContentTypePath = indexedContentTypePath;
+    }
+
+
+    /**
+     * Gets the indexedFolderRecycled value for this IndexBlock.
+     * 
+     * @return indexedFolderRecycled
+     */
+    public java.lang.Boolean getIndexedFolderRecycled() {
+        return indexedFolderRecycled;
+    }
+
+
+    /**
+     * Sets the indexedFolderRecycled value for this IndexBlock.
+     * 
+     * @param indexedFolderRecycled
+     */
+    public void setIndexedFolderRecycled(java.lang.Boolean indexedFolderRecycled) {
+        this.indexedFolderRecycled = indexedFolderRecycled;
     }
 
 
@@ -648,6 +674,9 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
             ((this.indexedContentTypePath==null && other.getIndexedContentTypePath()==null) || 
              (this.indexedContentTypePath!=null &&
               this.indexedContentTypePath.equals(other.getIndexedContentTypePath()))) &&
+            ((this.indexedFolderRecycled==null && other.getIndexedFolderRecycled()==null) || 
+             (this.indexedFolderRecycled!=null &&
+              this.indexedFolderRecycled.equals(other.getIndexedFolderRecycled()))) &&
             ((this.maxRenderedAssets==null && other.getMaxRenderedAssets()==null) || 
              (this.maxRenderedAssets!=null &&
               this.maxRenderedAssets.equals(other.getMaxRenderedAssets()))) &&
@@ -730,6 +759,9 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         }
         if (getIndexedContentTypePath() != null) {
             _hashCode += getIndexedContentTypePath().hashCode();
+        }
+        if (getIndexedFolderRecycled() != null) {
+            _hashCode += getIndexedFolderRecycled().hashCode();
         }
         if (getMaxRenderedAssets() != null) {
             _hashCode += getMaxRenderedAssets().hashCode();
@@ -830,6 +862,13 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         elemField.setFieldName("indexedContentTypePath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "indexedContentTypePath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("indexedFolderRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "indexedFolderRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
