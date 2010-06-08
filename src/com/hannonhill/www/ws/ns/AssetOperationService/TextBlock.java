@@ -29,6 +29,7 @@ public class TextBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.B
            java.lang.String metadataSetPath,
            java.lang.String expirationFolderId,
            java.lang.String expirationFolderPath,
+           java.lang.Boolean expirationFolderRecycled,
            java.lang.String text) {
         super(
             id,
@@ -45,7 +46,8 @@ public class TextBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.B
             metadataSetId,
             metadataSetPath,
             expirationFolderId,
-            expirationFolderPath);
+            expirationFolderPath,
+            expirationFolderRecycled);
         this.text = text;
     }
 

@@ -26,6 +26,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Authentication;
 import com.hannonhill.www.ws.ns.AssetOperationService.ContentType;
 import com.hannonhill.www.ws.ns.AssetOperationService.ContentTypeContainer;
 import com.hannonhill.www.ws.ns.AssetOperationService.CreateResult;
+import com.hannonhill.www.ws.ns.AssetOperationService.DataDefinition;
 import com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinition;
 import com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString;
 import com.hannonhill.www.ws.ns.AssetOperationService.File;
@@ -38,7 +39,6 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Page;
 import com.hannonhill.www.ws.ns.AssetOperationService.Path;
 import com.hannonhill.www.ws.ns.AssetOperationService.ReadResult;
 import com.hannonhill.www.ws.ns.AssetOperationService.Site;
-import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinition;
 
 /**
  * This class contains service methods for web services
@@ -161,16 +161,16 @@ public class WebServices
         Authentication authentication = getAuthentication(projectInformation);
 
         // Check if data definition is assigned. If it isn't, return null (we will just create the XHTML field).
-        String dataDefinitionId = contentType.getStructuredDataDefinitionId();
+        String dataDefinitionId = contentType.getDataDefinitionId();
         if (dataDefinitionId == null)
             return null;
 
-        Identifier identifier = new Identifier(dataDefinitionId, null, EntityTypeString.structureddatadefinition, false);
+        Identifier identifier = new Identifier(dataDefinitionId, null, EntityTypeString.datadefinition, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true"))
             throw new Exception("Error occured when reading a Data Definition with id '" + dataDefinitionId + "': " + readResult.getMessage());
 
-        StructuredDataDefinition dataDefinition = readResult.getAsset().getStructuredDataDefinition();
+        DataDefinition dataDefinition = readResult.getAsset().getDataDefinition();
         return XmlAnalyzer.analyzeDataDefinitionXml(dataDefinition.getXml());
     }
 

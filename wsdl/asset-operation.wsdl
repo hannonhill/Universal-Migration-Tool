@@ -1135,7 +1135,7 @@
 
 				     <enumeration value="block_TEXT"/>
 
-				     <enumeration value="block_XHTML_STRUCTUREDDATA"/>
+				     <enumeration value="block_XHTML_DATADEFINITION"/>
 
 				     <enumeration value="block_XML"/>
 
@@ -1181,9 +1181,9 @@
 
 				     <enumeration value="role"/>
 
-				     <enumeration value="structureddatadefinition"/>
+				     <enumeration value="datadefinition"/>
 
-				     <enumeration value="structureddatadefinitioncontainer"/>
+				     <enumeration value="datadefinitioncontainer"/>
 
 				     <enumeration value="format"/>
 
@@ -2003,10 +2003,6 @@
 
 				<!-- NOT REQUIRED - default false -->
 
-				     <element maxOccurs="1" minOccurs="0" name="globalAdmin" type="xsd:boolean"/>
-
-				<!-- NOT REQUIRED - default false -->
-
 				     <element maxOccurs="1" minOccurs="0" name="bypassAllPermissionsChecks" type="xsd:boolean"/>
 
 				<!-- NOT REQUIRED - default false -->
@@ -2047,7 +2043,7 @@
 
 				<!-- NOT REQUIRED - default false -->
 
-				     <element maxOccurs="1" minOccurs="0" name="editStructuredDataDefinition" type="xsd:boolean"/>
+				     <element maxOccurs="1" minOccurs="0" name="editDataDefinition" type="xsd:boolean"/>
 
 				<!-- NOT REQUIRED - default false -->
 
@@ -2316,7 +2312,6 @@
 				<!-- NOT REQUIRED - default false -->
 
 				     <element maxOccurs="1" minOccurs="0" name="moveRenameAssets" type="xsd:boolean"/>
-
 				
 			    </sequence>
 
@@ -2363,7 +2358,7 @@
 
 				<!-- NOT REQUIRED - default false -->
 
-				     <element maxOccurs="1" minOccurs="0" name="editStructuredDataDefinition" type="xsd:boolean"/>
+				     <element maxOccurs="1" minOccurs="0" name="editDataDefinition" type="xsd:boolean"/>
 
 				<!-- NOT REQUIRED - default false -->
 
@@ -2622,6 +2617,7 @@
 
 					<!-- When editing and selected asset is recycled, it is recommended to preserve this relationship by providing selected asset's id
 						 in case if the selected asset gets restored from the recycle bin. -->
+
 				
 					      <element maxOccurs="1" minOccurs="0" name="groupStartingPageId" type="xsd:string"/>
 
@@ -2665,7 +2661,6 @@
 					 This asset factory container will determine which asset factories
 					 show on that user's dashboard under the "My New Content Wizards" section.
 					 NOT REQUIRED default: none -->
-
 					 
 				     <choice>
 
@@ -2849,7 +2844,6 @@
 						<!-- REQUIRED The recycle bin expiration time -->
 
 						       <element maxOccurs="1" minOccurs="1" name="recycleBinExpiration" type="impl:recycleBinExpiration"/>
-
  
 						
 						<!-- The root folder id and containers idds - used only when reading a site. Unused in other cases
@@ -2865,7 +2859,7 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="rootConnectorContainerId" nillable="true" type="xsd:string"/>
 
-						       <element maxOccurs="1" minOccurs="0" name="rootStructuredDataDefinitionContainerId" nillable="true" type="xsd:string"/>
+						       <element maxOccurs="1" minOccurs="0" name="rootDataDefinitionContainerId" nillable="true" type="xsd:string"/>
 
 						       <element maxOccurs="1" minOccurs="0" name="rootMetadataSetContainerId" nillable="true" type="xsd:string"/>
 
@@ -3177,9 +3171,9 @@
 
 						       <choice>
 
-							        <element maxOccurs="1" minOccurs="0" name="structuredDataDefinitionId" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="dataDefinitionId" type="xsd:string"/>
 
-							        <element maxOccurs="1" minOccurs="0" name="structuredDataDefinitionPath" type="xsd:string"/>
+							        <element maxOccurs="1" minOccurs="0" name="dataDefinitionPath" type="xsd:string"/>
 
 						       </choice>
 
@@ -3445,7 +3439,7 @@
 		   </complexType>
 
 		
-		   <complexType name="structuredDataDefinition">
+		   <complexType name="dataDefinition">
 
 			    <complexContent>
 
@@ -3467,7 +3461,7 @@
 		   </complexType>
 
 		
-		   <complexType name="structuredDataDefinitionContainer">
+		   <complexType name="dataDefinitionContainer">
 
 			    <complexContent>
 
@@ -3845,6 +3839,7 @@
 			    </complexContent>
 
 		   </complexType>
+
 					
 		
 		   <complexType name="target">
@@ -4232,7 +4227,6 @@
 					      </sequence>
 
 				     </extension>
-
 		
 			    </complexContent>
 
@@ -5026,7 +5020,7 @@
 		
 		<!-- A block containing plain XHTML or Structured Data-->
 
-		   <complexType name="xhtmlStructuredDataBlock">
+		   <complexType name="xhtmlDataDefinitionBlock">
 
 			    <complexContent>
 
@@ -5093,7 +5087,6 @@
 			    </complexContent>
 
 		   </complexType>
-
 		
 		
 		<!-- BEGIN Page and associated structured data types -->
@@ -5156,7 +5149,7 @@
 
 			    <sequence>
 
-				<!-- For defining a page's structured data definition relationship
+				<!-- For defining a page's Data Definition relationship
 					 REQUIRED -->
 
 				     <choice>
@@ -5431,9 +5424,10 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="textBlock" nillable="true" type="impl:textBlock"/>
 
-					      <element maxOccurs="1" minOccurs="1" name="xhtmlStructuredDataBlock" nillable="true" type="impl:xhtmlStructuredDataBlock"/>
+					      <element maxOccurs="1" minOccurs="1" name="xhtmlDataDefinitionBlock" nillable="true" type="impl:xhtmlDataDefinitionBlock"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="xmlBlock" nillable="true" type="impl:xmlBlock"/>
+
 					
 					      <element maxOccurs="1" minOccurs="1" name="file" nillable="true" type="impl:file"/>
 
@@ -5459,6 +5453,7 @@
 					      <element maxOccurs="1" minOccurs="1" name="group" nillable="true" type="impl:group"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="role" nillable="true" type="impl:role"/>
+
 					
 					      <element maxOccurs="1" minOccurs="1" name="assetFactory" nillable="true" type="impl:assetFactory"/>
 
@@ -5478,9 +5473,9 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="pageConfigurationSetContainer" nillable="true" type="impl:pageConfigurationSetContainer"/>
 
-					      <element maxOccurs="1" minOccurs="1" name="structuredDataDefinition" nillable="true" type="impl:structuredDataDefinition"/>
+					      <element maxOccurs="1" minOccurs="1" name="dataDefinition" nillable="true" type="impl:dataDefinition"/>
 
-					      <element maxOccurs="1" minOccurs="1" name="structuredDataDefinitionContainer" nillable="true" type="impl:structuredDataDefinitionContainer"/>
+					      <element maxOccurs="1" minOccurs="1" name="dataDefinitionContainer" nillable="true" type="impl:dataDefinitionContainer"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="metadataSet" nillable="true" type="impl:metadataSet"/>
 
@@ -5846,7 +5841,6 @@
 
 	
     <wsdl:message name="readRequest">
-
 	   
 	     <wsdl:part element="impl:read" name="parameters"/>
 	   
@@ -5863,10 +5857,8 @@
     <wsdl:message name="searchRequest">
 
 	     <wsdl:part element="impl:search" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="searchResponse">
 
@@ -5878,10 +5870,8 @@
     <wsdl:message name="readAccessRightsRequest">
 
 	     <wsdl:part element="impl:readAccessRights" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="readAccessRightsResponse">
 
@@ -5893,10 +5883,8 @@
     <wsdl:message name="editAccessRightsRequest">
 
 	     <wsdl:part element="impl:editAccessRights" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="editAccessRightsResponse">
 
@@ -5908,10 +5896,8 @@
     <wsdl:message name="listMessagesRequest">
 
 	     <wsdl:part element="impl:listMessages" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="listMessagesResponse">
 
@@ -5923,10 +5909,8 @@
     <wsdl:message name="markMessageRequest">
 
 	     <wsdl:part element="impl:markMessage" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="markMessageResponse">
 
@@ -5938,10 +5922,8 @@
     <wsdl:message name="deleteMessageRequest">
 
 	     <wsdl:part element="impl:deleteMessage" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="deleteMessageResponse">
 
@@ -5953,10 +5935,8 @@
     <wsdl:message name="sendMessageRequest">
 
 	     <wsdl:part element="impl:sendMessage" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="sendMessageResponse">
 
@@ -5968,10 +5948,8 @@
     <wsdl:message name="checkOutRequest">
 
 	     <wsdl:part element="impl:checkOut" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="checkOutResponse">
 
@@ -5983,10 +5961,8 @@
     <wsdl:message name="checkInRequest">
 
 	     <wsdl:part element="impl:checkIn" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="checkInResponse">
 
@@ -5998,10 +5974,8 @@
     <wsdl:message name="copyRequest">
 
 	     <wsdl:part element="impl:copy" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="copyResponse">
 
@@ -6013,10 +5987,8 @@
     <wsdl:message name="moveRequest">
 
 	     <wsdl:part element="impl:move" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="moveResponse">
 
@@ -6028,10 +6000,8 @@
     <wsdl:message name="readWorkflowInformationRequest">
 
 	     <wsdl:part element="impl:readWorkflowInformation" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="readWorkflowInformationResponse">
 
@@ -6043,10 +6013,8 @@
     <wsdl:message name="readAuditsRequest">
 
 	     <wsdl:part element="impl:readAudits" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="readAuditsResponse">
 
@@ -6058,10 +6026,8 @@
     <wsdl:message name="performWorkflowTransitionRequest">
 
 	     <wsdl:part element="impl:performWorkflowTransition" name="parameters"/>
-
    
     </wsdl:message>
-
 
     <wsdl:message name="performWorkflowTransitionResponse">
 

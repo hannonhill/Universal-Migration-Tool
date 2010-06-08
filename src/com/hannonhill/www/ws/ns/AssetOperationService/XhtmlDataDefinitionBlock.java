@@ -1,5 +1,5 @@
 /**
- * XhtmlStructuredDataBlock.java
+ * XhtmlDataDefinitionBlock.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 12, 2007 (02:39:05 EDT) WSDL2Java emitter.
@@ -7,15 +7,15 @@
 
 package com.hannonhill.www.ws.ns.AssetOperationService;
 
-public class XhtmlStructuredDataBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.Block  implements java.io.Serializable {
+public class XhtmlDataDefinitionBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.Block  implements java.io.Serializable {
     private com.hannonhill.www.ws.ns.AssetOperationService.StructuredData structuredData;
 
     private java.lang.String xhtml;
 
-    public XhtmlStructuredDataBlock() {
+    public XhtmlDataDefinitionBlock() {
     }
 
-    public XhtmlStructuredDataBlock(
+    public XhtmlDataDefinitionBlock(
            java.lang.String id,
            com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
@@ -57,7 +57,7 @@ public class XhtmlStructuredDataBlock  extends com.hannonhill.www.ws.ns.AssetOpe
 
 
     /**
-     * Gets the structuredData value for this XhtmlStructuredDataBlock.
+     * Gets the structuredData value for this XhtmlDataDefinitionBlock.
      * 
      * @return structuredData
      */
@@ -67,7 +67,7 @@ public class XhtmlStructuredDataBlock  extends com.hannonhill.www.ws.ns.AssetOpe
 
 
     /**
-     * Sets the structuredData value for this XhtmlStructuredDataBlock.
+     * Sets the structuredData value for this XhtmlDataDefinitionBlock.
      * 
      * @param structuredData
      */
@@ -77,7 +77,7 @@ public class XhtmlStructuredDataBlock  extends com.hannonhill.www.ws.ns.AssetOpe
 
 
     /**
-     * Gets the xhtml value for this XhtmlStructuredDataBlock.
+     * Gets the xhtml value for this XhtmlDataDefinitionBlock.
      * 
      * @return xhtml
      */
@@ -87,7 +87,7 @@ public class XhtmlStructuredDataBlock  extends com.hannonhill.www.ws.ns.AssetOpe
 
 
     /**
-     * Sets the xhtml value for this XhtmlStructuredDataBlock.
+     * Sets the xhtml value for this XhtmlDataDefinitionBlock.
      * 
      * @param xhtml
      */
@@ -97,8 +97,8 @@ public class XhtmlStructuredDataBlock  extends com.hannonhill.www.ws.ns.AssetOpe
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof XhtmlStructuredDataBlock)) return false;
-        XhtmlStructuredDataBlock other = (XhtmlStructuredDataBlock) obj;
+        if (!(obj instanceof XhtmlDataDefinitionBlock)) return false;
+        XhtmlDataDefinitionBlock other = (XhtmlDataDefinitionBlock) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -136,10 +136,10 @@ public class XhtmlStructuredDataBlock  extends com.hannonhill.www.ws.ns.AssetOpe
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(XhtmlStructuredDataBlock.class, true);
+        new org.apache.axis.description.TypeDesc(XhtmlDataDefinitionBlock.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlStructuredDataBlock"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlDataDefinitionBlock"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("structuredData");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "structuredData"));

@@ -16,9 +16,9 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     private java.lang.String metadataSetPath;
 
-    private java.lang.String structuredDataDefinitionId;
+    private java.lang.String dataDefinitionId;
 
-    private java.lang.String structuredDataDefinitionPath;
+    private java.lang.String dataDefinitionPath;
 
     public ContentType() {
     }
@@ -36,8 +36,8 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
            java.lang.String pageConfigurationSetPath,
            java.lang.String metadataSetId,
            java.lang.String metadataSetPath,
-           java.lang.String structuredDataDefinitionId,
-           java.lang.String structuredDataDefinitionPath) {
+           java.lang.String dataDefinitionId,
+           java.lang.String dataDefinitionPath) {
         super(
             id,
             entityType,
@@ -51,8 +51,8 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.pageConfigurationSetPath = pageConfigurationSetPath;
         this.metadataSetId = metadataSetId;
         this.metadataSetPath = metadataSetPath;
-        this.structuredDataDefinitionId = structuredDataDefinitionId;
-        this.structuredDataDefinitionPath = structuredDataDefinitionPath;
+        this.dataDefinitionId = dataDefinitionId;
+        this.dataDefinitionPath = dataDefinitionPath;
     }
 
 
@@ -137,42 +137,42 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
 
 
     /**
-     * Gets the structuredDataDefinitionId value for this ContentType.
+     * Gets the dataDefinitionId value for this ContentType.
      * 
-     * @return structuredDataDefinitionId
+     * @return dataDefinitionId
      */
-    public java.lang.String getStructuredDataDefinitionId() {
-        return structuredDataDefinitionId;
+    public java.lang.String getDataDefinitionId() {
+        return dataDefinitionId;
     }
 
 
     /**
-     * Sets the structuredDataDefinitionId value for this ContentType.
+     * Sets the dataDefinitionId value for this ContentType.
      * 
-     * @param structuredDataDefinitionId
+     * @param dataDefinitionId
      */
-    public void setStructuredDataDefinitionId(java.lang.String structuredDataDefinitionId) {
-        this.structuredDataDefinitionId = structuredDataDefinitionId;
+    public void setDataDefinitionId(java.lang.String dataDefinitionId) {
+        this.dataDefinitionId = dataDefinitionId;
     }
 
 
     /**
-     * Gets the structuredDataDefinitionPath value for this ContentType.
+     * Gets the dataDefinitionPath value for this ContentType.
      * 
-     * @return structuredDataDefinitionPath
+     * @return dataDefinitionPath
      */
-    public java.lang.String getStructuredDataDefinitionPath() {
-        return structuredDataDefinitionPath;
+    public java.lang.String getDataDefinitionPath() {
+        return dataDefinitionPath;
     }
 
 
     /**
-     * Sets the structuredDataDefinitionPath value for this ContentType.
+     * Sets the dataDefinitionPath value for this ContentType.
      * 
-     * @param structuredDataDefinitionPath
+     * @param dataDefinitionPath
      */
-    public void setStructuredDataDefinitionPath(java.lang.String structuredDataDefinitionPath) {
-        this.structuredDataDefinitionPath = structuredDataDefinitionPath;
+    public void setDataDefinitionPath(java.lang.String dataDefinitionPath) {
+        this.dataDefinitionPath = dataDefinitionPath;
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -199,12 +199,12 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
             ((this.metadataSetPath==null && other.getMetadataSetPath()==null) || 
              (this.metadataSetPath!=null &&
               this.metadataSetPath.equals(other.getMetadataSetPath()))) &&
-            ((this.structuredDataDefinitionId==null && other.getStructuredDataDefinitionId()==null) || 
-             (this.structuredDataDefinitionId!=null &&
-              this.structuredDataDefinitionId.equals(other.getStructuredDataDefinitionId()))) &&
-            ((this.structuredDataDefinitionPath==null && other.getStructuredDataDefinitionPath()==null) || 
-             (this.structuredDataDefinitionPath!=null &&
-              this.structuredDataDefinitionPath.equals(other.getStructuredDataDefinitionPath())));
+            ((this.dataDefinitionId==null && other.getDataDefinitionId()==null) || 
+             (this.dataDefinitionId!=null &&
+              this.dataDefinitionId.equals(other.getDataDefinitionId()))) &&
+            ((this.dataDefinitionPath==null && other.getDataDefinitionPath()==null) || 
+             (this.dataDefinitionPath!=null &&
+              this.dataDefinitionPath.equals(other.getDataDefinitionPath())));
         __equalsCalc = null;
         return _equals;
     }
@@ -228,11 +228,11 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         if (getMetadataSetPath() != null) {
             _hashCode += getMetadataSetPath().hashCode();
         }
-        if (getStructuredDataDefinitionId() != null) {
-            _hashCode += getStructuredDataDefinitionId().hashCode();
+        if (getDataDefinitionId() != null) {
+            _hashCode += getDataDefinitionId().hashCode();
         }
-        if (getStructuredDataDefinitionPath() != null) {
-            _hashCode += getStructuredDataDefinitionPath().hashCode();
+        if (getDataDefinitionPath() != null) {
+            _hashCode += getDataDefinitionPath().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -273,15 +273,15 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("structuredDataDefinitionId");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "structuredDataDefinitionId"));
+        elemField.setFieldName("dataDefinitionId");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dataDefinitionId"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("structuredDataDefinitionPath");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "structuredDataDefinitionPath"));
+        elemField.setFieldName("dataDefinitionPath");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dataDefinitionPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

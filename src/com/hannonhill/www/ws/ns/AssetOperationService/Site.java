@@ -54,7 +54,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     private java.lang.String rootConnectorContainerId;
 
-    private java.lang.String rootStructuredDataDefinitionContainerId;
+    private java.lang.String rootDataDefinitionContainerId;
 
     private java.lang.String rootMetadataSetContainerId;
 
@@ -96,7 +96,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            java.lang.String rootPageConfigurationSetContainerId,
            java.lang.String rootContentTypeContainerId,
            java.lang.String rootConnectorContainerId,
-           java.lang.String rootStructuredDataDefinitionContainerId,
+           java.lang.String rootDataDefinitionContainerId,
            java.lang.String rootMetadataSetContainerId,
            java.lang.String rootPublishSetContainerId,
            java.lang.String rootSiteDestinationContainerId,
@@ -129,7 +129,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         this.rootPageConfigurationSetContainerId = rootPageConfigurationSetContainerId;
         this.rootContentTypeContainerId = rootContentTypeContainerId;
         this.rootConnectorContainerId = rootConnectorContainerId;
-        this.rootStructuredDataDefinitionContainerId = rootStructuredDataDefinitionContainerId;
+        this.rootDataDefinitionContainerId = rootDataDefinitionContainerId;
         this.rootMetadataSetContainerId = rootMetadataSetContainerId;
         this.rootPublishSetContainerId = rootPublishSetContainerId;
         this.rootSiteDestinationContainerId = rootSiteDestinationContainerId;
@@ -599,22 +599,22 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
 
     /**
-     * Gets the rootStructuredDataDefinitionContainerId value for this Site.
+     * Gets the rootDataDefinitionContainerId value for this Site.
      * 
-     * @return rootStructuredDataDefinitionContainerId
+     * @return rootDataDefinitionContainerId
      */
-    public java.lang.String getRootStructuredDataDefinitionContainerId() {
-        return rootStructuredDataDefinitionContainerId;
+    public java.lang.String getRootDataDefinitionContainerId() {
+        return rootDataDefinitionContainerId;
     }
 
 
     /**
-     * Sets the rootStructuredDataDefinitionContainerId value for this Site.
+     * Sets the rootDataDefinitionContainerId value for this Site.
      * 
-     * @param rootStructuredDataDefinitionContainerId
+     * @param rootDataDefinitionContainerId
      */
-    public void setRootStructuredDataDefinitionContainerId(java.lang.String rootStructuredDataDefinitionContainerId) {
-        this.rootStructuredDataDefinitionContainerId = rootStructuredDataDefinitionContainerId;
+    public void setRootDataDefinitionContainerId(java.lang.String rootDataDefinitionContainerId) {
+        this.rootDataDefinitionContainerId = rootDataDefinitionContainerId;
     }
 
 
@@ -798,9 +798,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.rootConnectorContainerId==null && other.getRootConnectorContainerId()==null) || 
              (this.rootConnectorContainerId!=null &&
               this.rootConnectorContainerId.equals(other.getRootConnectorContainerId()))) &&
-            ((this.rootStructuredDataDefinitionContainerId==null && other.getRootStructuredDataDefinitionContainerId()==null) || 
-             (this.rootStructuredDataDefinitionContainerId!=null &&
-              this.rootStructuredDataDefinitionContainerId.equals(other.getRootStructuredDataDefinitionContainerId()))) &&
+            ((this.rootDataDefinitionContainerId==null && other.getRootDataDefinitionContainerId()==null) || 
+             (this.rootDataDefinitionContainerId!=null &&
+              this.rootDataDefinitionContainerId.equals(other.getRootDataDefinitionContainerId()))) &&
             ((this.rootMetadataSetContainerId==null && other.getRootMetadataSetContainerId()==null) || 
              (this.rootMetadataSetContainerId!=null &&
               this.rootMetadataSetContainerId.equals(other.getRootMetadataSetContainerId()))) &&
@@ -904,8 +904,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         if (getRootConnectorContainerId() != null) {
             _hashCode += getRootConnectorContainerId().hashCode();
         }
-        if (getRootStructuredDataDefinitionContainerId() != null) {
-            _hashCode += getRootStructuredDataDefinitionContainerId().hashCode();
+        if (getRootDataDefinitionContainerId() != null) {
+            _hashCode += getRootDataDefinitionContainerId().hashCode();
         }
         if (getRootMetadataSetContainerId() != null) {
             _hashCode += getRootMetadataSetContainerId().hashCode();
@@ -1093,8 +1093,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("rootStructuredDataDefinitionContainerId");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "rootStructuredDataDefinitionContainerId"));
+        elemField.setFieldName("rootDataDefinitionContainerId");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "rootDataDefinitionContainerId"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);

@@ -24,7 +24,7 @@ public class SiteAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean editPageContentType;
 
-    private java.lang.Boolean editStructuredDataDefinition;
+    private java.lang.Boolean editDataDefinition;
 
     private java.lang.Boolean publishReadableHomeAssets;
 
@@ -106,7 +106,7 @@ public class SiteAbilities  implements java.io.Serializable {
            java.lang.Boolean multiSelectDelete,
            java.lang.Boolean editPageLevelConfigurations,
            java.lang.Boolean editPageContentType,
-           java.lang.Boolean editStructuredDataDefinition,
+           java.lang.Boolean editDataDefinition,
            java.lang.Boolean publishReadableHomeAssets,
            java.lang.Boolean publishWritableHomeAssets,
            java.lang.Boolean editAccessRights,
@@ -149,7 +149,7 @@ public class SiteAbilities  implements java.io.Serializable {
            this.multiSelectDelete = multiSelectDelete;
            this.editPageLevelConfigurations = editPageLevelConfigurations;
            this.editPageContentType = editPageContentType;
-           this.editStructuredDataDefinition = editStructuredDataDefinition;
+           this.editDataDefinition = editDataDefinition;
            this.publishReadableHomeAssets = publishReadableHomeAssets;
            this.publishWritableHomeAssets = publishWritableHomeAssets;
            this.editAccessRights = editAccessRights;
@@ -348,22 +348,22 @@ public class SiteAbilities  implements java.io.Serializable {
 
 
     /**
-     * Gets the editStructuredDataDefinition value for this SiteAbilities.
+     * Gets the editDataDefinition value for this SiteAbilities.
      * 
-     * @return editStructuredDataDefinition
+     * @return editDataDefinition
      */
-    public java.lang.Boolean getEditStructuredDataDefinition() {
-        return editStructuredDataDefinition;
+    public java.lang.Boolean getEditDataDefinition() {
+        return editDataDefinition;
     }
 
 
     /**
-     * Sets the editStructuredDataDefinition value for this SiteAbilities.
+     * Sets the editDataDefinition value for this SiteAbilities.
      * 
-     * @param editStructuredDataDefinition
+     * @param editDataDefinition
      */
-    public void setEditStructuredDataDefinition(java.lang.Boolean editStructuredDataDefinition) {
-        this.editStructuredDataDefinition = editStructuredDataDefinition;
+    public void setEditDataDefinition(java.lang.Boolean editDataDefinition) {
+        this.editDataDefinition = editDataDefinition;
     }
 
 
@@ -1082,9 +1082,9 @@ public class SiteAbilities  implements java.io.Serializable {
             ((this.editPageContentType==null && other.getEditPageContentType()==null) || 
              (this.editPageContentType!=null &&
               this.editPageContentType.equals(other.getEditPageContentType()))) &&
-            ((this.editStructuredDataDefinition==null && other.getEditStructuredDataDefinition()==null) || 
-             (this.editStructuredDataDefinition!=null &&
-              this.editStructuredDataDefinition.equals(other.getEditStructuredDataDefinition()))) &&
+            ((this.editDataDefinition==null && other.getEditDataDefinition()==null) || 
+             (this.editDataDefinition!=null &&
+              this.editDataDefinition.equals(other.getEditDataDefinition()))) &&
             ((this.publishReadableHomeAssets==null && other.getPublishReadableHomeAssets()==null) || 
              (this.publishReadableHomeAssets!=null &&
               this.publishReadableHomeAssets.equals(other.getPublishReadableHomeAssets()))) &&
@@ -1222,8 +1222,8 @@ public class SiteAbilities  implements java.io.Serializable {
         if (getEditPageContentType() != null) {
             _hashCode += getEditPageContentType().hashCode();
         }
-        if (getEditStructuredDataDefinition() != null) {
-            _hashCode += getEditStructuredDataDefinition().hashCode();
+        if (getEditDataDefinition() != null) {
+            _hashCode += getEditDataDefinition().hashCode();
         }
         if (getPublishReadableHomeAssets() != null) {
             _hashCode += getPublishReadableHomeAssets().hashCode();
@@ -1394,8 +1394,8 @@ public class SiteAbilities  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("editStructuredDataDefinition");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editStructuredDataDefinition"));
+        elemField.setFieldName("editDataDefinition");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editDataDefinition"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

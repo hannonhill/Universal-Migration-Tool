@@ -16,6 +16,8 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
 
     private java.lang.String formatPath;
 
+    private java.lang.Boolean formatRecycled;
+
     private java.lang.String xml;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.PageRegion[] pageRegions;
@@ -38,6 +40,7 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
            java.lang.String targetPath,
            java.lang.String formatId,
            java.lang.String formatPath,
+           java.lang.Boolean formatRecycled,
            java.lang.String xml,
            com.hannonhill.www.ws.ns.AssetOperationService.PageRegion[] pageRegions) {
         super(
@@ -55,6 +58,7 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
         this.targetPath = targetPath;
         this.formatId = formatId;
         this.formatPath = formatPath;
+        this.formatRecycled = formatRecycled;
         this.xml = xml;
         this.pageRegions = pageRegions;
     }
@@ -141,6 +145,26 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
 
 
     /**
+     * Gets the formatRecycled value for this Template.
+     * 
+     * @return formatRecycled
+     */
+    public java.lang.Boolean getFormatRecycled() {
+        return formatRecycled;
+    }
+
+
+    /**
+     * Sets the formatRecycled value for this Template.
+     * 
+     * @param formatRecycled
+     */
+    public void setFormatRecycled(java.lang.Boolean formatRecycled) {
+        this.formatRecycled = formatRecycled;
+    }
+
+
+    /**
      * Gets the xml value for this Template.
      * 
      * @return xml
@@ -203,6 +227,9 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
             ((this.formatPath==null && other.getFormatPath()==null) || 
              (this.formatPath!=null &&
               this.formatPath.equals(other.getFormatPath()))) &&
+            ((this.formatRecycled==null && other.getFormatRecycled()==null) || 
+             (this.formatRecycled!=null &&
+              this.formatRecycled.equals(other.getFormatRecycled()))) &&
             ((this.xml==null && other.getXml()==null) || 
              (this.xml!=null &&
               this.xml.equals(other.getXml()))) &&
@@ -231,6 +258,9 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
         }
         if (getFormatPath() != null) {
             _hashCode += getFormatPath().hashCode();
+        }
+        if (getFormatRecycled() != null) {
+            _hashCode += getFormatRecycled().hashCode();
         }
         if (getXml() != null) {
             _hashCode += getXml().hashCode();
@@ -281,6 +311,13 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
         elemField.setFieldName("formatPath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "formatPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("formatRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "formatRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

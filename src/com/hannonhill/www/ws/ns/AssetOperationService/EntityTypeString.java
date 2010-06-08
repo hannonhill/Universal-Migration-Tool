@@ -23,7 +23,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final java.lang.String _block_FEED = "block_FEED";
     public static final java.lang.String _block_INDEX = "block_INDEX";
     public static final java.lang.String _block_TEXT = "block_TEXT";
-    public static final java.lang.String _block_XHTML_STRUCTUREDDATA = "block_XHTML_STRUCTUREDDATA";
+    public static final java.lang.String _block_XHTML_DATADEFINITION = "block_XHTML_DATADEFINITION";
     public static final java.lang.String _block_XML = "block_XML";
     public static final java.lang.String _connectorcontainer = "connectorcontainer";
     public static final java.lang.String _twitterconnector = "twitterconnector";
@@ -46,8 +46,8 @@ public class EntityTypeString implements java.io.Serializable {
     public static final java.lang.String _publishsetcontainer = "publishsetcontainer";
     public static final java.lang.String _reference = "reference";
     public static final java.lang.String _role = "role";
-    public static final java.lang.String _structureddatadefinition = "structureddatadefinition";
-    public static final java.lang.String _structureddatadefinitioncontainer = "structureddatadefinitioncontainer";
+    public static final java.lang.String _datadefinition = "datadefinition";
+    public static final java.lang.String _datadefinitioncontainer = "datadefinitioncontainer";
     public static final java.lang.String _format = "format";
     public static final java.lang.String _format_XSLT = "format_XSLT";
     public static final java.lang.String _format_SCRIPT = "format_SCRIPT";
@@ -67,7 +67,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final EntityTypeString block_FEED = new EntityTypeString(_block_FEED);
     public static final EntityTypeString block_INDEX = new EntityTypeString(_block_INDEX);
     public static final EntityTypeString block_TEXT = new EntityTypeString(_block_TEXT);
-    public static final EntityTypeString block_XHTML_STRUCTUREDDATA = new EntityTypeString(_block_XHTML_STRUCTUREDDATA);
+    public static final EntityTypeString block_XHTML_DATADEFINITION = new EntityTypeString(_block_XHTML_DATADEFINITION);
     public static final EntityTypeString block_XML = new EntityTypeString(_block_XML);
     public static final EntityTypeString connectorcontainer = new EntityTypeString(_connectorcontainer);
     public static final EntityTypeString twitterconnector = new EntityTypeString(_twitterconnector);
@@ -90,8 +90,8 @@ public class EntityTypeString implements java.io.Serializable {
     public static final EntityTypeString publishsetcontainer = new EntityTypeString(_publishsetcontainer);
     public static final EntityTypeString reference = new EntityTypeString(_reference);
     public static final EntityTypeString role = new EntityTypeString(_role);
-    public static final EntityTypeString structureddatadefinition = new EntityTypeString(_structureddatadefinition);
-    public static final EntityTypeString structureddatadefinitioncontainer = new EntityTypeString(_structureddatadefinitioncontainer);
+    public static final EntityTypeString datadefinition = new EntityTypeString(_datadefinition);
+    public static final EntityTypeString datadefinitioncontainer = new EntityTypeString(_datadefinitioncontainer);
     public static final EntityTypeString format = new EntityTypeString(_format);
     public static final EntityTypeString format_XSLT = new EntityTypeString(_format_XSLT);
     public static final EntityTypeString format_SCRIPT = new EntityTypeString(_format_SCRIPT);

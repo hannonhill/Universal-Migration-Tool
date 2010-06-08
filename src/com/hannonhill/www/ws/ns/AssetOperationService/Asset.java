@@ -16,7 +16,7 @@ public class Asset  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.TextBlock textBlock;
 
-    private com.hannonhill.www.ws.ns.AssetOperationService.XhtmlStructuredDataBlock xhtmlStructuredDataBlock;
+    private com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock xhtmlDataDefinitionBlock;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.XmlBlock xmlBlock;
 
@@ -60,9 +60,9 @@ public class Asset  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSetContainer pageConfigurationSetContainer;
 
-    private com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinition structuredDataDefinition;
+    private com.hannonhill.www.ws.ns.AssetOperationService.DataDefinition dataDefinition;
 
-    private com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinitionContainer structuredDataDefinitionContainer;
+    private com.hannonhill.www.ws.ns.AssetOperationService.DataDefinitionContainer dataDefinitionContainer;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.MetadataSet metadataSet;
 
@@ -100,7 +100,7 @@ public class Asset  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.FeedBlock feedBlock,
            com.hannonhill.www.ws.ns.AssetOperationService.IndexBlock indexBlock,
            com.hannonhill.www.ws.ns.AssetOperationService.TextBlock textBlock,
-           com.hannonhill.www.ws.ns.AssetOperationService.XhtmlStructuredDataBlock xhtmlStructuredDataBlock,
+           com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock xhtmlDataDefinitionBlock,
            com.hannonhill.www.ws.ns.AssetOperationService.XmlBlock xmlBlock,
            com.hannonhill.www.ws.ns.AssetOperationService.File file,
            com.hannonhill.www.ws.ns.AssetOperationService.Folder folder,
@@ -122,8 +122,8 @@ public class Asset  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.WordPressConnector wordPressConnector,
            com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSet pageConfigurationSet,
            com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSetContainer pageConfigurationSetContainer,
-           com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinition structuredDataDefinition,
-           com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinitionContainer structuredDataDefinitionContainer,
+           com.hannonhill.www.ws.ns.AssetOperationService.DataDefinition dataDefinition,
+           com.hannonhill.www.ws.ns.AssetOperationService.DataDefinitionContainer dataDefinitionContainer,
            com.hannonhill.www.ws.ns.AssetOperationService.MetadataSet metadataSet,
            com.hannonhill.www.ws.ns.AssetOperationService.MetadataSetContainer metadataSetContainer,
            com.hannonhill.www.ws.ns.AssetOperationService.PublishSet publishSet,
@@ -142,7 +142,7 @@ public class Asset  implements java.io.Serializable {
            this.feedBlock = feedBlock;
            this.indexBlock = indexBlock;
            this.textBlock = textBlock;
-           this.xhtmlStructuredDataBlock = xhtmlStructuredDataBlock;
+           this.xhtmlDataDefinitionBlock = xhtmlDataDefinitionBlock;
            this.xmlBlock = xmlBlock;
            this.file = file;
            this.folder = folder;
@@ -164,8 +164,8 @@ public class Asset  implements java.io.Serializable {
            this.wordPressConnector = wordPressConnector;
            this.pageConfigurationSet = pageConfigurationSet;
            this.pageConfigurationSetContainer = pageConfigurationSetContainer;
-           this.structuredDataDefinition = structuredDataDefinition;
-           this.structuredDataDefinitionContainer = structuredDataDefinitionContainer;
+           this.dataDefinition = dataDefinition;
+           this.dataDefinitionContainer = dataDefinitionContainer;
            this.metadataSet = metadataSet;
            this.metadataSetContainer = metadataSetContainer;
            this.publishSet = publishSet;
@@ -264,22 +264,22 @@ public class Asset  implements java.io.Serializable {
 
 
     /**
-     * Gets the xhtmlStructuredDataBlock value for this Asset.
+     * Gets the xhtmlDataDefinitionBlock value for this Asset.
      * 
-     * @return xhtmlStructuredDataBlock
+     * @return xhtmlDataDefinitionBlock
      */
-    public com.hannonhill.www.ws.ns.AssetOperationService.XhtmlStructuredDataBlock getXhtmlStructuredDataBlock() {
-        return xhtmlStructuredDataBlock;
+    public com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock getXhtmlDataDefinitionBlock() {
+        return xhtmlDataDefinitionBlock;
     }
 
 
     /**
-     * Sets the xhtmlStructuredDataBlock value for this Asset.
+     * Sets the xhtmlDataDefinitionBlock value for this Asset.
      * 
-     * @param xhtmlStructuredDataBlock
+     * @param xhtmlDataDefinitionBlock
      */
-    public void setXhtmlStructuredDataBlock(com.hannonhill.www.ws.ns.AssetOperationService.XhtmlStructuredDataBlock xhtmlStructuredDataBlock) {
-        this.xhtmlStructuredDataBlock = xhtmlStructuredDataBlock;
+    public void setXhtmlDataDefinitionBlock(com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock xhtmlDataDefinitionBlock) {
+        this.xhtmlDataDefinitionBlock = xhtmlDataDefinitionBlock;
     }
 
 
@@ -704,42 +704,42 @@ public class Asset  implements java.io.Serializable {
 
 
     /**
-     * Gets the structuredDataDefinition value for this Asset.
+     * Gets the dataDefinition value for this Asset.
      * 
-     * @return structuredDataDefinition
+     * @return dataDefinition
      */
-    public com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinition getStructuredDataDefinition() {
-        return structuredDataDefinition;
+    public com.hannonhill.www.ws.ns.AssetOperationService.DataDefinition getDataDefinition() {
+        return dataDefinition;
     }
 
 
     /**
-     * Sets the structuredDataDefinition value for this Asset.
+     * Sets the dataDefinition value for this Asset.
      * 
-     * @param structuredDataDefinition
+     * @param dataDefinition
      */
-    public void setStructuredDataDefinition(com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinition structuredDataDefinition) {
-        this.structuredDataDefinition = structuredDataDefinition;
+    public void setDataDefinition(com.hannonhill.www.ws.ns.AssetOperationService.DataDefinition dataDefinition) {
+        this.dataDefinition = dataDefinition;
     }
 
 
     /**
-     * Gets the structuredDataDefinitionContainer value for this Asset.
+     * Gets the dataDefinitionContainer value for this Asset.
      * 
-     * @return structuredDataDefinitionContainer
+     * @return dataDefinitionContainer
      */
-    public com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinitionContainer getStructuredDataDefinitionContainer() {
-        return structuredDataDefinitionContainer;
+    public com.hannonhill.www.ws.ns.AssetOperationService.DataDefinitionContainer getDataDefinitionContainer() {
+        return dataDefinitionContainer;
     }
 
 
     /**
-     * Sets the structuredDataDefinitionContainer value for this Asset.
+     * Sets the dataDefinitionContainer value for this Asset.
      * 
-     * @param structuredDataDefinitionContainer
+     * @param dataDefinitionContainer
      */
-    public void setStructuredDataDefinitionContainer(com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataDefinitionContainer structuredDataDefinitionContainer) {
-        this.structuredDataDefinitionContainer = structuredDataDefinitionContainer;
+    public void setDataDefinitionContainer(com.hannonhill.www.ws.ns.AssetOperationService.DataDefinitionContainer dataDefinitionContainer) {
+        this.dataDefinitionContainer = dataDefinitionContainer;
     }
 
 
@@ -1046,9 +1046,9 @@ public class Asset  implements java.io.Serializable {
             ((this.textBlock==null && other.getTextBlock()==null) || 
              (this.textBlock!=null &&
               this.textBlock.equals(other.getTextBlock()))) &&
-            ((this.xhtmlStructuredDataBlock==null && other.getXhtmlStructuredDataBlock()==null) || 
-             (this.xhtmlStructuredDataBlock!=null &&
-              this.xhtmlStructuredDataBlock.equals(other.getXhtmlStructuredDataBlock()))) &&
+            ((this.xhtmlDataDefinitionBlock==null && other.getXhtmlDataDefinitionBlock()==null) || 
+             (this.xhtmlDataDefinitionBlock!=null &&
+              this.xhtmlDataDefinitionBlock.equals(other.getXhtmlDataDefinitionBlock()))) &&
             ((this.xmlBlock==null && other.getXmlBlock()==null) || 
              (this.xmlBlock!=null &&
               this.xmlBlock.equals(other.getXmlBlock()))) &&
@@ -1112,12 +1112,12 @@ public class Asset  implements java.io.Serializable {
             ((this.pageConfigurationSetContainer==null && other.getPageConfigurationSetContainer()==null) || 
              (this.pageConfigurationSetContainer!=null &&
               this.pageConfigurationSetContainer.equals(other.getPageConfigurationSetContainer()))) &&
-            ((this.structuredDataDefinition==null && other.getStructuredDataDefinition()==null) || 
-             (this.structuredDataDefinition!=null &&
-              this.structuredDataDefinition.equals(other.getStructuredDataDefinition()))) &&
-            ((this.structuredDataDefinitionContainer==null && other.getStructuredDataDefinitionContainer()==null) || 
-             (this.structuredDataDefinitionContainer!=null &&
-              this.structuredDataDefinitionContainer.equals(other.getStructuredDataDefinitionContainer()))) &&
+            ((this.dataDefinition==null && other.getDataDefinition()==null) || 
+             (this.dataDefinition!=null &&
+              this.dataDefinition.equals(other.getDataDefinition()))) &&
+            ((this.dataDefinitionContainer==null && other.getDataDefinitionContainer()==null) || 
+             (this.dataDefinitionContainer!=null &&
+              this.dataDefinitionContainer.equals(other.getDataDefinitionContainer()))) &&
             ((this.metadataSet==null && other.getMetadataSet()==null) || 
              (this.metadataSet!=null &&
               this.metadataSet.equals(other.getMetadataSet()))) &&
@@ -1183,8 +1183,8 @@ public class Asset  implements java.io.Serializable {
         if (getTextBlock() != null) {
             _hashCode += getTextBlock().hashCode();
         }
-        if (getXhtmlStructuredDataBlock() != null) {
-            _hashCode += getXhtmlStructuredDataBlock().hashCode();
+        if (getXhtmlDataDefinitionBlock() != null) {
+            _hashCode += getXhtmlDataDefinitionBlock().hashCode();
         }
         if (getXmlBlock() != null) {
             _hashCode += getXmlBlock().hashCode();
@@ -1249,11 +1249,11 @@ public class Asset  implements java.io.Serializable {
         if (getPageConfigurationSetContainer() != null) {
             _hashCode += getPageConfigurationSetContainer().hashCode();
         }
-        if (getStructuredDataDefinition() != null) {
-            _hashCode += getStructuredDataDefinition().hashCode();
+        if (getDataDefinition() != null) {
+            _hashCode += getDataDefinition().hashCode();
         }
-        if (getStructuredDataDefinitionContainer() != null) {
-            _hashCode += getStructuredDataDefinitionContainer().hashCode();
+        if (getDataDefinitionContainer() != null) {
+            _hashCode += getDataDefinitionContainer().hashCode();
         }
         if (getMetadataSet() != null) {
             _hashCode += getMetadataSet().hashCode();
@@ -1336,9 +1336,9 @@ public class Asset  implements java.io.Serializable {
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("xhtmlStructuredDataBlock");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlStructuredDataBlock"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlStructuredDataBlock"));
+        elemField.setFieldName("xhtmlDataDefinitionBlock");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlDataDefinitionBlock"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xhtmlDataDefinitionBlock"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
@@ -1490,16 +1490,16 @@ public class Asset  implements java.io.Serializable {
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("structuredDataDefinition");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "structuredDataDefinition"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "structuredDataDefinition"));
+        elemField.setFieldName("dataDefinition");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dataDefinition"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dataDefinition"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("structuredDataDefinitionContainer");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "structuredDataDefinitionContainer"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "structuredDataDefinitionContainer"));
+        elemField.setFieldName("dataDefinitionContainer");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dataDefinitionContainer"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dataDefinitionContainer"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

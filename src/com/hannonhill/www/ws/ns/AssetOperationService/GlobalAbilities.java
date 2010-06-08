@@ -8,8 +8,6 @@
 package com.hannonhill.www.ws.ns.AssetOperationService;
 
 public class GlobalAbilities  implements java.io.Serializable {
-    private java.lang.Boolean globalAdmin;
-
     private java.lang.Boolean bypassAllPermissionsChecks;
 
     private java.lang.Boolean accessSiteManagement;
@@ -30,7 +28,7 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean editPageContentType;
 
-    private java.lang.Boolean editStructuredDataDefinition;
+    private java.lang.Boolean editDataDefinition;
 
     private java.lang.Boolean publishReadableHomeAssets;
 
@@ -170,7 +168,6 @@ public class GlobalAbilities  implements java.io.Serializable {
     }
 
     public GlobalAbilities(
-           java.lang.Boolean globalAdmin,
            java.lang.Boolean bypassAllPermissionsChecks,
            java.lang.Boolean accessSiteManagement,
            java.lang.Boolean createSites,
@@ -181,7 +178,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean multiSelectDelete,
            java.lang.Boolean editPageLevelConfigurations,
            java.lang.Boolean editPageContentType,
-           java.lang.Boolean editStructuredDataDefinition,
+           java.lang.Boolean editDataDefinition,
            java.lang.Boolean publishReadableHomeAssets,
            java.lang.Boolean publishWritableHomeAssets,
            java.lang.Boolean viewPublishQueue,
@@ -249,7 +246,6 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean editAnyGroup,
            java.lang.Boolean editMemberGroups,
            java.lang.Boolean moveRenameAssets) {
-           this.globalAdmin = globalAdmin;
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.accessSiteManagement = accessSiteManagement;
            this.createSites = createSites;
@@ -260,7 +256,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.multiSelectDelete = multiSelectDelete;
            this.editPageLevelConfigurations = editPageLevelConfigurations;
            this.editPageContentType = editPageContentType;
-           this.editStructuredDataDefinition = editStructuredDataDefinition;
+           this.editDataDefinition = editDataDefinition;
            this.publishReadableHomeAssets = publishReadableHomeAssets;
            this.publishWritableHomeAssets = publishWritableHomeAssets;
            this.viewPublishQueue = viewPublishQueue;
@@ -328,26 +324,6 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.editAnyGroup = editAnyGroup;
            this.editMemberGroups = editMemberGroups;
            this.moveRenameAssets = moveRenameAssets;
-    }
-
-
-    /**
-     * Gets the globalAdmin value for this GlobalAbilities.
-     * 
-     * @return globalAdmin
-     */
-    public java.lang.Boolean getGlobalAdmin() {
-        return globalAdmin;
-    }
-
-
-    /**
-     * Sets the globalAdmin value for this GlobalAbilities.
-     * 
-     * @param globalAdmin
-     */
-    public void setGlobalAdmin(java.lang.Boolean globalAdmin) {
-        this.globalAdmin = globalAdmin;
     }
 
 
@@ -552,22 +528,22 @@ public class GlobalAbilities  implements java.io.Serializable {
 
 
     /**
-     * Gets the editStructuredDataDefinition value for this GlobalAbilities.
+     * Gets the editDataDefinition value for this GlobalAbilities.
      * 
-     * @return editStructuredDataDefinition
+     * @return editDataDefinition
      */
-    public java.lang.Boolean getEditStructuredDataDefinition() {
-        return editStructuredDataDefinition;
+    public java.lang.Boolean getEditDataDefinition() {
+        return editDataDefinition;
     }
 
 
     /**
-     * Sets the editStructuredDataDefinition value for this GlobalAbilities.
+     * Sets the editDataDefinition value for this GlobalAbilities.
      * 
-     * @param editStructuredDataDefinition
+     * @param editDataDefinition
      */
-    public void setEditStructuredDataDefinition(java.lang.Boolean editStructuredDataDefinition) {
-        this.editStructuredDataDefinition = editStructuredDataDefinition;
+    public void setEditDataDefinition(java.lang.Boolean editDataDefinition) {
+        this.editDataDefinition = editDataDefinition;
     }
 
 
@@ -1922,9 +1898,6 @@ public class GlobalAbilities  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.globalAdmin==null && other.getGlobalAdmin()==null) || 
-             (this.globalAdmin!=null &&
-              this.globalAdmin.equals(other.getGlobalAdmin()))) &&
             ((this.bypassAllPermissionsChecks==null && other.getBypassAllPermissionsChecks()==null) || 
              (this.bypassAllPermissionsChecks!=null &&
               this.bypassAllPermissionsChecks.equals(other.getBypassAllPermissionsChecks()))) &&
@@ -1955,9 +1928,9 @@ public class GlobalAbilities  implements java.io.Serializable {
             ((this.editPageContentType==null && other.getEditPageContentType()==null) || 
              (this.editPageContentType!=null &&
               this.editPageContentType.equals(other.getEditPageContentType()))) &&
-            ((this.editStructuredDataDefinition==null && other.getEditStructuredDataDefinition()==null) || 
-             (this.editStructuredDataDefinition!=null &&
-              this.editStructuredDataDefinition.equals(other.getEditStructuredDataDefinition()))) &&
+            ((this.editDataDefinition==null && other.getEditDataDefinition()==null) || 
+             (this.editDataDefinition!=null &&
+              this.editDataDefinition.equals(other.getEditDataDefinition()))) &&
             ((this.publishReadableHomeAssets==null && other.getPublishReadableHomeAssets()==null) || 
              (this.publishReadableHomeAssets!=null &&
               this.publishReadableHomeAssets.equals(other.getPublishReadableHomeAssets()))) &&
@@ -2170,9 +2143,6 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getGlobalAdmin() != null) {
-            _hashCode += getGlobalAdmin().hashCode();
-        }
         if (getBypassAllPermissionsChecks() != null) {
             _hashCode += getBypassAllPermissionsChecks().hashCode();
         }
@@ -2203,8 +2173,8 @@ public class GlobalAbilities  implements java.io.Serializable {
         if (getEditPageContentType() != null) {
             _hashCode += getEditPageContentType().hashCode();
         }
-        if (getEditStructuredDataDefinition() != null) {
-            _hashCode += getEditStructuredDataDefinition().hashCode();
+        if (getEditDataDefinition() != null) {
+            _hashCode += getEditDataDefinition().hashCode();
         }
         if (getPublishReadableHomeAssets() != null) {
             _hashCode += getPublishReadableHomeAssets().hashCode();
@@ -2418,13 +2388,6 @@ public class GlobalAbilities  implements java.io.Serializable {
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "global-abilities"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("globalAdmin");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "globalAdmin"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("bypassAllPermissionsChecks");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "bypassAllPermissionsChecks"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
@@ -2495,8 +2458,8 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("editStructuredDataDefinition");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editStructuredDataDefinition"));
+        elemField.setFieldName("editDataDefinition");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editDataDefinition"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

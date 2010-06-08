@@ -29,6 +29,7 @@ public class Symlink  extends com.hannonhill.www.ws.ns.AssetOperationService.Exp
            java.lang.String metadataSetPath,
            java.lang.String expirationFolderId,
            java.lang.String expirationFolderPath,
+           java.lang.Boolean expirationFolderRecycled,
            org.apache.axis.types.URI linkURL) {
         super(
             id,
@@ -45,7 +46,8 @@ public class Symlink  extends com.hannonhill.www.ws.ns.AssetOperationService.Exp
             metadataSetId,
             metadataSetPath,
             expirationFolderId,
-            expirationFolderPath);
+            expirationFolderPath,
+            expirationFolderRecycled);
         this.linkURL = linkURL;
     }
 

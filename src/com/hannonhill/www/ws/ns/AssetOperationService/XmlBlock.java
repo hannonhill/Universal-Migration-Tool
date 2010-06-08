@@ -29,6 +29,7 @@ public class XmlBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.Bl
            java.lang.String metadataSetPath,
            java.lang.String expirationFolderId,
            java.lang.String expirationFolderPath,
+           java.lang.Boolean expirationFolderRecycled,
            java.lang.String xml) {
         super(
             id,
@@ -45,7 +46,8 @@ public class XmlBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.Bl
             metadataSetId,
             metadataSetPath,
             expirationFolderId,
-            expirationFolderPath);
+            expirationFolderPath,
+            expirationFolderRecycled);
         this.xml = xml;
     }
 

@@ -28,6 +28,10 @@ public class User  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType;
 
+    private java.lang.String defaultSiteId;
+
+    private java.lang.String defaultSiteName;
+
     public User() {
     }
 
@@ -41,7 +45,9 @@ public class User  implements java.io.Serializable {
            java.lang.String groups,
            java.lang.String defaultGroup,
            java.lang.String role,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType) {
+           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
+           java.lang.String defaultSiteId,
+           java.lang.String defaultSiteName) {
            this.username = username;
            this.fullName = fullName;
            this.email = email;
@@ -52,6 +58,8 @@ public class User  implements java.io.Serializable {
            this.defaultGroup = defaultGroup;
            this.role = role;
            this.entityType = entityType;
+           this.defaultSiteId = defaultSiteId;
+           this.defaultSiteName = defaultSiteName;
     }
 
 
@@ -254,6 +262,46 @@ public class User  implements java.io.Serializable {
         this.entityType = entityType;
     }
 
+
+    /**
+     * Gets the defaultSiteId value for this User.
+     * 
+     * @return defaultSiteId
+     */
+    public java.lang.String getDefaultSiteId() {
+        return defaultSiteId;
+    }
+
+
+    /**
+     * Sets the defaultSiteId value for this User.
+     * 
+     * @param defaultSiteId
+     */
+    public void setDefaultSiteId(java.lang.String defaultSiteId) {
+        this.defaultSiteId = defaultSiteId;
+    }
+
+
+    /**
+     * Gets the defaultSiteName value for this User.
+     * 
+     * @return defaultSiteName
+     */
+    public java.lang.String getDefaultSiteName() {
+        return defaultSiteName;
+    }
+
+
+    /**
+     * Sets the defaultSiteName value for this User.
+     * 
+     * @param defaultSiteName
+     */
+    public void setDefaultSiteName(java.lang.String defaultSiteName) {
+        this.defaultSiteName = defaultSiteName;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof User)) return false;
@@ -295,7 +343,13 @@ public class User  implements java.io.Serializable {
               this.role.equals(other.getRole()))) &&
             ((this.entityType==null && other.getEntityType()==null) || 
              (this.entityType!=null &&
-              this.entityType.equals(other.getEntityType())));
+              this.entityType.equals(other.getEntityType()))) &&
+            ((this.defaultSiteId==null && other.getDefaultSiteId()==null) || 
+             (this.defaultSiteId!=null &&
+              this.defaultSiteId.equals(other.getDefaultSiteId()))) &&
+            ((this.defaultSiteName==null && other.getDefaultSiteName()==null) || 
+             (this.defaultSiteName!=null &&
+              this.defaultSiteName.equals(other.getDefaultSiteName())));
         __equalsCalc = null;
         return _equals;
     }
@@ -336,6 +390,12 @@ public class User  implements java.io.Serializable {
         }
         if (getEntityType() != null) {
             _hashCode += getEntityType().hashCode();
+        }
+        if (getDefaultSiteId() != null) {
+            _hashCode += getDefaultSiteId().hashCode();
+        }
+        if (getDefaultSiteName() != null) {
+            _hashCode += getDefaultSiteName().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -411,6 +471,20 @@ public class User  implements java.io.Serializable {
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "entity-type"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("defaultSiteId");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "defaultSiteId"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("defaultSiteName");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "defaultSiteName"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }
 

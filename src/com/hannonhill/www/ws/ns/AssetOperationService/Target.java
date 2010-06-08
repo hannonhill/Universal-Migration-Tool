@@ -26,6 +26,8 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
 
     private java.lang.String cssFilePath;
 
+    private java.lang.Boolean cssFileRecycled;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.SerializationType serializationType;
 
     private java.lang.Boolean includeXMLDeclaration;
@@ -60,6 +62,7 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
            java.lang.String cssClasses,
            java.lang.String cssFileId,
            java.lang.String cssFilePath,
+           java.lang.Boolean cssFileRecycled,
            com.hannonhill.www.ws.ns.AssetOperationService.SerializationType serializationType,
            java.lang.Boolean includeXMLDeclaration,
            java.lang.Boolean includeTargetPath,
@@ -82,6 +85,7 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
         this.cssClasses = cssClasses;
         this.cssFileId = cssFileId;
         this.cssFilePath = cssFilePath;
+        this.cssFileRecycled = cssFileRecycled;
         this.serializationType = serializationType;
         this.includeXMLDeclaration = includeXMLDeclaration;
         this.includeTargetPath = includeTargetPath;
@@ -271,6 +275,26 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
      */
     public void setCssFilePath(java.lang.String cssFilePath) {
         this.cssFilePath = cssFilePath;
+    }
+
+
+    /**
+     * Gets the cssFileRecycled value for this Target.
+     * 
+     * @return cssFileRecycled
+     */
+    public java.lang.Boolean getCssFileRecycled() {
+        return cssFileRecycled;
+    }
+
+
+    /**
+     * Sets the cssFileRecycled value for this Target.
+     * 
+     * @param cssFileRecycled
+     */
+    public void setCssFileRecycled(java.lang.Boolean cssFileRecycled) {
+        this.cssFileRecycled = cssFileRecycled;
     }
 
 
@@ -492,6 +516,9 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
             ((this.cssFilePath==null && other.getCssFilePath()==null) || 
              (this.cssFilePath!=null &&
               this.cssFilePath.equals(other.getCssFilePath()))) &&
+            ((this.cssFileRecycled==null && other.getCssFileRecycled()==null) || 
+             (this.cssFileRecycled!=null &&
+              this.cssFileRecycled.equals(other.getCssFileRecycled()))) &&
             ((this.serializationType==null && other.getSerializationType()==null) || 
              (this.serializationType!=null &&
               this.serializationType.equals(other.getSerializationType()))) &&
@@ -556,6 +583,9 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
         }
         if (getCssFilePath() != null) {
             _hashCode += getCssFilePath().hashCode();
+        }
+        if (getCssFileRecycled() != null) {
+            _hashCode += getCssFileRecycled().hashCode();
         }
         if (getSerializationType() != null) {
             _hashCode += getSerializationType().hashCode();
@@ -661,6 +691,13 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
         elemField.setFieldName("cssFilePath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cssFilePath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("cssFileRecycled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cssFileRecycled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
