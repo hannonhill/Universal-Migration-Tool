@@ -56,6 +56,8 @@ public class Asset  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.WordPressConnector wordPressConnector;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.GoogleAnalyticsConnector googleAnalyticsConnector;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSet pageConfigurationSet;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSetContainer pageConfigurationSetContainer;
@@ -120,6 +122,7 @@ public class Asset  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.ConnectorContainer connectorContainer,
            com.hannonhill.www.ws.ns.AssetOperationService.TwitterConnector twitterConnector,
            com.hannonhill.www.ws.ns.AssetOperationService.WordPressConnector wordPressConnector,
+           com.hannonhill.www.ws.ns.AssetOperationService.GoogleAnalyticsConnector googleAnalyticsConnector,
            com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSet pageConfigurationSet,
            com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSetContainer pageConfigurationSetContainer,
            com.hannonhill.www.ws.ns.AssetOperationService.DataDefinition dataDefinition,
@@ -162,6 +165,7 @@ public class Asset  implements java.io.Serializable {
            this.connectorContainer = connectorContainer;
            this.twitterConnector = twitterConnector;
            this.wordPressConnector = wordPressConnector;
+           this.googleAnalyticsConnector = googleAnalyticsConnector;
            this.pageConfigurationSet = pageConfigurationSet;
            this.pageConfigurationSetContainer = pageConfigurationSetContainer;
            this.dataDefinition = dataDefinition;
@@ -664,6 +668,26 @@ public class Asset  implements java.io.Serializable {
 
 
     /**
+     * Gets the googleAnalyticsConnector value for this Asset.
+     * 
+     * @return googleAnalyticsConnector
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.GoogleAnalyticsConnector getGoogleAnalyticsConnector() {
+        return googleAnalyticsConnector;
+    }
+
+
+    /**
+     * Sets the googleAnalyticsConnector value for this Asset.
+     * 
+     * @param googleAnalyticsConnector
+     */
+    public void setGoogleAnalyticsConnector(com.hannonhill.www.ws.ns.AssetOperationService.GoogleAnalyticsConnector googleAnalyticsConnector) {
+        this.googleAnalyticsConnector = googleAnalyticsConnector;
+    }
+
+
+    /**
      * Gets the pageConfigurationSet value for this Asset.
      * 
      * @return pageConfigurationSet
@@ -1106,6 +1130,9 @@ public class Asset  implements java.io.Serializable {
             ((this.wordPressConnector==null && other.getWordPressConnector()==null) || 
              (this.wordPressConnector!=null &&
               this.wordPressConnector.equals(other.getWordPressConnector()))) &&
+            ((this.googleAnalyticsConnector==null && other.getGoogleAnalyticsConnector()==null) || 
+             (this.googleAnalyticsConnector!=null &&
+              this.googleAnalyticsConnector.equals(other.getGoogleAnalyticsConnector()))) &&
             ((this.pageConfigurationSet==null && other.getPageConfigurationSet()==null) || 
              (this.pageConfigurationSet!=null &&
               this.pageConfigurationSet.equals(other.getPageConfigurationSet()))) &&
@@ -1242,6 +1269,9 @@ public class Asset  implements java.io.Serializable {
         }
         if (getWordPressConnector() != null) {
             _hashCode += getWordPressConnector().hashCode();
+        }
+        if (getGoogleAnalyticsConnector() != null) {
+            _hashCode += getGoogleAnalyticsConnector().hashCode();
         }
         if (getPageConfigurationSet() != null) {
             _hashCode += getPageConfigurationSet().hashCode();
@@ -1472,6 +1502,13 @@ public class Asset  implements java.io.Serializable {
         elemField.setFieldName("wordPressConnector");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "wordPressConnector"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "wordPressConnector"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("googleAnalyticsConnector");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "googleAnalyticsConnector"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "googleAnalyticsConnector"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

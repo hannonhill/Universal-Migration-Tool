@@ -27,7 +27,6 @@ public class Connector  extends com.hannonhill.www.ws.ns.AssetOperationService.C
 
     public Connector(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -43,7 +42,6 @@ public class Connector  extends com.hannonhill.www.ws.ns.AssetOperationService.C
            com.hannonhill.www.ws.ns.AssetOperationService.ConnectorContentTypeLink[] connectorContentTypeLinks) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,
@@ -337,6 +335,7 @@ public class Connector  extends com.hannonhill.www.ws.ns.AssetOperationService.C
         elemField.setFieldName("connectorContentTypeLinks");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "connectorContentTypeLinks"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "connector-content-type-link"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "connectorContentTypeLink"));
         typeDesc.addFieldDesc(elemField);

@@ -18,6 +18,8 @@ public class WorkflowConfiguration  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.WorkflowStepConfiguration[] workflowStepConfigurations;
 
+    private java.util.Calendar endDate;
+
     public WorkflowConfiguration() {
     }
 
@@ -26,12 +28,14 @@ public class WorkflowConfiguration  implements java.io.Serializable {
            java.lang.String workflowDefinitionId,
            java.lang.String workflowDefinitionPath,
            java.lang.String workflowComments,
-           com.hannonhill.www.ws.ns.AssetOperationService.WorkflowStepConfiguration[] workflowStepConfigurations) {
+           com.hannonhill.www.ws.ns.AssetOperationService.WorkflowStepConfiguration[] workflowStepConfigurations,
+           java.util.Calendar endDate) {
            this.workflowName = workflowName;
            this.workflowDefinitionId = workflowDefinitionId;
            this.workflowDefinitionPath = workflowDefinitionPath;
            this.workflowComments = workflowComments;
            this.workflowStepConfigurations = workflowStepConfigurations;
+           this.endDate = endDate;
     }
 
 
@@ -134,6 +138,26 @@ public class WorkflowConfiguration  implements java.io.Serializable {
         this.workflowStepConfigurations = workflowStepConfigurations;
     }
 
+
+    /**
+     * Gets the endDate value for this WorkflowConfiguration.
+     * 
+     * @return endDate
+     */
+    public java.util.Calendar getEndDate() {
+        return endDate;
+    }
+
+
+    /**
+     * Sets the endDate value for this WorkflowConfiguration.
+     * 
+     * @param endDate
+     */
+    public void setEndDate(java.util.Calendar endDate) {
+        this.endDate = endDate;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof WorkflowConfiguration)) return false;
@@ -160,7 +184,10 @@ public class WorkflowConfiguration  implements java.io.Serializable {
               this.workflowComments.equals(other.getWorkflowComments()))) &&
             ((this.workflowStepConfigurations==null && other.getWorkflowStepConfigurations()==null) || 
              (this.workflowStepConfigurations!=null &&
-              java.util.Arrays.equals(this.workflowStepConfigurations, other.getWorkflowStepConfigurations())));
+              java.util.Arrays.equals(this.workflowStepConfigurations, other.getWorkflowStepConfigurations()))) &&
+            ((this.endDate==null && other.getEndDate()==null) || 
+             (this.endDate!=null &&
+              this.endDate.equals(other.getEndDate())));
         __equalsCalc = null;
         return _equals;
     }
@@ -194,6 +221,9 @@ public class WorkflowConfiguration  implements java.io.Serializable {
                     _hashCode += obj.hashCode();
                 }
             }
+        }
+        if (getEndDate() != null) {
+            _hashCode += getEndDate().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -238,6 +268,13 @@ public class WorkflowConfiguration  implements java.io.Serializable {
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "workflowStepConfiguration"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("endDate");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "endDate"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }
 

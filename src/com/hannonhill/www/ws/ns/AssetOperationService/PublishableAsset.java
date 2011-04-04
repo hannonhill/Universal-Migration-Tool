@@ -21,7 +21,6 @@ public class PublishableAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
 
     public PublishableAsset(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -42,7 +41,6 @@ public class PublishableAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
            java.lang.String lastPublishedBy) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

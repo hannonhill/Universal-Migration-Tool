@@ -55,7 +55,6 @@ public class MetadataSet  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     public MetadataSet(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -85,7 +84,6 @@ public class MetadataSet  extends com.hannonhill.www.ws.ns.AssetOperationService
            com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinition[] dynamicMetadataFieldDefinitions) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,

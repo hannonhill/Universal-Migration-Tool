@@ -19,7 +19,6 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
 
     public ExpiringAsset(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -36,7 +35,6 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
            java.lang.Boolean expirationFolderRecycled) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

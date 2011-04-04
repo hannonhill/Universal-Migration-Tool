@@ -17,7 +17,6 @@ public class TwitterConnector  extends com.hannonhill.www.ws.ns.AssetOperationSe
 
     public TwitterConnector(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -35,7 +34,6 @@ public class TwitterConnector  extends com.hannonhill.www.ws.ns.AssetOperationSe
            java.lang.String destinationPath) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,

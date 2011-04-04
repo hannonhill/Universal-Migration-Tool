@@ -1,7 +1,7 @@
 /*
  * Created on Dec 16, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.service;
 
@@ -22,11 +22,11 @@ import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.XmlUtil;
 
 /**
- * A service that takes care of persisting the content type and field mappings on the server's file system and retrieving back that information.
+ * A service that takes care of persisting the content type and field mappings on the server's file system and
+ * retrieving back that information.
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class MappingPersister
 {
@@ -68,7 +68,7 @@ public class MappingPersister
 
         content.append("<" + ROOT_LEVEL_FOLDERS_TAG + ">");
         for (String folder : projectInformation.getExternalRootLevelFolderAssignemnts().keySet())
-            persistRootLevelFolder(content, projectInformation, projectInformation.getExternalRootLevelFolderAssignemnts().get(folder));
+            persistRootLevelFolder(content, projectInformation.getExternalRootLevelFolderAssignemnts().get(folder));
         content.append("</" + ROOT_LEVEL_FOLDERS_TAG + ">");
 
         content.append("</" + PROJECT_INFORMATION_TAG + ">");
@@ -78,7 +78,8 @@ public class MappingPersister
     }
 
     /**
-     * Loads the mappings from the file system and assigns them to the projectInformation object. If there is a problem with loading the saved mappings,
+     * Loads the mappings from the file system and assigns them to the projectInformation object. If there is
+     * a problem with loading the saved mappings,
      * nothing significant will happen - no mappings will be loaded and the stack trace will be in the output.
      * 
      * @param projectInformation
@@ -209,12 +210,15 @@ public class MappingPersister
         if (assetTypeName == null || mappedContentTypePath == null)
             return;
 
-        // Check if the asset type and content type like that still exists (it's possible that the contents of the serena xml files changed 
-        // and it doesn't exist anymore or Content Type in Cascade got deleted in meantime) and if it doesn't exist, then just ignore this mapping.
+        // Check if the asset type and content type like that still exists (it's possible that the contents of
+        // the serena xml files changed
+        // and it doesn't exist anymore or Content Type in Cascade got deleted in meantime) and if it doesn't
+        // exist, then just ignore this mapping.
         AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
         ContentTypeInformation contentType = projectInformation.getContentTypes().get(mappedContentTypePath);
 
-        // If either asset type or content type could not be found, it means that this mapping is invalid, so just ignore it
+        // If either asset type or content type could not be found, it means that this mapping is invalid, so
+        // just ignore it
         if (assetType == null || contentType == null)
             return;
 
@@ -232,7 +236,8 @@ public class MappingPersister
     }
 
     /**
-     * Assigns the static value mappings from each &lt;fieldMapping&gt; child to the mappings. Finds the field object by its identifier in the content type.
+     * Assigns the static value mappings from each &lt;fieldMapping&gt; child to the mappings. Finds the field
+     * object by its identifier in the content type.
      * If the field object could not be found, it gets ignored.
      * 
      * @param mappingsNode
@@ -250,7 +255,8 @@ public class MappingPersister
     }
 
     /**
-     * Assigns the field mappings from given node to the mappings. Finds the field object by its identifier in the content type.
+     * Assigns the field mappings from given node to the mappings. Finds the field object by its identifier in
+     * the content type.
      * If the field object could not be found, it gets ignored.
      * 
      * @param mappingNode
@@ -278,7 +284,8 @@ public class MappingPersister
         if ((fieldName == null) || (cascadeMetadataField == null && cascadeDataDefinitionField == null))
             return;
 
-        // Quit if the field with given identifier does not exist anymore - it's possible that the metadata set or data definition was modified
+        // Quit if the field with given identifier does not exist anymore - it's possible that the metadata
+        // set or data definition was modified
         Field field = getField(contentType, cascadeMetadataField, cascadeDataDefinitionField);
         if (field == null)
             return;
@@ -287,7 +294,8 @@ public class MappingPersister
     }
 
     /**
-     * Assigns the static value mappings from each &lt;staticValueMapping&gt; child to the mappings. Finds the field object by its identifier in the content type.
+     * Assigns the static value mappings from each &lt;staticValueMapping&gt; child to the mappings. Finds the
+     * field object by its identifier in the content type.
      * If the field object could not be found, it gets ignored.
      * 
      * @param mappingsNode
@@ -305,7 +313,8 @@ public class MappingPersister
     }
 
     /**
-     * Assigns the static value mappings from given node to the mappings. Finds the field object by its identifier in the content type.
+     * Assigns the static value mappings from given node to the mappings. Finds the field object by its
+     * identifier in the content type.
      * If the field object could not be found, it gets ignored.
      * 
      * @param mappingNode
@@ -333,7 +342,8 @@ public class MappingPersister
         if ((cascadeMetadataField == null && cascadeDataDefinitionField == null) || staticValue == null)
             return;
 
-        // Quit if the field with given identifier does not exist anymore - it's possible that the metadata set or data definition was modified
+        // Quit if the field with given identifier does not exist anymore - it's possible that the metadata
+        // set or data definition was modified
         Field field = getField(contentType, cascadeMetadataField, cascadeDataDefinitionField);
         if (field == null)
             return;
@@ -342,8 +352,10 @@ public class MappingPersister
     }
 
     /**
-     * If cascadeMetadataField is not null, returns a metadata field from the content type that matches the cascadeMetadataField identifier.
-     * If not, returns a data definition field from the content type that matches the cascadeDataDefinitionField identifier.
+     * If cascadeMetadataField is not null, returns a metadata field from the content type that matches the
+     * cascadeMetadataField identifier.
+     * If not, returns a data definition field from the content type that matches the
+     * cascadeDataDefinitionField identifier.
      * 
      * @param contentType
      * @param cascadeMetadataField
@@ -357,7 +369,8 @@ public class MappingPersister
     }
 
     /**
-     * Adds the &lt;assetType&gt; tag to the content with all the information that needs to be stored about that asset type
+     * Adds the &lt;assetType&gt; tag to the content with all the information that needs to be stored about
+     * that asset type
      * 
      * @param content
      * @param projectInformation
@@ -391,17 +404,15 @@ public class MappingPersister
     }
 
     /**
-     * Adds the &lt;rootLevelFolder&gt; tag to the content with the root level folder assignment information that needs to be stored
+     * Adds the &lt;rootLevelFolder&gt; tag to the content with the root level folder assignment information
+     * that needs to be stored
      * 
      * @param content
-     * @param projectInformation
      * @param assignment
      */
-    private static void persistRootLevelFolder(StringBuilder content, ProjectInformation projectInformation,
-            ExternalRootLevelFolderAssignment assignment)
+    private static void persistRootLevelFolder(StringBuilder content, ExternalRootLevelFolderAssignment assignment)
     {
         content.append("<" + ROOT_LEVEL_FOLDER_TAG + ">");
-
         content.append("<" + FOLDER_TAG + ">");
         content.append(assignment.getFolder());
         content.append("</" + FOLDER_TAG + ">");
@@ -424,7 +435,8 @@ public class MappingPersister
     }
 
     /**
-     * Adds the &lt;fieldMapping&gt; tag to the content with information about the xml field name mapping to a Cascade field
+     * Adds the &lt;fieldMapping&gt; tag to the content with information about the xml field name mapping to a
+     * Cascade field
      * 
      * @param content
      * @param mapping
@@ -439,7 +451,8 @@ public class MappingPersister
     }
 
     /**
-     * Adds the &lt;staticValueMapping*gt; tag to the content with information about Cascade field mapping to a static value
+     * Adds the &lt;staticValueMapping*gt; tag to the content with information about Cascade field mapping to
+     * a static value
      * 
      * @param content
      * @param mapping
@@ -455,7 +468,8 @@ public class MappingPersister
     }
 
     /**
-     * Adds the &lt;cascadeMetadataField&gt; tag or &lt;cascadeDataDefinitionField&gt; tag depending on the field type to the content 
+     * Adds the &lt;cascadeMetadataField&gt; tag or &lt;cascadeDataDefinitionField&gt; tag depending on the
+     * field type to the content
      * with the identifier of the field
      * 
      * @param content

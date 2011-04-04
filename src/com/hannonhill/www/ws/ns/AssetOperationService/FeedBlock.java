@@ -15,7 +15,6 @@ public class FeedBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.B
 
     public FeedBlock(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -33,7 +32,6 @@ public class FeedBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.B
            org.apache.axis.types.URI feedURL) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

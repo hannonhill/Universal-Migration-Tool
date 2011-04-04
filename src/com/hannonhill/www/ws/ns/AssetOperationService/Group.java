@@ -44,8 +44,6 @@ public class Group  implements java.io.Serializable {
 
     private java.lang.String role;
 
-    private com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType;
-
     public Group() {
     }
 
@@ -67,8 +65,7 @@ public class Group  implements java.io.Serializable {
            java.lang.Boolean wysiwygAllowImageInsertion,
            java.lang.Boolean wysiwygAllowTableInsertion,
            java.lang.String users,
-           java.lang.String role,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType) {
+           java.lang.String role) {
            this.groupName = groupName;
            this.groupStartingPageId = groupStartingPageId;
            this.groupStartingPagePath = groupStartingPagePath;
@@ -87,7 +84,6 @@ public class Group  implements java.io.Serializable {
            this.wysiwygAllowTableInsertion = wysiwygAllowTableInsertion;
            this.users = users;
            this.role = role;
-           this.entityType = entityType;
     }
 
 
@@ -450,26 +446,6 @@ public class Group  implements java.io.Serializable {
         this.role = role;
     }
 
-
-    /**
-     * Gets the entityType value for this Group.
-     * 
-     * @return entityType
-     */
-    public com.hannonhill.www.ws.ns.AssetOperationService.EntityType getEntityType() {
-        return entityType;
-    }
-
-
-    /**
-     * Sets the entityType value for this Group.
-     * 
-     * @param entityType
-     */
-    public void setEntityType(com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType) {
-        this.entityType = entityType;
-    }
-
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Group)) return false;
@@ -535,10 +511,7 @@ public class Group  implements java.io.Serializable {
               this.users.equals(other.getUsers()))) &&
             ((this.role==null && other.getRole()==null) || 
              (this.role!=null &&
-              this.role.equals(other.getRole()))) &&
-            ((this.entityType==null && other.getEntityType()==null) || 
-             (this.entityType!=null &&
-              this.entityType.equals(other.getEntityType())));
+              this.role.equals(other.getRole())));
         __equalsCalc = null;
         return _equals;
     }
@@ -603,9 +576,6 @@ public class Group  implements java.io.Serializable {
         }
         if (getRole() != null) {
             _hashCode += getRole().hashCode();
-        }
-        if (getEntityType() != null) {
-            _hashCode += getEntityType().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -739,13 +709,6 @@ public class Group  implements java.io.Serializable {
         elemField.setFieldName("role");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "role"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("entityType");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "entityType"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "entity-type"));
-        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }

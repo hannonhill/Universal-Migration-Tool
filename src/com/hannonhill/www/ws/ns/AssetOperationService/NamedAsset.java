@@ -15,11 +15,9 @@ public class NamedAsset  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
     public NamedAsset(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name) {
         super(
-            id,
-            entityType);
+            id);
         this.name = name;
     }
 

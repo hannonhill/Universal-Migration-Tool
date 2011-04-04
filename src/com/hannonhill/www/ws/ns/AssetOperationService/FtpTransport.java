@@ -27,7 +27,6 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
 
     public FtpTransport(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -43,7 +42,6 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
            java.lang.Boolean doPASV) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,

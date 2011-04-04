@@ -19,7 +19,6 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
 
     public DublinAwareAsset(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -33,7 +32,6 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
            java.lang.String metadataSetPath) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

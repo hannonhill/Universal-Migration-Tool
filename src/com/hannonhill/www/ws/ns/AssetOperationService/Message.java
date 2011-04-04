@@ -23,15 +23,13 @@ public class Message  extends com.hannonhill.www.ws.ns.AssetOperationService.Bas
 
     public Message(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String to,
            java.lang.String from,
            java.lang.String subject,
            java.util.Calendar date,
            java.lang.String body) {
         super(
-            id,
-            entityType);
+            id);
         this.to = to;
         this.from = from;
         this.subject = subject;

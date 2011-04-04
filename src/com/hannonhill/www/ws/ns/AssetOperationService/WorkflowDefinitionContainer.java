@@ -15,7 +15,6 @@ public class WorkflowDefinitionContainer  extends com.hannonhill.www.ws.ns.Asset
 
     public WorkflowDefinitionContainer(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -25,7 +24,6 @@ public class WorkflowDefinitionContainer  extends com.hannonhill.www.ws.ns.Asset
            com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,

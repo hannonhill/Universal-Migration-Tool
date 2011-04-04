@@ -15,7 +15,6 @@ public class FileSystemTransport  extends com.hannonhill.www.ws.ns.AssetOperatio
 
     public FileSystemTransport(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -25,7 +24,6 @@ public class FileSystemTransport  extends com.hannonhill.www.ws.ns.AssetOperatio
            java.lang.String directory) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,

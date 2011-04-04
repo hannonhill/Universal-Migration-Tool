@@ -8,7 +8,7 @@
 package com.hannonhill.www.ws.ns.AssetOperationService;
 
 public class DatabaseTransport  extends com.hannonhill.www.ws.ns.AssetOperationService.ContaineredAsset  implements java.io.Serializable {
-    private org.apache.axis.types.PositiveInteger transportSiteId;
+    private org.apache.axis.types.NonNegativeInteger transportSiteId;
 
     private java.lang.String serverName;
 
@@ -25,14 +25,13 @@ public class DatabaseTransport  extends com.hannonhill.www.ws.ns.AssetOperationS
 
     public DatabaseTransport(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
            java.lang.String path,
            java.lang.String siteId,
            java.lang.String siteName,
-           org.apache.axis.types.PositiveInteger transportSiteId,
+           org.apache.axis.types.NonNegativeInteger transportSiteId,
            java.lang.String serverName,
            org.apache.axis.types.PositiveInteger serverPort,
            java.lang.String databaseName,
@@ -40,7 +39,6 @@ public class DatabaseTransport  extends com.hannonhill.www.ws.ns.AssetOperationS
            java.lang.String password) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,
@@ -61,7 +59,7 @@ public class DatabaseTransport  extends com.hannonhill.www.ws.ns.AssetOperationS
      * 
      * @return transportSiteId
      */
-    public org.apache.axis.types.PositiveInteger getTransportSiteId() {
+    public org.apache.axis.types.NonNegativeInteger getTransportSiteId() {
         return transportSiteId;
     }
 
@@ -71,7 +69,7 @@ public class DatabaseTransport  extends com.hannonhill.www.ws.ns.AssetOperationS
      * 
      * @param transportSiteId
      */
-    public void setTransportSiteId(org.apache.axis.types.PositiveInteger transportSiteId) {
+    public void setTransportSiteId(org.apache.axis.types.NonNegativeInteger transportSiteId) {
         this.transportSiteId = transportSiteId;
     }
 
@@ -247,7 +245,7 @@ public class DatabaseTransport  extends com.hannonhill.www.ws.ns.AssetOperationS
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("transportSiteId");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "transportSiteId"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "positiveInteger"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "nonNegativeInteger"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

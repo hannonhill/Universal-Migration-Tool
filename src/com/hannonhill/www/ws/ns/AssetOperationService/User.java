@@ -26,8 +26,6 @@ public class User  implements java.io.Serializable {
 
     private java.lang.String role;
 
-    private com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType;
-
     private java.lang.String defaultSiteId;
 
     private java.lang.String defaultSiteName;
@@ -45,7 +43,6 @@ public class User  implements java.io.Serializable {
            java.lang.String groups,
            java.lang.String defaultGroup,
            java.lang.String role,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String defaultSiteId,
            java.lang.String defaultSiteName) {
            this.username = username;
@@ -57,7 +54,6 @@ public class User  implements java.io.Serializable {
            this.groups = groups;
            this.defaultGroup = defaultGroup;
            this.role = role;
-           this.entityType = entityType;
            this.defaultSiteId = defaultSiteId;
            this.defaultSiteName = defaultSiteName;
     }
@@ -244,26 +240,6 @@ public class User  implements java.io.Serializable {
 
 
     /**
-     * Gets the entityType value for this User.
-     * 
-     * @return entityType
-     */
-    public com.hannonhill.www.ws.ns.AssetOperationService.EntityType getEntityType() {
-        return entityType;
-    }
-
-
-    /**
-     * Sets the entityType value for this User.
-     * 
-     * @param entityType
-     */
-    public void setEntityType(com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType) {
-        this.entityType = entityType;
-    }
-
-
-    /**
      * Gets the defaultSiteId value for this User.
      * 
      * @return defaultSiteId
@@ -341,9 +317,6 @@ public class User  implements java.io.Serializable {
             ((this.role==null && other.getRole()==null) || 
              (this.role!=null &&
               this.role.equals(other.getRole()))) &&
-            ((this.entityType==null && other.getEntityType()==null) || 
-             (this.entityType!=null &&
-              this.entityType.equals(other.getEntityType()))) &&
             ((this.defaultSiteId==null && other.getDefaultSiteId()==null) || 
              (this.defaultSiteId!=null &&
               this.defaultSiteId.equals(other.getDefaultSiteId()))) &&
@@ -387,9 +360,6 @@ public class User  implements java.io.Serializable {
         }
         if (getRole() != null) {
             _hashCode += getRole().hashCode();
-        }
-        if (getEntityType() != null) {
-            _hashCode += getEntityType().hashCode();
         }
         if (getDefaultSiteId() != null) {
             _hashCode += getDefaultSiteId().hashCode();
@@ -463,13 +433,6 @@ public class User  implements java.io.Serializable {
         elemField.setFieldName("role");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "role"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("entityType");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "entityType"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "entity-type"));
-        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

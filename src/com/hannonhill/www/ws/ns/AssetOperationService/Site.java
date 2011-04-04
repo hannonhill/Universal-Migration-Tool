@@ -38,9 +38,11 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     private org.apache.axis.types.Time timeToPublish;
 
-    private org.apache.axis.types.NonNegativeInteger publishInterval;
+    private org.apache.axis.types.NonNegativeInteger publishIntervalHours;
 
-    private com.hannonhill.www.ws.ns.AssetOperationService.TimeUnits publishIntervalUnits;
+    private com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] publishDaysOfWeek;
+
+    private java.lang.String cronExpression;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration;
 
@@ -71,7 +73,6 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     public Site(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String url,
            java.lang.String defaultMetadataSetId,
@@ -88,8 +89,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            com.hannonhill.www.ws.ns.AssetOperationService.RoleAssignment[] roleAssignments,
            java.lang.Boolean usesScheduledPublishing,
            org.apache.axis.types.Time timeToPublish,
-           org.apache.axis.types.NonNegativeInteger publishInterval,
-           com.hannonhill.www.ws.ns.AssetOperationService.TimeUnits publishIntervalUnits,
+           org.apache.axis.types.NonNegativeInteger publishIntervalHours,
+           com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] publishDaysOfWeek,
+           java.lang.String cronExpression,
            com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration,
            java.lang.String rootFolderId,
            java.lang.String rootAssetFactoryContainerId,
@@ -104,7 +106,6 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            java.lang.String rootWorkflowDefinitionContainerId) {
         super(
             id,
-            entityType,
             name);
         this.url = url;
         this.defaultMetadataSetId = defaultMetadataSetId;
@@ -121,8 +122,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         this.roleAssignments = roleAssignments;
         this.usesScheduledPublishing = usesScheduledPublishing;
         this.timeToPublish = timeToPublish;
-        this.publishInterval = publishInterval;
-        this.publishIntervalUnits = publishIntervalUnits;
+        this.publishIntervalHours = publishIntervalHours;
+        this.publishDaysOfWeek = publishDaysOfWeek;
+        this.cronExpression = cronExpression;
         this.recycleBinExpiration = recycleBinExpiration;
         this.rootFolderId = rootFolderId;
         this.rootAssetFactoryContainerId = rootAssetFactoryContainerId;
@@ -439,42 +441,62 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
 
     /**
-     * Gets the publishInterval value for this Site.
+     * Gets the publishIntervalHours value for this Site.
      * 
-     * @return publishInterval
+     * @return publishIntervalHours
      */
-    public org.apache.axis.types.NonNegativeInteger getPublishInterval() {
-        return publishInterval;
+    public org.apache.axis.types.NonNegativeInteger getPublishIntervalHours() {
+        return publishIntervalHours;
     }
 
 
     /**
-     * Sets the publishInterval value for this Site.
+     * Sets the publishIntervalHours value for this Site.
      * 
-     * @param publishInterval
+     * @param publishIntervalHours
      */
-    public void setPublishInterval(org.apache.axis.types.NonNegativeInteger publishInterval) {
-        this.publishInterval = publishInterval;
+    public void setPublishIntervalHours(org.apache.axis.types.NonNegativeInteger publishIntervalHours) {
+        this.publishIntervalHours = publishIntervalHours;
     }
 
 
     /**
-     * Gets the publishIntervalUnits value for this Site.
+     * Gets the publishDaysOfWeek value for this Site.
      * 
-     * @return publishIntervalUnits
+     * @return publishDaysOfWeek
      */
-    public com.hannonhill.www.ws.ns.AssetOperationService.TimeUnits getPublishIntervalUnits() {
-        return publishIntervalUnits;
+    public com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] getPublishDaysOfWeek() {
+        return publishDaysOfWeek;
     }
 
 
     /**
-     * Sets the publishIntervalUnits value for this Site.
+     * Sets the publishDaysOfWeek value for this Site.
      * 
-     * @param publishIntervalUnits
+     * @param publishDaysOfWeek
      */
-    public void setPublishIntervalUnits(com.hannonhill.www.ws.ns.AssetOperationService.TimeUnits publishIntervalUnits) {
-        this.publishIntervalUnits = publishIntervalUnits;
+    public void setPublishDaysOfWeek(com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] publishDaysOfWeek) {
+        this.publishDaysOfWeek = publishDaysOfWeek;
+    }
+
+
+    /**
+     * Gets the cronExpression value for this Site.
+     * 
+     * @return cronExpression
+     */
+    public java.lang.String getCronExpression() {
+        return cronExpression;
+    }
+
+
+    /**
+     * Sets the cronExpression value for this Site.
+     * 
+     * @param cronExpression
+     */
+    public void setCronExpression(java.lang.String cronExpression) {
+        this.cronExpression = cronExpression;
     }
 
 
@@ -774,12 +796,15 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.timeToPublish==null && other.getTimeToPublish()==null) || 
              (this.timeToPublish!=null &&
               this.timeToPublish.equals(other.getTimeToPublish()))) &&
-            ((this.publishInterval==null && other.getPublishInterval()==null) || 
-             (this.publishInterval!=null &&
-              this.publishInterval.equals(other.getPublishInterval()))) &&
-            ((this.publishIntervalUnits==null && other.getPublishIntervalUnits()==null) || 
-             (this.publishIntervalUnits!=null &&
-              this.publishIntervalUnits.equals(other.getPublishIntervalUnits()))) &&
+            ((this.publishIntervalHours==null && other.getPublishIntervalHours()==null) || 
+             (this.publishIntervalHours!=null &&
+              this.publishIntervalHours.equals(other.getPublishIntervalHours()))) &&
+            ((this.publishDaysOfWeek==null && other.getPublishDaysOfWeek()==null) || 
+             (this.publishDaysOfWeek!=null &&
+              java.util.Arrays.equals(this.publishDaysOfWeek, other.getPublishDaysOfWeek()))) &&
+            ((this.cronExpression==null && other.getCronExpression()==null) || 
+             (this.cronExpression!=null &&
+              this.cronExpression.equals(other.getCronExpression()))) &&
             ((this.recycleBinExpiration==null && other.getRecycleBinExpiration()==null) || 
              (this.recycleBinExpiration!=null &&
               this.recycleBinExpiration.equals(other.getRecycleBinExpiration()))) &&
@@ -880,11 +905,22 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         if (getTimeToPublish() != null) {
             _hashCode += getTimeToPublish().hashCode();
         }
-        if (getPublishInterval() != null) {
-            _hashCode += getPublishInterval().hashCode();
+        if (getPublishIntervalHours() != null) {
+            _hashCode += getPublishIntervalHours().hashCode();
         }
-        if (getPublishIntervalUnits() != null) {
-            _hashCode += getPublishIntervalUnits().hashCode();
+        if (getPublishDaysOfWeek() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getPublishDaysOfWeek());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getPublishDaysOfWeek(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
+        if (getCronExpression() != null) {
+            _hashCode += getCronExpression().hashCode();
         }
         if (getRecycleBinExpiration() != null) {
             _hashCode += getRecycleBinExpiration().hashCode();
@@ -1038,16 +1074,24 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("publishInterval");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishInterval"));
+        elemField.setFieldName("publishIntervalHours");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishIntervalHours"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "nonNegativeInteger"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("publishIntervalUnits");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishIntervalUnits"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "timeUnits"));
+        elemField.setFieldName("publishDaysOfWeek");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishDaysOfWeek"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dayOfWeek"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dayOfWeek"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("cronExpression");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cronExpression"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

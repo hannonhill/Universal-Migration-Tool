@@ -15,7 +15,6 @@ public class SiteDestinationContainer  extends com.hannonhill.www.ws.ns.AssetOpe
 
     public SiteDestinationContainer(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -25,7 +24,6 @@ public class SiteDestinationContainer  extends com.hannonhill.www.ws.ns.AssetOpe
            com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,

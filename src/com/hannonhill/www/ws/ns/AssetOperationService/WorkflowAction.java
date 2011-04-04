@@ -16,8 +16,6 @@ public class WorkflowAction  implements java.io.Serializable {
 
     private java.lang.String nextId;
 
-    private java.lang.String move;
-
     public WorkflowAction() {
     }
 
@@ -25,13 +23,11 @@ public class WorkflowAction  implements java.io.Serializable {
            java.lang.String identifier,
            java.lang.String label,
            java.lang.String actionType,
-           java.lang.String nextId,
-           java.lang.String move) {
+           java.lang.String nextId) {
            this.identifier = identifier;
            this.label = label;
            this.actionType = actionType;
            this.nextId = nextId;
-           this.move = move;
     }
 
 
@@ -114,26 +110,6 @@ public class WorkflowAction  implements java.io.Serializable {
         this.nextId = nextId;
     }
 
-
-    /**
-     * Gets the move value for this WorkflowAction.
-     * 
-     * @return move
-     */
-    public java.lang.String getMove() {
-        return move;
-    }
-
-
-    /**
-     * Sets the move value for this WorkflowAction.
-     * 
-     * @param move
-     */
-    public void setMove(java.lang.String move) {
-        this.move = move;
-    }
-
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof WorkflowAction)) return false;
@@ -157,10 +133,7 @@ public class WorkflowAction  implements java.io.Serializable {
               this.actionType.equals(other.getActionType()))) &&
             ((this.nextId==null && other.getNextId()==null) || 
              (this.nextId!=null &&
-              this.nextId.equals(other.getNextId()))) &&
-            ((this.move==null && other.getMove()==null) || 
-             (this.move!=null &&
-              this.move.equals(other.getMove())));
+              this.nextId.equals(other.getNextId())));
         __equalsCalc = null;
         return _equals;
     }
@@ -183,9 +156,6 @@ public class WorkflowAction  implements java.io.Serializable {
         }
         if (getNextId() != null) {
             _hashCode += getNextId().hashCode();
-        }
-        if (getMove() != null) {
-            _hashCode += getMove().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -218,12 +188,6 @@ public class WorkflowAction  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("nextId");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "nextId"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("move");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "move"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

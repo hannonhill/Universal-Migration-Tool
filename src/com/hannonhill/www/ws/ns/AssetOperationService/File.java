@@ -21,7 +21,6 @@ public class File  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
 
     public File(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -46,7 +45,6 @@ public class File  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
            java.lang.Boolean maintainAbsoluteLinks) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

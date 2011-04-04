@@ -27,7 +27,6 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
 
     public FolderContainedAsset(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -38,7 +37,6 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
            java.lang.String siteName) {
         super(
             id,
-            entityType,
             name);
         this.parentFolderId = parentFolderId;
         this.parentFolderPath = parentFolderPath;

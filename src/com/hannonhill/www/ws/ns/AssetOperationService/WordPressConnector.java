@@ -13,7 +13,6 @@ public class WordPressConnector  extends com.hannonhill.www.ws.ns.AssetOperation
 
     public WordPressConnector(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -29,7 +28,6 @@ public class WordPressConnector  extends com.hannonhill.www.ws.ns.AssetOperation
            com.hannonhill.www.ws.ns.AssetOperationService.ConnectorContentTypeLink[] connectorContentTypeLinks) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,

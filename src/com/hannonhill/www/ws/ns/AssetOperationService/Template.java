@@ -27,7 +27,6 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
 
     public Template(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -45,7 +44,6 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
            com.hannonhill.www.ws.ns.AssetOperationService.PageRegion[] pageRegions) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

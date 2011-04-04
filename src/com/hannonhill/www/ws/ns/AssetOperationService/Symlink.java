@@ -15,7 +15,6 @@ public class Symlink  extends com.hannonhill.www.ws.ns.AssetOperationService.Exp
 
     public Symlink(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -33,7 +32,6 @@ public class Symlink  extends com.hannonhill.www.ws.ns.AssetOperationService.Exp
            org.apache.axis.types.URI linkURL) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

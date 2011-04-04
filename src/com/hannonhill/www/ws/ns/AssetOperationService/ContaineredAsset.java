@@ -23,7 +23,6 @@ public class ContaineredAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
 
     public ContaineredAsset(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -32,7 +31,6 @@ public class ContaineredAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
            java.lang.String siteName) {
         super(
             id,
-            entityType,
             name);
         this.parentContainerId = parentContainerId;
         this.parentContainerPath = parentContainerPath;

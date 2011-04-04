@@ -15,7 +15,6 @@ public class ScriptFormat  extends com.hannonhill.www.ws.ns.AssetOperationServic
 
     public ScriptFormat(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -27,7 +26,6 @@ public class ScriptFormat  extends com.hannonhill.www.ws.ns.AssetOperationServic
            java.lang.String script) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

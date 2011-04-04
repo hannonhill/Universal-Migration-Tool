@@ -15,7 +15,6 @@ public class TextBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.B
 
     public TextBlock(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -33,7 +32,6 @@ public class TextBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.B
            java.lang.String text) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

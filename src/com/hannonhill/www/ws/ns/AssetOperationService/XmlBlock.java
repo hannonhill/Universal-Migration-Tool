@@ -15,7 +15,6 @@ public class XmlBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.Bl
 
     public XmlBlock(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -33,7 +32,6 @@ public class XmlBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.Bl
            java.lang.String xml) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

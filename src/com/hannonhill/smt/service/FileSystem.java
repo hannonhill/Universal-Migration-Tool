@@ -1,7 +1,7 @@
 /*
  * Created on Dec 11, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.service;
 
@@ -24,9 +24,8 @@ import com.hannonhill.smt.ProjectInformation;
 /**
  * A service responsible for tasks related with files and folders
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class FileSystem
 {
@@ -88,9 +87,8 @@ public class FileSystem
      * Creates a folder with given path if it doesn't exist
      * 
      * @param path
-     * @throws Exception
      */
-    public static void createFolderIfDoesNotExist(String path) throws Exception
+    public static void createFolderIfDoesNotExist(String path)
     {
         File f = new File(path);
         f.mkdir();

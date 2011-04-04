@@ -19,7 +19,6 @@ public class Reference  extends com.hannonhill.www.ws.ns.AssetOperationService.F
 
     public Reference(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -33,7 +32,6 @@ public class Reference  extends com.hannonhill.www.ws.ns.AssetOperationService.F
            com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString referencedAssetType) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

@@ -15,7 +15,6 @@ public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
     public XsltFormat(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -27,7 +26,6 @@ public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.String xml) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

@@ -17,7 +17,6 @@ public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperat
 
     public AssetFactoryContainer(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -28,7 +27,6 @@ public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperat
            com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,
@@ -136,6 +134,7 @@ public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperat
         elemField.setFieldName("applicableGroups");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "applicableGroups"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

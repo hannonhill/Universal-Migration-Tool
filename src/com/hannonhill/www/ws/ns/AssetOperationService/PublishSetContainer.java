@@ -15,7 +15,6 @@ public class PublishSetContainer  extends com.hannonhill.www.ws.ns.AssetOperatio
 
     public PublishSetContainer(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -25,7 +24,6 @@ public class PublishSetContainer  extends com.hannonhill.www.ws.ns.AssetOperatio
            com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,

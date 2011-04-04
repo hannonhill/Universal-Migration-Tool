@@ -28,6 +28,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final java.lang.String _connectorcontainer = "connectorcontainer";
     public static final java.lang.String _twitterconnector = "twitterconnector";
     public static final java.lang.String _wordpressconnector = "wordpressconnector";
+    public static final java.lang.String _googleanalyticsconnector = "googleanalyticsconnector";
     public static final java.lang.String _contenttype = "contenttype";
     public static final java.lang.String _contenttypecontainer = "contenttypecontainer";
     public static final java.lang.String _destination = "destination";
@@ -57,8 +58,12 @@ public class EntityTypeString implements java.io.Serializable {
     public static final java.lang.String _target = "target";
     public static final java.lang.String _template = "template";
     public static final java.lang.String _transport = "transport";
+    public static final java.lang.String _transport_fs = "transport_fs";
+    public static final java.lang.String _transport_ftp = "transport_ftp";
+    public static final java.lang.String _transport_db = "transport_db";
     public static final java.lang.String _transportcontainer = "transportcontainer";
     public static final java.lang.String _user = "user";
+    public static final java.lang.String _workflow = "workflow";
     public static final java.lang.String _workflowdefinition = "workflowdefinition";
     public static final java.lang.String _workflowdefinitioncontainer = "workflowdefinitioncontainer";
     public static final EntityTypeString assetfactory = new EntityTypeString(_assetfactory);
@@ -72,6 +77,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final EntityTypeString connectorcontainer = new EntityTypeString(_connectorcontainer);
     public static final EntityTypeString twitterconnector = new EntityTypeString(_twitterconnector);
     public static final EntityTypeString wordpressconnector = new EntityTypeString(_wordpressconnector);
+    public static final EntityTypeString googleanalyticsconnector = new EntityTypeString(_googleanalyticsconnector);
     public static final EntityTypeString contenttype = new EntityTypeString(_contenttype);
     public static final EntityTypeString contenttypecontainer = new EntityTypeString(_contenttypecontainer);
     public static final EntityTypeString destination = new EntityTypeString(_destination);
@@ -101,8 +107,12 @@ public class EntityTypeString implements java.io.Serializable {
     public static final EntityTypeString target = new EntityTypeString(_target);
     public static final EntityTypeString template = new EntityTypeString(_template);
     public static final EntityTypeString transport = new EntityTypeString(_transport);
+    public static final EntityTypeString transport_fs = new EntityTypeString(_transport_fs);
+    public static final EntityTypeString transport_ftp = new EntityTypeString(_transport_ftp);
+    public static final EntityTypeString transport_db = new EntityTypeString(_transport_db);
     public static final EntityTypeString transportcontainer = new EntityTypeString(_transportcontainer);
     public static final EntityTypeString user = new EntityTypeString(_user);
+    public static final EntityTypeString workflow = new EntityTypeString(_workflow);
     public static final EntityTypeString workflowdefinition = new EntityTypeString(_workflowdefinition);
     public static final EntityTypeString workflowdefinitioncontainer = new EntityTypeString(_workflowdefinitioncontainer);
     public java.lang.String getValue() { return _value_;}

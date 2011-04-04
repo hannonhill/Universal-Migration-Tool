@@ -63,7 +63,6 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
     public IndexBlock(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -105,7 +104,6 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
            com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockSortOrder sortOrder) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

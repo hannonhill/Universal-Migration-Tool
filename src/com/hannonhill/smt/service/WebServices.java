@@ -1,7 +1,7 @@
 /*
  * Created on Nov 19, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.service;
 
@@ -43,9 +43,8 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Site;
 /**
  * This class contains service methods for web services
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class WebServices
 {
@@ -101,8 +100,8 @@ public class WebServices
      */
     public static List<ContentType> getContentTypesFromSite(ProjectInformation projectInformation) throws Exception
     {
-        Site site = readSite(projectInformation.getUsername(), projectInformation.getPassword(), projectInformation.getUrl(), projectInformation
-                .getSiteName());
+        Site site = readSite(projectInformation.getUsername(), projectInformation.getPassword(), projectInformation.getUrl(),
+                projectInformation.getSiteName());
 
         // Recursively collect all ancestor content types
         List<ContentType> contentTypes = new ArrayList<ContentType>();
@@ -111,16 +110,16 @@ public class WebServices
     }
 
     /**
-     * Returns a map of metadata field identifiers to actual fields of a metadata set that is assigned to a content type with given contentTypePath
+     * Returns a map of metadata field identifiers to actual fields of a metadata set that is assigned to a
+     * content type with given contentTypePath
      * 
-     * @param contentTypePath
      * @param projectInformation
      * @param contentType
      * @return
      * @throws Exception
      */
-    public static Map<String, MetadataSetField> getMetadataFieldsForContentType(String contentTypePath, ProjectInformation projectInformation,
-            ContentType contentType) throws Exception
+    public static Map<String, MetadataSetField> getMetadataFieldsForContentType(ProjectInformation projectInformation, ContentType contentType)
+            throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
         String metadataSetId = contentType.getMetadataSetId();
@@ -146,21 +145,22 @@ public class WebServices
     }
 
     /**
-     * Returns a map of data definition field identifier to actual fields of a data definition that is assigned to a content type with given contentTypePath.
+     * Returns a map of data definition field identifier to actual fields of a data definition that is
+     * assigned to a content type with given contentTypePath.
      * If no data definition is assigned to the content type, returns null.
      * 
-     * @param contentTypePath
      * @param projectInformation
      * @param contentType
      * @return
      * @throws Exception
      */
-    public static Map<String, DataDefinitionField> getDataDefinitionFieldsForContentType(String contentTypePath,
-            ProjectInformation projectInformation, ContentType contentType) throws Exception
+    public static Map<String, DataDefinitionField> getDataDefinitionFieldsForContentType(ProjectInformation projectInformation,
+            ContentType contentType) throws Exception
     {
         Authentication authentication = getAuthentication(projectInformation);
 
-        // Check if data definition is assigned. If it isn't, return null (we will just create the XHTML field).
+        // Check if data definition is assigned. If it isn't, return null (we will just create the XHTML
+        // field).
         String dataDefinitionId = contentType.getDataDefinitionId();
         if (dataDefinitionId == null)
             return null;
@@ -175,7 +175,8 @@ public class WebServices
     }
 
     /**
-     * Creates a page in Cascade Server using information provided in the DetailedXmlPageInformation object. If the parent folder cannot be found,
+     * Creates a page in Cascade Server using information provided in the DetailedXmlPageInformation object.
+     * If the parent folder cannot be found,
      * it will create it.
      * 
      * @param xmlPage
@@ -201,25 +202,29 @@ public class WebServices
         Asset asset = new Asset();
         asset.setPage(page);
 
-        // Check overwrite behavior. If overwrite behavior is to update existing, check if page with given path exists and if so, get its id
+        // Check overwrite behavior. If overwrite behavior is to update existing, check if page with given
+        // path exists and if so, get its id
         String overwriteBehavior = projectInformation.getOverwriteBehavior();
         String existingPageId = null;
         if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_UPDATE_EXISTING))
             existingPageId = getPageId(pagePath, projectInformation);
-        // If overwite existing is selected, we need to delete the existing page and ignore an error if it did not exists and we attempted to delete it
+        // If overwite existing is selected, we need to delete the existing page and ignore an error if it did
+        // not exists and we attempted to delete it
         else if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING))
             deletePage(pagePath, projectInformation);
 
-        // If page doesn't exist or overwrite behavior is not to update existing, create the page and ancestor folders if necessary
+        // If page doesn't exist or overwrite behavior is not to update existing, create the page and ancestor
+        // folders if necessary
         if (existingPageId == null)
         {
             Authentication authentication = getAuthentication(projectInformation);
             CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
 
-            // If the page couldn't be created because parent folder doesn't exist, go ahead and create the parent folder and attempt to create the page again
+            // If the page couldn't be created because parent folder doesn't exist, go ahead and create the
+            // parent folder and attempt to create the page again
             if (!createResult.getSuccess().equals("true"))
             {
-                if (createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+                if (createResult.getMessage().startsWith("folder with path/name: " + parentFolderPath + " could not be found"))
                 {
                     createFolder(parentFolderPath, projectInformation);
                     return createPage(xmlPage, projectInformation);
@@ -246,7 +251,6 @@ public class WebServices
     public static void realignLinks(String id, ProjectInformation projectInformation) throws Exception
     {
         Page page = readPage(id, projectInformation);
-        WebServicesUtil.nullPageValues(page);
         editPage(page, projectInformation);
     }
 
@@ -366,7 +370,8 @@ public class WebServices
     }
 
     /**
-     * Asks Cascade Server to delete a page with given path. If page didn't exist, the error will be ignored. If 
+     * Asks Cascade Server to delete a page with given path. If page didn't exist, the error will be ignored.
+     * If
      * some other problem occured, an exception will be thrown.
      * 
      * @param path
@@ -407,11 +412,12 @@ public class WebServices
         Authentication authentication = getAuthentication(projectInformation);
         CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
 
-        // If the folder couldn't be create because parent folder doesn't exist, go ahead and create the parent folder and attempt to create the page again
+        // If the folder couldn't be create because parent folder doesn't exist, go ahead and create the
+        // parent folder and attempt to create the page again
         if (!createResult.getSuccess().equals("true"))
         {
             if (createResult.getMessage() != null
-                    && createResult.getMessage().equals("Parent folder with path '" + parentFolderPath + "' cannot be found."))
+                    && createResult.getMessage().startsWith("folder with path/name: " + parentFolderPath + " could not be found"))
             {
                 createFolder(parentFolderPath, projectInformation);
                 createFolder(path, projectInformation);

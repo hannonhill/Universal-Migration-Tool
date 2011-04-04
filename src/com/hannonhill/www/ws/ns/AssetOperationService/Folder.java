@@ -15,7 +15,6 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
 
     public Folder(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -37,7 +36,6 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
            com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

@@ -15,7 +15,6 @@ public class DataDefinition  extends com.hannonhill.www.ws.ns.AssetOperationServ
 
     public DataDefinition(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -25,7 +24,6 @@ public class DataDefinition  extends com.hannonhill.www.ws.ns.AssetOperationServ
            java.lang.String xml) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,

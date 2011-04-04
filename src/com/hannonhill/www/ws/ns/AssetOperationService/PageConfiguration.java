@@ -37,7 +37,6 @@ public class PageConfiguration  extends com.hannonhill.www.ws.ns.AssetOperationS
 
     public PageConfiguration(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            boolean defaultConfiguration,
            java.lang.String templateId,
@@ -51,8 +50,7 @@ public class PageConfiguration  extends com.hannonhill.www.ws.ns.AssetOperationS
            java.lang.Boolean includeXMLDeclaration,
            java.lang.Boolean publishable) {
         super(
-            id,
-            entityType);
+            id);
         this.name = name;
         this.defaultConfiguration = defaultConfiguration;
         this.templateId = templateId;

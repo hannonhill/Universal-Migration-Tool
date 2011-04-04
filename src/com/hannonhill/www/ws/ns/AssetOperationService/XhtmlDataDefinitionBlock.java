@@ -17,7 +17,6 @@ public class XhtmlDataDefinitionBlock  extends com.hannonhill.www.ws.ns.AssetOpe
 
     public XhtmlDataDefinitionBlock(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentFolderId,
            java.lang.String parentFolderPath,
@@ -36,7 +35,6 @@ public class XhtmlDataDefinitionBlock  extends com.hannonhill.www.ws.ns.AssetOpe
            java.lang.String xhtml) {
         super(
             id,
-            entityType,
             name,
             parentFolderId,
             parentFolderPath,

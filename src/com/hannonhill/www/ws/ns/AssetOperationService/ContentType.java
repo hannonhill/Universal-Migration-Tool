@@ -20,12 +20,13 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     private java.lang.String dataDefinitionPath;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations;
+
     public ContentType() {
     }
 
     public ContentType(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String parentContainerId,
            java.lang.String parentContainerPath,
@@ -37,10 +38,10 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
            java.lang.String metadataSetId,
            java.lang.String metadataSetPath,
            java.lang.String dataDefinitionId,
-           java.lang.String dataDefinitionPath) {
+           java.lang.String dataDefinitionPath,
+           com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations) {
         super(
             id,
-            entityType,
             name,
             parentContainerId,
             parentContainerPath,
@@ -53,6 +54,7 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.metadataSetPath = metadataSetPath;
         this.dataDefinitionId = dataDefinitionId;
         this.dataDefinitionPath = dataDefinitionPath;
+        this.contentTypePageConfigurations = contentTypePageConfigurations;
     }
 
 
@@ -175,6 +177,26 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.dataDefinitionPath = dataDefinitionPath;
     }
 
+
+    /**
+     * Gets the contentTypePageConfigurations value for this ContentType.
+     * 
+     * @return contentTypePageConfigurations
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] getContentTypePageConfigurations() {
+        return contentTypePageConfigurations;
+    }
+
+
+    /**
+     * Sets the contentTypePageConfigurations value for this ContentType.
+     * 
+     * @param contentTypePageConfigurations
+     */
+    public void setContentTypePageConfigurations(com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations) {
+        this.contentTypePageConfigurations = contentTypePageConfigurations;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ContentType)) return false;
@@ -204,7 +226,10 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
               this.dataDefinitionId.equals(other.getDataDefinitionId()))) &&
             ((this.dataDefinitionPath==null && other.getDataDefinitionPath()==null) || 
              (this.dataDefinitionPath!=null &&
-              this.dataDefinitionPath.equals(other.getDataDefinitionPath())));
+              this.dataDefinitionPath.equals(other.getDataDefinitionPath()))) &&
+            ((this.contentTypePageConfigurations==null && other.getContentTypePageConfigurations()==null) || 
+             (this.contentTypePageConfigurations!=null &&
+              java.util.Arrays.equals(this.contentTypePageConfigurations, other.getContentTypePageConfigurations())));
         __equalsCalc = null;
         return _equals;
     }
@@ -233,6 +258,17 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         }
         if (getDataDefinitionPath() != null) {
             _hashCode += getDataDefinitionPath().hashCode();
+        }
+        if (getContentTypePageConfigurations() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getContentTypePageConfigurations());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getContentTypePageConfigurations(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -285,6 +321,14 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("contentTypePageConfigurations");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "contentTypePageConfigurations"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "contentTypePageConfiguration"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "contentTypePageConfiguration"));
         typeDesc.addFieldDesc(elemField);
     }
 

@@ -31,7 +31,6 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
     public PageRegion(
            java.lang.String id,
-           com.hannonhill.www.ws.ns.AssetOperationService.EntityType entityType,
            java.lang.String name,
            java.lang.String blockId,
            java.lang.String blockPath,
@@ -42,8 +41,7 @@ public class PageRegion  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.Boolean formatRecycled,
            java.lang.Boolean noFormat) {
         super(
-            id,
-            entityType);
+            id);
         this.name = name;
         this.blockId = blockId;
         this.blockPath = blockPath;
