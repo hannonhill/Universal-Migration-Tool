@@ -6,8 +6,10 @@
 package com.hannonhill.smt.service;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +55,7 @@ public class FileSystem
 
             if (entry.isDirectory())
                 (new File(uploadDir + "/" + entry.getName())).mkdirs();
-            else if (entry.getName().endsWith(".xml"))
+            else if (entry.getName().endsWith(".xml") || entry.getName().endsWith(".jsp"))
                 copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + "/" + entry.getName())));
         }
 
@@ -63,12 +65,13 @@ public class FileSystem
     }
 
     /**
-     * Returns all the xml files in the folder and all sub-folders
+     * Returns all the files with given extension in the folder and all sub-folders
      * 
      * @param projectInformation
+     * @param extension For example ".xml" for xml files
      * @return
      */
-    public static List<File> getAllXmlFiles(File folder)
+    public static List<File> getAllFilesByExtension(File folder, String extension)
     {
         List<File> files = new ArrayList<File>();
         for (String fileString : folder.list())
@@ -76,8 +79,8 @@ public class FileSystem
             File file = new File(folder.getAbsolutePath() + "/" + fileString);
 
             if (!file.isFile())
-                files.addAll(getAllXmlFiles(file));
-            else if (file.getName().endsWith(".xml"))
+                files.addAll(getAllFilesByExtension(file, extension));
+            else if (file.getName().endsWith(extension))
                 files.add(file);
         }
         return files;
@@ -110,6 +113,27 @@ public class FileSystem
     }
 
     /**
+     * Reads file and returns its contents as String
+     * 
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public static String getFileContents(File file) throws Exception
+    {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        String ls = System.getProperty("line.separator");
+        while ((line = reader.readLine()) != null)
+        {
+            stringBuilder.append(line);
+            stringBuilder.append(ls);
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
      * Copies the input stream
      * 
      * @param in
@@ -127,4 +151,5 @@ public class FileSystem
         in.close();
         out.close();
     }
+
 }

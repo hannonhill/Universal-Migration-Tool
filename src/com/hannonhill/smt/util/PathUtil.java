@@ -1,7 +1,7 @@
 /*
  * Created on Dec 3, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.util;
 
@@ -12,14 +12,14 @@ import com.hannonhill.smt.CascadePageInformation;
 /**
  * Utility methods related to path manipulations
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class PathUtil
 {
     /**
-     * Returns a part of absolute path that starts from the xml directory path (xml directory path is cut off).
+     * Returns a part of absolute path that starts from the xml directory path (xml directory path is cut
+     * off).
      * 
      * @param file
      * @param xmlDirectoryPath
@@ -42,7 +42,8 @@ public class PathUtil
     }
 
     /**
-     * Truncates the extension of the file name. For example x.html will return x. If there is no extension, the full name will be returned.
+     * Truncates the extension of the file name. For example x.html will return x. If there is no extension,
+     * the full name will be returned.
      * 
      * @param name
      * @return
@@ -53,7 +54,8 @@ public class PathUtil
     }
 
     /**
-     * Returns the extension of the file name. For example x.html will return .html. If there is no extension, an empty string will be returned.
+     * Returns the extension of the file name. For example x.html will return .html. If there is no extension,
+     * an empty string will be returned.
      * 
      * @param name
      * @return
@@ -92,7 +94,8 @@ public class PathUtil
         String[] correctParts = currentLocation.split("/");
 
         StringBuilder newPath = new StringBuilder();
-        int correctPartsCounter = correctParts.length - 1; // The counter starts at the last location and goes down
+        int correctPartsCounter = correctParts.length - 1; // The counter starts at the last location and goes
+                                                           // down
         int oldPartsIndex; // The index for the old parts starts at 0 and goes up
 
         // For each "../" decrement the counter
@@ -104,7 +107,8 @@ public class PathUtil
             correctPartsCounter--;
         }
 
-        // Once we know how many times we went to parent folder using "../", we know the common part of the absolute path so we can build it
+        // Once we know how many times we went to parent folder using "../", we know the common part of the
+        // absolute path so we can build it
         for (int correctPartsIndex = 0; correctPartsIndex < correctPartsCounter; correctPartsIndex++)
             newPath.append("/" + correctParts[correctPartsIndex]);
 
@@ -123,7 +127,7 @@ public class PathUtil
      */
     public static boolean isLinkRelative(String link)
     {
-        // Ignore empty links 
+        // Ignore empty links
         if (link.equals(""))
             return false;
 
@@ -173,12 +177,16 @@ public class PathUtil
     }
 
     /**
-     * Adds "http://" in front if necessary and "/ws/services/AssetOperationService?wsdl" at the end if necessary
+     * Adds "http://" in front if necessary and "/ws/services/AssetOperationService?wsdl" at the end if
+     * necessary
      * 
-     * @param url a url in format "localhost:8080" or "http://localhost:8080" or "localhost:8080/ws/services/AssetOperationService"
-     *            or "localhost:8080/ws/services/AssetOperationService?wsdl" or "http://localhost:8080/ws/services/AssetOperationService"
-     *            or "http://localhost:8080/ws/services/AssetOperationService?wsdl"
-     * @return a url in format "http://localhost:8080/ws/services/AssetOperationService?wsdl" or "http://localhost:8080/ws/services/AssetOperationService"
+     * @param url a url in format "localhost:8080" or "http://localhost:8080" or
+     *        "localhost:8080/ws/services/AssetOperationService"
+     *        or "localhost:8080/ws/services/AssetOperationService?wsdl" or
+     *        "http://localhost:8080/ws/services/AssetOperationService"
+     *        or "http://localhost:8080/ws/services/AssetOperationService?wsdl"
+     * @return a url in format "http://localhost:8080/ws/services/AssetOperationService?wsdl" or
+     *         "http://localhost:8080/ws/services/AssetOperationService"
      */
     public static String convertToFullAssetOperationURL(String url)
     {
@@ -194,7 +202,8 @@ public class PathUtil
     /**
      * Returns a link to the Cascade Server based on the url with the AssetOperationService part
      * 
-     * @param url a url in format "http://localhost:8080/ws/services/AssetOperationService?wsdl" or "http://localhost:8080/ws/services/AssetOperationService"
+     * @param url a url in format "http://localhost:8080/ws/services/AssetOperationService?wsdl" or
+     *        "http://localhost:8080/ws/services/AssetOperationService"
      * @return a url in format "http://localhost:8080"
      */
     public static String getURLWithoutAssetOperationPart(String url)
@@ -213,6 +222,20 @@ public class PathUtil
     {
         return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(cascadeUrl) + "/entity/open.act?id=" + cascadePage.getId()
                 + "&amp;type=page\" target=\"_blank\">/" + cascadePage.getPath() + "</a> ";
+    }
+
+    /**
+     * Removes the root folder from the path. For example /A/B/c.html gets converted to /B/c.html
+     * 
+     * @param path
+     * @return
+     */
+    public static String skipRootFolder(String path)
+    {
+        if (path.startsWith("/"))
+            path = path.substring(1);
+
+        return path.substring(path.indexOf('/'));
     }
 
     /**

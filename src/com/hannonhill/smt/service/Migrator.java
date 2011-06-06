@@ -1,7 +1,7 @@
 /*
  * Created on Dec 2, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.service;
 
@@ -17,9 +17,8 @@ import com.hannonhill.smt.util.PathUtil;
 /**
  * A service responsible for the actual migration
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class Migrator
 {
@@ -38,11 +37,12 @@ public class Migrator
 
             try
             {
-                // To build the file path that needs to be displayed, we show only the part of the abosute path after the xml directory 
+                // To build the file path that needs to be displayed, we show only the part of the abosute
+                // path after the xml directory
                 String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
 
                 Log.add("Creating a page from file " + relativePath + "... ", migrationStatus);
-                DetailedXmlPageInformation page = XmlAnalyzer.parseXmlFile(file);
+                DetailedXmlPageInformation page = XmlAnalyzer.parseSerenaXmlFile(file);
 
                 // If the asset type wasn't mapped, skip this page
                 String assetTypeName = page.getAssetType();

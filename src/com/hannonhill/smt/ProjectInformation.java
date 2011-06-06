@@ -1,7 +1,7 @@
 /*
  * Created on Nov 18, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt;
 
@@ -16,9 +16,8 @@ import java.util.Set;
 /**
  * This object holds all the current project information
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class ProjectInformation
 {
@@ -34,18 +33,33 @@ public class ProjectInformation
     private String password;
     private String siteName;
     private String xmlDirectory;
-    private Map<String, String> contentTypeMap; // the mapping from XML Asset Type name to Cascade Content Type path
-    private List<String> assetTypeNames; // repeated information - an ordered list of XML Asset Type names (the map above holds things that are not ordered)
-    private Map<String, AssetType> assetTypes; // All XML Asset Type names and the actual XML Asset Type which contains user entered field mappings (if mapped)
-    private String overwriteBehavior; // Matches one of the constants ProjectInformation.OVERWRITE_BEHAVIOR_???
+    private Map<String, String> contentTypeMap; // the mapping from XML Asset Type name to Cascade Content
+                                                // Type path
+    private List<String> assetTypeNames; // repeated information - an ordered list of XML Asset Type names
+                                         // (the map above holds things that are not ordered)
+    private Map<String, AssetType> assetTypes; // All XML Asset Type names and the actual XML Asset Type which
+                                               // contains user entered field mappings (if mapped)
+    private String overwriteBehavior; // Matches one of the constants
+                                      // ProjectInformation.OVERWRITE_BEHAVIOR_???
     private Map<String, ExternalRootLevelFolderAssignment> externalRootLevelFolderAssignemnts;
 
     // analyzed information
-    private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type information (with the available metadata and dd fields)
+    private boolean luminis = false;
+    private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type
+                                                              // information (with the available metadata and
+                                                              // dd fields)
     private final List<File> filesToProcess; // All the XML files that need to be processed during migration
-    private Set<String> gatheredExtensions; // a set of extensions found for pages (for example ".html", ".htm")
+    private Set<String> gatheredExtensions; // a set of extensions found for pages (for example ".html",
+                                            // ".htm")
     private Set<String> gatheredRootLevelFolders; // a set of root level folders of XML pages
-    private Set<String> gatheredLinkedRootLevelFolders; // a set of root level folders in links in the XML that link to assets
+    private Set<String> gatheredLinkedRootLevelFolders; // a set of root level folders in links in the XML
+                                                        // that link to assets
+    private final Map<File, DetailedXmlPageInformation> pagesToProcess; // a map of a filesToProcess file
+                                                                        // to detailed information about the
+                                                                        // page coming from linkFile.xml in
+                                                                        // Luminis dump
+    // detailed information of the page in
+    // that file
 
     // other useful information
     private MigrationStatus migrationStatus;
@@ -76,6 +90,7 @@ public class ProjectInformation
         contentTypes = new HashMap<String, ContentTypeInformation>();
         contentTypeMap = new HashMap<String, String>();
         externalRootLevelFolderAssignemnts = new HashMap<String, ExternalRootLevelFolderAssignment>();
+        pagesToProcess = new HashMap<File, DetailedXmlPageInformation>();
     }
 
     /**
@@ -151,7 +166,8 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the xmlDirectory - this is the directory where the xml files reside for a specific folder.
+     * @return Returns the xmlDirectory - this is the directory where the xml files reside for a specific
+     *         folder.
      */
     public String getXmlDirectory()
     {
@@ -175,7 +191,8 @@ public class ProjectInformation
     }
 
     /**
-     * @param contentTypeMap the contentTypeMap to set - the mapping from XML Asset Type name to Cascade Content Type path
+     * @param contentTypeMap the contentTypeMap to set - the mapping from XML Asset Type name to Cascade
+     *        Content Type path
      */
     public void setContentTypeMap(Map<String, String> contentTypeMap)
     {
@@ -199,7 +216,8 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the assetTypeNames - an ordered list of XML Asset Type names that exist in the contentTypeMap
+     * @return Returns the assetTypeNames - an ordered list of XML Asset Type names that exist in the
+     *         contentTypeMap
      */
     public List<String> getAssetTypeNames()
     {
@@ -207,7 +225,8 @@ public class ProjectInformation
     }
 
     /**
-     * @param assetTypeNames the assetTypeNames to set - an ordered list of XML Asset Type names that exist in the contentTypeMap
+     * @param assetTypeNames the assetTypeNames to set - an ordered list of XML Asset Type names that exist in
+     *        the contentTypeMap
      */
     public void setAssetTypeNames(List<String> assetTypeNames)
     {
@@ -372,5 +391,29 @@ public class ProjectInformation
     public void setExternalRootLevelFolderAssignemnts(Map<String, ExternalRootLevelFolderAssignment> externalRootLevelFolderAssignemnts)
     {
         this.externalRootLevelFolderAssignemnts = externalRootLevelFolderAssignemnts;
+    }
+
+    /**
+     * @return Returns the luminis.
+     */
+    public boolean isLuminis()
+    {
+        return luminis;
+    }
+
+    /**
+     * @param luminis the luminis to set
+     */
+    public void setLuminis(boolean luminis)
+    {
+        this.luminis = luminis;
+    }
+
+    /**
+     * @return Returns the pagesToProcess.
+     */
+    public Map<File, DetailedXmlPageInformation> getPagesToProcess()
+    {
+        return pagesToProcess;
     }
 }

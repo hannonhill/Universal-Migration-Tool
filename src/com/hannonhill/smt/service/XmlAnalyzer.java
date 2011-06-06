@@ -1,16 +1,19 @@
 /*
  * Created on Nov 20, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.service;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -32,23 +35,30 @@ import com.hannonhill.smt.util.XmlUtil;
 /**
  * This class contains service methods for analyzing the xml file contents
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class XmlAnalyzer
 {
     private static final String ASSET_TYPE_XPATH = "/asset/coreData/assetType/text()";
-    private static final String METADATA_FIELDS_XPATH = "/asset/metaData/field";
-    private static final String CONTENT_FIELDS_XPATH = "/asset/content/field";
+    private static final String SERENA_METADATA_FIELDS_XPATH = "/asset/metaData/field";
+    private static final String SERENA_CONTENT_FIELDS_XPATH = "/asset/content/field";
+    private static final String LUMINIS_METADATA_FIELD_NAMES_REGEX = "<sct:meta name=\"([^\"]*)\"";
+    private static final String LUMINIS_NORMAL_FIELD_NAMES_REGEX = "<sct:field name=\"([^\"]*)\"";
+    private static final String LUMINIS_XHTML_FIELD_NAMES_REGEX = "<sct:xhtml name=\"([^\"]*)\"";
+    private static final String LUMINIS_IMG_FIELD_NAMES_REGEX = "<sct:img name=\"([^\"]*)\"";
+    private static final String LUMINIS_WEBVIEW_URL_XPATH = "/root/@webviewurl";
+    private static final String LUMINIS_SCT_WEB_PAGE_XPATH = "/root/sct_web_page";
     private static final String FILE_PROBLEM_MESSAGE = "There were problems with analyzing file ";
     private static final String LINK_XPATH = "//a/@href | //img/@src | //script/@src | //link/@href ";
     private static final String DEPLOY_PATH_XPATH = "/asset/coreData/deployPath";
     private static final String FIELDS_XPATH = "//field";
+    private static final String ROOT_SITE_FOLDER_NAME = "Root Site";
+    private static final String LINK_FILE_NAME = "linkFile.xml";
 
     /**
-     * Analyzes a folder by going through each file in the folder and subfolders and calling {@link XmlAnalyzer#analyzeContentsOfXmlFile(File)}
-     * on each xml file
+     * Analyzes a folder by going through each file in the folder and subfolders and calling appropriate
+     * method to analyze it depending on whether it is a Luminis dump or a Serena dump
      * 
      * @param folder
      * @param assetTypes
@@ -56,9 +66,27 @@ public class XmlAnalyzer
      */
     public static void analyzeFolder(File folder, ProjectInformation projectInformation, List<String> errorMessages)
     {
-        List<File> files = FileSystem.getAllXmlFiles(folder);
-        for (File file : files)
-            analyzeFile(file, projectInformation, errorMessages);
+        File luminisFolder = findLuminisRootSiteFolder(folder);
+
+        // If Luminis folder is found, mark it as luminis migration and analyze the Luminis files
+        if (luminisFolder != null)
+        {
+            projectInformation.setLuminis(true);
+            List<File> jspFiles = FileSystem.getAllFilesByExtension(luminisFolder, ".jsp");
+            for (File jspFile : jspFiles)
+                analyzeLuminisJspFile(jspFile, projectInformation, errorMessages);
+
+            List<File> xmlFiles = FileSystem.getAllFilesByExtension(luminisFolder, ".xml");
+            for (File xmlFile : xmlFiles)
+                analyzeLuminisXmlFile(xmlFile, projectInformation, errorMessages);
+        }
+        // Otherwise analyze Serena files
+        else
+        {
+            List<File> files = FileSystem.getAllFilesByExtension(folder, ".xml");
+            for (File file : files)
+                analyzeSerenaFile(file, projectInformation, errorMessages);
+        }
     }
 
     /**
@@ -78,13 +106,14 @@ public class XmlAnalyzer
     }
 
     /**
-     * Parses an XML file and returns a Page object that contains all the necessary information for migration of that page into Cascade Server
+     * Parses an XML file and returns a Page object that contains all the necessary information for migration
+     * of that page into Cascade Server
      * 
      * @param file
      * @return
      * @throws Exception
      */
-    public static DetailedXmlPageInformation parseXmlFile(File file) throws Exception
+    public static DetailedXmlPageInformation parseSerenaXmlFile(File file) throws Exception
     {
         DetailedXmlPageInformation page = new DetailedXmlPageInformation();
         Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new FileInputStream(file)));
@@ -94,11 +123,11 @@ public class XmlAnalyzer
             Node rootChildNode = rootChildNodes.item(i);
             String rootChildNodeName = rootChildNode.getNodeName();
             if (rootChildNodeName.equals("coreData"))
-                parseCoreData(rootChildNode, page);
+                parseSerenaCoreData(rootChildNode, page);
             else if (rootChildNodeName.equals("metaData"))
-                parseMetaData(rootChildNode, page);
+                parseSerenaMetaData(rootChildNode, page);
             else if (rootChildNodeName.equals("content"))
-                parseContent(rootChildNode, page);
+                parseSerenaContent(rootChildNode, page);
         }
 
         return page;
@@ -120,7 +149,8 @@ public class XmlAnalyzer
     }
 
     /**
-     * Checks if current node contains an src attribute and if not, then recursively checks all the ancestor nodes and returns
+     * Checks if current node contains an src attribute and if not, then recursively checks all the ancestor
+     * nodes and returns
      * the values first one that contains.
      * 
      * @param node
@@ -148,7 +178,7 @@ public class XmlAnalyzer
      * @param coreDataNode
      * @param page
      */
-    private static void parseCoreData(Node coreDataNode, DetailedXmlPageInformation page)
+    private static void parseSerenaCoreData(Node coreDataNode, DetailedXmlPageInformation page)
     {
         NodeList nodes = coreDataNode.getChildNodes();
         for (int i = 0; i < nodes.getLength(); i++)
@@ -168,7 +198,7 @@ public class XmlAnalyzer
      * @param coreDataNode
      * @param page
      */
-    private static void parseMetaData(Node coreDataNode, DetailedXmlPageInformation page)
+    private static void parseSerenaMetaData(Node coreDataNode, DetailedXmlPageInformation page)
     {
         NodeList nodes = coreDataNode.getChildNodes();
         for (int i = 0; i < nodes.getLength(); i++)
@@ -183,7 +213,8 @@ public class XmlAnalyzer
             Node isUserMetadataAttribute = node.getAttributes().getNamedItem("isUserMetaData");
             Node nameAttribute = node.getAttributes().getNamedItem("name");
 
-            // only <field> tags count and they must have "name" and "isUserMetaData" attributes the "isUserMetadata" attribute must say "true"
+            // only <field> tags count and they must have "name" and "isUserMetaData" attributes the
+            // "isUserMetadata" attribute must say "true"
             if (nodeName.equals("field") && nameAttribute != null && isUserMetadataAttribute != null
                     && isUserMetadataAttribute.getNodeValue().equals("true"))
                 page.getMetadataMap().put(nameAttribute.getNodeValue(), XmlAnalyzer.getCDataContent(node));
@@ -196,7 +227,7 @@ public class XmlAnalyzer
      * @param coreDataNode
      * @param page
      */
-    private static void parseContent(Node coreDataNode, DetailedXmlPageInformation page)
+    private static void parseSerenaContent(Node coreDataNode, DetailedXmlPageInformation page)
     {
         NodeList nodes = coreDataNode.getChildNodes();
         for (int i = 0; i < nodes.getLength(); i++)
@@ -289,18 +320,175 @@ public class XmlAnalyzer
     }
 
     /**
-     * Analyzes a file using the {@link XmlAnalyzer#analyzeContentsOfXmlFile(File)} method. If exception occurs, adds
-     * an error message to the existing list of error messages. Adds the information that was analyzed to the project information.
+     * Stores the jsp template name
+     * 
+     * @param jspFile
+     * @param projectInformation
+     * @param errorMessages
+     */
+    private static void analyzeLuminisJspFile(File jspFile, ProjectInformation projectInformation, List<String> errorMessages)
+    {
+        try
+        {
+            String assetTypeName = PathUtil.skipRootFolder(PathUtil.getRelativePath(jspFile, projectInformation.getXmlDirectory()));
+            AssetType assetType = new AssetType(assetTypeName);
+            projectInformation.getAssetTypes().put(assetTypeName, assetType);
+
+            // <sct:meta/>
+            assetType.getMetadataFields().addAll(findLuminisMetadataFields(jspFile));
+
+            // <sct:field/>, <sct:img/> and <sct:xhtml/>
+            assetType.getContentFields().addAll(findLuminisContentFields(jspFile));
+        }
+        catch (Exception e)
+        {
+            // To build the file path that needs to be displayed, we show only the part of the abosute path
+            // after the xml directory
+            String relativePath = PathUtil.getRelativePath(jspFile, projectInformation.getXmlDirectory());
+
+            // Sometimes the exception message is null, so we get the message from the parent exception
+            String message = e.getMessage();
+            if (message == null && e.getCause() != null)
+                message = e.getCause().getMessage();
+
+            errorMessages.add(FILE_PROBLEM_MESSAGE + relativePath + ": " + message);
+        }
+    }
+
+    /**
+     * Returns all &lt;sct:meta/&gt; fields in the given <code>jspFile</code> and returns a list of their
+     * names (name attributes)
+     * 
+     * @param jspFile
+     * @return
+     */
+    private static List<String> findLuminisMetadataFields(File jspFile) throws Exception
+    {
+        String jsp = FileSystem.getFileContents(jspFile);
+        return getRegexMatches(jsp, LUMINIS_METADATA_FIELD_NAMES_REGEX);
+    }
+
+    /**
+     * Returns all &lt;sct:field/&gt;, &lt;sct:xhtml/&gt; and &lt;sct:img/&gt; fields in the given
+     * <code>jspFile</code> and returns a list of their names (name attributes)
+     * 
+     * @param jspFile
+     * @return
+     */
+    private static List<String> findLuminisContentFields(File jspFile) throws Exception
+    {
+        String jsp = FileSystem.getFileContents(jspFile);
+        List<String> result = new ArrayList<String>();
+
+        result.addAll(getRegexMatches(jsp, LUMINIS_NORMAL_FIELD_NAMES_REGEX));
+        result.addAll(getRegexMatches(jsp, LUMINIS_XHTML_FIELD_NAMES_REGEX));
+        result.addAll(getRegexMatches(jsp, LUMINIS_IMG_FIELD_NAMES_REGEX));
+
+        return result;
+    }
+
+    /**
+     * Applies given <code>regEx</code> regular expression to given <code>text</code> and returns all
+     * occurrences from group 1.
+     * 
+     * @param jsp
+     * @param regEx
+     * @return
+     */
+    private static List<String> getRegexMatches(String text, String regEx)
+    {
+        List<String> result = new ArrayList<String>();
+
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(text);
+        boolean r = m.find();
+        while (r)
+        {
+            result.add(m.group(1));
+            r = m.find();
+        }
+
+        return result;
+    }
+
+    /**
+     * Adds non-linkFile files to the list of files to process
+     * 
+     * @param xmlFile
+     * @param projectInformation
+     * @param errorMessages
+     */
+    private static void analyzeLuminisXmlFile(File xmlFile, ProjectInformation projectInformation, List<String> errorMessages)
+    {
+        try
+        {
+            if (!xmlFile.getName().equals(LINK_FILE_NAME))
+                projectInformation.getFilesToProcess().add(xmlFile);
+            else
+                analyzeLuminisLinkfile(xmlFile, projectInformation);
+        }
+        catch (Exception e)
+        {
+            // To build the file path that needs to be displayed, we show only the part of the abosute path
+            // after the xml directory
+            String relativePath = PathUtil.getRelativePath(xmlFile, projectInformation.getXmlDirectory());
+
+            // Sometimes the exception message is null, so we get the message from the parent exception
+            String message = e.getMessage();
+            if (message == null && e.getCause() != null)
+                message = e.getCause().getMessage();
+
+            errorMessages.add(FILE_PROBLEM_MESSAGE + relativePath + ": " + message);
+        }
+    }
+
+    private static void analyzeLuminisLinkfile(File linkfile, ProjectInformation projectInformation) throws Exception
+    {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+
+        InputSource inputSource = new InputSource(new FileInputStream(linkfile));
+        String webviewUrl = xpath.evaluate(LUMINIS_WEBVIEW_URL_XPATH, inputSource);
+
+        if (webviewUrl == null)
+            throw new Exception("Linkfile is missing a webview url");
+
+        xpath = XPathFactory.newInstance().newXPath();
+
+        NodeList sctWebPageNodes = (NodeList) xpath.evaluate(LUMINIS_SCT_WEB_PAGE_XPATH, inputSource, XPathConstants.NODESET);
+
+        for (int i = 0; i < sctWebPageNodes.getLength(); i++)
+        {
+            DetailedXmlPageInformation sctWebPage = new DetailedXmlPageInformation();
+            Node objectNameNode = sctWebPageNodes.item(i).getAttributes().getNamedItem("object_name");
+            if (objectNameNode == null)
+                throw new Exception("The <sct_web_page> tag has no \"object_name\" attribute.");
+
+            Node templateUsedNode = sctWebPageNodes.item(i).getAttributes().getNamedItem("template_used");
+            if (templateUsedNode == null)
+                throw new Exception("The <sct_web_page> tag has no \"template_used\" attribute.");
+
+            sctWebPage.setDeployPath(webviewUrl + "/" + objectNameNode.getTextContent());
+            sctWebPage.setAssetType(templateUsedNode.getTextContent());
+            projectInformation.getPagesToProcess().put(linkfile, sctWebPage);
+        }
+
+    }
+
+    /**
+     * Analyzes a file for Serena dump using the {@link XmlAnalyzer#analyzeContentsOfSerenaXmlFile(File)}
+     * method. If
+     * exception occurs, adds an error message to the existing list of error messages. Adds the information
+     * that was analyzed to the project information.
      * 
      * @param file
      * @param projectInformation
      * @param errorMessages
      */
-    private static void analyzeFile(File file, ProjectInformation projectInformation, List<String> errorMessages)
+    private static void analyzeSerenaFile(File file, ProjectInformation projectInformation, List<String> errorMessages)
     {
         try
         {
-            XmlPageInformation xmlPageInformation = XmlAnalyzer.analyzeContentsOfXmlFile(file);
+            XmlPageInformation xmlPageInformation = analyzeContentsOfSerenaXmlFile(file);
             if (xmlPageInformation == null)
                 return;
 
@@ -317,15 +505,25 @@ public class XmlAnalyzer
                 projectInformation.getAssetTypes().put(assetTypeName, assetType);
             }
 
-            assetType.getMetadataFields().addAll(xmlPageInformation.getMetadataFields()); // adds unique field names only
-            assetType.getContentFields().addAll(xmlPageInformation.getContentFields()); // adds unique field names only
-            projectInformation.getGatheredRootLevelFolders().add(xmlPageInformation.getRootLevelFolder()); // adds unique folder name only
-            projectInformation.getGatheredLinkedRootLevelFolders().addAll(xmlPageInformation.getLinkedToRootLevelFolders()); // adds unique folder names only
-            projectInformation.getFilesToProcess().add(file); // add only if no exception was thrown, 
+            // adds unique field names only
+            assetType.getMetadataFields().addAll(xmlPageInformation.getMetadataFields());
+
+            // adds unique field names only
+            assetType.getContentFields().addAll(xmlPageInformation.getContentFields());
+
+            // adds unique folder name only
+            projectInformation.getGatheredRootLevelFolders().add(xmlPageInformation.getRootLevelFolder());
+
+            // adds unique folder names only
+            projectInformation.getGatheredLinkedRootLevelFolders().addAll(xmlPageInformation.getLinkedToRootLevelFolders());
+
+            // add only if no exception was thrown,
+            projectInformation.getFilesToProcess().add(file);
         }
         catch (Exception e)
         {
-            // To build the file path that needs to be displayed, we show only the part of the abosute path after the xml directory 
+            // To build the file path that needs to be displayed, we show only the part of the abosute path
+            // after the xml directory
             String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
 
             // Sometimes the exception message is null, so we get the message from the parent exception
@@ -338,36 +536,38 @@ public class XmlAnalyzer
     }
 
     /**
-     * Parses the contents of an XML file and returns the XmlPageInformation object with the information gathered from that file
+     * Parses the contents of an XML file and returns the XmlPageInformation object with the information
+     * gathered from that file
      * 
      * @param file
      * @return
      */
-    private static XmlPageInformation analyzeContentsOfXmlFile(File file) throws Exception
+    private static XmlPageInformation analyzeContentsOfSerenaXmlFile(File file) throws Exception
     {
         XmlPageInformation xmlPageInformation = new XmlPageInformation();
 
-        findAssetType(file, xmlPageInformation);
+        findSerenaAssetType(file, xmlPageInformation);
 
         // Skip this file if the asset type couldn't be found
         if (StringUtils.isEmpty(xmlPageInformation.getAssetTypeName()))
             return null;
 
-        findMetadataFields(file, xmlPageInformation);
-        findContentFields(file, xmlPageInformation);
-        findLinkedRootLevelFolders(file, xmlPageInformation);
+        findSerenaMetadataFields(file, xmlPageInformation);
+        findSerenaContentFields(file, xmlPageInformation);
+        findSerenaLinkedRootLevelFolders(file, xmlPageInformation);
 
         return xmlPageInformation;
     }
 
     /**
-     * Analyzes the XML file and finds the Asset Type name in it and assigns it to the XmlPageInformation object.
+     * Analyzes the XML file and finds the Asset Type name in it and assigns it to the XmlPageInformation
+     * object.
      * 
      * @param file
      * @param xmlPageInformation
      * @throws Exception
      */
-    private static void findAssetType(File file, XmlPageInformation xmlPageInformation) throws Exception
+    private static void findSerenaAssetType(File file, XmlPageInformation xmlPageInformation) throws Exception
     {
         XPath xpath = XPathFactory.newInstance().newXPath();
 
@@ -382,18 +582,19 @@ public class XmlAnalyzer
     }
 
     /**
-     * Analyzes the XML file and finds the Metadata field names in it and assigns them to the XmlPageInformation object.
+     * Analyzes the XML file and finds the Metadata field names in it and assigns them to the
+     * XmlPageInformation object.
      * 
      * @param file
      * @param xmlPageInformation
      * @throws Exception
      */
-    private static void findMetadataFields(File file, XmlPageInformation xmlPageInformation) throws Exception
+    private static void findSerenaMetadataFields(File file, XmlPageInformation xmlPageInformation) throws Exception
     {
         XPath xpath = XPathFactory.newInstance().newXPath();
 
         InputSource inputSource = new InputSource(new FileInputStream(file));
-        NodeList metadataFields = (NodeList) xpath.evaluate(METADATA_FIELDS_XPATH, inputSource, XPathConstants.NODESET);
+        NodeList metadataFields = (NodeList) xpath.evaluate(SERENA_METADATA_FIELDS_XPATH, inputSource, XPathConstants.NODESET);
 
         for (int i = 0; i < metadataFields.getLength(); i++)
         {
@@ -406,18 +607,19 @@ public class XmlAnalyzer
     }
 
     /**
-     * Analyzes the XML file and finds the Content filed names in it and assigns them to the XmlPageinformation object
+     * Analyzes the XML file and finds the Content filed names in it and assigns them to the
+     * XmlPageinformation object
      * 
      * @param file
      * @param xmlPageInformation
      * @throws Exception
      */
-    private static void findContentFields(File file, XmlPageInformation xmlPageInformation) throws Exception
+    private static void findSerenaContentFields(File file, XmlPageInformation xmlPageInformation) throws Exception
     {
         XPath xpath = XPathFactory.newInstance().newXPath();
 
         InputSource inputSource = new InputSource(new FileInputStream(file));
-        NodeList contentFields = (NodeList) xpath.evaluate(CONTENT_FIELDS_XPATH, inputSource, XPathConstants.NODESET);
+        NodeList contentFields = (NodeList) xpath.evaluate(SERENA_CONTENT_FIELDS_XPATH, inputSource, XPathConstants.NODESET);
 
         for (int i = 0; i < contentFields.getLength(); i++)
         {
@@ -436,7 +638,7 @@ public class XmlAnalyzer
      * @param xmlPageInformation
      * @throws Exception
      */
-    private static void findLinkedRootLevelFolders(File file, XmlPageInformation xmlPageInformation) throws Exception
+    private static void findSerenaLinkedRootLevelFolders(File file, XmlPageInformation xmlPageInformation) throws Exception
     {
         String deployPath = getDeployPath(file).trim();
         xmlPageInformation.setRootLevelFolder(deployPath.substring(0, deployPath.indexOf('/')));
@@ -452,8 +654,10 @@ public class XmlAnalyzer
     }
 
     /**
-     * Analyzes given field tag node, strips the cdata content and finds all link tags (a, img, link, script) and if these are root level
-     * folder links (go ../ as many times as the page is deep from deplyPathLevels), then the folder is added to the list
+     * Analyzes given field tag node, strips the cdata content and finds all link tags (a, img, link, script)
+     * and if these are root level
+     * folder links (go ../ as many times as the page is deep from deplyPathLevels), then the folder is added
+     * to the list
      * linkedToRootLevelFolders in xmlPageInformation
      * 
      * @param fieldNode
@@ -475,7 +679,8 @@ public class XmlAnalyzer
             Node linkNode = linkNodes.item(i);
             String link = linkNode.getTextContent();
 
-            // If it doesn't start with ../ then it will never be a relative link that goes to the root level folder
+            // If it doesn't start with ../ then it will never be a relative link that goes to the root level
+            // folder
             if (!link.startsWith("../"))
                 continue;
 
@@ -502,5 +707,77 @@ public class XmlAnalyzer
         InputSource inputSource = new InputSource(new FileInputStream(file));
         NodeList deployPathNodes = (NodeList) xpath.evaluate(DEPLOY_PATH_XPATH, inputSource, XPathConstants.NODESET);
         return deployPathNodes.item(0).getTextContent();
+    }
+
+    /**
+     * Assumming it is a Luminis dump, it will return the third level "Root Site" folder if it is the only
+     * sub-folder of it's parent. If not found, returns null.
+     * 
+     * @param rootfolder Root folder of the zip file uploaded
+     * @return
+     */
+    private static File findLuminisRootSiteFolder(File rootfolder)
+    {
+        for (String firstLevelFileString : rootfolder.list())
+        {
+            File firstLevelFile = new File(rootfolder.getAbsolutePath() + "/" + firstLevelFileString);
+
+            // If it's a file (meaning not a folder), skip
+            if (firstLevelFile.isFile())
+                continue;
+
+            for (String secondLevelFileString : firstLevelFile.list())
+            {
+                File secondLevelFile = new File(firstLevelFile.getAbsolutePath() + "/" + secondLevelFileString);
+
+                // If it's a file (meaning not a folder), skip
+                if (secondLevelFile.isFile())
+                    continue;
+
+                // Find the "Root Folder" and make sure it's the only folder. If found - return it.
+                File foundFolder = findOnlyRootSiteFolder(secondLevelFile);
+                if (foundFolder != null)
+                    return foundFolder;
+
+                // If not found, continue search
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Assumming it is a Luminis dump, it will return the third level "Root Site" folder if it is the only
+     * sub-folder of it's parent. If not found, returns null. Takes second level folder as a parameter
+     * 
+     * @param secondLevelFolder One of the second level folders of the zip file uploaded
+     * @return
+     */
+    private static File findOnlyRootSiteFolder(File secondLevelFolder)
+    {
+        int nFolders = 0;
+        File foundFolder = null;
+
+        for (String thirdLevelFileString : secondLevelFolder.list())
+        {
+            File thirdLevelFile = new File(secondLevelFolder.getAbsolutePath() + "/" + thirdLevelFileString);
+
+            // If it's a file, skip (Can be .DS_Store or something else, so just ignore it)
+            if (thirdLevelFile.isFile())
+                continue;
+
+            // If it's a folder, count it in
+            nFolders++;
+
+            // If it's a Root Site folder, store it
+            if (ROOT_SITE_FOLDER_NAME.equals(thirdLevelFileString))
+                foundFolder = thirdLevelFile;
+        }
+
+        // If there was Root Site folder and it was the only folder, we found it - return
+        if (nFolders == 1 && foundFolder != null)
+            return foundFolder;
+
+        return null;
     }
 }
