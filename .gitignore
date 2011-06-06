@@ -1,3 +1,9 @@
 bin
 tomcat/webapps/ROOT
 tomcat/work/Catalina
+.DS_Store
+_PRE-COMPILED/.DS_Store
+_PRE-COMPILED/6.4/.DS_Store
+_PRE-COMPILED/6.8/.DS_Store
+tomcat/.DS_Store
+tomcat/webapps/.DS_Store
