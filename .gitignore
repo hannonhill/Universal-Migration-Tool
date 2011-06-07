@@ -1,5 +1,5 @@
 bin
-tomcat/webapps/ROOT
+tomcat/webapps/ROOT/WEB-INF/classes/com
 tomcat/work/Catalina
 .DS_Store
 _PRE-COMPILED/.DS_Store
