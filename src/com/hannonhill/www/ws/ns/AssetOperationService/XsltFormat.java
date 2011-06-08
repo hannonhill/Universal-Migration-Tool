@@ -21,6 +21,8 @@ public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.String path,
            java.util.Calendar lastModifiedDate,
            java.lang.String lastModifiedBy,
+           java.util.Calendar createdDate,
+           java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
            java.lang.String xml) {
@@ -32,6 +34,8 @@ public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.
             path,
             lastModifiedDate,
             lastModifiedBy,
+            createdDate,
+            createdBy,
             siteId,
             siteName);
         this.xml = xml;

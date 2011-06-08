@@ -1,7 +1,7 @@
 /*
  * Created on Dec 8, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.service;
 
@@ -24,6 +24,7 @@ import org.xml.sax.InputSource;
 
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.ExternalRootLevelFolderAssignment;
+import com.hannonhill.smt.LuminisLink;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
 import com.hannonhill.smt.util.XmlUtil;
@@ -31,15 +32,16 @@ import com.hannonhill.smt.util.XmlUtil;
 /**
  * A service responsible for link rewriting
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class LinkRewriter
 {
     /**
-     * Rewrites all the file and page links in the content and metadata fields of the page. If it is a page link (ends with any extension of the 
-     * extensions in possibleExtensions set and is relative), the extension will be stripped. Also, removes the Serena specific attributes: 
+     * Rewrites all the file and page links in the content and metadata fields of the page. If it is a page
+     * link (ends with any extension of the
+     * extensions in possibleExtensions set and is relative), the extension will be stripped. Also, removes
+     * the Serena specific attributes:
      * cmid and collagestyle from all tags.
      * 
      * @param page
@@ -53,9 +55,47 @@ public class LinkRewriter
         rewriteLinkAndRemoveSerenaAttributes(page.getMetadataMap(), pagePath, projectInformation);
     }
 
+    public static void rewriteLuminisLinks(DetailedXmlPageInformation page, ProjectInformation projectInformation)
+    {
+        rewriteLuminisLinks(page.getContentMap(), page, projectInformation);
+        rewriteLuminisLinks(page.getMetadataMap(), page, projectInformation);
+    }
+
+    private static void rewriteLuminisLinks(Map<String, String> map, DetailedXmlPageInformation page, ProjectInformation projectInformation)
+    {
+        for (LuminisLink link : page.getLuminisLinks())
+        {
+            String regex = "\"/id(" + link.getId() + ")\"";
+            String webViewUrl = getViewUrl(link.getLinkedItemFolder(), projectInformation.getLinkFileUrlToWebviewUrlMap());
+            for (String fieldIdentifier : map.keySet())
+            {
+                String content = map.get(fieldIdentifier);
+                String newContent = content.replaceAll(regex, "\"/" + PathUtil.removeLeadingSlashes(webViewUrl + "/" + link.getLinkedItemName())
+                        + "\"");
+                map.put(fieldIdentifier, newContent);
+            }
+        }
+    }
+
+    private static String getViewUrl(String folder, Map<String, String> linkFileToUrlMap)
+    {
+        String webViewUrl = linkFileToUrlMap.get(folder + "/linkFile.xml");
+        if (webViewUrl != null)
+            return webViewUrl;
+
+        String parentFolder = PathUtil.getParentFolderPathFromPath(folder);
+        if (!parentFolder.equals("/"))
+            return getViewUrl(parentFolder, linkFileToUrlMap);
+
+        return "";
+
+    }
+
     /**
-     * Rewrites all the file and page links in each value of the map. If it is a page link (ends with .html extension and is
-     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid and collagestyle from all tags.
+     * Rewrites all the file and page links in each value of the map. If it is a page link (ends with .html
+     * extension and is
+     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid
+     * and collagestyle from all tags.
      * 
      * @param map
      * @param pagePath
@@ -75,7 +115,8 @@ public class LinkRewriter
 
     /**
      * Rewrites all the file and page links in the xml. If it is a page link (ends with .html extension and is
-     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid and collagestyle from all tags.
+     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid
+     * and collagestyle from all tags.
      * 
      * @param xml
      * @param pagePath
@@ -118,8 +159,10 @@ public class LinkRewriter
     }
 
     /**
-     * Rewrites the file and page link in the xml tag node and all ancestor nodes. If it is a page link (ends with .html extension and is
-     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid and collagestyle from all tags.
+     * Rewrites the file and page link in the xml tag node and all ancestor nodes. If it is a page link (ends
+     * with .html extension and is
+     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid
+     * and collagestyle from all tags.
      * 
      * @param node
      * @param pagePath
@@ -161,8 +204,10 @@ public class LinkRewriter
     }
 
     /**
-     * Rewrites a file or page link in the xml tag node's attribute of given attributeName if it is a relative link. 
-     * If it is a page link (ends with .html extension and is a relative), the .html extension will be stripped. Keeps the anchor.
+     * Rewrites a file or page link in the xml tag node's attribute of given attributeName if it is a relative
+     * link.
+     * If it is a page link (ends with .html extension and is a relative), the .html extension will be
+     * stripped. Keeps the anchor.
      * 
      * @param element
      * @param attributeName
@@ -191,11 +236,15 @@ public class LinkRewriter
     }
 
     /**
-     * Rewrites the prefix part of the link and if needed, trunkates the extension. 
-     * For example, for a page with path /folder/page and a link ../folder2/page2.html, the link will be rewritten to /folder2/page2.html.
-     * If it goes up to the root level (and example above does), it looks for the root level folder assignments and if it finds one, it rewrites it again
-     * with the assignment. For example if there is a site assignment of "folder2" to "site_a", the link will look like this: site://site_a/folder2/page2.html
-     * If it is not a external link, also trunkates extension if it is a link to a page, meaning the extension belongs to one of the gathered extensions 
+     * Rewrites the prefix part of the link and if needed, trunkates the extension.
+     * For example, for a page with path /folder/page and a link ../folder2/page2.html, the link will be
+     * rewritten to /folder2/page2.html.
+     * If it goes up to the root level (and example above does), it looks for the root level folder
+     * assignments and if it finds one, it rewrites it again
+     * with the assignment. For example if there is a site assignment of "folder2" to "site_a", the link will
+     * look like this: site://site_a/folder2/page2.html
+     * If it is not a external link, also trunkates extension if it is a link to a page, meaning the extension
+     * belongs to one of the gathered extensions
      * in project information. So the end result of the example above would be site://site_a/folder2/page2
      * 
      * @param link
@@ -224,14 +273,18 @@ public class LinkRewriter
             {
                 // if it is an external link, add the external url and return (skip adding extension)
                 if (assignment.getAssignmentType().equals(ExternalRootLevelFolderAssignment.ASSIGNMENT_TYPE_EXTERNAL_LINK))
-                    return assignment.getExternalLinkAssignment() + newPath; // converts link /folder/page to http://domain/com/folder/page
+                    return assignment.getExternalLinkAssignment() + newPath; // converts link /folder/page to
+                                                                             // http://domain/com/folder/page
 
                 // if it is not an external link, do a cross site link and keep it for adding the extension
-                newPath = "site://" + assignment.getCrossSiteAssignment() + newPath; // converts link /folder/page to site://sitename/folder/page
+                newPath = "site://" + assignment.getCrossSiteAssignment() + newPath; // converts link
+                                                                                     // /folder/page to
+                                                                                     // site://sitename/folder/page
             }
         }
 
-        // If the link links to a file with extension that is one of the possible extensions used, that means it is a link to a page
+        // If the link links to a file with extension that is one of the possible extensions used, that means
+        // it is a link to a page
         // and therefore, the extension in the link needs to be stripped
         String extension = PathUtil.getExtension(newPath);
         if (projectInformation.getGatheredExtensions().contains(extension))

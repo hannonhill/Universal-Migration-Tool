@@ -44,7 +44,8 @@ public class ProjectInformation
     private Map<String, ExternalRootLevelFolderAssignment> externalRootLevelFolderAssignemnts;
 
     // analyzed information
-    private boolean luminis = false;
+    private File luminisFolder;
+    private String luminisLinkRootPath;
     private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type
                                                               // information (with the available metadata and
                                                               // dd fields)
@@ -54,10 +55,12 @@ public class ProjectInformation
     private Set<String> gatheredRootLevelFolders; // a set of root level folders of XML pages
     private Set<String> gatheredLinkedRootLevelFolders; // a set of root level folders in links in the XML
                                                         // that link to assets
-    private final Map<File, DetailedXmlPageInformation> pagesToProcess; // a map of a filesToProcess file
+    private final Map<File, DetailedXmlPageInformation> pagesToProcess; // a map of a filesToProcess files
                                                                         // to detailed information about the
                                                                         // page coming from linkFile.xml in
                                                                         // Luminis dump
+    private final Map<String, String> linkFileUrlToWebviewUrlMap;
+
     // detailed information of the page in
     // that file
 
@@ -91,6 +94,8 @@ public class ProjectInformation
         contentTypeMap = new HashMap<String, String>();
         externalRootLevelFolderAssignemnts = new HashMap<String, ExternalRootLevelFolderAssignment>();
         pagesToProcess = new HashMap<File, DetailedXmlPageInformation>();
+        luminisFolder = null;
+        linkFileUrlToWebviewUrlMap = new HashMap<String, String>();
     }
 
     /**
@@ -394,19 +399,35 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the luminis.
+     * @return Returns the luminisFolder.
      */
-    public boolean isLuminis()
+    public File getLuminisFolder()
     {
-        return luminis;
+        return luminisFolder;
     }
 
     /**
-     * @param luminis the luminis to set
+     * @param luminisFolder the luminisFolder to set
      */
-    public void setLuminis(boolean luminis)
+    public void setLuminisFolder(File luminisFolder)
     {
-        this.luminis = luminis;
+        this.luminisFolder = luminisFolder;
+    }
+
+    /**
+     * @return Returns the luminisLinkRootPath.
+     */
+    public String getLuminisLinkRootPath()
+    {
+        return luminisLinkRootPath;
+    }
+
+    /**
+     * @param luminisLinkRootPath the luminisLinkRootPath to set
+     */
+    public void setLuminisLinkRootPath(String luminisLinkRootPath)
+    {
+        this.luminisLinkRootPath = luminisLinkRootPath;
     }
 
     /**
@@ -416,4 +437,13 @@ public class ProjectInformation
     {
         return pagesToProcess;
     }
+
+    /**
+     * @return Returns the linkFileUrlToWebviewUrlMap.
+     */
+    public Map<String, String> getLinkFileUrlToWebviewUrlMap()
+    {
+        return linkFileUrlToWebviewUrlMap;
+    }
+
 }

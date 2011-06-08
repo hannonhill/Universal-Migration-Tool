@@ -18,6 +18,10 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
 
     private java.lang.String lastModifiedBy;
 
+    private java.util.Calendar createdDate;
+
+    private java.lang.String createdBy;
+
     private java.lang.String siteId;
 
     private java.lang.String siteName;
@@ -33,6 +37,8 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
            java.lang.String path,
            java.util.Calendar lastModifiedDate,
            java.lang.String lastModifiedBy,
+           java.util.Calendar createdDate,
+           java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName) {
         super(
@@ -43,6 +49,8 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         this.path = path;
         this.lastModifiedDate = lastModifiedDate;
         this.lastModifiedBy = lastModifiedBy;
+        this.createdDate = createdDate;
+        this.createdBy = createdBy;
         this.siteId = siteId;
         this.siteName = siteName;
     }
@@ -149,6 +157,46 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
 
 
     /**
+     * Gets the createdDate value for this FolderContainedAsset.
+     * 
+     * @return createdDate
+     */
+    public java.util.Calendar getCreatedDate() {
+        return createdDate;
+    }
+
+
+    /**
+     * Sets the createdDate value for this FolderContainedAsset.
+     * 
+     * @param createdDate
+     */
+    public void setCreatedDate(java.util.Calendar createdDate) {
+        this.createdDate = createdDate;
+    }
+
+
+    /**
+     * Gets the createdBy value for this FolderContainedAsset.
+     * 
+     * @return createdBy
+     */
+    public java.lang.String getCreatedBy() {
+        return createdBy;
+    }
+
+
+    /**
+     * Sets the createdBy value for this FolderContainedAsset.
+     * 
+     * @param createdBy
+     */
+    public void setCreatedBy(java.lang.String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+
+    /**
      * Gets the siteId value for this FolderContainedAsset.
      * 
      * @return siteId
@@ -214,6 +262,12 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
             ((this.lastModifiedBy==null && other.getLastModifiedBy()==null) || 
              (this.lastModifiedBy!=null &&
               this.lastModifiedBy.equals(other.getLastModifiedBy()))) &&
+            ((this.createdDate==null && other.getCreatedDate()==null) || 
+             (this.createdDate!=null &&
+              this.createdDate.equals(other.getCreatedDate()))) &&
+            ((this.createdBy==null && other.getCreatedBy()==null) || 
+             (this.createdBy!=null &&
+              this.createdBy.equals(other.getCreatedBy()))) &&
             ((this.siteId==null && other.getSiteId()==null) || 
              (this.siteId!=null &&
               this.siteId.equals(other.getSiteId()))) &&
@@ -245,6 +299,12 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         }
         if (getLastModifiedBy() != null) {
             _hashCode += getLastModifiedBy().hashCode();
+        }
+        if (getCreatedDate() != null) {
+            _hashCode += getCreatedDate().hashCode();
+        }
+        if (getCreatedBy() != null) {
+            _hashCode += getCreatedBy().hashCode();
         }
         if (getSiteId() != null) {
             _hashCode += getSiteId().hashCode();
@@ -293,6 +353,20 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("lastModifiedBy");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "lastModifiedBy"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("createdDate");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "createdDate"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("createdBy");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "createdBy"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);

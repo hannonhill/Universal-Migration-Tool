@@ -5,6 +5,7 @@
  */
 package com.hannonhill.smt.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
@@ -27,6 +28,7 @@ import org.xml.sax.InputSource;
 import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.DetailedXmlPageInformation;
+import com.hannonhill.smt.LuminisLink;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.XmlPageInformation;
 import com.hannonhill.smt.util.PathUtil;
@@ -44,9 +46,7 @@ public class XmlAnalyzer
     private static final String SERENA_METADATA_FIELDS_XPATH = "/asset/metaData/field";
     private static final String SERENA_CONTENT_FIELDS_XPATH = "/asset/content/field";
     private static final String LUMINIS_METADATA_FIELD_NAMES_REGEX = "<sct:meta name=\"([^\"]*)\"";
-    private static final String LUMINIS_NORMAL_FIELD_NAMES_REGEX = "<sct:field name=\"([^\"]*)\"";
-    private static final String LUMINIS_XHTML_FIELD_NAMES_REGEX = "<sct:xhtml name=\"([^\"]*)\"";
-    private static final String LUMINIS_IMG_FIELD_NAMES_REGEX = "<sct:img name=\"([^\"]*)\"";
+    private static final String LUMINIS_CONTENT_FIELD_NAMES_REGEX = "<sct:(field|xhtml|img|ckeditor|eoprong) name=\"([^\"]*)\"";
     private static final String LUMINIS_WEBVIEW_URL_XPATH = "/root/@webviewurl";
     private static final String LUMINIS_SCT_WEB_PAGE_XPATH = "/root/sct_web_page";
     private static final String FILE_PROBLEM_MESSAGE = "There were problems with analyzing file ";
@@ -71,19 +71,16 @@ public class XmlAnalyzer
         // If Luminis folder is found, mark it as luminis migration and analyze the Luminis files
         if (luminisFolder != null)
         {
-            projectInformation.setLuminis(true);
-            List<File> jspFiles = FileSystem.getAllFilesByExtension(luminisFolder, ".jsp");
-            for (File jspFile : jspFiles)
-                analyzeLuminisJspFile(jspFile, projectInformation, errorMessages);
-
-            List<File> xmlFiles = FileSystem.getAllFilesByExtension(luminisFolder, ".xml");
+            projectInformation.setLuminisFolder(luminisFolder);
+            projectInformation.setLuminisLinkRootPath(new File(luminisFolder.getParent()).getParent());
+            List<File> xmlFiles = FileSystem.getAllXmlFiles(luminisFolder);
             for (File xmlFile : xmlFiles)
                 analyzeLuminisXmlFile(xmlFile, projectInformation, errorMessages);
         }
         // Otherwise analyze Serena files
         else
         {
-            List<File> files = FileSystem.getAllFilesByExtension(folder, ".xml");
+            List<File> files = FileSystem.getAllXmlFiles(folder);
             for (File file : files)
                 analyzeSerenaFile(file, projectInformation, errorMessages);
         }
@@ -106,8 +103,8 @@ public class XmlAnalyzer
     }
 
     /**
-     * Parses an XML file and returns a Page object that contains all the necessary information for migration
-     * of that page into Cascade Server
+     * Parses a Serena XML file and returns a Page object that contains all the necessary information for
+     * migration of that page into Cascade Server
      * 
      * @param file
      * @return
@@ -131,6 +128,28 @@ public class XmlAnalyzer
         }
 
         return page;
+    }
+
+    /**
+     * Parses a Luminis XML file and returns a Page object that contains all the necessary information for
+     * migration of that page into Cascade Server
+     * 
+     * @param file file on the file system containing the xml information
+     * @param page information about the page that data will be added to
+     * @return
+     * @throws Exception
+     */
+    public static void parseLuminisXmlFile(File file, DetailedXmlPageInformation page) throws Exception
+    {
+        String fileContent = FileSystem.getFileContents(file);
+        String text = fileContent.substring(fileContent.indexOf("<object>"));
+        Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new ByteArrayInputStream(text.getBytes())));
+        NodeList rootChildNodes = rootNode.getChildNodes();
+        for (int i = 0; i < rootChildNodes.getLength(); i++)
+        {
+            Node rootChildNode = rootChildNodes.item(i);
+            page.getContentMap().put(rootChildNode.getNodeName(), JTidy.tidyContent(rootChildNode.getTextContent()));
+        }
     }
 
     /**
@@ -323,14 +342,14 @@ public class XmlAnalyzer
      * Stores the jsp template name
      * 
      * @param jspFile
+     * @param assetTypeName
      * @param projectInformation
      * @param errorMessages
      */
-    private static void analyzeLuminisJspFile(File jspFile, ProjectInformation projectInformation, List<String> errorMessages)
+    private static void analyzeLuminisJspFile(File jspFile, String assetTypeName, ProjectInformation projectInformation, List<String> errorMessages)
     {
         try
         {
-            String assetTypeName = PathUtil.skipRootFolder(PathUtil.getRelativePath(jspFile, projectInformation.getXmlDirectory()));
             AssetType assetType = new AssetType(assetTypeName);
             projectInformation.getAssetTypes().put(assetTypeName, assetType);
 
@@ -365,7 +384,7 @@ public class XmlAnalyzer
     private static List<String> findLuminisMetadataFields(File jspFile) throws Exception
     {
         String jsp = FileSystem.getFileContents(jspFile);
-        return getRegexMatches(jsp, LUMINIS_METADATA_FIELD_NAMES_REGEX);
+        return getRegexMatches(jsp, LUMINIS_METADATA_FIELD_NAMES_REGEX, 1);
     }
 
     /**
@@ -378,24 +397,19 @@ public class XmlAnalyzer
     private static List<String> findLuminisContentFields(File jspFile) throws Exception
     {
         String jsp = FileSystem.getFileContents(jspFile);
-        List<String> result = new ArrayList<String>();
-
-        result.addAll(getRegexMatches(jsp, LUMINIS_NORMAL_FIELD_NAMES_REGEX));
-        result.addAll(getRegexMatches(jsp, LUMINIS_XHTML_FIELD_NAMES_REGEX));
-        result.addAll(getRegexMatches(jsp, LUMINIS_IMG_FIELD_NAMES_REGEX));
-
-        return result;
+        return getRegexMatches(jsp, LUMINIS_CONTENT_FIELD_NAMES_REGEX, 2);
     }
 
     /**
      * Applies given <code>regEx</code> regular expression to given <code>text</code> and returns all
-     * occurrences from group 1.
+     * occurrences from group with number provided in <code>group</group> parameter.
      * 
      * @param jsp
      * @param regEx
+     * @param group the group number
      * @return
      */
-    private static List<String> getRegexMatches(String text, String regEx)
+    private static List<String> getRegexMatches(String text, String regEx, int group)
     {
         List<String> result = new ArrayList<String>();
 
@@ -404,7 +418,7 @@ public class XmlAnalyzer
         boolean r = m.find();
         while (r)
         {
-            result.add(m.group(1));
+            result.add(m.group(group));
             r = m.find();
         }
 
@@ -412,7 +426,8 @@ public class XmlAnalyzer
     }
 
     /**
-     * Adds non-linkFile files to the list of files to process
+     * Adds non-linkFile files to the list of files to process. Adds .jsp files found in linkFile.xml files to
+     * list of asset types.
      * 
      * @param xmlFile
      * @param projectInformation
@@ -422,10 +437,8 @@ public class XmlAnalyzer
     {
         try
         {
-            if (!xmlFile.getName().equals(LINK_FILE_NAME))
-                projectInformation.getFilesToProcess().add(xmlFile);
-            else
-                analyzeLuminisLinkfile(xmlFile, projectInformation);
+            if (xmlFile.getName().equals(LINK_FILE_NAME))
+                analyzeLuminisLinkfile(xmlFile, projectInformation, errorMessages);
         }
         catch (Exception e)
         {
@@ -442,14 +455,20 @@ public class XmlAnalyzer
         }
     }
 
-    private static void analyzeLuminisLinkfile(File linkfile, ProjectInformation projectInformation) throws Exception
+    private static void analyzeLuminisLinkfile(File linkFile, ProjectInformation projectInformation, List<String> errorMessages) throws Exception
     {
         XPath xpath = XPathFactory.newInstance().newXPath();
 
-        InputSource inputSource = new InputSource(new FileInputStream(linkfile));
+        InputSource inputSource = new InputSource(new FileInputStream(linkFile));
         String webviewUrl = xpath.evaluate(LUMINIS_WEBVIEW_URL_XPATH, inputSource);
 
-        inputSource = new InputSource(new FileInputStream(linkfile));
+        if (webviewUrl == null)
+            webviewUrl = "";
+
+        projectInformation.getLinkFileUrlToWebviewUrlMap().put(
+                linkFile.getAbsolutePath().substring(projectInformation.getLuminisLinkRootPath().length()), webviewUrl);
+
+        inputSource = new InputSource(new FileInputStream(linkFile));
         xpath = XPathFactory.newInstance().newXPath();
 
         NodeList sctWebPageNodes = (NodeList) xpath.evaluate(LUMINIS_SCT_WEB_PAGE_XPATH, inputSource, XPathConstants.NODESET);
@@ -459,15 +478,68 @@ public class XmlAnalyzer
             DetailedXmlPageInformation sctWebPage = new DetailedXmlPageInformation();
             Node objectNameNode = sctWebPageNodes.item(i).getAttributes().getNamedItem("object_name");
             if (objectNameNode == null)
-                throw new Exception("The <sct_web_page> tag has no \"object_name\" attribute.");
+                throw new Exception("The <sct_web_page> tag has no \"object_name\" tag.");
 
             Node templateUsedNode = sctWebPageNodes.item(i).getAttributes().getNamedItem("template_used");
             if (templateUsedNode == null)
-                throw new Exception("The <sct_web_page> tag has no \"template_used\" attribute.");
+                throw new Exception("The <sct_web_page> tag has no \"template_used\" tag.");
 
-            sctWebPage.setDeployPath(webviewUrl + "/" + objectNameNode.getTextContent());
-            sctWebPage.setAssetType(templateUsedNode.getTextContent());
-            projectInformation.getPagesToProcess().put(linkfile, sctWebPage);
+            sctWebPage.setDeployPath(PathUtil.removeLeadingSlashes(webviewUrl + "/" + objectNameNode.getTextContent()));
+
+            // Template path starts with "/dumpname/Root Site/..." - 2 unnecessary folders that are always the
+            // same - remove the 2 levels from assetTypeName to get accurate path.
+            String assetTypeName = PathUtil.skipRootFolder(PathUtil.skipRootFolder(templateUsedNode.getTextContent()));
+            sctWebPage.setAssetType(assetTypeName);
+
+            // If we didn't save a template with this name yet, let's analyze the template file and save it
+            if (projectInformation.getAssetTypes().get(assetTypeName) == null)
+            {
+                String jspFilePath = projectInformation.getLuminisFolder().getAbsolutePath() + assetTypeName;
+                File jspFile = new File(jspFilePath);
+                analyzeLuminisJspFile(jspFile, assetTypeName, projectInformation, errorMessages);
+            }
+
+            NodeList childNodes = sctWebPageNodes.item(i).getChildNodes();
+            for (int j = 0; j < childNodes.getLength(); j++)
+            {
+                Node childNode = childNodes.item(j);
+                if (childNode.getNodeName().equals("linked_item"))
+                {
+                    String rObjectId = null;
+                    String objectName = null;
+                    String rFolderPath = null;
+
+                    NodeList grandchildNodes = childNode.getChildNodes();
+                    for (int k = 0; k < grandchildNodes.getLength(); k++)
+                    {
+                        Node grandchildNode = grandchildNodes.item(k);
+                        if (grandchildNode.getNodeName().equals("i_chronicle_id"))
+                            rObjectId = grandchildNode.getTextContent().trim();
+                        else if (grandchildNode.getNodeName().equals("object_name"))
+                            objectName = grandchildNode.getTextContent().trim();
+                        else if (grandchildNode.getNodeName().equals("r_folder_path"))
+                            rFolderPath = grandchildNode.getTextContent().trim();
+                    }
+
+                    if (rObjectId != null && objectName != null && rFolderPath != null)
+                    {
+                        // String folderPath =
+                        // projectInformation.getLinkFileUrlToWebviewUrlMap().get(rFolderPath +
+                        // "/linkFile.xml");
+                        // String path = folderPath + "/" + objectName;
+                        sctWebPage.getLuminisLinks().add(new LuminisLink(rObjectId, rFolderPath, objectName));
+                    }
+                }
+            }
+
+            String xmlFileName = objectNameNode.getTextContent();
+            if (!xmlFileName.endsWith(".xml"))
+                xmlFileName += ".xml";
+            String xmlFilePath = linkFile.getParent() + "/" + xmlFileName;
+            File xmlFile = new File(xmlFilePath);
+
+            projectInformation.getPagesToProcess().put(xmlFile, sctWebPage);
+            projectInformation.getFilesToProcess().add(xmlFile);
         }
 
     }

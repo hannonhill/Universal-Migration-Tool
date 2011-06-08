@@ -25,6 +25,8 @@ public class Reference  extends com.hannonhill.www.ws.ns.AssetOperationService.F
            java.lang.String path,
            java.util.Calendar lastModifiedDate,
            java.lang.String lastModifiedBy,
+           java.util.Calendar createdDate,
+           java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
            java.lang.String referencedAssetId,
@@ -38,6 +40,8 @@ public class Reference  extends com.hannonhill.www.ws.ns.AssetOperationService.F
             path,
             lastModifiedDate,
             lastModifiedBy,
+            createdDate,
+            createdBy,
             siteId,
             siteName);
         this.referencedAssetId = referencedAssetId;

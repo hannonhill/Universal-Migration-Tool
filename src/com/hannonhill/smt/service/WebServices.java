@@ -189,7 +189,7 @@ public class WebServices
         String path = xmlPage.getDeployPath();
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
-        String pagePath = parentFolderPath + "/" + pageName;
+        String pagePath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + pageName);
         String assetTypeName = xmlPage.getAssetType();
         String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
 

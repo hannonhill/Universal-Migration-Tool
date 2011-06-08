@@ -71,7 +71,7 @@ public class FileSystem
      * @param extension For example ".xml" for xml files
      * @return
      */
-    public static List<File> getAllFilesByExtension(File folder, String extension)
+    public static List<File> getAllXmlFiles(File folder)
     {
         List<File> files = new ArrayList<File>();
         for (String fileString : folder.list())
@@ -79,8 +79,8 @@ public class FileSystem
             File file = new File(folder.getAbsolutePath() + "/" + fileString);
 
             if (!file.isFile())
-                files.addAll(getAllFilesByExtension(file, extension));
-            else if (file.getName().endsWith(extension))
+                files.addAll(getAllXmlFiles(file));
+            else if (file.getName().endsWith(".xml"))
                 files.add(file);
         }
         return files;

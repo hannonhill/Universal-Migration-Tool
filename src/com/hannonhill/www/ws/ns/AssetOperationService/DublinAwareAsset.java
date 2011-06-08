@@ -25,6 +25,8 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
            java.lang.String path,
            java.util.Calendar lastModifiedDate,
            java.lang.String lastModifiedBy,
+           java.util.Calendar createdDate,
+           java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
            com.hannonhill.www.ws.ns.AssetOperationService.Metadata metadata,
@@ -38,6 +40,8 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
             path,
             lastModifiedDate,
             lastModifiedBy,
+            createdDate,
+            createdBy,
             siteId,
             siteName);
         this.metadata = metadata;

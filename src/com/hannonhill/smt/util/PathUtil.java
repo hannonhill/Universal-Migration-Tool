@@ -155,6 +155,17 @@ public class PathUtil
     }
 
     /**
+     * Removes leading slashs (one or more) if they are there
+     * 
+     * @param link
+     * @return
+     */
+    public static String removeLeadingSlashes(String link)
+    {
+        return link.startsWith("/") ? removeLeadingSlashes(link.substring(1)) : link;
+    }
+
+    /**
      * Returns the part of the link that does not include the anchor part
      * 
      * @param link
