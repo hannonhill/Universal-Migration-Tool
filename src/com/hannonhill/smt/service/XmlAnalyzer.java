@@ -449,9 +449,7 @@ public class XmlAnalyzer
         InputSource inputSource = new InputSource(new FileInputStream(linkfile));
         String webviewUrl = xpath.evaluate(LUMINIS_WEBVIEW_URL_XPATH, inputSource);
 
-        if (webviewUrl == null)
-            throw new Exception("Linkfile is missing a webview url");
-
+        inputSource = new InputSource(new FileInputStream(linkfile));
         xpath = XPathFactory.newInstance().newXPath();
 
         NodeList sctWebPageNodes = (NodeList) xpath.evaluate(LUMINIS_SCT_WEB_PAGE_XPATH, inputSource, XPathConstants.NODESET);
