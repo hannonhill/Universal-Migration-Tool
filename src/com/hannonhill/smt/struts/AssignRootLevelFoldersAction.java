@@ -1,7 +1,7 @@
 /*
  * Created on Dec 30, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.struts;
 
@@ -16,11 +16,11 @@ import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.service.MappingPersister;
 
 /**
- * Allows the user to assign the external root level folders to either a cross site link, external site or nothing (link will be rewritten the regular way)
+ * Allows the user to assign the external root level folders to either a cross site link, external site or
+ * nothing (link will be rewritten the regular way)
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class AssignRootLevelFoldersAction extends BaseAction
 {
@@ -31,9 +31,6 @@ public class AssignRootLevelFoldersAction extends BaseAction
     private List<String> selectedCrossSiteTexts;
     private List<String> selectedExternalLinkTexts;
 
-    /* (non-Javadoc)
-     * @see com.opensymphony.xwork2.ActionSupport#execute()
-     */
     @Override
     public String execute() throws Exception
     {
@@ -93,6 +90,11 @@ public class AssignRootLevelFoldersAction extends BaseAction
     private String processView()
     {
         ProjectInformation projectInformation = getProjectInformation();
+
+        // Skip root level folder assignment for Luminis migration for now - will implement it if needed
+        if (projectInformation.getLuminisFolder() != null)
+            return SUCCESS;
+
         MappingPersister.loadMappings(projectInformation);
 
         // Check if any root level folders link to external root level folders

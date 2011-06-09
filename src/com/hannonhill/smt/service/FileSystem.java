@@ -8,6 +8,7 @@ package com.hannonhill.smt.service;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -55,13 +56,40 @@ public class FileSystem
 
             if (entry.isDirectory())
                 (new File(uploadDir + "/" + entry.getName())).mkdirs();
-            else if (entry.getName().endsWith(".xml") || entry.getName().endsWith(".jsp"))
+            else
                 copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + "/" + entry.getName())));
         }
 
         zipFile.close();
 
         return uploadDir;
+    }
+
+    /**
+     * Returns the contents of the file in a byte array.
+     * 
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static byte[] getBytesFromFile(File file) throws IOException
+    {
+        InputStream is = new FileInputStream(file);
+        byte[] bytes = new byte[(int) file.length()];
+
+        // Read in the bytes
+        int offset = 0;
+        int numRead = 0;
+        while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0)
+            offset += numRead;
+
+        // Ensure all the bytes have been read in
+        if (offset < bytes.length)
+            throw new IOException("Could not completely read file " + file.getName());
+
+        // Close the input stream and return bytes
+        is.close();
+        return bytes;
     }
 
     /**
@@ -84,6 +112,20 @@ public class FileSystem
                 files.add(file);
         }
         return files;
+    }
+
+    /**
+     * Returns folder contents in a form of a list of {@link File}s
+     * 
+     * @param folder
+     * @return
+     */
+    public static List<File> getFolderContents(File folder)
+    {
+        List<File> result = new ArrayList<File>();
+        for (String fileString : folder.list())
+            result.add(new File(folder.getAbsolutePath() + "/" + fileString));
+        return result;
     }
 
     /**

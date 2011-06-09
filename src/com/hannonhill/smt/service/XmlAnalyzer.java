@@ -55,6 +55,7 @@ public class XmlAnalyzer
     private static final String FIELDS_XPATH = "//field";
     private static final String ROOT_SITE_FOLDER_NAME = "Root Site";
     private static final String LINK_FILE_NAME = "linkFile.xml";
+    private static final String LINKED_ITEM_TAG_NAME = "linked_item";
 
     /**
      * Analyzes a folder by going through each file in the folder and subfolders and calling appropriate
@@ -148,7 +149,10 @@ public class XmlAnalyzer
         for (int i = 0; i < rootChildNodes.getLength(); i++)
         {
             Node rootChildNode = rootChildNodes.item(i);
+
+            // Because we do not know if the field belongs to content or metadata, we assign it to both maps
             page.getContentMap().put(rootChildNode.getNodeName(), JTidy.tidyContent(rootChildNode.getTextContent()));
+            page.getMetadataMap().put(rootChildNode.getNodeName(), JTidy.tidyContent(rootChildNode.getTextContent()));
         }
     }
 
@@ -455,6 +459,16 @@ public class XmlAnalyzer
         }
     }
 
+    /**
+     * Analyzes the contents of linkFile.xml provided as <code>linkFile</code>. Stores the webview url
+     * provided and analyzes each &lt;sct_web_page&gt; in the file by calling
+     * {@link #analyzeLuminisSctWebPage(Node, String, File, ProjectInformation, List)} on each found tag.
+     * 
+     * @param linkFile
+     * @param projectInformation
+     * @param errorMessages
+     * @throws Exception
+     */
     private static void analyzeLuminisLinkfile(File linkFile, ProjectInformation projectInformation, List<String> errorMessages) throws Exception
     {
         XPath xpath = XPathFactory.newInstance().newXPath();
@@ -474,74 +488,96 @@ public class XmlAnalyzer
         NodeList sctWebPageNodes = (NodeList) xpath.evaluate(LUMINIS_SCT_WEB_PAGE_XPATH, inputSource, XPathConstants.NODESET);
 
         for (int i = 0; i < sctWebPageNodes.getLength(); i++)
+            analyzeLuminisSctWebPage(sctWebPageNodes.item(i), webviewUrl, linkFile, projectInformation, errorMessages);
+    }
+
+    /**
+     * Analyzes the contents of &lt;sct_web_page&gt; tag: figures out the Luminis page's name, template used,
+     * deploy path (by putting together given <code>webviewUrl</code> with page's name. Stores the page as
+     * {@link File} object to be included in migration. Analyzes links provided as &lt;linked_item&gt;s by
+     * calling {@link #analyzeLuminisLinkedItem(Node, DetailedXmlPageInformation)} on each found tag.
+     * 
+     * Also calls {@link #analyzeLuminisJspFile(File, String, ProjectInformation, List)} if found .jsp
+     * template hasn't been analyzed yet.
+     * 
+     * @param sctWebPageNode
+     * @param webviewUrl
+     * @param linkFile
+     * @param projectInformation
+     * @param errorMessages
+     * @throws Exception
+     */
+    private static void analyzeLuminisSctWebPage(Node sctWebPageNode, String webviewUrl, File linkFile, ProjectInformation projectInformation,
+            List<String> errorMessages) throws Exception
+    {
+        DetailedXmlPageInformation sctWebPage = new DetailedXmlPageInformation();
+
+        Node objectNameNode = sctWebPageNode.getAttributes().getNamedItem("object_name");
+        if (objectNameNode == null)
+            throw new Exception("The <sct_web_page> tag has no \"object_name\" tag.");
+
+        Node templateUsedNode = sctWebPageNode.getAttributes().getNamedItem("template_used");
+        if (templateUsedNode == null)
+            throw new Exception("The <sct_web_page> tag has no \"template_used\" tag.");
+
+        sctWebPage.setDeployPath(PathUtil.removeLeadingSlashes(webviewUrl + "/" + objectNameNode.getTextContent()));
+
+        // Template path starts with "/dumpname/Root Site/..." - 2 unnecessary folders that are always the
+        // same - remove the 2 levels from assetTypeName to get accurate path.
+        String assetTypeName = PathUtil.skipRootFolder(PathUtil.skipRootFolder(templateUsedNode.getTextContent()));
+        sctWebPage.setAssetType(assetTypeName);
+
+        // If we didn't save a template with this name yet, let's analyze the template file and save it
+        if (projectInformation.getAssetTypes().get(assetTypeName) == null)
         {
-            DetailedXmlPageInformation sctWebPage = new DetailedXmlPageInformation();
-            Node objectNameNode = sctWebPageNodes.item(i).getAttributes().getNamedItem("object_name");
-            if (objectNameNode == null)
-                throw new Exception("The <sct_web_page> tag has no \"object_name\" tag.");
-
-            Node templateUsedNode = sctWebPageNodes.item(i).getAttributes().getNamedItem("template_used");
-            if (templateUsedNode == null)
-                throw new Exception("The <sct_web_page> tag has no \"template_used\" tag.");
-
-            sctWebPage.setDeployPath(PathUtil.removeLeadingSlashes(webviewUrl + "/" + objectNameNode.getTextContent()));
-
-            // Template path starts with "/dumpname/Root Site/..." - 2 unnecessary folders that are always the
-            // same - remove the 2 levels from assetTypeName to get accurate path.
-            String assetTypeName = PathUtil.skipRootFolder(PathUtil.skipRootFolder(templateUsedNode.getTextContent()));
-            sctWebPage.setAssetType(assetTypeName);
-
-            // If we didn't save a template with this name yet, let's analyze the template file and save it
-            if (projectInformation.getAssetTypes().get(assetTypeName) == null)
-            {
-                String jspFilePath = projectInformation.getLuminisFolder().getAbsolutePath() + assetTypeName;
-                File jspFile = new File(jspFilePath);
-                analyzeLuminisJspFile(jspFile, assetTypeName, projectInformation, errorMessages);
-            }
-
-            NodeList childNodes = sctWebPageNodes.item(i).getChildNodes();
-            for (int j = 0; j < childNodes.getLength(); j++)
-            {
-                Node childNode = childNodes.item(j);
-                if (childNode.getNodeName().equals("linked_item"))
-                {
-                    String rObjectId = null;
-                    String objectName = null;
-                    String rFolderPath = null;
-
-                    NodeList grandchildNodes = childNode.getChildNodes();
-                    for (int k = 0; k < grandchildNodes.getLength(); k++)
-                    {
-                        Node grandchildNode = grandchildNodes.item(k);
-                        if (grandchildNode.getNodeName().equals("i_chronicle_id"))
-                            rObjectId = grandchildNode.getTextContent().trim();
-                        else if (grandchildNode.getNodeName().equals("object_name"))
-                            objectName = grandchildNode.getTextContent().trim();
-                        else if (grandchildNode.getNodeName().equals("r_folder_path"))
-                            rFolderPath = grandchildNode.getTextContent().trim();
-                    }
-
-                    if (rObjectId != null && objectName != null && rFolderPath != null)
-                    {
-                        // String folderPath =
-                        // projectInformation.getLinkFileUrlToWebviewUrlMap().get(rFolderPath +
-                        // "/linkFile.xml");
-                        // String path = folderPath + "/" + objectName;
-                        sctWebPage.getLuminisLinks().add(new LuminisLink(rObjectId, rFolderPath, objectName));
-                    }
-                }
-            }
-
-            String xmlFileName = objectNameNode.getTextContent();
-            if (!xmlFileName.endsWith(".xml"))
-                xmlFileName += ".xml";
-            String xmlFilePath = linkFile.getParent() + "/" + xmlFileName;
-            File xmlFile = new File(xmlFilePath);
-
-            projectInformation.getPagesToProcess().put(xmlFile, sctWebPage);
-            projectInformation.getFilesToProcess().add(xmlFile);
+            String jspFilePath = projectInformation.getLuminisFolder().getAbsolutePath() + assetTypeName;
+            File jspFile = new File(jspFilePath);
+            analyzeLuminisJspFile(jspFile, assetTypeName, projectInformation, errorMessages);
         }
 
+        // Store <linked_item>s as LuminisLinks
+        NodeList childNodes = sctWebPageNode.getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++)
+            if (childNodes.item(i).getNodeName().equals(LINKED_ITEM_TAG_NAME))
+                analyzeLuminisLinkedItem(childNodes.item(i), sctWebPage);
+
+        String xmlFileName = objectNameNode.getTextContent();
+        if (!xmlFileName.endsWith(".xml"))
+            xmlFileName += ".xml";
+        String xmlFilePath = linkFile.getParent() + "/" + xmlFileName;
+        File xmlFile = new File(xmlFilePath);
+
+        projectInformation.getPagesToProcess().put(xmlFile, sctWebPage);
+        projectInformation.getFilesToProcess().add(xmlFile);
+    }
+
+    /**
+     * Reads contents of &lt;linked_item&gt; tag and stores the i_chronicle_id, object_name and r_folder_path
+     * as {@link LuminisLink} and adds it to the {@link DetailedXmlPageInformation}
+     * 
+     * @param linkedItemNode
+     * @param sctWebPage
+     */
+    private static void analyzeLuminisLinkedItem(Node linkedItemNode, DetailedXmlPageInformation sctWebPage)
+    {
+        String rObjectId = null;
+        String objectName = null;
+        String rFolderPath = null;
+
+        NodeList grandchildNodes = linkedItemNode.getChildNodes();
+        for (int i = 0; i < grandchildNodes.getLength(); i++)
+        {
+            Node grandchildNode = grandchildNodes.item(i);
+            if (grandchildNode.getNodeName().equals("i_chronicle_id"))
+                rObjectId = grandchildNode.getTextContent().trim();
+            else if (grandchildNode.getNodeName().equals("object_name"))
+                objectName = grandchildNode.getTextContent().trim();
+            else if (grandchildNode.getNodeName().equals("r_folder_path"))
+                rFolderPath = grandchildNode.getTextContent().trim();
+        }
+
+        if (rObjectId != null && objectName != null && rFolderPath != null)
+            sctWebPage.getLuminisLinks().add(new LuminisLink(rObjectId, rFolderPath, objectName));
     }
 
     /**

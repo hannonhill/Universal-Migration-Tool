@@ -18,6 +18,7 @@ import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.MetadataSetField;
 import com.hannonhill.smt.ProjectInformation;
+import com.hannonhill.smt.service.LinkRewriter;
 import com.hannonhill.smt.service.WebServices;
 import com.hannonhill.smt.service.XmlAnalyzer;
 import com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataField;
@@ -66,7 +67,7 @@ public class WebServicesUtil
         page.setMetadata(createPageMetadata(xmlPage, assetType, metadataFieldNames));
 
         // Create the structured data object with the tree of structured data nodes
-        StructuredData structuredData = createPageStructuredData(xmlPage, assetType);
+        StructuredData structuredData = createPageStructuredData(xmlPage, assetType, projectInformation);
 
         // If page uses data definition, assign it to the page object
         if (contentType.isUsesDataDefinition())
@@ -94,10 +95,12 @@ public class WebServicesUtil
      * 
      * @param xmlPage
      * @param assetType
+     * @param projectInformation
      * @return
      * @throws Exception
      */
-    private static StructuredData createPageStructuredData(DetailedXmlPageInformation xmlPage, AssetType assetType) throws Exception
+    private static StructuredData createPageStructuredData(DetailedXmlPageInformation xmlPage, AssetType assetType,
+            ProjectInformation projectInformation) throws Exception
     {
         // Create the root group object to which all the information will be attached
         StructuredDataGroup rootGroup = new StructuredDataGroup();
@@ -112,7 +115,7 @@ public class WebServicesUtil
 
             String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
             if (field instanceof DataDefinitionField)
-                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue);
+                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
         }
 
         // For each xml content field, find a mapping and assign appropriate value in structured data
@@ -125,7 +128,7 @@ public class WebServicesUtil
 
             String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
             if (field instanceof DataDefinitionField)
-                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue);
+                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
         }
 
         // For each static value field, assign the static value in structured data
@@ -134,7 +137,7 @@ public class WebServicesUtil
             {
                 // Escape ampersands to make it a valid xml
                 String fieldValue = assetType.getStaticValueMapping().get(field).replaceAll("&", "&amp;");
-                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue);
+                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
             }
 
         return convertToStructuredData(rootGroup);
@@ -252,8 +255,10 @@ public class WebServicesUtil
      * @param rootGroup
      * @param field
      * @param fieldValue
+     * @param projectInformation
      */
-    private static void assignAppropriateFieldValue(StructuredDataGroup rootGroup, DataDefinitionField field, String fieldValue) throws Exception
+    private static void assignAppropriateFieldValue(StructuredDataGroup rootGroup, DataDefinitionField field, String fieldValue,
+            ProjectInformation projectInformation) throws Exception
     {
         String fieldName = field.getIdentifier();
         int lastSlashIdx = fieldName.lastIndexOf('/');
@@ -287,10 +292,12 @@ public class WebServicesUtil
         }
         else
         {
-            String path = XmlAnalyzer.getFirstSrcAttribute(fieldValue);
+            String path = fieldValue.startsWith(LinkRewriter.LUMINIS_FILE_PREFIX) ? fieldValue.substring(LinkRewriter.LUMINIS_FILE_PREFIX.length())
+                    : XmlAnalyzer.getFirstSrcAttribute(fieldValue);
             StructuredDataNode fileNode = new StructuredDataNode();
             fileNode.setIdentifier(identifier);
-            fileNode.setFilePath(path);
+            if (WebServices.doesAssetExist(path, projectInformation))
+                fileNode.setFilePath(path);
             fileNode.setType(StructuredDataType.asset);
             fileNode.setAssetType(StructuredDataAssetType.file);
             currentNode.getContentFields().put(identifier, fileNode);

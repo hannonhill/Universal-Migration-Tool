@@ -242,6 +242,67 @@ public class WebServices
     }
 
     /**
+     * Creates a file asset in Cascade Server with contents from the <code>filesystemFile</code> if one does
+     * not exist. The path of the file is figured out using webViewUrl in linkFile.xml in current or ancestor
+     * folders. If file with that path already exists, it is left as it is. If the file starts with a ".", it
+     * means it's a hidden file and it will be ignored as well.
+     * 
+     * @param filesystemFile
+     * @param projectInformation
+     * @param metadataSetId
+     * @return Identifier
+     * @throws Exception
+     */
+    public static Identifier createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId) throws Exception
+    {
+        String parentFolderPath = PathUtil.removeLeadingSlashes(LinkRewriter.getWebViewUrl(
+                filesystemFile.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
+                projectInformation.getLinkFileUrlToWebviewUrlMap()));
+        if (parentFolderPath.equals(""))
+            parentFolderPath = "/";
+        String fileName = filesystemFile.getName();
+        String filePath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + fileName);
+
+        if (projectInformation.getExistingCascadeFiles().contains(filePath))
+        {
+            Log.add(filePath + " <span style=\"color: blue;\">file already exists.</span><br/>", projectInformation.getMigrationStatus());
+            return null;
+        }
+
+        // Set up the file object and assign it to the asset object
+        File file = new File();
+        file.setName(fileName);
+        file.setParentFolderPath(parentFolderPath);
+        file.setSiteName(projectInformation.getSiteName());
+        file.setMetadataSetId(metadataSetId);
+        file.setShouldBeIndexed(true);
+        file.setShouldBeIndexed(true);
+        file.setData(FileSystem.getBytesFromFile(filesystemFile));
+
+        Asset asset = new Asset();
+        asset.setFile(file);
+
+        Authentication authentication = getAuthentication(projectInformation);
+        CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
+
+        // If the page couldn't be created because parent folder doesn't exist, go ahead and create the
+        // parent folder and attempt to create the page again
+        if (!createResult.getSuccess().equals("true"))
+        {
+            if (createResult.getMessage().startsWith("folder with path/name: " + parentFolderPath + " could not be found"))
+            {
+                createFolder(parentFolderPath, projectInformation);
+                return createFile(filesystemFile, projectInformation, metadataSetId);
+            }
+
+            throw new Exception("File " + filePath + " could not be created: " + createResult.getMessage());
+        }
+
+        return new Identifier(createResult.getCreatedAssetId(), new Path(filePath, null, projectInformation.getSiteName()), EntityTypeString.file,
+                false);
+    }
+
+    /**
      * Reads and edits the page so that the links are realigned
      * 
      * @param id
@@ -290,6 +351,46 @@ public class WebServices
             return true;
 
         return false;
+    }
+
+    /**
+     * Reads all files in selected site and stores their paths in projectInformation so that later on when
+     * creating a file only if one doesn't exist, the check for whether or not the file exists does not
+     * involve reading the file from Cascade (as it can be very slow if the file is big)
+     * 
+     * @param projectInformation
+     * @throws Exception
+     */
+    public static void populateExistingCascadeFiles(ProjectInformation projectInformation) throws Exception
+    {
+        Identifier identifier = new Identifier(null, new Path("/", null, projectInformation.getSiteName()), EntityTypeString.folder, false);
+        populateExistingCascadeFilesOfFolder(identifier, projectInformation);
+    }
+
+    /**
+     * Recursively reads all files from given folder and its descendants and stores their paths in
+     * {@link ProjectInformation#getExistingCascadeFiles()}.
+     * 
+     * @param folderIdentifier
+     * @param projectInformation
+     * @throws Exception
+     */
+    private static void populateExistingCascadeFilesOfFolder(Identifier folderIdentifier, ProjectInformation projectInformation) throws Exception
+    {
+        ReadResult readResult = getServer(projectInformation.getUrl()).read(getAuthentication(projectInformation), folderIdentifier);
+        if (!readResult.getSuccess().equals("true"))
+            throw new Exception("Error occured when reading a Cascade Folder with path '/': " + readResult.getMessage());
+
+        Folder folder = readResult.getAsset().getFolder();
+        Identifier[] children = folder.getChildren();
+        for (Identifier child : children)
+        {
+            if (child.getType().equals(EntityTypeString.file))
+                projectInformation.getExistingCascadeFiles().add(child.getPath().getPath());
+            else if (child.getType().equals(EntityTypeString.folder))
+                populateExistingCascadeFilesOfFolder(child, projectInformation);
+        }
+
     }
 
     /**

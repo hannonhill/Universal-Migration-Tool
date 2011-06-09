@@ -60,6 +60,9 @@ public class ProjectInformation
                                                                         // page coming from linkFile.xml in
                                                                         // Luminis dump
     private final Map<String, String> linkFileUrlToWebviewUrlMap;
+    private final Set<String> existingCascadeFiles; // Used for Luminis file import performance reasons - file
+                                                    // paths are checked first to avoid having to check if
+                                                    // file exists each time a new file is brought in
 
     // detailed information of the page in
     // that file
@@ -96,6 +99,7 @@ public class ProjectInformation
         pagesToProcess = new HashMap<File, DetailedXmlPageInformation>();
         luminisFolder = null;
         linkFileUrlToWebviewUrlMap = new HashMap<String, String>();
+        existingCascadeFiles = new HashSet<String>();
     }
 
     /**
@@ -446,4 +450,11 @@ public class ProjectInformation
         return linkFileUrlToWebviewUrlMap;
     }
 
+    /**
+     * @return Returns the existingCascadeFiles.
+     */
+    public Set<String> getExistingCascadeFiles()
+    {
+        return existingCascadeFiles;
+    }
 }

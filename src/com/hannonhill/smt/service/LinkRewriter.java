@@ -37,12 +37,15 @@ import com.hannonhill.smt.util.XmlUtil;
  */
 public class LinkRewriter
 {
+    public static final String LUMINIS_FILE_PREFIX = "[luminis-file]";
+    private static final String DEFAULT_FILES_FOLDER = "files"; // Used when there is no webViewUrl to decide
+                                                                // where a file should go
+
     /**
-     * Rewrites all the file and page links in the content and metadata fields of the page. If it is a page
-     * link (ends with any extension of the
-     * extensions in possibleExtensions set and is relative), the extension will be stripped. Also, removes
-     * the Serena specific attributes:
-     * cmid and collagestyle from all tags.
+     * Rewrites all the file and page links in the content and metadata fields of the Serena page. If it is a
+     * page link (ends with any extension of the extensions in possibleExtensions set and is relative), the
+     * extension will be stripped. Also, removes the Serena specific attributes: cmid and collagestyle from
+     * all tags.
      * 
      * @param page
      * @param projectInformation
@@ -55,29 +58,59 @@ public class LinkRewriter
         rewriteLinkAndRemoveSerenaAttributes(page.getMetadataMap(), pagePath, projectInformation);
     }
 
+    /**
+     * Rewrites all occurrences of "/id[number]" in the Luminis page to link to actual asset. The information
+     * about how to link it should be stored in {@link DetailedXmlPageInformation#getLuminisLinks()}.
+     * 
+     * @param page
+     * @param projectInformation
+     */
     public static void rewriteLuminisLinks(DetailedXmlPageInformation page, ProjectInformation projectInformation)
     {
         rewriteLuminisLinks(page.getContentMap(), page, projectInformation);
         rewriteLuminisLinks(page.getMetadataMap(), page, projectInformation);
     }
 
+    /**
+     * Rewrites all occurrences of "/id[number]" in the LUminis page's content or metadata map passed as
+     * <code>map</code>.
+     * 
+     * @param map
+     * @param page
+     * @param projectInformation
+     */
     private static void rewriteLuminisLinks(Map<String, String> map, DetailedXmlPageInformation page, ProjectInformation projectInformation)
     {
         for (LuminisLink link : page.getLuminisLinks())
         {
             String regex = "\"/id(" + link.getId() + ")\"";
-            String webViewUrl = getViewUrl(link.getLinkedItemFolder(), projectInformation.getLinkFileUrlToWebviewUrlMap());
+            String webViewUrl = getWebViewUrl(link.getLinkedItemFolder(), projectInformation.getLinkFileUrlToWebviewUrlMap());
             for (String fieldIdentifier : map.keySet())
             {
                 String content = map.get(fieldIdentifier);
-                String newContent = content.replaceAll(regex, "\"/" + PathUtil.removeLeadingSlashes(webViewUrl + "/" + link.getLinkedItemName())
-                        + "\"");
+                String newPath = PathUtil.removeLeadingSlashes(webViewUrl + "/" + link.getLinkedItemName());
+                String newContent = content.replaceAll(regex, "\"/" + newPath + "\"");
+                if (newContent.startsWith("/id"))
+                    newContent = LUMINIS_FILE_PREFIX + newPath;
+
                 map.put(fieldIdentifier, newContent);
             }
         }
     }
 
-    private static String getViewUrl(String folder, Map<String, String> linkFileToUrlMap)
+    /**
+     * Recursively tries to figure out webViewUrl of a folder by looking for linkFile.xml in that folder and
+     * reading webViewUrl from there. If no linkFile.xml is present in that folder, ancestor folders will be
+     * checked. Once ancestor folder with linkFile.xml is found, the webViewUrl from that linkFile is
+     * retrieved and relative path to <code>folder</code> is appended to it. For example, if folder="/a/b/c"
+     * and linkFile.xml is present at /a/b/linkFile.xml, and the linkfile's webViewUrl is "/images", then the
+     * returned string from this function will be "/images/c"
+     * 
+     * @param folder
+     * @param linkFileToUrlMap
+     * @return
+     */
+    public static String getWebViewUrl(String folder, Map<String, String> linkFileToUrlMap)
     {
         String webViewUrl = linkFileToUrlMap.get(folder + "/linkFile.xml");
         if (webViewUrl != null)
@@ -85,17 +118,20 @@ public class LinkRewriter
 
         String parentFolder = PathUtil.getParentFolderPathFromPath(folder);
         if (!parentFolder.equals("/"))
-            return getViewUrl(parentFolder, linkFileToUrlMap);
+        {
+            webViewUrl = getWebViewUrl(parentFolder, linkFileToUrlMap);
+            if (webViewUrl.equals(DEFAULT_FILES_FOLDER))
+                return DEFAULT_FILES_FOLDER;
+            return webViewUrl + "/" + PathUtil.getNameFromPath(folder);
+        }
 
-        return "";
-
+        return DEFAULT_FILES_FOLDER;
     }
 
     /**
      * Rewrites all the file and page links in each value of the map. If it is a page link (ends with .html
-     * extension and is
-     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid
-     * and collagestyle from all tags.
+     * extension and is a relative), the .html extension will be stripped. Also, removes the Serena specific
+     * attributes: cmid and collagestyle from all tags.
      * 
      * @param map
      * @param pagePath
@@ -160,9 +196,8 @@ public class LinkRewriter
 
     /**
      * Rewrites the file and page link in the xml tag node and all ancestor nodes. If it is a page link (ends
-     * with .html extension and is
-     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid
-     * and collagestyle from all tags.
+     * with .html extension and is a relative), the .html extension will be stripped. Also, removes the Serena
+     * specific attributes: cmid and collagestyle from all tags.
      * 
      * @param node
      * @param pagePath

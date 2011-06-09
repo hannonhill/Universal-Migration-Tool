@@ -8,6 +8,7 @@ package com.hannonhill.smt.util;
 import java.io.File;
 
 import com.hannonhill.smt.CascadePageInformation;
+import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
 
 /**
  * Utility methods related to path manipulations
@@ -233,6 +234,19 @@ public class PathUtil
     {
         return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(cascadeUrl) + "/entity/open.act?id=" + cascadePage.getId()
                 + "&amp;type=page\" target=\"_blank\">/" + cascadePage.getPath() + "</a> ";
+    }
+
+    /**
+     * Generates a link to the file in Cascade Server
+     * 
+     * @param cascadeFile
+     * @param cascadeUrl
+     * @return
+     */
+    public static String generateFileLink(Identifier cascadeFile, String cascadeUrl)
+    {
+        return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(cascadeUrl) + "/entity/open.act?id=" + cascadeFile.getId()
+                + "&amp;type=file\" target=\"_blank\">/" + cascadeFile.getPath().getPath() + "</a> ";
     }
 
     /**

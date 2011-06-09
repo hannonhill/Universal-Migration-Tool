@@ -13,6 +13,7 @@ import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.MigrationStatus;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
+import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
 
 /**
  * A service responsible for the actual migration
@@ -71,6 +72,11 @@ public class Migrator
         }
     }
 
+    /**
+     * Creates Serena pages based on the information provided in {@link ProjectInformation}
+     * 
+     * @param projectInformation
+     */
     private static void createSerenaPages(ProjectInformation projectInformation)
     {
         List<File> files = projectInformation.getFilesToProcess();
@@ -133,12 +139,101 @@ public class Migrator
         }
     }
 
+    /**
+     * Recursively creates files in Cascade - out of passed {@link File} objects, creates cascade file assets
+     * for the {@link File} objects that actually are files, are not hidden (do not start with "."), are not
+     * "linkFile.xml" and do not belong to filesToProcess list (as those will be pages in Cascade).
+     * 
+     * @param folderFiles
+     * @param projectInformation
+     * @param metadataSetId
+     */
+    private static void createLuminisFiles(List<File> folderFiles, ProjectInformation projectInformation, String metadataSetId)
+    {
+        List<File> filesToProcess = projectInformation.getFilesToProcess();
+        for (File folderFile : folderFiles)
+        {
+            // skip folders, filesToProcess, hidden files and linkFile.xml
+            if (!folderFile.isDirectory() && !filesToProcess.contains(folderFile) && !folderFile.getName().startsWith(".")
+                    && !folderFile.getName().equals("linkFile.xml"))
+                createLuminisFile(folderFile, projectInformation, metadataSetId);
+            // If it's a folder, recursively create files from it but skip hidden folders
+            else if (folderFile.isDirectory() && !folderFile.getName().startsWith("."))
+                createLuminisFiles(FileSystem.getFolderContents(folderFile), projectInformation, metadataSetId);
+        }
+    }
+
+    /**
+     * Creates a file asset in Cascade based on the information from the passed filesystem {@link File}.
+     * 
+     * @param folderFile
+     * @param projectInformation
+     * @param metadataSetId
+     */
+    private static void createLuminisFile(File folderFile, ProjectInformation projectInformation, String metadataSetId)
+    {
+        MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
+        try
+        {
+            String relativePath = PathUtil.getRelativePath(folderFile, projectInformation.getXmlDirectory());
+            Log.add("Creating file in Cascade " + relativePath + "... ", migrationStatus);
+            Identifier cascadeFile = WebServices.createFile(folderFile, projectInformation, metadataSetId);
+            if (cascadeFile != null)
+            {
+                Log.add(PathUtil.generateFileLink(cascadeFile, projectInformation.getUrl()), migrationStatus);
+                Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+            }
+        }
+        catch (Exception e)
+        {
+            // Sometimes the exception message is null, so we get the message from the parent
+            // exception
+            String message = e.getMessage();
+            if (message == null && e.getCause() != null)
+                message = e.getCause().getMessage();
+
+            Log.add("<span style=\"color: red;\">Error when creating a file: " + message + "</span><br/>", migrationStatus);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Creates Luminis pages based on the information provided in {@link ProjectInformation}
+     * 
+     * @param projectInformation
+     */
     private static void createLuminisPages(ProjectInformation projectInformation)
     {
-        List<File> files = projectInformation.getFilesToProcess();
+        List<File> filesToProcess = projectInformation.getFilesToProcess();
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
 
-        for (File file : files)
+        try
+        {
+            // Create file assets for any files that weren't included in filesToProcess
+            List<File> folderFiles = FileSystem.getFolderContents(projectInformation.getLuminisFolder());
+            String siteName = projectInformation.getSiteName();
+            String metadataSetId = WebServices.readSite(projectInformation.getUsername(), projectInformation.getPassword(),
+                    projectInformation.getUrl(), siteName).getDefaultMetadataSetId();
+
+            // Store existing file paths first to speed up creation of files
+            Log.add("Reading Cascade folder structure...<br/>", migrationStatus);
+            WebServices.populateExistingCascadeFiles(projectInformation);
+
+            // Create files that do not exist in Cascade
+            createLuminisFiles(folderFiles, projectInformation, metadataSetId);
+        }
+        catch (Exception e)
+        {
+            // Sometimes the exception message is null, so we get the message from the parent exception
+            String message = e.getMessage();
+            if (message == null && e.getCause() != null)
+                message = e.getCause().getMessage();
+
+            Log.add("<span style=\"color: red;\">Error when reading site's metadata set: " + message + "</span><br/>", migrationStatus);
+            e.printStackTrace();
+        }
+
+        for (File file : filesToProcess)
         {
             if (migrationStatus.isShouldStop())
                 return;
@@ -194,5 +289,6 @@ public class Migrator
                 e.printStackTrace();
             }
         }
+
     }
 }
