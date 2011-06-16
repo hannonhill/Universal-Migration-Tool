@@ -12,12 +12,15 @@ Deploying SMT in an Eclipse debugger:
   d) Click Finish
 2. Configure the server
   a) Double click on the newly created server
-  b) In "Server Locations" area, choose "Use custom location" and Browse in the file system for the tomcat folder that resides in the project
-  c) In "Publishing" area, select "Never publish automatically"
-  d) In "General Information" area click "Open Launch Configuration"
-  e) In "Arguments" tab add " -Xmx1024M -Xms1024M" to VM arguments
-  f) In "Source" tab add the SMT Java Project
-  g) Close the window and choose File -> Save
+  b) In "Server Locations" area, choose "Use workspace metadata"
+  c) In "Deploy path" field, click Browse... and browse for the Tomcat folder inside of your Serena project
+  d) In "Publishing" area, select "Never publish automatically"
+  e) Also, check the "Update context paths" checkbox
+  e) In "Server Options" make sure "Serve modules without publishing" is unchecked
+  f) In "General Information" area click "Open Launch Configuration"
+  g) In "Arguments" tab add "-Xmx1024M -Xms1024M" to VM argument
+  h) In "Source" tab add the SMT Java Project
+  i) Close the window and choose File -> Save
 3. Build the project
   a) Open "Ant" view
   b) Drag "build.xml" file and drop it to the ant view
