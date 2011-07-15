@@ -3,12 +3,16 @@
     <description>Serena Migration Tool</description>
 
     <property name="src.dir" value="src"/>
+	<property name="dist.dir" value="dist"/>
  	<property name="lib.dir" value="tomcat/lib"/>
  	<property name="work.dir" value="tomcat/work"/>
  	<property name="wtpwebapps.dir" value="tomcat/wtpwebapps"/>
+	<property name="root.dir" value="tomcat/webapps/ROOT"/>
  	<property name="classes.dir" value="tomcat/webapps/ROOT/WEB-INF/classes"/>
  	<property name="classes.com.dir" value="${classes.dir}/com"/>
  	<property name="wsdl.dir" value="wsdl"/>	
+	<property name="webinf.dir" value="tomcat/webapps/ROOT/WEB-INF"/>
+	<property name="app.lib.dir" value="${webinf.dir}/lib"/>
  
     <!--+
         | Default classpath
@@ -17,6 +21,9 @@
         <fileset dir="${lib.dir}">
         	<include name="**/*.jar" />
         </fileset>
+    	<fileset dir="${app.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
         <pathelement path="${java.class.path}/" />
     </path>
     
@@ -29,6 +36,16 @@
             <src path="src" />
         </javac>
     </target>
+	
+	<target name="dist" depends="compile">
+		<war destfile="${dist.dir}/ROOT.war" webxml="${webinf.dir}/web.xml">
+			<classes dir="${classes.dir}"/>
+			<lib dir="${app.lib.dir}"/>
+			<fileset dir="${root.dir}">
+				<exclude name="WEB-INF"/>
+			</fileset>
+		</war>
+	</target>
     
     <target name="generate-stubs" depends="clean">
 		<taskdef name="wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask" classpathref="classpath" />
