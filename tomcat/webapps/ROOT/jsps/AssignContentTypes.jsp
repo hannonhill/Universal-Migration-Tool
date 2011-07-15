@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Serena Migration Tool</title>
+		<title>Migration Tool</title>
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 		<script type="text/javascript">
 			function addMapping()
@@ -83,7 +83,7 @@
 		</script>
 	</head>
 	<body>
-		<h1>Serena Migration Tool</h1>
+		<h1>Migration Tool</h1>
 		<div class="main">
 			<h2>Please assign Content Type mappings</h2>
 			<h4><s:actionerror /></h4>
