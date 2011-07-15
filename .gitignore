@@ -9,3 +9,4 @@ tomcat/.DS_Store
 tomcat/webapps/.DS_Store
 tomcat/logs
 dist
+uploads
