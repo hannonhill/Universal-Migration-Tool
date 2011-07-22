@@ -90,7 +90,7 @@
 			<s:form action="AssignContentTypes" method="POST">
 			    <s:select list="assetTypes" name="assetTypes" label="XML Asset Type"/>	
 			    <s:select list="contentTypes" name="contentTypes" label="Cascade Content Type"/>
-				<tr><td colspan="2"><button onclick="addMapping();return false;"/>Add Mapping</button></td></tr>
+				<tr><td colspan="2"><button onclick="addMapping();return false;">Add Mapping</button></td></tr>
 				<tr>
 					<td colspan="2">
 						<table summary="Mappings">
@@ -101,7 +101,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><button onclick="window.location='/AssignRootLevelFolders';return false;">Previous</button></td>
+					<td><button onclick="window.location='<s:property value="previousLink"/>';return false;">Previous</button></td>
 					<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>
 				</tr>
 			</s:form>

@@ -1,7 +1,7 @@
 /*
  * Created on Nov 24, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.struts;
 
@@ -18,23 +18,23 @@ import com.hannonhill.smt.service.MappingPersister;
 /**
  * In this action user is assigning the asset types from xml to Content Types in Cascade
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class AssignContentTypesAction extends BaseAction
 {
     private static final long serialVersionUID = 3992252452526228826L;
 
-    private final List<String> assetTypes = new ArrayList<String>(); // a list of available XML Asset Type names
-    private final List<String> contentTypes = new ArrayList<String>(); // alist of available Cascade Content Type paths in given site
+    private final List<String> assetTypes = new ArrayList<String>(); // a list of available XML Asset Type
+                                                                     // names
+    private final List<String> contentTypes = new ArrayList<String>(); // alist of available Cascade Content
+                                                                       // Type paths in given site
 
-    private String[] selectedAssetTypes; // the XML Asset Type names selected by the user after the form submission
-    private String[] selectedContentTypes; // the Cascade Content Type paths selected by the user after the form submission
+    private String[] selectedAssetTypes; // the XML Asset Type names selected by the user after the form
+                                         // submission
+    private String[] selectedContentTypes; // the Cascade Content Type paths selected by the user after the
+                                           // form submission
 
-    /* (non-Javadoc)
-     * @see com.opensymphony.xwork2.ActionSupport#execute()
-     */
     @Override
     public String execute() throws Exception
     {
@@ -65,7 +65,8 @@ public class AssignContentTypesAction extends BaseAction
 
         try
         {
-            // For each mapping, add it to the project information and load the content type throgh web services
+            // For each mapping, add it to the project information and load the content type throgh web
+            // services
             for (int i = 0; i < selectedAssetTypes.length; i++)
                 projectInformation.getContentTypeMap().put(selectedAssetTypes[i], selectedContentTypes[i]);
 
@@ -104,7 +105,8 @@ public class AssignContentTypesAction extends BaseAction
     }
 
     /**
-     * To save the memory and avoid problems with unnecessary information that causes mess, the unused content types get
+     * To save the memory and avoid problems with unnecessary information that causes mess, the unused content
+     * types get
      * their field mappings cleared out.
      */
     private void clearOutUnusedContentTypeFieldMappings()
@@ -172,5 +174,13 @@ public class AssignContentTypesAction extends BaseAction
     public Map<String, String> getContentTypeMap()
     {
         return getProjectInformation().getContentTypeMap();
+    }
+
+    /**
+     * @return Returns an action that should be used for the "Previous" button
+     */
+    public String getPreviousLink()
+    {
+        return getProjectInformation().getLuminisFolder() != null ? "/UploadZip" : "/ProjectProperties";
     }
 }
