@@ -16,6 +16,7 @@ import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.MetadataSetField;
+import com.hannonhill.smt.MigrationStatus;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
 import com.hannonhill.smt.util.WebServicesUtil;
@@ -238,22 +239,21 @@ public class WebServices
         // If page exists, edit it
         page.setId(existingPageId);
         editPage(page, projectInformation);
+        projectInformation.getExistingCascadePages().add(pagePath);
         return new CascadePageInformation(existingPageId, pagePath);
     }
 
     /**
      * Creates a file asset in Cascade Server with contents from the <code>filesystemFile</code> if one does
      * not exist. The path of the file is figured out using webViewUrl in linkFile.xml in current or ancestor
-     * folders. If file with that path already exists, it is left as it is. If the file starts with a ".", it
-     * means it's a hidden file and it will be ignored as well.
+     * folders. If file with that path already exists, it is left as it is.
      * 
      * @param filesystemFile
      * @param projectInformation
      * @param metadataSetId
-     * @return Identifier
      * @throws Exception
      */
-    public static Identifier createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId) throws Exception
+    public static void createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId) throws Exception
     {
         String parentFolderPath = PathUtil.removeLeadingSlashes(LinkRewriter.getWebViewUrl(
                 filesystemFile.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
@@ -264,10 +264,11 @@ public class WebServices
         String filePath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + fileName);
 
         if (projectInformation.getExistingCascadeFiles().contains(filePath))
-        {
-            Log.add(filePath + " <span style=\"color: blue;\">file already exists.</span><br/>", projectInformation.getMigrationStatus());
-            return null;
-        }
+            return;
+
+        MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
+        String relativePath = PathUtil.getRelativePath(filesystemFile, projectInformation.getXmlDirectory());
+        Log.add("Creating file in Cascade " + relativePath + "... ", migrationStatus);
 
         // Set up the file object and assign it to the asset object
         File file = new File();
@@ -292,14 +293,19 @@ public class WebServices
             if (createResult.getMessage().startsWith("folder with path/name: " + parentFolderPath + " could not be found"))
             {
                 createFolder(parentFolderPath, projectInformation);
-                return createFile(filesystemFile, projectInformation, metadataSetId);
+                createFile(filesystemFile, projectInformation, metadataSetId);
+                return;
             }
 
             throw new Exception("File " + filePath + " could not be created: " + createResult.getMessage());
         }
+        Identifier cascadeFile = new Identifier(createResult.getCreatedAssetId(), new Path(filePath, null, projectInformation.getSiteName()),
+                EntityTypeString.file, false);
 
-        return new Identifier(createResult.getCreatedAssetId(), new Path(filePath, null, projectInformation.getSiteName()), EntityTypeString.file,
-                false);
+        projectInformation.getExistingCascadeFiles().add(filePath);
+
+        Log.add(PathUtil.generateFileLink(cascadeFile, projectInformation.getUrl()), migrationStatus);
+        Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
     }
 
     /**
@@ -344,6 +350,13 @@ public class WebServices
      */
     public static boolean doesAssetExist(String path, ProjectInformation projectInformation) throws Exception
     {
+        // Check confirmed paths first
+        if (projectInformation.getExistingCascadeFiles().contains(PathUtil.removeLeadingSlashes(path)))
+            return true;
+        if (projectInformation.getExistingCascadePages().contains(PathUtil.removeLeadingSlashes(path)))
+            return true;
+
+        // If not found, try reading the asset by path
         if (readPageByPath(path, projectInformation) != null)
             return true;
 
@@ -387,6 +400,8 @@ public class WebServices
         {
             if (child.getType().equals(EntityTypeString.file))
                 projectInformation.getExistingCascadeFiles().add(child.getPath().getPath());
+            else if (child.getType().equals(EntityTypeString.page))
+                projectInformation.getExistingCascadePages().add(child.getPath().getPath());
             else if (child.getType().equals(EntityTypeString.folder))
                 populateExistingCascadeFilesOfFolder(child, projectInformation);
         }

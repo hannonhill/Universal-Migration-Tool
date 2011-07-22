@@ -13,7 +13,6 @@ import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.MigrationStatus;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
-import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
 
 /**
  * A service responsible for the actual migration
@@ -153,12 +152,13 @@ public class Migrator
         List<File> filesToProcess = projectInformation.getFilesToProcess();
         for (File folderFile : folderFiles)
         {
-            // skip folders, filesToProcess, hidden files and linkFile.xml
-            if (!folderFile.isDirectory() && !filesToProcess.contains(folderFile) && !folderFile.getName().startsWith(".")
-                    && !folderFile.getName().equals("linkFile.xml"))
+            String name = folderFile.getName();
+            // skip folders, filesToProcess, hidden files, linkFile.xml and VarAndMetaTagValues.xml
+            if (!folderFile.isDirectory() && !filesToProcess.contains(folderFile) && !name.startsWith(".") && !name.equals("linkFile.xml")
+                    && !name.equals("VarAndMetaTagValues.xml"))
                 createLuminisFile(folderFile, projectInformation, metadataSetId);
             // If it's a folder, recursively create files from it but skip hidden folders
-            else if (folderFile.isDirectory() && !folderFile.getName().startsWith("."))
+            else if (folderFile.isDirectory() && !name.startsWith("."))
                 createLuminisFiles(FileSystem.getFolderContents(folderFile), projectInformation, metadataSetId);
         }
     }
@@ -175,14 +175,7 @@ public class Migrator
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         try
         {
-            String relativePath = PathUtil.getRelativePath(folderFile, projectInformation.getXmlDirectory());
-            Log.add("Creating file in Cascade " + relativePath + "... ", migrationStatus);
-            Identifier cascadeFile = WebServices.createFile(folderFile, projectInformation, metadataSetId);
-            if (cascadeFile != null)
-            {
-                Log.add(PathUtil.generateFileLink(cascadeFile, projectInformation.getUrl()), migrationStatus);
-                Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
-            }
+            WebServices.createFile(folderFile, projectInformation, metadataSetId);
         }
         catch (Exception e)
         {
