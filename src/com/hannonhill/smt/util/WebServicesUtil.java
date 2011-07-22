@@ -18,7 +18,9 @@ import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.MetadataSetField;
 import com.hannonhill.smt.ProjectInformation;
+import com.hannonhill.smt.TaskStatus;
 import com.hannonhill.smt.service.LinkRewriter;
+import com.hannonhill.smt.service.Log;
 import com.hannonhill.smt.service.WebServices;
 import com.hannonhill.smt.service.XmlAnalyzer;
 import com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataField;
@@ -64,7 +66,7 @@ public class WebServicesUtil
         page.setName(pageName);
         page.setParentFolderPath(parentFolderPath);
         page.setSiteName(projectInformation.getSiteName());
-        page.setMetadata(createPageMetadata(xmlPage, assetType, metadataFieldNames));
+        page.setMetadata(createPageMetadata(xmlPage, assetType, metadataFieldNames, projectInformation.getMigrationStatus()));
 
         // Create the structured data object with the tree of structured data nodes
         StructuredData structuredData = createPageStructuredData(xmlPage, assetType, projectInformation);
@@ -150,11 +152,12 @@ public class WebServicesUtil
      * @param xmlPage
      * @param assetType
      * @param availableMetadataFieldNames
+     * @param taskStatus
      * @return
      * @throws Exception
      */
-    private static Metadata createPageMetadata(DetailedXmlPageInformation xmlPage, AssetType assetType, Set<String> availableMetadataFieldNames)
-            throws Exception
+    private static Metadata createPageMetadata(DetailedXmlPageInformation xmlPage, AssetType assetType, Set<String> availableMetadataFieldNames,
+            TaskStatus taskStatus) throws Exception
     {
         // Create the metadata object and the list of dynamic fields
         Metadata metadata = new Metadata();
@@ -176,9 +179,11 @@ public class WebServicesUtil
             if (field == null)
                 continue;
 
-            String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
             if (field instanceof MetadataSetField)
+            {
+                String fieldValue = trimMetadataFieldValue(field.getIdentifier(), xmlPage.getMetadataMap().get(xmlMetadataFieldName), taskStatus);
                 assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
+            }
         }
 
         // For each xml content field, find a mapping and assign appropriate value in metadata
@@ -189,9 +194,11 @@ public class WebServicesUtil
             if (field == null)
                 continue;
 
-            String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
             if (field instanceof MetadataSetField)
+            {
+                String fieldValue = trimMetadataFieldValue(field.getIdentifier(), xmlPage.getContentMap().get(xmlContentFieldName), taskStatus);
                 assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
+            }
         }
 
         // For each static value field, assign the static value in the metadata
@@ -199,13 +206,33 @@ public class WebServicesUtil
             if (field instanceof MetadataSetField)
             {
                 // Escape ampersands to make it a valid xml
-                String fieldValue = assetType.getStaticValueMapping().get(field).replaceAll("&", "&amp;");
+                String fieldValue = trimMetadataFieldValue(field.getIdentifier(),
+                        assetType.getStaticValueMapping().get(field).replaceAll("&", "&amp;"), taskStatus);
                 assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
             }
 
         // Convert the list of dynamic field to an array and assign it to the metadata object
         metadata.setDynamicFields(dynamicFieldsList.toArray(new DynamicMetadataField[dynamicFieldsList.size()]));
         return metadata;
+    }
+
+    /**
+     * Checks if given field value has more than 250 characters and if so, returns only the first 250 and
+     * outputs a warning in the log.
+     * 
+     * @param fieldName used for logging purposes
+     * @param fieldValue field value to check
+     * @param taskStatus used for logging purposes
+     * @return
+     */
+    private static String trimMetadataFieldValue(String fieldName, String fieldValue, TaskStatus taskStatus)
+    {
+        if (fieldValue == null || fieldValue.length() <= 250)
+            return fieldValue;
+
+        Log.add("<span style=\"color:orange;\">Cascade metadata field \"" + fieldName + "\" contains " + fieldValue.length()
+                + " characters. Trimming to 250.</span>", taskStatus);
+        return fieldValue.substring(0, 250);
     }
 
     /**
