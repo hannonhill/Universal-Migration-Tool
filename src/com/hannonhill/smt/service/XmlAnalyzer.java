@@ -816,8 +816,8 @@ public class XmlAnalyzer
     }
 
     /**
-     * Assumming it is a Luminis dump, it will return the third level "Root Site" folder if it is the only
-     * sub-folder of it's parent. If not found, returns null.
+     * Assumming it is a Luminis dump, it will return the second or third level "Root Site" folder if it is
+     * the only sub-folder of its parent. If not found, returns null.
      * 
      * @param rootfolder Root folder of the zip file uploaded
      * @return
@@ -832,6 +832,10 @@ public class XmlAnalyzer
             if (firstLevelFile.isFile())
                 continue;
 
+            File foundFolder = findOnlyRootSiteFolder(firstLevelFile);
+            if (foundFolder != null)
+                return foundFolder;
+
             for (String secondLevelFileString : firstLevelFile.list())
             {
                 File secondLevelFile = new File(firstLevelFile.getAbsolutePath() + "/" + secondLevelFileString);
@@ -840,8 +844,8 @@ public class XmlAnalyzer
                 if (secondLevelFile.isFile())
                     continue;
 
-                // Find the "Root Folder" and make sure it's the only folder. If found - return it.
-                File foundFolder = findOnlyRootSiteFolder(secondLevelFile);
+                // Find the "Root Site" folder and make sure it's the only folder. If found - return it.
+                foundFolder = findOnlyRootSiteFolder(secondLevelFile);
                 if (foundFolder != null)
                     return foundFolder;
 
@@ -853,31 +857,31 @@ public class XmlAnalyzer
     }
 
     /**
-     * Assumming it is a Luminis dump, it will return the third level "Root Site" folder if it is the only
-     * sub-folder of it's parent. If not found, returns null. Takes second level folder as a parameter
+     * Returns the child "Root Site" folder if it is the only child folder of it's provided parent. If not
+     * found, returns null.
      * 
-     * @param secondLevelFolder One of the second level folders of the zip file uploaded
+     * @param parentFolder
      * @return
      */
-    private static File findOnlyRootSiteFolder(File secondLevelFolder)
+    private static File findOnlyRootSiteFolder(File parentFolder)
     {
         int nFolders = 0;
         File foundFolder = null;
 
-        for (String thirdLevelFileString : secondLevelFolder.list())
+        for (String childFileString : parentFolder.list())
         {
-            File thirdLevelFile = new File(secondLevelFolder.getAbsolutePath() + "/" + thirdLevelFileString);
+            File childFile = new File(parentFolder.getAbsolutePath() + "/" + childFileString);
 
             // If it's a file, skip (Can be .DS_Store or something else, so just ignore it)
-            if (thirdLevelFile.isFile())
+            if (childFile.isFile())
                 continue;
 
             // If it's a folder, count it in
             nFolders++;
 
             // If it's a Root Site folder, store it
-            if (ROOT_SITE_FOLDER_NAME.equals(thirdLevelFileString))
-                foundFolder = thirdLevelFile;
+            if (ROOT_SITE_FOLDER_NAME.equals(childFileString))
+                foundFolder = childFile;
         }
 
         // If there was Root Site folder and it was the only folder, we found it - return
