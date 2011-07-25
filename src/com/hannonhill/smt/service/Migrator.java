@@ -152,6 +152,9 @@ public class Migrator
         List<File> filesToProcess = projectInformation.getFilesToProcess();
         for (File folderFile : folderFiles)
         {
+            if (projectInformation.getMigrationStatus().isShouldStop())
+                return;
+
             String name = folderFile.getName();
             // skip folders, filesToProcess, hidden files, linkFile.xml and VarAndMetaTagValues.xml
             if (!folderFile.isDirectory() && !filesToProcess.contains(folderFile) && !name.startsWith(".") && !name.equals("linkFile.xml")

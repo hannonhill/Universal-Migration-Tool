@@ -255,6 +255,21 @@ public class WebServices
      */
     public static void createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId) throws Exception
     {
+        createFile(filesystemFile, projectInformation, metadataSetId, true);
+    }
+
+    /**
+     * See {@link #createFile(java.io.File, ProjectInformation, String)}
+     * 
+     * @param filesystemFile
+     * @param projectInformation
+     * @param metadataSetId
+     * @param logCreatingFile whether or not the "Creating file ..." message should be logged
+     * @throws Exception
+     */
+    private static void createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId, boolean logCreatingFile)
+            throws Exception
+    {
         String parentFolderPath = PathUtil.removeLeadingSlashes(LinkRewriter.getWebViewUrl(
                 filesystemFile.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
                 projectInformation.getLinkFileUrlToWebviewUrlMap()));
@@ -268,7 +283,8 @@ public class WebServices
 
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         String relativePath = PathUtil.getRelativePath(filesystemFile, projectInformation.getXmlDirectory());
-        Log.add("Creating file in Cascade " + relativePath + "... ", migrationStatus);
+        if (logCreatingFile)
+            Log.add("Creating file in Cascade " + relativePath + "... ", migrationStatus);
 
         // Set up the file object and assign it to the asset object
         File file = new File();
@@ -293,7 +309,7 @@ public class WebServices
             if (createResult.getMessage().startsWith("folder with path/name: " + parentFolderPath + " could not be found"))
             {
                 createFolder(parentFolderPath, projectInformation);
-                createFile(filesystemFile, projectInformation, metadataSetId);
+                createFile(filesystemFile, projectInformation, metadataSetId, false);
                 return;
             }
 
