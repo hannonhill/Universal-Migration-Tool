@@ -27,6 +27,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final java.lang.String _block_XML = "block_XML";
     public static final java.lang.String _connectorcontainer = "connectorcontainer";
     public static final java.lang.String _twitterconnector = "twitterconnector";
+    public static final java.lang.String _facebookconnector = "facebookconnector";
     public static final java.lang.String _wordpressconnector = "wordpressconnector";
     public static final java.lang.String _googleanalyticsconnector = "googleanalyticsconnector";
     public static final java.lang.String _contenttype = "contenttype";
@@ -76,6 +77,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final EntityTypeString block_XML = new EntityTypeString(_block_XML);
     public static final EntityTypeString connectorcontainer = new EntityTypeString(_connectorcontainer);
     public static final EntityTypeString twitterconnector = new EntityTypeString(_twitterconnector);
+    public static final EntityTypeString facebookconnector = new EntityTypeString(_facebookconnector);
     public static final EntityTypeString wordpressconnector = new EntityTypeString(_wordpressconnector);
     public static final EntityTypeString googleanalyticsconnector = new EntityTypeString(_googleanalyticsconnector);
     public static final EntityTypeString contenttype = new EntityTypeString(_contenttype);

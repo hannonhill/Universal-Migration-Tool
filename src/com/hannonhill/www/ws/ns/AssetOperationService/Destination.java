@@ -34,6 +34,8 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     private java.lang.String cronExpression;
 
+    private java.lang.String webUrl;
+
     private java.lang.String siteId;
 
     private java.lang.String siteName;
@@ -57,6 +59,7 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
            org.apache.axis.types.NonNegativeInteger publishIntervalHours,
            com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] publishDaysOfWeek,
            java.lang.String cronExpression,
+           java.lang.String webUrl,
            java.lang.String siteId,
            java.lang.String siteName) {
         super(
@@ -75,6 +78,7 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.publishIntervalHours = publishIntervalHours;
         this.publishDaysOfWeek = publishDaysOfWeek;
         this.cronExpression = cronExpression;
+        this.webUrl = webUrl;
         this.siteId = siteId;
         this.siteName = siteName;
     }
@@ -341,6 +345,26 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
 
 
     /**
+     * Gets the webUrl value for this Destination.
+     * 
+     * @return webUrl
+     */
+    public java.lang.String getWebUrl() {
+        return webUrl;
+    }
+
+
+    /**
+     * Sets the webUrl value for this Destination.
+     * 
+     * @param webUrl
+     */
+    public void setWebUrl(java.lang.String webUrl) {
+        this.webUrl = webUrl;
+    }
+
+
+    /**
      * Gets the siteId value for this Destination.
      * 
      * @return siteId
@@ -430,6 +454,9 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
             ((this.cronExpression==null && other.getCronExpression()==null) || 
              (this.cronExpression!=null &&
               this.cronExpression.equals(other.getCronExpression()))) &&
+            ((this.webUrl==null && other.getWebUrl()==null) || 
+             (this.webUrl!=null &&
+              this.webUrl.equals(other.getWebUrl()))) &&
             ((this.siteId==null && other.getSiteId()==null) || 
              (this.siteId!=null &&
               this.siteId.equals(other.getSiteId()))) &&
@@ -493,6 +520,9 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         }
         if (getCronExpression() != null) {
             _hashCode += getCronExpression().hashCode();
+        }
+        if (getWebUrl() != null) {
+            _hashCode += getWebUrl().hashCode();
         }
         if (getSiteId() != null) {
             _hashCode += getSiteId().hashCode();
@@ -601,6 +631,13 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("webUrl");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "webUrl"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("siteId");

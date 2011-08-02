@@ -7,11 +7,7 @@
 
 package com.hannonhill.www.ws.ns.AssetOperationService;
 
-public class TwitterConnector  extends com.hannonhill.www.ws.ns.AssetOperationService.Connector  implements java.io.Serializable {
-    private java.lang.String destinationId;
-
-    private java.lang.String destinationPath;
-
+public class TwitterConnector  extends com.hannonhill.www.ws.ns.AssetOperationService.StatusUpdateConnector  implements java.io.Serializable {
     public TwitterConnector() {
     }
 
@@ -46,49 +42,9 @@ public class TwitterConnector  extends com.hannonhill.www.ws.ns.AssetOperationSe
             verified,
             verifiedDate,
             connectorParameters,
-            connectorContentTypeLinks);
-        this.destinationId = destinationId;
-        this.destinationPath = destinationPath;
-    }
-
-
-    /**
-     * Gets the destinationId value for this TwitterConnector.
-     * 
-     * @return destinationId
-     */
-    public java.lang.String getDestinationId() {
-        return destinationId;
-    }
-
-
-    /**
-     * Sets the destinationId value for this TwitterConnector.
-     * 
-     * @param destinationId
-     */
-    public void setDestinationId(java.lang.String destinationId) {
-        this.destinationId = destinationId;
-    }
-
-
-    /**
-     * Gets the destinationPath value for this TwitterConnector.
-     * 
-     * @return destinationPath
-     */
-    public java.lang.String getDestinationPath() {
-        return destinationPath;
-    }
-
-
-    /**
-     * Sets the destinationPath value for this TwitterConnector.
-     * 
-     * @param destinationPath
-     */
-    public void setDestinationPath(java.lang.String destinationPath) {
-        this.destinationPath = destinationPath;
+            connectorContentTypeLinks,
+            destinationId,
+            destinationPath);
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -102,13 +58,7 @@ public class TwitterConnector  extends com.hannonhill.www.ws.ns.AssetOperationSe
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = super.equals(obj) && 
-            ((this.destinationId==null && other.getDestinationId()==null) || 
-             (this.destinationId!=null &&
-              this.destinationId.equals(other.getDestinationId()))) &&
-            ((this.destinationPath==null && other.getDestinationPath()==null) || 
-             (this.destinationPath!=null &&
-              this.destinationPath.equals(other.getDestinationPath())));
+        _equals = super.equals(obj);
         __equalsCalc = null;
         return _equals;
     }
@@ -120,12 +70,6 @@ public class TwitterConnector  extends com.hannonhill.www.ws.ns.AssetOperationSe
         }
         __hashCodeCalc = true;
         int _hashCode = super.hashCode();
-        if (getDestinationId() != null) {
-            _hashCode += getDestinationId().hashCode();
-        }
-        if (getDestinationPath() != null) {
-            _hashCode += getDestinationPath().hashCode();
-        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -136,20 +80,6 @@ public class TwitterConnector  extends com.hannonhill.www.ws.ns.AssetOperationSe
 
     static {
         typeDesc.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "twitterConnector"));
-        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("destinationId");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "destinationId"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("destinationPath");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "destinationPath"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
     }
 
     /**

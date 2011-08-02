@@ -1140,6 +1140,8 @@
 
 				     <enumeration value="twitterconnector"/>
 
+				     <enumeration value="facebookconnector"/>
+
 				     <enumeration value="wordpressconnector"/>
 
 				     <enumeration value="googleanalyticsconnector"/>
@@ -1286,7 +1288,6 @@
 					      </sequence>
 
 				     </extension>
-
 				
 			    </complexContent>
 
@@ -1310,6 +1311,7 @@
 			    </complexContent>
 			
 		   </complexType>
+
 		
 		
 		<!-- A search result -->
@@ -1580,7 +1582,6 @@
 			    <sequence>
 
 				     <element maxOccurs="unbounded" minOccurs="0" name="step" type="impl:workflowStep"/>
-
 		
 			    </sequence>
 
@@ -2317,6 +2318,7 @@
 				<!-- NOT REQUIRED - default false -->
 
 				     <element maxOccurs="1" minOccurs="0" name="moveRenameAssets" type="xsd:boolean"/>
+
 				
 			    </sequence>
 
@@ -2658,7 +2660,6 @@
 					 show on that user's dashboard under the "My New Content Wizards" section.
 					 PRIORITY: groupAssetFactoryContainerId > groupAssetFactoryContainerPath
 					 NOT REQUIRED default: none -->
-
 					 
 				     <element maxOccurs="1" minOccurs="0" name="groupAssetFactoryContainerId" type="xsd:string"/>
 
@@ -2930,7 +2931,6 @@
 			    </sequence>
 	
 		   </complexType>
-
 				
 		
 		   <complexType name="assetFactory">
@@ -3992,6 +3992,7 @@
 
 						       <element maxOccurs="1" minOccurs="0" name="cssFilePath" type="xsd:string"/>
 
+
 						<!-- NOT REQUIRED: For reading purposes only. Ignored when editing, copying etc. -->
 
 						       <element maxOccurs="1" minOccurs="0" name="cssFileRecycled" type="xsd:boolean"/>
@@ -4167,6 +4168,12 @@
 							        <element maxOccurs="1" minOccurs="0" name="cronExpression" type="xsd:string"/>
 
 						       </choice>
+
+						
+						<!-- The base URL which should be used for linking to a given configuration during publishing, when this destination
+							 is explicity chosen for a configuration on the content type. -->
+
+						       <element maxOccurs="1" minOccurs="0" name="webUrl" nillable="true" type="xsd:string"/>
 
 
 						<!-- The site 
@@ -4397,9 +4404,34 @@
 						       <element maxOccurs="1" minOccurs="0" name="connectorParameters" type="impl:connector-parameter-list"/>
 
 						<!-- A list of connector parameters
-							 REQUIRED for TwitterConnector and WordPressConnector -->
+							 REQUIRED for TwitterConnector, FacebookConnector and WordPressConnector -->
 
 						       <element maxOccurs="1" minOccurs="0" name="connectorContentTypeLinks" type="impl:connector-content-type-link-list"/>
+
+					      </sequence>
+
+				     </extension>
+
+			    </complexContent>
+
+		   </complexType>
+
+		
+		   <complexType name="statusUpdateConnector">
+
+			    <complexContent>
+
+				     <extension base="impl:connector">
+
+					      <sequence>
+
+						<!-- The destination
+							 Priority: destinationId > destinationPath
+							 One is REQUIRED -->
+
+						       <element maxOccurs="1" minOccurs="0" name="destinationId" type="xsd:string"/>
+
+						       <element maxOccurs="1" minOccurs="0" name="destinationPath" type="xsd:string"/>
 
 					      </sequence>
 
@@ -4425,27 +4457,24 @@
 
 			    <complexContent>
 
-				     <extension base="impl:connector">
-
-					      <sequence>
-
-						<!-- The destination
-							 Priority: destinationId > destinationPath
-							 One is REQUIRED -->
-
-						       <element maxOccurs="1" minOccurs="0" name="destinationId" type="xsd:string"/>
-
-						       <element maxOccurs="1" minOccurs="0" name="destinationPath" type="xsd:string"/>
-
-					      </sequence>
-
-				     </extension>
+				     <extension base="impl:statusUpdateConnector"/>
 
 			    </complexContent>
 
 		   </complexType>
 
 		
+		   <complexType name="facebookConnector">
+
+			    <complexContent>
+
+				     <extension base="impl:statusUpdateConnector"/>
+
+			    </complexContent>
+
+		   </complexType>
+
+
 		   <complexType name="googleAnalyticsConnector">
 
 			    <complexContent>
@@ -5046,6 +5075,7 @@
                    <enumeration value="ascending"/>
 
                    <enumeration value="descending"/>
+
                  
               </restriction>
 
@@ -5547,6 +5577,8 @@
 
 					      <element maxOccurs="1" minOccurs="1" name="twitterConnector" nillable="true" type="impl:twitterConnector"/>
 
+					      <element maxOccurs="1" minOccurs="1" name="facebookConnector" nillable="true" type="impl:facebookConnector"/>
+
 					      <element maxOccurs="1" minOccurs="1" name="wordPressConnector" nillable="true" type="impl:wordPressConnector"/>
 
 					      <element maxOccurs="1" minOccurs="1" name="googleAnalyticsConnector" nillable="true" type="impl:googleAnalyticsConnector"/>
@@ -5928,6 +5960,7 @@
     <wsdl:message name="readRequest">
 	   
 	     <wsdl:part element="impl:read" name="parameters"/>
+
 	   
     </wsdl:message>
 
@@ -6309,7 +6342,6 @@
 		     <wsdl:output message="impl:readAuditsResponse" name="readAuditsResponse"/>
 
 	    </wsdl:operation>
-
 	
 	   
 	    <wsdl:operation name="performWorkflowTransition">

@@ -54,6 +54,8 @@ public class Asset  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.TwitterConnector twitterConnector;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.FacebookConnector facebookConnector;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.WordPressConnector wordPressConnector;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.GoogleAnalyticsConnector googleAnalyticsConnector;
@@ -121,6 +123,7 @@ public class Asset  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.ContentTypeContainer contentTypeContainer,
            com.hannonhill.www.ws.ns.AssetOperationService.ConnectorContainer connectorContainer,
            com.hannonhill.www.ws.ns.AssetOperationService.TwitterConnector twitterConnector,
+           com.hannonhill.www.ws.ns.AssetOperationService.FacebookConnector facebookConnector,
            com.hannonhill.www.ws.ns.AssetOperationService.WordPressConnector wordPressConnector,
            com.hannonhill.www.ws.ns.AssetOperationService.GoogleAnalyticsConnector googleAnalyticsConnector,
            com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSet pageConfigurationSet,
@@ -164,6 +167,7 @@ public class Asset  implements java.io.Serializable {
            this.contentTypeContainer = contentTypeContainer;
            this.connectorContainer = connectorContainer;
            this.twitterConnector = twitterConnector;
+           this.facebookConnector = facebookConnector;
            this.wordPressConnector = wordPressConnector;
            this.googleAnalyticsConnector = googleAnalyticsConnector;
            this.pageConfigurationSet = pageConfigurationSet;
@@ -648,6 +652,26 @@ public class Asset  implements java.io.Serializable {
 
 
     /**
+     * Gets the facebookConnector value for this Asset.
+     * 
+     * @return facebookConnector
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.FacebookConnector getFacebookConnector() {
+        return facebookConnector;
+    }
+
+
+    /**
+     * Sets the facebookConnector value for this Asset.
+     * 
+     * @param facebookConnector
+     */
+    public void setFacebookConnector(com.hannonhill.www.ws.ns.AssetOperationService.FacebookConnector facebookConnector) {
+        this.facebookConnector = facebookConnector;
+    }
+
+
+    /**
      * Gets the wordPressConnector value for this Asset.
      * 
      * @return wordPressConnector
@@ -1127,6 +1151,9 @@ public class Asset  implements java.io.Serializable {
             ((this.twitterConnector==null && other.getTwitterConnector()==null) || 
              (this.twitterConnector!=null &&
               this.twitterConnector.equals(other.getTwitterConnector()))) &&
+            ((this.facebookConnector==null && other.getFacebookConnector()==null) || 
+             (this.facebookConnector!=null &&
+              this.facebookConnector.equals(other.getFacebookConnector()))) &&
             ((this.wordPressConnector==null && other.getWordPressConnector()==null) || 
              (this.wordPressConnector!=null &&
               this.wordPressConnector.equals(other.getWordPressConnector()))) &&
@@ -1266,6 +1293,9 @@ public class Asset  implements java.io.Serializable {
         }
         if (getTwitterConnector() != null) {
             _hashCode += getTwitterConnector().hashCode();
+        }
+        if (getFacebookConnector() != null) {
+            _hashCode += getFacebookConnector().hashCode();
         }
         if (getWordPressConnector() != null) {
             _hashCode += getWordPressConnector().hashCode();
@@ -1495,6 +1525,13 @@ public class Asset  implements java.io.Serializable {
         elemField.setFieldName("twitterConnector");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "twitterConnector"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "twitterConnector"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("facebookConnector");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "facebookConnector"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "facebookConnector"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

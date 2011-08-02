@@ -820,6 +820,13 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "facebookConnector");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.FacebookConnector.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "feedBlock");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.FeedBlock.class;
@@ -1080,13 +1087,6 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "path");
-            cachedSerQNames.add(qName);
-            cls = com.hannonhill.www.ws.ns.AssetOperationService.Path.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
     }
     private void addBindings1() {
             java.lang.Class cls;
@@ -1102,6 +1102,13 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "path");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.Path.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publish");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.Publish.class;
@@ -1286,6 +1293,13 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteDestinationContainer");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.SiteDestinationContainer.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "statusUpdateConnector");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.StatusUpdateConnector.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
