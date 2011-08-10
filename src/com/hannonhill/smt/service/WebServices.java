@@ -225,13 +225,16 @@ public class WebServices
             // parent folder and attempt to create the page again
             if (!createResult.getSuccess().equals("true"))
             {
-                if (createResult.getMessage().startsWith("folder with path/name: " + parentFolderPath + " could not be found"))
+                String message = createResult.getMessage();
+                if (message != null && message.contains("folder with path/name: ") && message.contains(parentFolderPath.trim())
+                        && message.contains("could not be found"))
                 {
                     createFolder(parentFolderPath, projectInformation);
                     return createPage(xmlPage, projectInformation);
                 }
 
-                throw new Exception("Page " + pagePath + " could not be created: " + createResult.getMessage());
+                throw new Exception("Page " + pagePath + " could not be created: " + createResult.getMessage() + " - Parent folder path is: -"
+                        + parentFolderPath + "-");
             }
             return new CascadePageInformation(createResult.getCreatedAssetId(), pagePath);
         }
@@ -306,14 +309,17 @@ public class WebServices
         // parent folder and attempt to create the page again
         if (!createResult.getSuccess().equals("true"))
         {
-            if (createResult.getMessage().startsWith("folder with path/name: " + parentFolderPath + " could not be found"))
+            String message = createResult.getMessage();
+            if (message != null && message.contains("folder with path/name: ") && message.contains(parentFolderPath.trim())
+                    && message.contains("could not be found"))
             {
                 createFolder(parentFolderPath, projectInformation);
                 createFile(filesystemFile, projectInformation, metadataSetId, false);
                 return;
             }
 
-            throw new Exception("File " + filePath + " could not be created: " + createResult.getMessage());
+            throw new Exception("File " + filePath + " could not be created: " + createResult.getMessage() + " - Parent folder path is: -"
+                    + parentFolderPath + "-");
         }
         Identifier cascadeFile = new Identifier(createResult.getCreatedAssetId(), new Path(filePath, null, projectInformation.getSiteName()),
                 EntityTypeString.file, false);
@@ -548,14 +554,16 @@ public class WebServices
         // parent folder and attempt to create the page again
         if (!createResult.getSuccess().equals("true"))
         {
-            if (createResult.getMessage() != null
-                    && createResult.getMessage().startsWith("folder with path/name: " + parentFolderPath + " could not be found"))
+            String message = createResult.getMessage();
+            if (message != null && message.contains("folder with path/name: ") && message.contains(parentFolderPath.trim())
+                    && message.contains("could not be found"))
             {
                 createFolder(parentFolderPath, projectInformation);
                 createFolder(path, projectInformation);
             }
             else
-                throw new Exception("Parent folder " + path + " could not be created: " + createResult.getMessage());
+                throw new Exception("Parent folder " + path + " could not be created: " + createResult.getMessage() + " - Parent folder path is: -"
+                        + parentFolderPath + "-");
         }
     }
 
