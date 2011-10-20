@@ -1,7 +1,7 @@
 /*
  * Created on Dec 2, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.struts;
 
@@ -20,18 +20,14 @@ import com.hannonhill.smt.task.MigrationTask;
 /**
  * Action reponsible for starting the migration and for displaying an ajax-enabled log screen.
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class MigrationAction extends BaseAction
 {
     private static final long serialVersionUID = 7623856132054947522L;
     private InputStream inputStream;
 
-    /* (non-Javadoc)
-     * @see com.opensymphony.xwork2.ActionSupport#execute()
-     */
     @Override
     public String execute() throws Exception
     {
@@ -71,7 +67,7 @@ public class MigrationAction extends BaseAction
                 MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
                 object = createJSONObject(migrationStatus, currentTask);
 
-                int totalProgress = projectInformation.getFilesToProcess().size() * 2;
+                int totalProgress = (projectInformation.getFilesToProcess().size() + projectInformation.getXhtmlFiles().size()) * 2;
                 object.put("progress", 1000.0 * migrationStatus.getProgress() / totalProgress);
                 object.put("pagesCreated", migrationStatus.getPagesCreated());
                 object.put("pagesSkipped", migrationStatus.getPagesSkipped());
@@ -136,7 +132,8 @@ public class MigrationAction extends BaseAction
     }
 
     /**
-     * Restarts a migration if it is not running and if the link checker is not running. Should be called through AJAX.
+     * Restarts a migration if it is not running and if the link checker is not running. Should be called
+     * through AJAX.
      * 
      * @return
      */

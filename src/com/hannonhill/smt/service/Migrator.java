@@ -6,6 +6,7 @@
 package com.hannonhill.smt.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hannonhill.smt.CascadePageInformation;
@@ -22,6 +23,18 @@ import com.hannonhill.smt.util.PathUtil;
  */
 public class Migrator
 {
+
+    private static final List<String> ignorableLuminisFileNames;
+
+    static
+    {
+        ignorableLuminisFileNames = new ArrayList<String>();
+
+        ignorableLuminisFileNames.add("linkFile.xml");
+        ignorableLuminisFileNames.add("VarAndMetaTagValues.xml");
+        ignorableLuminisFileNames.add("sct_nav_node.xml");
+        ignorableLuminisFileNames.add("sct_page_layout.xml");
+    }
 
     /**
      * Creates the pages and their parent folders if needed
@@ -42,6 +55,32 @@ public class Migrator
     {
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         List<CascadePageInformation> pages = migrationStatus.getCreatedPages();
+
+        for (String blockId : projectInformation.getModifiedBlockIds())
+        {
+            if (migrationStatus.isShouldStop())
+                return;
+
+            try
+            {
+                WebServices.realignXhtmlBlockLinks(blockId, projectInformation);
+                migrationStatus.incrementProgress(1);
+                migrationStatus.incrementPagesAligned();
+                Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+            }
+            catch (Exception e)
+            {
+                // Sometimes the exception message is null, so we get the message from the parent exception
+                String message = e.getMessage();
+                if (message == null && e.getCause() != null)
+                    message = e.getCause().getMessage();
+
+                migrationStatus.incrementProgress(1);
+                migrationStatus.incrementPagesNotAligned();
+                Log.add("<span style=\"color: red;\">Error: " + message + "</span><br/>", migrationStatus);
+                e.printStackTrace();
+            }
+        }
 
         for (CascadePageInformation page : pages)
         {
@@ -141,7 +180,7 @@ public class Migrator
     /**
      * Recursively creates files in Cascade - out of passed {@link File} objects, creates cascade file assets
      * for the {@link File} objects that actually are files, are not hidden (do not start with "."), are not
-     * "linkFile.xml" and do not belong to filesToProcess list (as those will be pages in Cascade).
+     * ignorableLuminisFileNames and do not belong to filesToProcess list (as those will be pages in Cascade).
      * 
      * @param folderFiles
      * @param projectInformation
@@ -156,14 +195,42 @@ public class Migrator
                 return;
 
             String name = folderFile.getName();
-            // skip folders, filesToProcess, hidden files, linkFile.xml and VarAndMetaTagValues.xml
-            if (!folderFile.isDirectory() && !filesToProcess.contains(folderFile) && !name.startsWith(".") && !name.equals("linkFile.xml")
-                    && !name.equals("VarAndMetaTagValues.xml"))
-                createLuminisFile(folderFile, projectInformation, metadataSetId);
+
+            // Skip hidden files and folders
+            if (name.startsWith("."))
+                continue;
+
             // If it's a folder, recursively create files from it but skip hidden folders
-            else if (folderFile.isDirectory() && !name.startsWith("."))
+            if (folderFile.isDirectory())
+            {
                 createLuminisFiles(FileSystem.getFolderContents(folderFile), projectInformation, metadataSetId);
+                continue;
+            }
+
+            // skip filesToProcess
+            if (!filesToProcess.contains(folderFile))
+            {
+                // .xhtml files are processed as XHTML Blocks separately
+                if (name.endsWith(".xhtml"))
+                    continue;
+
+                // Create a file, but skip if it's one of ignorableLuminisFileNames
+                if (!ignorableLuminisFileNames.contains(name))
+                    createLuminisFile(folderFile, projectInformation, metadataSetId);
+            }
         }
+    }
+
+    /**
+     * Goes through gathered list of xhtml files to process and creates corresponding XHTML Blocks in Cascade
+     * 
+     * @param projectInformation
+     * @param metadataSetId
+     */
+    public static void createLuminisXhtmlBlocks(ProjectInformation projectInformation, String metadataSetId)
+    {
+        for (File file : projectInformation.getXhtmlFiles())
+            createLuminisXhtmlBlock(file, projectInformation, metadataSetId);
     }
 
     /**
@@ -194,6 +261,35 @@ public class Migrator
     }
 
     /**
+     * Creates XHTML Block in Cascade with the content of the file put through JTidy.
+     * 
+     * @param file
+     * @param projectInformation
+     * @param metadataSetId
+     */
+    private static void createLuminisXhtmlBlock(File file, ProjectInformation projectInformation, String metadataSetId)
+    {
+        // web services create xhtml block
+        MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
+        try
+        {
+            WebServices.createXhtmlBlock(file, projectInformation, metadataSetId);
+            migrationStatus.incrementPagesCreated();
+            migrationStatus.incrementProgress(1);
+        }
+        catch (Exception e)
+        {
+            // Sometimes the exception message is null, so we get the message from the parent exception
+            String message = e.getMessage();
+            if (message == null && e.getCause() != null)
+                message = e.getCause().getMessage();
+
+            Log.add("<span style=\"color: red;\">Error when creating an XHTML Block: " + message + "</span><br/>", migrationStatus);
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Creates Luminis pages based on the information provided in {@link ProjectInformation}
      * 
      * @param projectInformation
@@ -217,6 +313,9 @@ public class Migrator
 
             // Create files that do not exist in Cascade
             createLuminisFiles(folderFiles, projectInformation, metadataSetId);
+
+            createLuminisXhtmlBlocks(projectInformation, metadataSetId);
+
         }
         catch (Exception e)
         {
@@ -225,7 +324,8 @@ public class Migrator
             if (message == null && e.getCause() != null)
                 message = e.getCause().getMessage();
 
-            Log.add("<span style=\"color: red;\">Error when reading site's metadata set: " + message + "</span><br/>", migrationStatus);
+            Log.add("<span style=\"color: red;\">Error when reading site's metadata set or uploading files: " + message + "</span><br/>",
+                    migrationStatus);
             e.printStackTrace();
         }
 

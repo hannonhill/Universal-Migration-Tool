@@ -74,14 +74,17 @@ public class XmlAnalyzer
         {
             projectInformation.setLuminisFolder(luminisFolder);
             projectInformation.setLuminisLinkRootPath(new File(luminisFolder.getParent()).getParent());
-            List<File> xmlFiles = FileSystem.getAllXmlFiles(luminisFolder);
+            List<File> xmlFiles = FileSystem.getAllFiles(luminisFolder, ".xml");
             for (File xmlFile : xmlFiles)
                 analyzeLuminisXmlFile(xmlFile, projectInformation, errorMessages);
+            List<File> xhtmlFiles = FileSystem.getAllFiles(luminisFolder, ".xhtml");
+            for (File xhtmlFile : xhtmlFiles)
+                projectInformation.getXhtmlFiles().add(xhtmlFile);
         }
         // Otherwise analyze Serena files
         else
         {
-            List<File> files = FileSystem.getAllXmlFiles(folder);
+            List<File> files = FileSystem.getAllFiles(folder, ".xml");
             for (File file : files)
                 analyzeSerenaFile(file, projectInformation, errorMessages);
         }
@@ -143,7 +146,11 @@ public class XmlAnalyzer
     public static void parseLuminisXmlFile(File file, DetailedXmlPageInformation page) throws Exception
     {
         String fileContent = FileSystem.getFileContents(file);
-        String text = fileContent.substring(fileContent.indexOf("<object>"));
+        int objectIndex = fileContent.indexOf("<object>");
+        if (objectIndex == -1)
+            throw new Exception("Error when parsing Luminis XML File: file content does not contain &lt;object&gt; tag");
+
+        String text = fileContent.substring(objectIndex);
         Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new ByteArrayInputStream(text.getBytes())));
         NodeList rootChildNodes = rootNode.getChildNodes();
         for (int i = 0; i < rootChildNodes.getLength(); i++)

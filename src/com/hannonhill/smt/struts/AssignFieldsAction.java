@@ -1,7 +1,7 @@
 /*
  * Created on Nov 24, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.struts;
 
@@ -19,9 +19,8 @@ import com.hannonhill.smt.service.MappingPersister;
 /**
  * Action responsible for assigning metadata and structured data fields.
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class AssignFieldsAction extends BaseAction
 {
@@ -32,21 +31,25 @@ public class AssignFieldsAction extends BaseAction
     private String contentTypePath;
 
     // These are the available xml and Cascade fields
-    private final List<String> xmlMetadataFieldNames = new ArrayList<String>(); // a list of available XML Metadata field names
-    private final List<String> xmlContentFieldNames = new ArrayList<String>(); // a list of available XML Content field names
-    private final List<Field> cascadeMetadataFields = new ArrayList<Field>(); // a list of available Cascade Metadata Set field identifiers
-    private final List<Field> cascadeDataDefinitionFields = new ArrayList<Field>(); // a list of available Cascade Data Definitnion field paths
+    private final List<String> xmlMetadataFieldNames = new ArrayList<String>(); // a list of available XML
+                                                                                // Metadata field names
+    private final List<String> xmlContentFieldNames = new ArrayList<String>(); // a list of available XML
+                                                                               // Content field names
+    private final List<Field> cascadeMetadataFields = new ArrayList<Field>(); // a list of available Cascade
+                                                                              // Metadata Set field
+                                                                              // identifiers
+    private final List<Field> cascadeDataDefinitionFields = new ArrayList<Field>(); // a list of available
+                                                                                    // Cascade Data
+                                                                                    // Definitnion field paths
 
-    // These are the hidden fields that are generated automatically by javascript. For each assignment, all 5 arrays have one element added.
+    // These are the hidden fields that are generated automatically by javascript. For each assignment, all 5
+    // arrays have one element added.
     private String[] selectedXmlMetadataFields = new String[0];
     private String[] selectedXmlContentFields = new String[0];
     private String[] staticValues = new String[0];
     private String[] selectedCascadeMetadataFields = new String[0];
     private String[] selectedCascadeDataDefinitionFields = new String[0];
 
-    /* (non-Javadoc)
-     * @see com.opensymphony.xwork2.ActionSupport#execute()
-     */
     @Override
     public String execute() throws Exception
     {
@@ -89,7 +92,7 @@ public class AssignFieldsAction extends BaseAction
 
         // Increment the current asset type and prepare the view information
         assetType++;
-        // If all the asset types are through, we go to the next screen (summary) 
+        // If all the asset types are through, we go to the next screen (summary)
         if (assetType == projectInformation.getAssetTypeNames().size())
             return SUCCESS;
 
@@ -120,10 +123,13 @@ public class AssignFieldsAction extends BaseAction
     }
 
     /**
-     * Given field identifiers of fields with given index i (selectedXmlMetadataFields, selectedXmlContentFields, selectedCascadeMetadataFields,
-     * selectedCascadeDataDefinitionFields) it picks two that are not "null" and creates a mapping for them. The mapping is 
-     * xml field identifier -> cascade field or cascade field -> static value. 
-     * The cascade field is retrieved from the contentType. The created mapping is added to the assetTypeObject. 
+     * Given field identifiers of fields with given index i (selectedXmlMetadataFields,
+     * selectedXmlContentFields, selectedCascadeMetadataFields,
+     * selectedCascadeDataDefinitionFields) it picks two that are not "null" and creates a mapping for them.
+     * The mapping is
+     * xml field identifier -> cascade field or cascade field -> static value.
+     * The cascade field is retrieved from the contentType. The created mapping is added to the
+     * assetTypeObject.
      * 
      * @param i
      * @param contentType
@@ -138,7 +144,8 @@ public class AssignFieldsAction extends BaseAction
         String cascadeMetadataFieldIdentifier = selectedCascadeMetadataFields[i];
         String cascadeDataDefinitionFieldIdentifier = selectedCascadeDataDefinitionFields[i];
 
-        // JavaScript generates word "null" for null assignments, so we get the Cascade field name and field type by looking for the "null" word
+        // JavaScript generates word "null" for null assignments, so we get the Cascade field name and field
+        // type by looking for the "null" word
         boolean isDataDefinition = cascadeMetadataFieldIdentifier.equals("null");
         boolean isContent = !xmlContentFieldIdentifier.equals("null");
         boolean isMetadata = !xmlMetadataFieldIdentifier.equals("null");
@@ -352,5 +359,25 @@ public class AssignFieldsAction extends BaseAction
         ProjectInformation projectInformation = getProjectInformation();
         String assetTypeName = projectInformation.getAssetTypeNames().get(assetType);
         return projectInformation.getAssetTypes().get(assetTypeName);
+    }
+
+    /**
+     * Returns the appropriate width of the bottom bar
+     * 
+     * @return
+     */
+    public String getBarWidthPercent()
+    {
+        return (100.0 / getProjectInformation().getAssetTypeNames().size()) + "%";
+    }
+
+    /**
+     * Returns the appropriate left margin of the bottom bar
+     * 
+     * @return
+     */
+    public String getMarginLeftPercent()
+    {
+        return (100.0 * assetType / getProjectInformation().getAssetTypeNames().size()) + "%";
     }
 }

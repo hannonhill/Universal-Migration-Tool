@@ -221,6 +221,11 @@
 				</tr>
 			</s:form>
 		</div>
+		<div style="border:1px solid black; background-color:#DDDDDD;margin-top:-1px;border-top:1px solid #BBB;;">
+			<div style="width: <s:property value="barWidthPercent"/>; margin-left: <s:property value="marginLeftPercent"/>; background-color: #EEEEEE;">
+				&nbsp;
+			</div>
+		</div>
 		<script type="text/javascript">
 		<s:iterator value="metadataFieldMap.entrySet()">
 			addMappingByName("m<s:property value="key"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");

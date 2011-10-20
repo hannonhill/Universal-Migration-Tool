@@ -40,6 +40,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Page;
 import com.hannonhill.www.ws.ns.AssetOperationService.Path;
 import com.hannonhill.www.ws.ns.AssetOperationService.ReadResult;
 import com.hannonhill.www.ws.ns.AssetOperationService.Site;
+import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock;
 
 /**
  * This class contains service methods for web services
@@ -247,6 +248,95 @@ public class WebServices
     }
 
     /**
+     * Creates XHTML Block in Cascade with the content of the file put through JTidy.
+     * 
+     * @param file
+     * @param projectInformation
+     * @param metadataSetId
+     * @throws Exception
+     */
+    public static void createXhtmlBlock(java.io.File file, ProjectInformation projectInformation, String metadataSetId) throws Exception
+    {
+        String parentFolderPath = PathUtil
+                .removeLeadingSlashes(LinkRewriter.getWebViewUrl(file.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
+                        projectInformation.getLinkFileUrlToWebviewUrlMap()));
+        if (parentFolderPath.equals(""))
+            parentFolderPath = "/";
+        String blockName = PathUtil.truncateExtension(file.getName());
+        String blockPath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + blockName);
+
+        String overwriteBehavior = projectInformation.getOverwriteBehavior();
+        String existingBlockId = null;
+
+        if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_UPDATE_EXISTING))
+        {
+            if (projectInformation.getExistingCascadeBlocks().contains(blockPath))
+                existingBlockId = getXhtmlBlockId(blockPath, projectInformation);
+        }
+        // If overwite existing is selected, we need to delete the existing block and ignore an error if it
+        // did not exists and we attempted to delete it
+        else if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING))
+        {
+            if (projectInformation.getExistingCascadeBlocks().contains(blockPath))
+                deleteXhtmlBlock(blockPath, projectInformation);
+        }
+
+        MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
+        String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
+        Log.add("Creating XHTML block in Cascade " + relativePath + "... ", migrationStatus);
+
+        // Set up the file object and assign it to the asset object
+        XhtmlDataDefinitionBlock block = new XhtmlDataDefinitionBlock();
+        block.setName(blockName);
+        block.setParentFolderPath(parentFolderPath);
+        block.setSiteName(projectInformation.getSiteName());
+        block.setMetadataSetId(metadataSetId);
+        block.setXhtml(JTidy.tidyContent(FileSystem.getFileContents(file)));
+
+        Asset asset = new Asset();
+        asset.setXhtmlDataDefinitionBlock(block);
+
+        Authentication authentication = getAuthentication(projectInformation);
+        if (existingBlockId == null)
+        {
+            CreateResult createResult = getServer(projectInformation.getUrl()).create(authentication, asset);
+
+            // If the page couldn't be created because parent folder doesn't exist, go ahead and create the
+            // parent folder and attempt to create the page again
+            if (!createResult.getSuccess().equals("true"))
+            {
+                String message = createResult.getMessage();
+                if (message != null && message.contains("folder with path/name: ") && message.contains(parentFolderPath.trim())
+                        && message.contains("could not be found"))
+                {
+                    createFolder(parentFolderPath, projectInformation);
+                    createXhtmlBlock(file, projectInformation, metadataSetId);
+                    return;
+                }
+
+                throw new Exception("XHTML Block " + blockPath + " could not be created: " + createResult.getMessage()
+                        + " - Parent folder path is: -" + parentFolderPath + "-");
+            }
+
+            projectInformation.getExistingCascadeBlocks().add(blockPath);
+            existingBlockId = createResult.getCreatedAssetId();
+        }
+        else
+        {
+            // If block exists, edit it
+            block.setId(existingBlockId);
+            editXhtmlBlock(block, projectInformation);
+        }
+
+        projectInformation.getModifiedBlockIds().add(existingBlockId);
+        Identifier blockIdentifier = new Identifier(existingBlockId, new Path(blockPath, null, projectInformation.getSiteName()),
+                EntityTypeString.block_XHTML_DATADEFINITION, false);
+
+        Log.add(PathUtil.generateBlockLink(blockIdentifier, projectInformation.getUrl()), migrationStatus);
+        Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+    }
+
+    /**
      * Creates a file asset in Cascade Server with contents from the <code>filesystemFile</code> if one does
      * not exist. The path of the file is figured out using webViewUrl in linkFile.xml in current or ancestor
      * folders. If file with that path already exists, it is left as it is.
@@ -296,7 +386,7 @@ public class WebServices
         file.setSiteName(projectInformation.getSiteName());
         file.setMetadataSetId(metadataSetId);
         file.setShouldBeIndexed(true);
-        file.setShouldBeIndexed(true);
+        file.setShouldBePublished(true);
         file.setData(FileSystem.getBytesFromFile(filesystemFile));
 
         Asset asset = new Asset();
@@ -344,6 +434,22 @@ public class WebServices
     }
 
     /**
+     * Reads and edits the XHTML Block - fixes the links and makes them realigned
+     * 
+     * @param id
+     * @param projectInformation
+     * @throws Exception
+     */
+    public static void realignXhtmlBlockLinks(String id, ProjectInformation projectInformation) throws Exception
+    {
+        XhtmlDataDefinitionBlock block = readXhtmlBlock(id, projectInformation);
+        Log.add("Aligning links in XHTML Block " + PathUtil.generateBlockLink(block, projectInformation.getUrl()) + "... ",
+                projectInformation.getMigrationStatus());
+        block.setXhtml(LinkRewriter.fixXhtmlBlockLinks(block.getXhtml(), projectInformation));
+        editXhtmlBlock(block, projectInformation);
+    }
+
+    /**
      * Reads a page with given id from Cascade Server
      * 
      * @param id
@@ -363,6 +469,25 @@ public class WebServices
     }
 
     /**
+     * Reads an XHTML Block with given id from Cascade Server
+     * 
+     * @param id
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    public static XhtmlDataDefinitionBlock readXhtmlBlock(String id, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Identifier identifier = new Identifier(id, null, EntityTypeString.block_XHTML_DATADEFINITION, false);
+        ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
+        if (!readResult.getSuccess().equals("true"))
+            throw new Exception("Error occured when reading an XHTML Block with id '" + id + "': " + readResult.getMessage());
+
+        return readResult.getAsset().getXhtmlDataDefinitionBlock();
+    }
+
+    /**
      * Returns true if either a page or file with given path exists in Cascade.
      * 
      * @param path
@@ -374,6 +499,8 @@ public class WebServices
     {
         // Check confirmed paths first
         if (projectInformation.getExistingCascadeFiles().contains(PathUtil.removeLeadingSlashes(path)))
+            return true;
+        if (projectInformation.getExistingCascadeBlocks().contains(PathUtil.removeLeadingSlashes(path)))
             return true;
         if (projectInformation.getExistingCascadePages().contains(PathUtil.removeLeadingSlashes(path)))
             return true;
@@ -404,7 +531,9 @@ public class WebServices
 
     /**
      * Recursively reads all files from given folder and its descendants and stores their paths in
-     * {@link ProjectInformation#getExistingCascadeFiles()}.
+     * {@link ProjectInformation#getExistingCascadeFiles()},
+     * {@link ProjectInformation#getExistingCascadeBlocks()} and
+     * {@link ProjectInformation#getExistingCascadePages()}
      * 
      * @param folderIdentifier
      * @param projectInformation
@@ -414,7 +543,8 @@ public class WebServices
     {
         ReadResult readResult = getServer(projectInformation.getUrl()).read(getAuthentication(projectInformation), folderIdentifier);
         if (!readResult.getSuccess().equals("true"))
-            throw new Exception("Error occured when reading a Cascade Folder with path '/': " + readResult.getMessage());
+            throw new Exception("Error occured when reading a Cascade Folder with path '" + folderIdentifier.getPath().getPath() + "': "
+                    + readResult.getMessage());
 
         Folder folder = readResult.getAsset().getFolder();
         Identifier[] children = folder.getChildren();
@@ -422,6 +552,8 @@ public class WebServices
         {
             if (child.getType().equals(EntityTypeString.file))
                 projectInformation.getExistingCascadeFiles().add(child.getPath().getPath());
+            else if (child.getType().equals(EntityTypeString.block_XHTML_DATADEFINITION))
+                projectInformation.getExistingCascadeBlocks().add(child.getPath().getPath());
             else if (child.getType().equals(EntityTypeString.page))
                 projectInformation.getExistingCascadePages().add(child.getPath().getPath());
             else if (child.getType().equals(EntityTypeString.folder))
@@ -448,6 +580,23 @@ public class WebServices
     }
 
     /**
+     * Reads a block with given path and returns its id. If the block doesn't exist, returns null.
+     * 
+     * @param path
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    private static String getXhtmlBlockId(String path, ProjectInformation projectInformation) throws Exception
+    {
+        XhtmlDataDefinitionBlock existingBlock = readXhtmlBlockByPath(path, projectInformation);
+        if (existingBlock != null)
+            return existingBlock.getId();
+
+        return null;
+    }
+
+    /**
      * Reads a page with given path from Cascade Server. If the page doesn't exist, returns null.
      * 
      * @param path
@@ -466,6 +615,28 @@ public class WebServices
             throw new Exception("Error occured when reading a Page with path '" + path + "': " + readResult.getMessage());
 
         return readResult.getSuccess().equals("true") ? readResult.getAsset().getPage() : null;
+    }
+
+    /**
+     * Reads an XHTML Block with given path from Cascade Server. If the block doesn't exist, returns null.
+     * 
+     * @param path
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    private static XhtmlDataDefinitionBlock readXhtmlBlockByPath(String path, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()),
+                EntityTypeString.block_XHTML_DATADEFINITION, false);
+        ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
+        if (!readResult.getSuccess().equals("true")
+                && (readResult.getMessage() == null || !readResult.getMessage().equals(
+                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'block_XHTML_DATADEFINITION'")))
+            throw new Exception("Error occured when reading a XHTML Block with path '" + path + "': " + readResult.getMessage());
+
+        return readResult.getSuccess().equals("true") ? readResult.getAsset().getXhtmlDataDefinitionBlock() : null;
     }
 
     /**
@@ -504,7 +675,25 @@ public class WebServices
         OperationResult operationResult = getServer(projectInformation.getUrl()).edit(authentication, asset);
 
         if (!operationResult.getSuccess().equals("true"))
-            throw new Exception("Error occured when reading a Page with id '" + page.getId() + "': " + operationResult.getMessage());
+            throw new Exception("Error occured when editing a Page with id '" + page.getId() + "': " + operationResult.getMessage());
+    }
+
+    /**
+     * Sends an edit request for given XHTML Block through web services
+     * 
+     * @param block
+     * @param projectInformation
+     * @throws Exception
+     */
+    private static void editXhtmlBlock(XhtmlDataDefinitionBlock block, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Asset asset = new Asset();
+        asset.setXhtmlDataDefinitionBlock(block);
+        OperationResult operationResult = getServer(projectInformation.getUrl()).edit(authentication, asset);
+
+        if (!operationResult.getSuccess().equals("true"))
+            throw new Exception("Error occured when editing an XHTML BLOCK with id '" + block.getId() + "': " + operationResult.getMessage());
     }
 
     /**
@@ -526,6 +715,27 @@ public class WebServices
                 && (deleteResult.getMessage() == null || !deleteResult.getMessage().equals(
                         "Unable to identify an entity based on provided entity path '" + path + "' and type 'page'")))
             throw new Exception("Error occured when deleting a Page with path '" + path + "': " + deleteResult.getMessage());
+    }
+
+    /**
+     * Asks Cascade Server to delete an XHTML Block with given path. If block didn't exist, the error will be
+     * ignored. If some other problem occurred, an exception will be thrown.
+     * 
+     * @param path
+     * @param projectInformation
+     * @throws Exception
+     */
+    private static void deleteXhtmlBlock(String path, ProjectInformation projectInformation) throws Exception
+    {
+        Authentication authentication = getAuthentication(projectInformation);
+        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()),
+                EntityTypeString.block_XHTML_DATADEFINITION, false);
+        OperationResult deleteResult = getServer(projectInformation.getUrl()).delete(authentication, identifier);
+
+        if (!deleteResult.getSuccess().equals("true")
+                && (deleteResult.getMessage() == null || !deleteResult.getMessage().equals(
+                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'block_XHTML_DATADEFINITION'")))
+            throw new Exception("Error occured when deleting an XHTML Block with path '" + path + "': " + deleteResult.getMessage());
     }
 
     /**

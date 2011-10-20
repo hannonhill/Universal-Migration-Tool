@@ -50,6 +50,8 @@ public class ProjectInformation
                                                               // information (with the available metadata and
                                                               // dd fields)
     private final List<File> filesToProcess; // All the XML files that need to be processed during migration
+    private final List<File> xhtmlFiles; // All XHTML files that need to be processed as XHTML Blocks for
+                                         // Luminis migration
     private Set<String> gatheredExtensions; // a set of extensions found for pages (for example ".html",
                                             // ".htm")
     private Set<String> gatheredRootLevelFolders; // a set of root level folders of XML pages
@@ -61,10 +63,12 @@ public class ProjectInformation
                                                                         // Luminis dump
     private final Map<String, String> linkFileUrlToWebviewUrlMap;
     private final Set<String> existingCascadeFiles; // Used for Luminis file import and link checking
-                                                    // performance reasons - file paths are checked first
+    private final Set<String> existingCascadeBlocks;// performance reasons - file paths are checked first
                                                     // to avoid having to check if file exists each time a new
                                                     // file is brought in
     private final Set<String> existingCascadePages; // Also used for link checking performance reasons
+
+    private final Set<String> modifiedBlockIds;
 
     // detailed information of the page in
     // that file
@@ -92,6 +96,7 @@ public class ProjectInformation
         linkCheckingStatus = new LinkCheckingStatus();
         currentTask = null;
         filesToProcess = new ArrayList<File>();
+        xhtmlFiles = new ArrayList<File>();
         gatheredExtensions = new HashSet<String>();
         gatheredRootLevelFolders = new HashSet<String>();
         gatheredLinkedRootLevelFolders = new HashSet<String>();
@@ -102,7 +107,9 @@ public class ProjectInformation
         luminisFolder = null;
         linkFileUrlToWebviewUrlMap = new HashMap<String, String>();
         existingCascadeFiles = new HashSet<String>();
+        existingCascadeBlocks = new HashSet<String>();
         existingCascadePages = new HashSet<String>();
+        modifiedBlockIds = new HashSet<String>();
     }
 
     /**
@@ -294,6 +301,14 @@ public class ProjectInformation
     }
 
     /**
+     * @return Returns the xhtmlFiles
+     */
+    public List<File> getXhtmlFiles()
+    {
+        return xhtmlFiles;
+    }
+
+    /**
      * @param migrationStatus the migrationStatus to set
      */
     public void setMigrationStatus(MigrationStatus migrationStatus)
@@ -462,10 +477,26 @@ public class ProjectInformation
     }
 
     /**
+     * @return Returns the existingCascadeBlocks.
+     */
+    public Set<String> getExistingCascadeBlocks()
+    {
+        return existingCascadeBlocks;
+    }
+
+    /**
      * @return Returns the existingCascadePages.
      */
     public Set<String> getExistingCascadePages()
     {
         return existingCascadePages;
+    }
+
+    /**
+     * @return Returns the modifiedBlockIds.
+     */
+    public Set<String> getModifiedBlockIds()
+    {
+        return modifiedBlockIds;
     }
 }

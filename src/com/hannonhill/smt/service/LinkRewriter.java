@@ -195,6 +195,49 @@ public class LinkRewriter
     }
 
     /**
+     * Finds absolute links in xhtml blocks and if they point to existing pages but have extensions, their
+     * extensions are removed
+     * 
+     * @param xml
+     * @param projectInformation
+     * @return
+     * @throws Exception
+     */
+    public static String fixXhtmlBlockLinks(String xml, ProjectInformation projectInformation) throws Exception
+    {
+        // To make things faster, if it's an empty string, just quit
+        if (xml == null || xml.equals(""))
+            return "";
+
+        // Wrap content in the root tag so that it is always a valid xml
+        xml = XmlUtil.addRootTag(xml);
+
+        StringBuffer stringBuffer = new StringBuffer(xml);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(stringBuffer.toString().getBytes("UTF-8"));
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = builder.parse(new InputSource(inputStream));
+
+        Node rootNode = document.getChildNodes().item(0);
+        removeExtension(rootNode, projectInformation);
+
+        // convert document to string
+        DOMSource domSource = new DOMSource(document);
+        StringWriter writer = new StringWriter();
+        StreamResult result = new StreamResult(writer);
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        transformer.setOutputProperty("omit-xml-declaration", "yes");
+        transformer.transform(domSource, result);
+        String resultWithRoot = writer.toString();
+
+        // Remove the root tag
+        String resultWithoutRoot = XmlUtil.removeRootTag(resultWithRoot);
+        return resultWithoutRoot;
+    }
+
+    /**
      * Rewrites the file and page link in the xml tag node and all ancestor nodes. If it is a page link (ends
      * with .html extension and is a relative), the .html extension will be stripped. Also, removes the Serena
      * specific attributes: cmid and collagestyle from all tags.
@@ -219,6 +262,52 @@ public class LinkRewriter
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++)
             rewriteLinkAndRemoveSerenaAttributes(children.item(i), pagePath, projectInformation);
+    }
+
+    /**
+     * Removes extension if link points to an existing page
+     * 
+     * @param node
+     * @param projectInformation
+     */
+    private static void removeExtension(Node node, ProjectInformation projectInformation)
+    {
+        if (node.getNodeName().equals("a"))
+            removeExtension(node, "href", projectInformation);
+        else if (node.getNodeName().equals("link"))
+            removeExtension(node, "href", projectInformation);
+
+        NodeList children = node.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++)
+            removeExtension(children.item(i), projectInformation);
+    }
+
+    /**
+     * Removes an extension if the link points to an existing page
+     * 
+     * @param element
+     * @param attributeName
+     * @param projectInformation
+     */
+    private static void removeExtension(Node element, String attributeName, ProjectInformation projectInformation)
+    {
+        Node attribute = element.getAttributes().getNamedItem(attributeName);
+        if (attribute == null)
+            return;
+
+        String oldPath = attribute.getNodeValue();
+
+        // split between the link part and the anchor part
+        String withoutAnchor = PathUtil.getPartWithoutAnchor(oldPath);
+        String anchor = PathUtil.getAnchorPart(oldPath);
+
+        if (!withoutAnchor.startsWith("/"))
+            return;
+
+        String withoutExtension = PathUtil.truncateExtension(withoutAnchor);
+        String pathOnly = PathUtil.removeLeadingSlashes(withoutExtension);
+        if (projectInformation.getExistingCascadePages().contains(pathOnly))
+            attribute.setNodeValue(withoutExtension + anchor);
     }
 
     /**
