@@ -164,6 +164,9 @@ public class PathUtil
      */
     public static String removeLeadingSlashes(String link)
     {
+        if (link == null)
+            return "";
+
         return link.startsWith("/") ? removeLeadingSlashes(link.substring(1)) : link;
     }
 

@@ -58,7 +58,7 @@ public class WebServices
             new MetadataSetField("author", "Author", false)
     };
 
-    public static final DataDefinitionField XHTML_DATA_DEFINITION_FIELD = new DataDefinitionField("xhtml", "XHTML", false);
+    public static final DataDefinitionField XHTML_DATA_DEFINITION_FIELD = new DataDefinitionField("xhtml", "XHTML", null, false);
 
     // Identifiers of the standard metadata fields
     public static final List<String> STANDARD_METADATA_FIELD_IDENTIFIERS;
@@ -260,8 +260,10 @@ public class WebServices
         String parentFolderPath = PathUtil
                 .removeLeadingSlashes(LinkRewriter.getWebViewUrl(file.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
                         projectInformation.getLinkFileUrlToWebviewUrlMap()));
-        if (parentFolderPath.equals(""))
-            parentFolderPath = "/";
+        // Don't create static components in the root folder. Instead, create them in
+        // "_internal/blocks/static" folder
+        if (parentFolderPath.equals("") || parentFolderPath.equals("/"))
+            parentFolderPath = "_cascade/blocks/static";
         String blockName = PathUtil.truncateExtension(file.getName());
         String blockPath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + blockName);
 
@@ -366,8 +368,10 @@ public class WebServices
         String parentFolderPath = PathUtil.removeLeadingSlashes(LinkRewriter.getWebViewUrl(
                 filesystemFile.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
                 projectInformation.getLinkFileUrlToWebviewUrlMap()));
+
+        // Do not create files in root folder. Instead, put them in "files" folder
         if (parentFolderPath.equals(""))
-            parentFolderPath = "/";
+            parentFolderPath = "files";
         String fileName = filesystemFile.getName();
         String filePath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + fileName);
 

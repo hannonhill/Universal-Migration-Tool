@@ -230,7 +230,12 @@ public class Migrator
     public static void createLuminisXhtmlBlocks(ProjectInformation projectInformation, String metadataSetId)
     {
         for (File file : projectInformation.getXhtmlFiles())
+        {
+            if (projectInformation.getMigrationStatus().isShouldStop())
+                return;
+
             createLuminisXhtmlBlock(file, projectInformation, metadataSetId);
+        }
     }
 
     /**
@@ -314,8 +319,8 @@ public class Migrator
             // Create files that do not exist in Cascade
             createLuminisFiles(folderFiles, projectInformation, metadataSetId);
 
+            // Create XHTML Blocks
             createLuminisXhtmlBlocks(projectInformation, metadataSetId);
-
         }
         catch (Exception e)
         {
@@ -324,8 +329,8 @@ public class Migrator
             if (message == null && e.getCause() != null)
                 message = e.getCause().getMessage();
 
-            Log.add("<span style=\"color: red;\">Error when reading site's metadata set or uploading files: " + message + "</span><br/>",
-                    migrationStatus);
+            Log.add("<span style=\"color: red;\">Error when reading site's metadata set, uploading files or importing blocks: " + message
+                    + "</span><br/>", migrationStatus);
             e.printStackTrace();
         }
 

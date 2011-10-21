@@ -84,6 +84,7 @@ public class LinkRewriter
         for (LuminisLink link : page.getLuminisLinks())
         {
             String regex = "\"/id(" + link.getId() + ")\"";
+            String componentRegex = link.getLinkedItemName() + "</sct-component>";
             String webViewUrl = getWebViewUrl(link.getLinkedItemFolder(), projectInformation.getLinkFileUrlToWebviewUrlMap());
             for (String fieldIdentifier : map.keySet())
             {
@@ -92,6 +93,8 @@ public class LinkRewriter
                 String newContent = content.replaceAll(regex, "\"/" + newPath + "\"");
                 if (newContent.startsWith("/id"))
                     newContent = LUMINIS_FILE_PREFIX + newPath;
+
+                newContent = newContent.replaceAll(componentRegex, newPath + "</sct-component>");
 
                 map.put(fieldIdentifier, newContent);
             }

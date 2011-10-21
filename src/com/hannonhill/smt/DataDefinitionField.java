@@ -1,39 +1,50 @@
 /*
  * Created on Dec 11, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt;
 
 /**
  * Object that stores information about a Cascade data definition field
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class DataDefinitionField extends Field
 {
-    private final boolean isFileChooser;
+    // Null if not a chooser field
+    private final ChooserType chooserType;
+    private final boolean multiple;
 
     /**
      * Constructor for data defintion field
      * 
      * @param identifier
      * @param label
-     * @param fieldType
+     * @param chooserType
+     * @param multiple
      */
-    public DataDefinitionField(String identifier, String label, boolean isFileChooser)
+    public DataDefinitionField(String identifier, String label, ChooserType chooserType, boolean multiple)
     {
         super(identifier, label);
-        this.isFileChooser = isFileChooser;
+        this.chooserType = chooserType;
+        this.multiple = multiple;
     }
 
     /**
-     * @return Returns the isFileChooser.
+     * @return Returns the chooserType.
      */
-    public boolean isFileChooser()
+    public ChooserType getChooserType()
     {
-        return isFileChooser;
+        return chooserType;
+    }
+
+    /**
+     * @return Returns the multiple.
+     */
+    public boolean isMultiple()
+    {
+        return multiple;
     }
 }

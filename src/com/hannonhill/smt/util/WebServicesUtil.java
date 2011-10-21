@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.hannonhill.smt.AssetType;
+import com.hannonhill.smt.ChooserType;
 import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.DetailedXmlPageInformation;
@@ -19,6 +20,7 @@ import com.hannonhill.smt.Field;
 import com.hannonhill.smt.MetadataSetField;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.TaskStatus;
+import com.hannonhill.smt.service.JTidy;
 import com.hannonhill.smt.service.LinkRewriter;
 import com.hannonhill.smt.service.Log;
 import com.hannonhill.smt.service.WebServices;
@@ -276,8 +278,7 @@ public class WebServicesUtil
 
     /**
      * Assigns given fieldValue of given fieldName as the path to the actual field identifier to structured
-     * data object forming
-     * a structural tree if necessary.
+     * data object forming a structural tree if necessary.
      * 
      * @param rootGroup
      * @param field
@@ -309,26 +310,92 @@ public class WebServicesUtil
             }
         }
 
-        if (!field.isFileChooser())
+        if (field.getChooserType() == null)
         {
+            fieldValue = JTidy.tidyContent(fieldValue);
             StructuredDataNode textNode = new StructuredDataNode();
             textNode.setIdentifier(identifier);
             textNode.setText(fieldValue);
             textNode.setType(StructuredDataType.text);
-            currentNode.getContentFields().put(identifier, textNode);
+            List<StructuredDataNode> textNodes = new ArrayList<StructuredDataNode>();
+            textNodes.add(textNode);
+            currentNode.getContentFields().put(identifier, textNodes);
         }
-        else
+        else if (field.getChooserType() == ChooserType.FILE)
         {
+            fieldValue = JTidy.tidyContent(fieldValue);
             String path = fieldValue.startsWith(LinkRewriter.LUMINIS_FILE_PREFIX) ? fieldValue.substring(LinkRewriter.LUMINIS_FILE_PREFIX.length())
                     : XmlAnalyzer.getFirstSrcAttribute(fieldValue);
-            StructuredDataNode fileNode = new StructuredDataNode();
-            fileNode.setIdentifier(identifier);
             if (WebServices.doesAssetExist(path, projectInformation))
+            {
+                StructuredDataNode fileNode = new StructuredDataNode();
+                fileNode.setIdentifier(identifier);
                 fileNode.setFilePath(path);
-            fileNode.setType(StructuredDataType.asset);
-            fileNode.setAssetType(StructuredDataAssetType.file);
-            currentNode.getContentFields().put(identifier, fileNode);
+                fileNode.setType(StructuredDataType.asset);
+                fileNode.setAssetType(StructuredDataAssetType.file);
+                List<StructuredDataNode> fileNodes = new ArrayList<StructuredDataNode>();
+                fileNodes.add(fileNode);
+                currentNode.getContentFields().put(identifier, fileNodes);
+            }
         }
+        else if (field.getChooserType() == ChooserType.BLOCK)
+        {
+            List<String> sctComponentPaths = getSctComponents(fieldValue);
+            if (sctComponentPaths.size() > 0)
+            {
+                List<StructuredDataNode> blockNodes = new ArrayList<StructuredDataNode>();
+                for (String sctComponentPath : sctComponentPaths)
+                {
+                    if (WebServices.doesAssetExist(sctComponentPath, projectInformation))
+                    {
+                        StructuredDataNode blockNode = new StructuredDataNode();
+                        blockNode.setIdentifier(identifier);
+                        blockNode.setBlockPath(sctComponentPath);
+                        blockNode.setType(StructuredDataType.asset);
+                        blockNode.setAssetType(StructuredDataAssetType.block);
+                        blockNodes.add(blockNode);
+                        if (!field.isMultiple())
+                            break;
+                    }
+                }
+                currentNode.getContentFields().put(identifier, blockNodes);
+            }
+        }
+    }
+
+    /**
+     * Returns a list of component paths found in the content
+     * 
+     * @param fieldValue
+     * @return
+     */
+    private static List<String> getSctComponents(String fieldValue)
+    {
+        // The xml might not be valid and JTidy removes the <sct-component> tags, so instead, look for closing
+        // </sct-component> tags and find text before that
+        List<String> result = new ArrayList<String>();
+        getSctComponents(fieldValue, result);
+        return result;
+    }
+
+    /**
+     * Recursively looks for paths of components
+     * 
+     * @param remainingValue
+     * @param result
+     */
+    private static void getSctComponents(String remainingValue, List<String> result)
+    {
+        int closingIndex = remainingValue.indexOf("</sct-component>");
+        if (closingIndex == -1)
+            return;
+
+        String currentPart = remainingValue.substring(0, closingIndex);
+        int openingIndex = currentPart.lastIndexOf(">");
+        if (openingIndex != -1)
+            result.add(currentPart.substring(openingIndex + 1));
+
+        getSctComponents(remainingValue.substring(closingIndex + 1), result);
     }
 
     /**
@@ -353,24 +420,22 @@ public class WebServicesUtil
      */
     private static StructuredDataNode[] convertToStructuredDataNodes(StructuredDataGroup group)
     {
-        StructuredDataNode[] structuredDataNodes = new StructuredDataNode[group.getGroups().size() + group.getContentFields().size()];
-        int index = 0;
+        List<StructuredDataNode> result = new ArrayList<StructuredDataNode>();
+
         for (String contentFieldIdentifier : group.getContentFields().keySet())
-        {
-            structuredDataNodes[index] = group.getContentFields().get(contentFieldIdentifier);
-            index++;
-        }
+            for (StructuredDataNode structuredDataNode : group.getContentFields().get(contentFieldIdentifier))
+                result.add(structuredDataNode);
 
         for (String groupIdentifier : group.getGroups().keySet())
         {
             StructuredDataGroup groupNode = group.getGroups().get(groupIdentifier);
-            structuredDataNodes[index] = new StructuredDataNode();
-            structuredDataNodes[index].setIdentifier(groupIdentifier);
-            structuredDataNodes[index].setType(StructuredDataType.group);
-            structuredDataNodes[index].setStructuredDataNodes(convertToStructuredDataNodes(groupNode));
-            index++;
+            StructuredDataNode structuredDataNode = new StructuredDataNode();
+            structuredDataNode.setIdentifier(groupIdentifier);
+            structuredDataNode.setType(StructuredDataType.group);
+            structuredDataNode.setStructuredDataNodes(convertToStructuredDataNodes(groupNode));
+            result.add(structuredDataNode);
         }
-        return structuredDataNodes;
+        return result.toArray(new StructuredDataNode[0]);
     }
 
     /**
@@ -384,7 +449,7 @@ public class WebServicesUtil
     private static class StructuredDataGroup
     {
         // the fields in the group with their values
-        private final Map<String, StructuredDataNode> contentFields = new HashMap<String, StructuredDataNode>();
+        private final Map<String, List<StructuredDataNode>> contentFields = new HashMap<String, List<StructuredDataNode>>();
 
         // other groups in the group
         private final Map<String, StructuredDataGroup> groups = new HashMap<String, StructuredDataGroup>();
@@ -400,7 +465,7 @@ public class WebServicesUtil
         /**
          * @return Returns the contentFields.
          */
-        public Map<String, StructuredDataNode> getContentFields()
+        public Map<String, List<StructuredDataNode>> getContentFields()
         {
             return contentFields;
         }

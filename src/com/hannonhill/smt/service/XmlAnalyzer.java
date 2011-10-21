@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.hannonhill.smt.AssetType;
+import com.hannonhill.smt.ChooserType;
 import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.LuminisLink;
@@ -158,8 +159,8 @@ public class XmlAnalyzer
             Node rootChildNode = rootChildNodes.item(i);
 
             // Because we do not know if the field belongs to content or metadata, we assign it to both maps
-            page.getContentMap().put(rootChildNode.getNodeName(), JTidy.tidyContent(rootChildNode.getTextContent()));
-            page.getMetadataMap().put(rootChildNode.getNodeName(), JTidy.tidyContent(rootChildNode.getTextContent()));
+            page.getContentMap().put(rootChildNode.getNodeName(), rootChildNode.getTextContent());
+            page.getMetadataMap().put(rootChildNode.getNodeName(), rootChildNode.getTextContent());
         }
     }
 
@@ -292,7 +293,7 @@ public class XmlAnalyzer
             String nodeName = node.getNodeName();
             if (nodeName.equals("#cdata-section"))
                 // Always tidy cdata section. Trim because jtidy leaves a new line character at the end.
-                return JTidy.tidyContent(node.getNodeValue()).trim();
+                return node.getNodeValue();
         }
         return "";
     }
@@ -330,23 +331,32 @@ public class XmlAnalyzer
             else
                 label = identifier;
 
+            String newIdentifier = identifierPrefix + identifier;
+            String newLabel = labelPrefix + label;
+
             // If group - go recursively, if text - add to the field list. Ignore asset choosers.
             if (node.getNodeName().equals("group"))
                 analyzeDataDefinitionGroup(node.getChildNodes(), identifierPrefix + identifier + "/", labelPrefix + label + "/", returnMap);
             else if (node.getNodeName().equals("text"))
-            {
-                String newIdentifier = identifierPrefix + identifier;
-                String newLabel = labelPrefix + label;
-                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, false));
-            }
+                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, null, isMultiple(node)));
             else if (node.getNodeName().equals("asset") && node.getAttributes().getNamedItem("type") != null
                     && node.getAttributes().getNamedItem("type").getTextContent().equals("file"))
-            {
-                String newIdentifier = identifierPrefix + identifier;
-                String newLabel = labelPrefix + label;
-                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, true));
-            }
+                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, ChooserType.FILE, isMultiple(node)));
+            else if (node.getNodeName().equals("asset") && node.getAttributes().getNamedItem("type") != null
+                    && node.getAttributes().getNamedItem("type").getTextContent().equals("block"))
+                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, ChooserType.BLOCK, isMultiple(node)));
         }
+    }
+
+    /**
+     * Returns true if provided node has a multiple="true" attribute
+     * 
+     * @param node
+     * @return
+     */
+    private static boolean isMultiple(Node node)
+    {
+        return node.getAttributes().getNamedItem("multiple") != null && node.getAttributes().getNamedItem("multiple").getTextContent().equals("true");
     }
 
     /**
@@ -395,7 +405,7 @@ public class XmlAnalyzer
     private static List<String> findLuminisMetadataFields(File jspFile) throws Exception
     {
         String jsp = FileSystem.getFileContents(jspFile);
-        return getRegexMatches(jsp, LUMINIS_METADATA_FIELD_NAMES_REGEX, 1);
+        return convertSpacesToUnderscores(getRegexMatches(jsp, LUMINIS_METADATA_FIELD_NAMES_REGEX, 1));
     }
 
     /**
@@ -408,7 +418,22 @@ public class XmlAnalyzer
     private static List<String> findLuminisContentFields(File jspFile) throws Exception
     {
         String jsp = FileSystem.getFileContents(jspFile);
-        return getRegexMatches(jsp, LUMINIS_CONTENT_FIELD_NAMES_REGEX, 2);
+        return convertSpacesToUnderscores(getRegexMatches(jsp, LUMINIS_CONTENT_FIELD_NAMES_REGEX, 2));
+    }
+
+    /**
+     * Converts spaces in strings given list to underscores. Returns a new list with the results.
+     * 
+     * @param list
+     * @return
+     */
+    private static List<String> convertSpacesToUnderscores(List<String> list)
+    {
+        List<String> result = new ArrayList<String>();
+        for (String singleResult : list)
+            result.add(singleResult.replaceAll(" ", "_"));
+
+        return result;
     }
 
     /**
