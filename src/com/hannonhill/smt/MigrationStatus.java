@@ -1,30 +1,34 @@
 /*
  * Created on Dec 9, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * An object containing information about the current status of the actual migration process
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class MigrationStatus extends TaskStatus
 {
-    private int pagesCreated;
+    private int assetsCreated;
     private int pagesSkipped;
-    private int pagesWithErrors;
+    private int assetsWithErrors;
 
-    private int pagesAligned;
-    private int pagesNotAligned;
+    private int assetsAligned;
+    private int assetsNotAligned;
 
-    private final List<CascadePageInformation> createdPages; // a list of ids and paths of created pages
+    private final List<CascadeAssetInformation> createdPages; // a list of ids and paths of created pages
+    private final List<CascadeAssetInformation> createdBlocks; // a list of ids of created blocks
+
+    private final Set<String> createdAssetPaths; // to quickly check for duplicates
 
     /**
      * Constructor
@@ -33,30 +37,33 @@ public class MigrationStatus extends TaskStatus
     {
         super();
 
-        pagesCreated = 0;
+        assetsCreated = 0;
         pagesSkipped = 0;
-        pagesWithErrors = 0;
+        assetsWithErrors = 0;
 
-        pagesAligned = 0;
-        pagesNotAligned = 0;
+        assetsAligned = 0;
+        assetsNotAligned = 0;
 
-        createdPages = new ArrayList<CascadePageInformation>();
+        createdPages = new ArrayList<CascadeAssetInformation>();
+        createdBlocks = new ArrayList<CascadeAssetInformation>();
+
+        createdAssetPaths = new HashSet<String>();
     }
 
     /**
-     * @return Returns the pagesCreated.
+     * @return Returns the assetsCreated.
      */
-    public int getPagesCreated()
+    public int getAssetsCreated()
     {
-        return pagesCreated;
+        return assetsCreated;
     }
 
     /**
      * Increments the number of pages created by 1
      */
-    public void incrementPagesCreated()
+    public void incrementAssetsCreated()
     {
-        pagesCreated++;
+        assetsCreated++;
     }
 
     /**
@@ -76,58 +83,96 @@ public class MigrationStatus extends TaskStatus
     }
 
     /**
-     * @return Returns the pagesWithErrors.
+     * @return Returns the assetsWithErrors.
      */
-    public int getPagesWithErrors()
+    public int getAssetsWithErrors()
     {
-        return pagesWithErrors;
+        return assetsWithErrors;
     }
 
     /**
      * Increments the number of pages with errors by 1
      */
-    public void incrementPagesWithErrors()
+    public void incrementAssetsWithErrors()
     {
-        pagesWithErrors++;
+        assetsWithErrors++;
     }
 
     /**
-     * @return Returns the pagesAligned.
+     * @return Returns the assetsAligned.
      */
-    public int getPagesAligned()
+    public int getAssetsAligned()
     {
-        return pagesAligned;
+        return assetsAligned;
     }
 
     /**
      * Increments the number of pages aligned by 1
      */
-    public void incrementPagesAligned()
+    public void incrementAssetsAligned()
     {
-        pagesAligned++;
+        assetsAligned++;
     }
 
     /**
-     * @return Returns the pagesNotAligned.
+     * @return Returns the assetsNotAligned.
      */
-    public int getPagesNotAligned()
+    public int getAssetsNotAligned()
     {
-        return pagesNotAligned;
+        return assetsNotAligned;
     }
 
     /**
      * Increments the number of pages not aligned by 1
      */
-    public void incrementPagesNotAligned()
+    public void incrementAssetsNotAligned()
     {
-        pagesNotAligned++;
+        assetsNotAligned++;
     }
 
     /**
      * @return Returns the createdPages.
      */
-    public List<CascadePageInformation> getCreatedPages()
+    public List<CascadeAssetInformation> getCreatedPages()
     {
         return createdPages;
+    }
+
+    /**
+     * Adds the created page to the list and its path to the set
+     * 
+     * @param page
+     */
+    public void addCreatedPage(CascadeAssetInformation page)
+    {
+        createdPages.add(page);
+        createdAssetPaths.add(page.getPath().toLowerCase());
+    }
+
+    /**
+     * @return Returns the createdBlocks.
+     */
+    public List<CascadeAssetInformation> getCreatedBlocks()
+    {
+        return createdBlocks;
+    }
+
+    /**
+     * Adds the created block to the list and its path to the set
+     * 
+     * @param block
+     */
+    public void addCreatedBlock(CascadeAssetInformation block)
+    {
+        createdBlocks.add(block);
+        createdAssetPaths.add(block.getPath().toLowerCase());
+    }
+
+    /**
+     * @return Returns the createdAssetPaths.
+     */
+    public Set<String> getCreatedAssetPaths()
+    {
+        return createdAssetPaths;
     }
 }

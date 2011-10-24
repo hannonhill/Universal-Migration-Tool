@@ -119,16 +119,16 @@
 				var fullTaskName = "";
 				if (currentTask=="migration")
 				{
-					animateNumber("created", responseObject["pagesCreated"]);
-					animateNumber("skipped", responseObject["pagesSkipped"]);
-					animateNumber("errors", responseObject["pagesWithErrors"]);
-					animateNumber("aligned", responseObject["pagesAligned"]);
-					animateNumber("notAligned", responseObject["pagesNotAligned"]);
+					animateNumber("created", responseObject["created"]);
+					animateNumber("skipped", responseObject["skipped"]);
+					animateNumber("errors", responseObject["withErrors"]);
+					animateNumber("aligned", responseObject["aligned"]);
+					animateNumber("notAligned", responseObject["notAligned"]);
 				}
 				else if (currentTask=="link-checker")
 				{
-					animateNumber("checked", responseObject["pagesChecked"]);
-					animateNumber("checkingErrors", responseObject["pagesWithErrors"]);
+					animateNumber("checked", responseObject["checked"]);
+					animateNumber("checkingErrors", responseObject["withErrors"]);
 					animateNumber("correctLinks", responseObject["correctLinks"]);
 					animateNumber("brokenLinks", responseObject["brokenLinks"]);
 				}				

@@ -1,7 +1,7 @@
 /*
  * Created on Dec 21, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.service;
 
@@ -16,7 +16,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.hannonhill.smt.CascadePageInformation;
+import com.hannonhill.smt.CascadeAssetInformation;
 import com.hannonhill.smt.LinkCheckingStatus;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
@@ -24,27 +24,51 @@ import com.hannonhill.smt.util.XmlUtil;
 import com.hannonhill.www.ws.ns.AssetOperationService.Page;
 import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataNode;
 import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataType;
+import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock;
 
 /**
  * Supplies methods related to link checking
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class LinkChecker
 {
     private static final String LINK_XPATH = "//a | //img | //script | //link ";
 
     /**
-     * Checks all the links in the pages that were created during migration (projectInformation.getMigrationStatus().getCreatedPages())
+     * Checks all the links in the pages that were created during migration
+     * (projectInformation.getMigrationStatus().getCreatedPages())
      * 
      * @param projectInformation
      */
     public static void checkLinks(ProjectInformation projectInformation)
     {
         LinkCheckingStatus linkCheckingStatus = projectInformation.getLinkCheckingStatus();
-        for (CascadePageInformation page : projectInformation.getMigrationStatus().getCreatedPages())
+
+        for (CascadeAssetInformation block : projectInformation.getMigrationStatus().getCreatedBlocks())
+        {
+            if (linkCheckingStatus.isShouldStop())
+                return;
+
+            Log.add("Checking links for block " + PathUtil.generateBlockLink(block, projectInformation.getUrl()) + "<br/>", linkCheckingStatus);
+
+            try
+            {
+                checkLinksForXhtmlBlock(block.getId(), projectInformation);
+                linkCheckingStatus.incrementAssetsChecked();
+            }
+            catch (Exception e)
+            {
+                Log.add("<span style=\"color: red;\">Error: " + e.getMessage() + "</span><br/>", linkCheckingStatus);
+                e.printStackTrace();
+                linkCheckingStatus.incrementAssetsWithErrors();
+            }
+
+            linkCheckingStatus.incrementProgress(1);
+        }
+
+        for (CascadeAssetInformation page : projectInformation.getMigrationStatus().getCreatedPages())
         {
             if (linkCheckingStatus.isShouldStop())
                 return;
@@ -53,14 +77,14 @@ public class LinkChecker
 
             try
             {
-                LinkChecker.checkLinks(page.getId(), projectInformation);
-                linkCheckingStatus.incrementPagesChecked();
+                checkLinks(page.getId(), projectInformation);
+                linkCheckingStatus.incrementAssetsChecked();
             }
             catch (Exception e)
             {
                 Log.add("<span style=\"color: red;\">Error: " + e.getMessage() + "</span><br/>", linkCheckingStatus);
                 e.printStackTrace();
-                linkCheckingStatus.incrementPagesWithErrors();
+                linkCheckingStatus.incrementAssetsWithErrors();
             }
 
             linkCheckingStatus.incrementProgress(1);
@@ -82,6 +106,21 @@ public class LinkChecker
             checkLinksFromXml(projectInformation, xhtml);
         else
             checkLinks(projectInformation, cascadePage.getStructuredData().getStructuredDataNodes());
+    }
+
+    /**
+     * Checks the links in an XHTML Block with given id.
+     * 
+     * @param pageId
+     * @param projectInformation
+     * @throws Exception
+     */
+    private static void checkLinksForXhtmlBlock(String blockId, ProjectInformation projectInformation) throws Exception
+    {
+        XhtmlDataDefinitionBlock block = WebServices.readXhtmlBlock(blockId, projectInformation);
+        String xhtml = block.getXhtml();
+        if (xhtml != null)
+            checkLinksFromXml(projectInformation, xhtml);
     }
 
     /**
@@ -163,7 +202,8 @@ public class LinkChecker
             validLink = false;
         else
         {
-            // If cache doesn't contain the link, check if it is a valid link through web services and then add it to the cache
+            // If cache doesn't contain the link, check if it is a valid link through web services and then
+            // add it to the cache
             validLink = WebServices.doesAssetExist(path, projectInformation);
 
             if (validLink)
@@ -184,7 +224,8 @@ public class LinkChecker
     }
 
     /**
-     * Gets the link's path from the XML node. If it is a &ltimg&gt; or &lt;script&gt; tag, it looks into the "src" attribute.
+     * Gets the link's path from the XML node. If it is a &ltimg&gt; or &lt;script&gt; tag, it looks into the
+     * "src" attribute.
      * In other tags, it looks into the "href" attribute.
      * 
      * @param node

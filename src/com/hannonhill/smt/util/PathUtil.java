@@ -7,9 +7,8 @@ package com.hannonhill.smt.util;
 
 import java.io.File;
 
-import com.hannonhill.smt.CascadePageInformation;
+import com.hannonhill.smt.CascadeAssetInformation;
 import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
-import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock;
 
 /**
  * Utility methods related to path manipulations
@@ -234,7 +233,7 @@ public class PathUtil
      * @param cascadeUrl
      * @return
      */
-    public static String generatePageLink(CascadePageInformation cascadePage, String cascadeUrl)
+    public static String generatePageLink(CascadeAssetInformation cascadePage, String cascadeUrl)
     {
         return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(cascadeUrl) + "/entity/open.act?id=" + cascadePage.getId()
                 + "&amp;type=page\" target=\"_blank\">/" + cascadePage.getPath() + "</a> ";
@@ -260,20 +259,7 @@ public class PathUtil
      * @param cascadeUrl
      * @return
      */
-    public static String generateBlockLink(Identifier cascadeBlock, String cascadeUrl)
-    {
-        return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(cascadeUrl) + "/entity/open.act?id=" + cascadeBlock.getId()
-                + "&amp;type=block\" target=\"_blank\">/" + cascadeBlock.getPath().getPath() + "</a> ";
-    }
-
-    /**
-     * Generates a link to the block in Cascade Servicer
-     * 
-     * @param cascadeBlock
-     * @param cascadeUrl
-     * @return
-     */
-    public static String generateBlockLink(XhtmlDataDefinitionBlock cascadeBlock, String cascadeUrl)
+    public static String generateBlockLink(CascadeAssetInformation cascadeBlock, String cascadeUrl)
     {
         return "<a href=\"" + PathUtil.getURLWithoutAssetOperationPart(cascadeUrl) + "/entity/open.act?id=" + cascadeBlock.getId()
                 + "&amp;type=block\" target=\"_blank\">/" + cascadeBlock.getPath() + "</a> ";

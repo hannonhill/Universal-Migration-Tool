@@ -1,19 +1,17 @@
 /*
  * Created on Dec 9, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt;
 
 /**
- * Object containing necessary information about page for logging purposes - skipping rest of fields from {@link com.hannonhill.www.ws.ns.AssetOperationService.Page}
- * to save the memory.
+ * Object containing necessary information about page or block for logging purposes
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
-public class CascadePageInformation
+public class CascadeAssetInformation
 {
     private final String id;
     private final String path;
@@ -24,7 +22,7 @@ public class CascadePageInformation
      * @param id
      * @param path
      */
-    public CascadePageInformation(String id, String path)
+    public CascadeAssetInformation(String id, String path)
     {
         this.id = id;
         this.path = path;

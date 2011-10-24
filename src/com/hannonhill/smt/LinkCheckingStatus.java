@@ -1,7 +1,7 @@
 /*
  * Created on Dec 28, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt;
 
@@ -11,14 +11,14 @@ import java.util.Set;
 /**
  * An object containing information about the current status of the actual link checking process
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class LinkCheckingStatus extends TaskStatus
 {
-    private int pagesChecked; // number of pages that were already checked for broken links
-    private int pagesWithErrors; // number of pages that couldn't be read or whose XML couldn't be parsed (or any other major problem occured)
+    private int assetsChecked; // number of assets that were already checked for broken links
+    private int assetsWithErrors; // number of assets that couldn't be read or whose XML couldn't be parsed
+                                  // (or/ any other major problem occurred)
 
     private int correctLinks; // number of valid links total
     private int brokenLinks; // number of broken links total
@@ -33,8 +33,8 @@ public class LinkCheckingStatus extends TaskStatus
     {
         super();
 
-        pagesChecked = 0;
-        pagesWithErrors = 0;
+        assetsChecked = 0;
+        assetsWithErrors = 0;
 
         correctLinks = 0;
         brokenLinks = 0;
@@ -44,35 +44,35 @@ public class LinkCheckingStatus extends TaskStatus
     }
 
     /**
-     * @return Returns the pagesChecked.
+     * @return Returns the assetsChecked.
      */
-    public int getPagesChecked()
+    public int getAssetsChecked()
     {
-        return pagesChecked;
+        return assetsChecked;
     }
 
     /**
-     * Increments the number of pages checked by 1
+     * Increments the number of assets checked by 1
      */
-    public void incrementPagesChecked()
+    public void incrementAssetsChecked()
     {
-        pagesChecked++;
+        assetsChecked++;
     }
 
     /**
-     * @return Returns the pagesWithErrors.
+     * @return Returns the assetsWithErrors.
      */
-    public int getPagesWithErrors()
+    public int getAssetsWithErrors()
     {
-        return pagesWithErrors;
+        return assetsWithErrors;
     }
 
     /**
-     * Increments the number of pages with errors by 1
+     * Increments the number of asset with errors by 1
      */
-    public void incrementPagesWithErrors()
+    public void incrementAssetsWithErrors()
     {
-        pagesWithErrors++;
+        assetsWithErrors++;
     }
 
     /**

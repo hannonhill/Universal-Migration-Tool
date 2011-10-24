@@ -69,21 +69,22 @@ public class MigrationAction extends BaseAction
 
                 int totalProgress = (projectInformation.getFilesToProcess().size() + projectInformation.getXhtmlFiles().size()) * 2;
                 object.put("progress", 1000.0 * migrationStatus.getProgress() / totalProgress);
-                object.put("pagesCreated", migrationStatus.getPagesCreated());
-                object.put("pagesSkipped", migrationStatus.getPagesSkipped());
-                object.put("pagesWithErrors", migrationStatus.getPagesWithErrors());
-                object.put("pagesAligned", migrationStatus.getPagesAligned());
-                object.put("pagesNotAligned", migrationStatus.getPagesNotAligned());
+                object.put("created", migrationStatus.getAssetsCreated());
+                object.put("skipped", migrationStatus.getPagesSkipped());
+                object.put("withErrors", migrationStatus.getAssetsWithErrors());
+                object.put("aligned", migrationStatus.getAssetsAligned());
+                object.put("notAligned", migrationStatus.getAssetsNotAligned());
             }
             else if (LinkCheckingTask.TASK_NAME.equals(currentTask))
             {
+                MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
                 LinkCheckingStatus linkCheckingStatus = projectInformation.getLinkCheckingStatus();
                 object = createJSONObject(linkCheckingStatus, currentTask);
 
-                int totalProgress = projectInformation.getMigrationStatus().getCreatedPages().size();
+                int totalProgress = migrationStatus.getCreatedPages().size() + migrationStatus.getCreatedBlocks().size();
                 object.put("progress", 1000.0 * linkCheckingStatus.getProgress() / totalProgress);
-                object.put("pagesChecked", linkCheckingStatus.getPagesChecked());
-                object.put("pagesWithErrors", linkCheckingStatus.getPagesWithErrors());
+                object.put("checked", linkCheckingStatus.getAssetsChecked());
+                object.put("withErrors", linkCheckingStatus.getAssetsWithErrors());
                 object.put("correctLinks", linkCheckingStatus.getCorrectLinks());
                 object.put("brokenLinks", linkCheckingStatus.getBrokenLinks());
             }

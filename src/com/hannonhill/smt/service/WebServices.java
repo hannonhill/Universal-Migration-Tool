@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.hannonhill.smt.CascadePageInformation;
+import com.hannonhill.smt.CascadeAssetInformation;
 import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
@@ -186,7 +186,7 @@ public class WebServices
      * @return Returns the created page's id.
      * @throws Exception
      */
-    public static CascadePageInformation createPage(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
+    public static CascadeAssetInformation createPage(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
     {
         String path = xmlPage.getDeployPath();
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
@@ -198,6 +198,10 @@ public class WebServices
         // This should be caught before, but just a sanity check
         if (contentTypePath == null)
             return null;
+
+        // Check for duplicate paths
+        if (projectInformation.getMigrationStatus().getCreatedAssetPaths().contains(pagePath.toLowerCase()))
+            throw new Exception("Duplicate path found - asset with given path already got created during this migration.");
 
         // Set up the page object and assign it to the asset object
         Page page = WebServicesUtil.setupPageObject(xmlPage, projectInformation);
@@ -237,14 +241,15 @@ public class WebServices
                 throw new Exception("Page " + pagePath + " could not be created: " + createResult.getMessage() + " - Parent folder path is: -"
                         + parentFolderPath + "-");
             }
-            return new CascadePageInformation(createResult.getCreatedAssetId(), pagePath);
+
+            projectInformation.getExistingCascadePages().add(pagePath.toLowerCase());
+            return new CascadeAssetInformation(createResult.getCreatedAssetId(), pagePath);
         }
 
         // If page exists, edit it
         page.setId(existingPageId);
         editPage(page, projectInformation);
-        projectInformation.getExistingCascadePages().add(pagePath);
-        return new CascadePageInformation(existingPageId, pagePath);
+        return new CascadeAssetInformation(existingPageId, pagePath);
     }
 
     /**
@@ -253,9 +258,11 @@ public class WebServices
      * @param file
      * @param projectInformation
      * @param metadataSetId
+     * @return
      * @throws Exception
      */
-    public static void createXhtmlBlock(java.io.File file, ProjectInformation projectInformation, String metadataSetId) throws Exception
+    public static CascadeAssetInformation createXhtmlBlock(java.io.File file, ProjectInformation projectInformation, String metadataSetId)
+            throws Exception
     {
         String parentFolderPath = PathUtil
                 .removeLeadingSlashes(LinkRewriter.getWebViewUrl(file.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
@@ -267,25 +274,29 @@ public class WebServices
         String blockName = PathUtil.truncateExtension(file.getName());
         String blockPath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + blockName);
 
+        MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
+        String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
+        Log.add("Creating XHTML block in Cascade " + relativePath + "... ", migrationStatus);
+
+        // Check for duplicate paths
+        if (projectInformation.getMigrationStatus().getCreatedAssetPaths().contains(blockPath.toLowerCase()))
+            throw new Exception("Duplicate path found - asset with given path already got created during this migration.");
+
         String overwriteBehavior = projectInformation.getOverwriteBehavior();
         String existingBlockId = null;
 
         if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_UPDATE_EXISTING))
         {
-            if (projectInformation.getExistingCascadeBlocks().contains(blockPath))
+            if (projectInformation.getExistingCascadeXhtmlBlocks().contains(blockPath.toLowerCase()))
                 existingBlockId = getXhtmlBlockId(blockPath, projectInformation);
         }
         // If overwite existing is selected, we need to delete the existing block and ignore an error if it
         // did not exists and we attempted to delete it
         else if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING))
         {
-            if (projectInformation.getExistingCascadeBlocks().contains(blockPath))
+            if (projectInformation.getExistingCascadeXhtmlBlocks().contains(blockPath.toLowerCase()))
                 deleteXhtmlBlock(blockPath, projectInformation);
         }
-
-        MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
-        String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
-        Log.add("Creating XHTML block in Cascade " + relativePath + "... ", migrationStatus);
 
         // Set up the file object and assign it to the asset object
         XhtmlDataDefinitionBlock block = new XhtmlDataDefinitionBlock();
@@ -312,30 +323,21 @@ public class WebServices
                         && message.contains("could not be found"))
                 {
                     createFolder(parentFolderPath, projectInformation);
-                    createXhtmlBlock(file, projectInformation, metadataSetId);
-                    return;
+                    return createXhtmlBlock(file, projectInformation, metadataSetId);
                 }
 
                 throw new Exception("XHTML Block " + blockPath + " could not be created: " + createResult.getMessage()
                         + " - Parent folder path is: -" + parentFolderPath + "-");
             }
 
-            projectInformation.getExistingCascadeBlocks().add(blockPath);
-            existingBlockId = createResult.getCreatedAssetId();
-        }
-        else
-        {
-            // If block exists, edit it
-            block.setId(existingBlockId);
-            editXhtmlBlock(block, projectInformation);
+            projectInformation.getExistingCascadeXhtmlBlocks().add(blockPath.toLowerCase());
+            return new CascadeAssetInformation(createResult.getCreatedAssetId(), blockPath);
         }
 
-        projectInformation.getModifiedBlockIds().add(existingBlockId);
-        Identifier blockIdentifier = new Identifier(existingBlockId, new Path(blockPath, null, projectInformation.getSiteName()),
-                EntityTypeString.block_XHTML_DATADEFINITION, false);
-
-        Log.add(PathUtil.generateBlockLink(blockIdentifier, projectInformation.getUrl()), migrationStatus);
-        Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+        // If block exists, edit it
+        block.setId(existingBlockId);
+        editXhtmlBlock(block, projectInformation);
+        return new CascadeAssetInformation(existingBlockId, blockPath);
     }
 
     /**
@@ -375,7 +377,7 @@ public class WebServices
         String fileName = filesystemFile.getName();
         String filePath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + fileName);
 
-        if (projectInformation.getExistingCascadeFiles().contains(filePath))
+        if (projectInformation.getExistingCascadeFiles().contains(filePath.toLowerCase()))
             return;
 
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
@@ -418,7 +420,7 @@ public class WebServices
         Identifier cascadeFile = new Identifier(createResult.getCreatedAssetId(), new Path(filePath, null, projectInformation.getSiteName()),
                 EntityTypeString.file, false);
 
-        projectInformation.getExistingCascadeFiles().add(filePath);
+        projectInformation.getExistingCascadeFiles().add(filePath.toLowerCase());
 
         Log.add(PathUtil.generateFileLink(cascadeFile, projectInformation.getUrl()), migrationStatus);
         Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
@@ -447,8 +449,6 @@ public class WebServices
     public static void realignXhtmlBlockLinks(String id, ProjectInformation projectInformation) throws Exception
     {
         XhtmlDataDefinitionBlock block = readXhtmlBlock(id, projectInformation);
-        Log.add("Aligning links in XHTML Block " + PathUtil.generateBlockLink(block, projectInformation.getUrl()) + "... ",
-                projectInformation.getMigrationStatus());
         block.setXhtml(LinkRewriter.fixXhtmlBlockLinks(block.getXhtml(), projectInformation));
         editXhtmlBlock(block, projectInformation);
     }
@@ -501,12 +501,13 @@ public class WebServices
      */
     public static boolean doesAssetExist(String path, ProjectInformation projectInformation) throws Exception
     {
+        path = PathUtil.removeLeadingSlashes(path).toLowerCase();
         // Check confirmed paths first
-        if (projectInformation.getExistingCascadeFiles().contains(PathUtil.removeLeadingSlashes(path)))
+        if (projectInformation.getExistingCascadeFiles().contains(path))
             return true;
-        if (projectInformation.getExistingCascadeBlocks().contains(PathUtil.removeLeadingSlashes(path)))
+        if (projectInformation.getExistingCascadeXhtmlBlocks().contains(path))
             return true;
-        if (projectInformation.getExistingCascadePages().contains(PathUtil.removeLeadingSlashes(path)))
+        if (projectInformation.getExistingCascadePages().contains(path))
             return true;
 
         // If not found, try reading the asset by path
@@ -516,35 +517,41 @@ public class WebServices
         if (readFileByPath(path, projectInformation) != null)
             return true;
 
+        if (readXhtmlBlockByPath(path, projectInformation) != null)
+            return true;
+
         return false;
     }
 
     /**
-     * Reads all files in selected site and stores their paths in projectInformation so that later on when
-     * creating a file only if one doesn't exist, the check for whether or not the file exists does not
-     * involve reading the file from Cascade (as it can be very slow if the file is big)
+     * Reads all files, blocks and pages in selected site and stores their paths in projectInformation so that
+     * later it doesn't have to read whole the asset only to see if it exists (as it can be very slow if the
+     * asset is big).
      * 
      * @param projectInformation
      * @throws Exception
      */
-    public static void populateExistingCascadeFiles(ProjectInformation projectInformation) throws Exception
+    public static void populateExistingCascadeAssets(ProjectInformation projectInformation) throws Exception
     {
         Identifier identifier = new Identifier(null, new Path("/", null, projectInformation.getSiteName()), EntityTypeString.folder, false);
-        populateExistingCascadeFilesOfFolder(identifier, projectInformation);
+        populateExistingCascadeAssetsOfFolder(identifier, projectInformation);
     }
 
     /**
-     * Recursively reads all files from given folder and its descendants and stores their paths in
+     * Recursively reads all assets from given folder and its descendants and stores their paths in
      * {@link ProjectInformation#getExistingCascadeFiles()},
-     * {@link ProjectInformation#getExistingCascadeBlocks()} and
+     * {@link ProjectInformation#getExistingCascadeXhtmlBlocks()} and
      * {@link ProjectInformation#getExistingCascadePages()}
      * 
      * @param folderIdentifier
      * @param projectInformation
      * @throws Exception
      */
-    private static void populateExistingCascadeFilesOfFolder(Identifier folderIdentifier, ProjectInformation projectInformation) throws Exception
+    private static void populateExistingCascadeAssetsOfFolder(Identifier folderIdentifier, ProjectInformation projectInformation) throws Exception
     {
+        if (projectInformation.getMigrationStatus().isShouldStop())
+            return;
+
         ReadResult readResult = getServer(projectInformation.getUrl()).read(getAuthentication(projectInformation), folderIdentifier);
         if (!readResult.getSuccess().equals("true"))
             throw new Exception("Error occured when reading a Cascade Folder with path '" + folderIdentifier.getPath().getPath() + "': "
@@ -555,13 +562,13 @@ public class WebServices
         for (Identifier child : children)
         {
             if (child.getType().equals(EntityTypeString.file))
-                projectInformation.getExistingCascadeFiles().add(child.getPath().getPath());
+                projectInformation.getExistingCascadeFiles().add(child.getPath().getPath().toLowerCase());
             else if (child.getType().equals(EntityTypeString.block_XHTML_DATADEFINITION))
-                projectInformation.getExistingCascadeBlocks().add(child.getPath().getPath());
+                projectInformation.getExistingCascadeXhtmlBlocks().add(child.getPath().getPath().toLowerCase());
             else if (child.getType().equals(EntityTypeString.page))
-                projectInformation.getExistingCascadePages().add(child.getPath().getPath());
+                projectInformation.getExistingCascadePages().add(child.getPath().getPath().toLowerCase());
             else if (child.getType().equals(EntityTypeString.folder))
-                populateExistingCascadeFilesOfFolder(child, projectInformation);
+                populateExistingCascadeAssetsOfFolder(child, projectInformation);
         }
 
     }
@@ -637,7 +644,7 @@ public class WebServices
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true")
                 && (readResult.getMessage() == null || !readResult.getMessage().equals(
-                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'block_XHTML_DATADEFINITION'")))
+                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'block'")))
             throw new Exception("Error occured when reading a XHTML Block with path '" + path + "': " + readResult.getMessage());
 
         return readResult.getSuccess().equals("true") ? readResult.getAsset().getXhtmlDataDefinitionBlock() : null;

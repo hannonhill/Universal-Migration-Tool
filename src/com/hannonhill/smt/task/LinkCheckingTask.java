@@ -1,7 +1,7 @@
 /*
  * Created on Dec 28, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.task;
 
@@ -13,9 +13,8 @@ import com.hannonhill.smt.service.Log;
 /**
  * The background link checking task
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class LinkCheckingTask extends Thread
 {
@@ -59,8 +58,8 @@ public class LinkCheckingTask extends Thread
     {
         LinkCheckingStatus linkCheckingStatus = projectInformation.getLinkCheckingStatus();
         Log.add("<br/><em>Link checking summary:<br/>", linkCheckingStatus);
-        Log.add("Checked: <span style=\"color: green;\">" + linkCheckingStatus.getPagesChecked() + "</span><br/>", linkCheckingStatus);
-        Log.add("Errors: <span style=\"color: red;\">" + linkCheckingStatus.getPagesWithErrors() + "</span><br/>", linkCheckingStatus);
+        Log.add("Checked: <span style=\"color: green;\">" + linkCheckingStatus.getAssetsChecked() + "</span><br/>", linkCheckingStatus);
+        Log.add("Errors: <span style=\"color: red;\">" + linkCheckingStatus.getAssetsWithErrors() + "</span><br/>", linkCheckingStatus);
         Log.add("Correct Links: <span style=\"color: green;\">" + linkCheckingStatus.getCorrectLinks() + "</span><br/>", linkCheckingStatus);
         Log.add("Broken Links: <span style=\"color: orange;\">" + linkCheckingStatus.getBrokenLinks() + "</span><br/>", linkCheckingStatus);
         Log.add("</em><br/>Link checking completed.<br/><br/>", linkCheckingStatus);

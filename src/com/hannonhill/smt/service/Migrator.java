@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hannonhill.smt.CascadePageInformation;
+import com.hannonhill.smt.CascadeAssetInformation;
 import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.MigrationStatus;
 import com.hannonhill.smt.ProjectInformation;
@@ -54,18 +54,20 @@ public class Migrator
     public static void alignLinks(ProjectInformation projectInformation)
     {
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
-        List<CascadePageInformation> pages = migrationStatus.getCreatedPages();
+        List<CascadeAssetInformation> blocks = migrationStatus.getCreatedBlocks();
+        List<CascadeAssetInformation> pages = migrationStatus.getCreatedPages();
 
-        for (String blockId : projectInformation.getModifiedBlockIds())
+        for (CascadeAssetInformation block : blocks)
         {
             if (migrationStatus.isShouldStop())
                 return;
 
             try
             {
-                WebServices.realignXhtmlBlockLinks(blockId, projectInformation);
+                Log.add("Aligning links in block " + PathUtil.generateBlockLink(block, projectInformation.getUrl()) + "... ", migrationStatus);
+                WebServices.realignXhtmlBlockLinks(block.getId(), projectInformation);
                 migrationStatus.incrementProgress(1);
-                migrationStatus.incrementPagesAligned();
+                migrationStatus.incrementAssetsAligned();
                 Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
             }
             catch (Exception e)
@@ -76,13 +78,13 @@ public class Migrator
                     message = e.getCause().getMessage();
 
                 migrationStatus.incrementProgress(1);
-                migrationStatus.incrementPagesNotAligned();
+                migrationStatus.incrementAssetsNotAligned();
                 Log.add("<span style=\"color: red;\">Error: " + message + "</span><br/>", migrationStatus);
                 e.printStackTrace();
             }
         }
 
-        for (CascadePageInformation page : pages)
+        for (CascadeAssetInformation page : pages)
         {
             if (migrationStatus.isShouldStop())
                 return;
@@ -92,7 +94,7 @@ public class Migrator
                 Log.add("Aligning links in page " + PathUtil.generatePageLink(page, projectInformation.getUrl()) + "... ", migrationStatus);
                 WebServices.realignLinks(page.getId(), projectInformation);
                 migrationStatus.incrementProgress(1);
-                migrationStatus.incrementPagesAligned();
+                migrationStatus.incrementAssetsAligned();
                 Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
             }
             catch (Exception e)
@@ -103,7 +105,7 @@ public class Migrator
                     message = e.getCause().getMessage();
 
                 migrationStatus.incrementProgress(1);
-                migrationStatus.incrementPagesNotAligned();
+                migrationStatus.incrementAssetsNotAligned();
                 Log.add("<span style=\"color: red;\">Error: " + message + "</span><br/>", migrationStatus);
                 e.printStackTrace();
             }
@@ -149,14 +151,14 @@ public class Migrator
                 }
 
                 LinkRewriter.rewriteLinkAndRemoveSerenaAttributes(page, projectInformation);
-                CascadePageInformation cascadePage = WebServices.createPage(page, projectInformation);
+                CascadeAssetInformation cascadePage = WebServices.createPage(page, projectInformation);
 
                 Log.add(PathUtil.generatePageLink(cascadePage, projectInformation.getUrl()), migrationStatus);
 
                 // Add the page to the list because links will need to be realigned.
-                migrationStatus.getCreatedPages().add(cascadePage);
+                migrationStatus.addCreatedPage(cascadePage);
                 migrationStatus.incrementProgress(1);
-                migrationStatus.incrementPagesCreated();
+                migrationStatus.incrementAssetsCreated();
                 Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
             }
             catch (Exception e)
@@ -170,7 +172,7 @@ public class Migrator
 
                 // Increment progress by 2, because no link alignment will be needed for it
                 migrationStatus.incrementProgress(2);
-                migrationStatus.incrementPagesWithErrors();
+                migrationStatus.incrementAssetsWithErrors();
 
                 e.printStackTrace();
             }
@@ -278,9 +280,12 @@ public class Migrator
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         try
         {
-            WebServices.createXhtmlBlock(file, projectInformation, metadataSetId);
-            migrationStatus.incrementPagesCreated();
+            CascadeAssetInformation cascadeBlock = WebServices.createXhtmlBlock(file, projectInformation, metadataSetId);
+            Log.add(PathUtil.generateBlockLink(cascadeBlock, projectInformation.getUrl()), migrationStatus);
+            migrationStatus.addCreatedBlock(cascadeBlock);
+            migrationStatus.incrementAssetsCreated();
             migrationStatus.incrementProgress(1);
+            Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
         }
         catch (Exception e)
         {
@@ -289,7 +294,12 @@ public class Migrator
             if (message == null && e.getCause() != null)
                 message = e.getCause().getMessage();
 
-            Log.add("<span style=\"color: red;\">Error when creating an XHTML Block: " + message + "</span><br/>", migrationStatus);
+            Log.add("<span style=\"color: red;\">Error: " + message + "</span><br/>", migrationStatus);
+
+            // Increment progress by 2, because no link alignment will be needed for it
+            migrationStatus.incrementProgress(2);
+            migrationStatus.incrementAssetsWithErrors();
+
             e.printStackTrace();
         }
     }
@@ -303,24 +313,14 @@ public class Migrator
     {
         List<File> filesToProcess = projectInformation.getFilesToProcess();
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
+        String metadataSetId = null;
 
+        // Get site's default metadata set id
         try
         {
-            // Create file assets for any files that weren't included in filesToProcess
-            List<File> folderFiles = FileSystem.getFolderContents(projectInformation.getLuminisFolder());
             String siteName = projectInformation.getSiteName();
-            String metadataSetId = WebServices.readSite(projectInformation.getUsername(), projectInformation.getPassword(),
-                    projectInformation.getUrl(), siteName).getDefaultMetadataSetId();
-
-            // Store existing file paths first to speed up creation of files
-            Log.add("Reading Cascade folder structure...<br/>", migrationStatus);
-            WebServices.populateExistingCascadeFiles(projectInformation);
-
-            // Create files that do not exist in Cascade
-            createLuminisFiles(folderFiles, projectInformation, metadataSetId);
-
-            // Create XHTML Blocks
-            createLuminisXhtmlBlocks(projectInformation, metadataSetId);
+            metadataSetId = WebServices.readSite(projectInformation.getUsername(), projectInformation.getPassword(), projectInformation.getUrl(),
+                    siteName).getDefaultMetadataSetId();
         }
         catch (Exception e)
         {
@@ -329,10 +329,36 @@ public class Migrator
             if (message == null && e.getCause() != null)
                 message = e.getCause().getMessage();
 
-            Log.add("<span style=\"color: red;\">Error when reading site's metadata set, uploading files or importing blocks: " + message
-                    + "</span><br/>", migrationStatus);
+            Log.add("<span style=\"color: red;\">Error when reading site's metadata set: " + message + "</span><br/>", migrationStatus);
+            e.printStackTrace();
+            return;
+        }
+
+        // Create file assets
+        try
+        {
+            List<File> folderFiles = FileSystem.getFolderContents(projectInformation.getLuminisFolder());
+
+            // Store existing file paths first to speed up creation of files
+            Log.add("Reading Cascade folder structure...<br/>", migrationStatus);
+            WebServices.populateExistingCascadeAssets(projectInformation);
+
+            // Create files that do not exist in Cascade
+            createLuminisFiles(folderFiles, projectInformation, metadataSetId);
+        }
+        catch (Exception e)
+        {
+            // Sometimes the exception message is null, so we get the message from the parent exception
+            String message = e.getMessage();
+            if (message == null && e.getCause() != null)
+                message = e.getCause().getMessage();
+
+            Log.add("<span style=\"color: red;\">Error when uploading files: " + message + "</span><br/>", migrationStatus);
             e.printStackTrace();
         }
+
+        // Create XHTML Blocks
+        createLuminisXhtmlBlocks(projectInformation, metadataSetId);
 
         for (File file : filesToProcess)
         {
@@ -364,14 +390,14 @@ public class Migrator
                 }
 
                 LinkRewriter.rewriteLuminisLinks(page, projectInformation);
-                CascadePageInformation cascadePage = WebServices.createPage(page, projectInformation);
+                CascadeAssetInformation cascadePage = WebServices.createPage(page, projectInformation);
 
                 Log.add(PathUtil.generatePageLink(cascadePage, projectInformation.getUrl()), migrationStatus);
 
                 // Add the page to the list because links will need to be realigned.
-                migrationStatus.getCreatedPages().add(cascadePage);
+                migrationStatus.addCreatedPage(cascadePage);
                 migrationStatus.incrementProgress(1);
-                migrationStatus.incrementPagesCreated();
+                migrationStatus.incrementAssetsCreated();
                 Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
             }
             catch (Exception e)
@@ -385,11 +411,10 @@ public class Migrator
 
                 // Increment progress by 2, because no link alignment will be needed for it
                 migrationStatus.incrementProgress(2);
-                migrationStatus.incrementPagesWithErrors();
+                migrationStatus.incrementAssetsWithErrors();
 
                 e.printStackTrace();
             }
         }
-
     }
 }

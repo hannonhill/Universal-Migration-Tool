@@ -63,15 +63,10 @@ public class ProjectInformation
                                                                         // Luminis dump
     private final Map<String, String> linkFileUrlToWebviewUrlMap;
     private final Set<String> existingCascadeFiles; // Used for Luminis file import and link checking
-    private final Set<String> existingCascadeBlocks;// performance reasons - file paths are checked first
-                                                    // to avoid having to check if file exists each time a new
-                                                    // file is brought in
+    private final Set<String> existingCascadeXhtmlBlocks;// performance reasons - file paths are checked first
+    // to avoid having to check if file exists each time a new
+    // file is brought in
     private final Set<String> existingCascadePages; // Also used for link checking performance reasons
-
-    private final Set<String> modifiedBlockIds;
-
-    // detailed information of the page in
-    // that file
 
     // other useful information
     private MigrationStatus migrationStatus;
@@ -107,9 +102,8 @@ public class ProjectInformation
         luminisFolder = null;
         linkFileUrlToWebviewUrlMap = new HashMap<String, String>();
         existingCascadeFiles = new HashSet<String>();
-        existingCascadeBlocks = new HashSet<String>();
+        existingCascadeXhtmlBlocks = new HashSet<String>();
         existingCascadePages = new HashSet<String>();
-        modifiedBlockIds = new HashSet<String>();
     }
 
     /**
@@ -477,11 +471,11 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the existingCascadeBlocks.
+     * @return Returns the existingCascadeXhtmlBlocks.
      */
-    public Set<String> getExistingCascadeBlocks()
+    public Set<String> getExistingCascadeXhtmlBlocks()
     {
-        return existingCascadeBlocks;
+        return existingCascadeXhtmlBlocks;
     }
 
     /**
@@ -490,13 +484,5 @@ public class ProjectInformation
     public Set<String> getExistingCascadePages()
     {
         return existingCascadePages;
-    }
-
-    /**
-     * @return Returns the modifiedBlockIds.
-     */
-    public Set<String> getModifiedBlockIds()
-    {
-        return modifiedBlockIds;
     }
 }
