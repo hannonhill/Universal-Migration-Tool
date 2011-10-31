@@ -18,7 +18,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -101,6 +103,19 @@ public class FileSystem
      */
     public static List<File> getAllFiles(File folder, String extension)
     {
+        List<File> files = getAllFilesRecursive(folder, extension);
+        return removeDuplicatePaths(files);
+    }
+
+    /**
+     * Recursively collects files with given extension in the folder and all sub-folders
+     * 
+     * @param folder
+     * @param extension
+     * @return
+     */
+    private static List<File> getAllFilesRecursive(File folder, String extension)
+    {
         List<File> files = new ArrayList<File>();
         for (String fileString : folder.list())
         {
@@ -112,6 +127,27 @@ public class FileSystem
                 files.add(file);
         }
         return files;
+    }
+
+    /**
+     * Returns a list with files with unique absolute paths
+     * 
+     * @param files
+     * @return
+     */
+    private static List<File> removeDuplicatePaths(List<File> files)
+    {
+        Set<String> paths = new HashSet<String>();
+        List<File> result = new ArrayList<File>();
+
+        for (File file : files)
+            if (!paths.contains(file.getAbsolutePath().toLowerCase()))
+            {
+                result.add(file);
+                paths.add(file.getAbsolutePath().toLowerCase());
+            }
+
+        return result;
     }
 
     /**

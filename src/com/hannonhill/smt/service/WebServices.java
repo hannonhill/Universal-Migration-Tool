@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.hannonhill.smt.CascadeAssetInformation;
 import com.hannonhill.smt.DataDefinitionField;
@@ -280,7 +281,11 @@ public class WebServices
 
         // Check for duplicate paths
         if (projectInformation.getMigrationStatus().getCreatedAssetPaths().contains(blockPath.toLowerCase()))
-            throw new Exception("Duplicate path found - asset with given path already got created during this migration.");
+        {
+            blockPath = getUniquePath(blockPath, projectInformation.getMigrationStatus().getCreatedAssetPaths());
+            blockName = PathUtil.getNameFromPath(blockPath);
+            parentFolderPath = PathUtil.getParentFolderPathFromPath(blockPath);
+        }
 
         String overwriteBehavior = projectInformation.getOverwriteBehavior();
         String existingBlockId = null;
@@ -338,6 +343,22 @@ public class WebServices
         block.setId(existingBlockId);
         editXhtmlBlock(block, projectInformation);
         return new CascadeAssetInformation(existingBlockId, blockPath);
+    }
+
+    /**
+     * Adds a number to the end of given path and if that path doesn't exist in existingPaths, returns it.
+     * 
+     * @param path
+     * @param existingPaths
+     * @return
+     */
+    private static String getUniquePath(String path, Set<String> existingPaths)
+    {
+        String lowerCasePath = path.toLowerCase();
+
+        for (int i = 1; true; i++)
+            if (!existingPaths.contains(lowerCasePath + i))
+                return lowerCasePath + i;
     }
 
     /**
