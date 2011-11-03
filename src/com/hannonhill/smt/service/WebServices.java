@@ -51,6 +51,8 @@ import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock;
  */
 public class WebServices
 {
+    private static final long MAX_FILE_SIZE_MB = 20l;
+
     private static final MetadataSetField[] STANDARD_METADATA_FIELDS = new MetadataSetField[]
     {
             new MetadataSetField("displayName", "Display Name", false), new MetadataSetField("title", "Title", false),
@@ -405,6 +407,9 @@ public class WebServices
         String relativePath = PathUtil.getRelativePath(filesystemFile, projectInformation.getXmlDirectory());
         if (logCreatingFile)
             Log.add("Creating file in Cascade " + relativePath + "... ", migrationStatus);
+
+        if (filesystemFile.length() > (MAX_FILE_SIZE_MB * 1024 * 1024))
+            throw new Exception("File is too large. Maximum file size is " + MAX_FILE_SIZE_MB + " MB");
 
         // Set up the file object and assign it to the asset object
         File file = new File();
