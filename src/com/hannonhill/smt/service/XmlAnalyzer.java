@@ -137,14 +137,15 @@ public class XmlAnalyzer
 
     /**
      * Parses a Luminis XML file and returns a Page object that contains all the necessary information for
-     * migration of that page into Cascade Server
+     * migration of that page into Cascade Server. Populates the page's deploy path
      * 
      * @param file file on the file system containing the xml information
      * @param page information about the page that data will be added to
+     * @param projectInformation
      * @return
      * @throws Exception
      */
-    public static void parseLuminisXmlFile(File file, DetailedXmlPageInformation page) throws Exception
+    public static void parseLuminisXmlFile(File file, DetailedXmlPageInformation page, ProjectInformation projectInformation) throws Exception
     {
         String fileContent = FileSystem.getFileContents(file);
         int objectIndex = fileContent.indexOf("<object>");
@@ -162,6 +163,12 @@ public class XmlAnalyzer
             page.getContentMap().put(rootChildNode.getNodeName(), rootChildNode.getTextContent());
             page.getMetadataMap().put(rootChildNode.getNodeName(), rootChildNode.getTextContent());
         }
+
+        String deployPath = PathUtil
+                .removeLeadingSlashes(LinkRewriter.getWebViewUrl(file.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
+                        projectInformation.getLinkFileUrlToWebviewUrlMap()))
+                + "/" + file.getName();
+        page.setDeployPath(deployPath);
     }
 
     /**
@@ -520,27 +527,27 @@ public class XmlAnalyzer
         NodeList sctWebPageNodes = (NodeList) xpath.evaluate(LUMINIS_SCT_WEB_PAGE_XPATH, inputSource, XPathConstants.NODESET);
 
         for (int i = 0; i < sctWebPageNodes.getLength(); i++)
-            analyzeLuminisSctWebPage(sctWebPageNodes.item(i), webviewUrl, linkFile, projectInformation, errorMessages);
+            analyzeLuminisSctWebPage(sctWebPageNodes.item(i), linkFile, projectInformation, errorMessages);
     }
 
     /**
-     * Analyzes the contents of &lt;sct_web_page&gt; tag: figures out the Luminis page's name, template used,
-     * deploy path (by putting together given <code>webviewUrl</code> with page's name. Stores the page as
-     * {@link File} object to be included in migration. Analyzes links provided as &lt;linked_item&gt;s by
-     * calling {@link #analyzeLuminisLinkedItem(Node, DetailedXmlPageInformation)} on each found tag.
+     * Analyzes the contents of &lt;sct_web_page&gt; tag: figures out the Luminis page's name, template used.
+     * Stores the page as {@link File} object to be included in migration. Analyzes links provided as
+     * &lt;linked_item&gt;s by calling {@link #analyzeLuminisLinkedItem(Node, DetailedXmlPageInformation)} on
+     * each found tag.
      * 
      * Also calls {@link #analyzeLuminisJspFile(File, String, ProjectInformation, List)} if found .jsp
      * template hasn't been analyzed yet.
      * 
      * @param sctWebPageNode
-     * @param webviewUrl
      * @param linkFile
      * @param projectInformation
      * @param errorMessages
      * @throws Exception
      */
-    private static void analyzeLuminisSctWebPage(Node sctWebPageNode, String webviewUrl, File linkFile, ProjectInformation projectInformation,
-            List<String> errorMessages) throws Exception
+    private static void
+            analyzeLuminisSctWebPage(Node sctWebPageNode, File linkFile, ProjectInformation projectInformation, List<String> errorMessages)
+                    throws Exception
     {
         DetailedXmlPageInformation sctWebPage = new DetailedXmlPageInformation();
 
@@ -551,8 +558,6 @@ public class XmlAnalyzer
         Node templateUsedNode = sctWebPageNode.getAttributes().getNamedItem("template_used");
         if (templateUsedNode == null)
             throw new Exception("The <sct_web_page> tag has no \"template_used\" tag.");
-
-        sctWebPage.setDeployPath(PathUtil.removeLeadingSlashes(webviewUrl + "/" + objectNameNode.getTextContent()));
 
         // Template path starts with "/dumpname/Root Site/..." - 2 unnecessary folders that are always the
         // same - remove the 2 levels from assetTypeName to get accurate path.

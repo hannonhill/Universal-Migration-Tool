@@ -373,7 +373,7 @@ public class Migrator
 
                 Log.add("Creating a page from file " + relativePath + "... ", migrationStatus);
                 DetailedXmlPageInformation page = projectInformation.getPagesToProcess().get(file);
-                XmlAnalyzer.parseLuminisXmlFile(file, page);
+                XmlAnalyzer.parseLuminisXmlFile(file, page, projectInformation);
 
                 // If the asset type wasn't mapped, skip this page
                 String assetTypeName = page.getAssetType();

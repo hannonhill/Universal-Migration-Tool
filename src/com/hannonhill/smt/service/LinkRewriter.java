@@ -115,18 +115,17 @@ public class LinkRewriter
      */
     public static String getWebViewUrl(String folder, Map<String, String> linkFileToUrlMap)
     {
-        String webViewUrl = linkFileToUrlMap.get(folder + "/linkFile.xml");
-        if (webViewUrl != null)
-            return webViewUrl;
-
         String parentFolder = PathUtil.getParentFolderPathFromPath(folder);
         if (!parentFolder.equals("/"))
         {
-            webViewUrl = getWebViewUrl(parentFolder, linkFileToUrlMap);
-            if (webViewUrl.equals(DEFAULT_FILES_FOLDER))
-                return DEFAULT_FILES_FOLDER;
-            return webViewUrl + "/" + PathUtil.getNameFromPath(folder);
+            String webViewUrl = getWebViewUrl(parentFolder, linkFileToUrlMap);
+            if (!webViewUrl.equals(DEFAULT_FILES_FOLDER))
+                return webViewUrl + "/" + PathUtil.getNameFromPath(folder);
         }
+
+        String webViewUrl = linkFileToUrlMap.get(folder + "/linkFile.xml");
+        if (webViewUrl != null)
+            return webViewUrl;
 
         return DEFAULT_FILES_FOLDER;
     }
