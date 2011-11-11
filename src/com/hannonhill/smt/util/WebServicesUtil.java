@@ -56,6 +56,8 @@ public class WebServicesUtil
         String path = xmlPage.getDeployPath();
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
+        if (parentFolderPath.equals(""))
+            parentFolderPath = "/";
 
         String assetTypeName = xmlPage.getAssetType();
         AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
