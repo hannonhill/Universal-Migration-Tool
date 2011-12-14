@@ -300,7 +300,7 @@ public class XmlAnalyzer
             String nodeName = node.getNodeName();
             if (nodeName.equals("#cdata-section"))
                 // Always tidy cdata section. Trim because jtidy leaves a new line character at the end.
-                return node.getNodeValue();
+                return JTidy.tidyContent(node.getNodeValue()).trim();
         }
         return "";
     }
