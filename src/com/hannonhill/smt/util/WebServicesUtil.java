@@ -314,14 +314,22 @@ public class WebServicesUtil
 
         if (field.getChooserType() == null)
         {
-            fieldValue = JTidy.tidyContent(fieldValue);
-            StructuredDataNode textNode = new StructuredDataNode();
-            textNode.setIdentifier(identifier);
-            textNode.setText(fieldValue);
-            textNode.setType(StructuredDataType.text);
-            List<StructuredDataNode> textNodes = new ArrayList<StructuredDataNode>();
-            textNodes.add(textNode);
-            currentNode.getContentFields().put(identifier, textNodes);
+            List<String> sctComponentPaths = getSctComponents(fieldValue);
+            if (sctComponentPaths.size() > 0)
+            {
+                assignSctComponents(sctComponentPaths, currentNode, identifier + "-block", projectInformation);
+            }
+            else
+            {
+                fieldValue = JTidy.tidyContent(fieldValue);
+                StructuredDataNode textNode = new StructuredDataNode();
+                textNode.setIdentifier(identifier);
+                textNode.setText(fieldValue);
+                textNode.setType(StructuredDataType.text);
+                List<StructuredDataNode> textNodes = new ArrayList<StructuredDataNode>();
+                textNodes.add(textNode);
+                currentNode.getContentFields().put(identifier, textNodes);
+            }
         }
         else if (field.getChooserType() == ChooserType.FILE)
         {
@@ -343,26 +351,39 @@ public class WebServicesUtil
         else if (field.getChooserType() == ChooserType.BLOCK)
         {
             List<String> sctComponentPaths = getSctComponents(fieldValue);
-            if (sctComponentPaths.size() > 0)
-            {
-                List<StructuredDataNode> blockNodes = new ArrayList<StructuredDataNode>();
-                for (String sctComponentPath : sctComponentPaths)
-                {
-                    if (WebServices.doesAssetExist(sctComponentPath, projectInformation))
-                    {
-                        StructuredDataNode blockNode = new StructuredDataNode();
-                        blockNode.setIdentifier(identifier);
-                        blockNode.setBlockPath(sctComponentPath);
-                        blockNode.setType(StructuredDataType.asset);
-                        blockNode.setAssetType(StructuredDataAssetType.block);
-                        blockNodes.add(blockNode);
-                        if (!field.isMultiple())
-                            break;
-                    }
-                }
-                currentNode.getContentFields().put(identifier, blockNodes);
-            }
+            assignSctComponents(sctComponentPaths, currentNode, identifier, projectInformation);
         }
+    }
+
+    /**
+     * Creates {@link StructuredDataNode}s that are block choosers and assigns them to
+     * <code>currentNode</code>.
+     * 
+     * @param sctComponentPaths
+     * @param currentNode
+     * @param identifier
+     * @param projectInformation
+     * @throws Exception
+     */
+    private static void assignSctComponents(List<String> sctComponentPaths, StructuredDataGroup currentNode, String identifier,
+            ProjectInformation projectInformation) throws Exception
+    {
+        if (sctComponentPaths.size() == 0)
+            return;
+
+        List<StructuredDataNode> blockNodes = new ArrayList<StructuredDataNode>();
+        for (String sctComponentPath : sctComponentPaths)
+            if (WebServices.doesAssetExist(sctComponentPath, projectInformation))
+            {
+                StructuredDataNode blockNode = new StructuredDataNode();
+                blockNode.setIdentifier(identifier);
+                blockNode.setBlockPath(sctComponentPath);
+                blockNode.setType(StructuredDataType.asset);
+                blockNode.setAssetType(StructuredDataAssetType.block);
+                blockNodes.add(blockNode);
+            }
+
+        currentNode.getContentFields().put(identifier, blockNodes);
     }
 
     /**
