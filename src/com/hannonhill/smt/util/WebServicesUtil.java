@@ -336,6 +336,7 @@ public class WebServicesUtil
             fieldValue = JTidy.tidyContent(fieldValue);
             String path = fieldValue.startsWith(LinkRewriter.LUMINIS_FILE_PREFIX) ? fieldValue.substring(LinkRewriter.LUMINIS_FILE_PREFIX.length())
                     : XmlAnalyzer.getFirstSrcAttribute(fieldValue);
+            path = path.trim();
             if (WebServices.doesAssetExist(path, projectInformation))
             {
                 StructuredDataNode fileNode = new StructuredDataNode();
