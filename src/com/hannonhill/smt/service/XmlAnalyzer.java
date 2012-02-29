@@ -47,7 +47,7 @@ public class XmlAnalyzer
     private static final String SERENA_METADATA_FIELDS_XPATH = "/asset/metaData/field";
     private static final String SERENA_CONTENT_FIELDS_XPATH = "/asset/content/field";
     private static final String LUMINIS_METADATA_FIELD_NAMES_REGEX = "<sct:meta name=\"([^\"]*)\"";
-    private static final String LUMINIS_CONTENT_FIELD_NAMES_REGEX = "<sct:(field|xhtml|img|ckeditor|eoprong) name=\"([^\"]*)\"";
+    private static final String LUMINIS_CONTENT_FIELD_NAMES_REGEX = "<sct:(field|xhtml|img|ckeditor|eoprong|component) name=\"([^\"]*)\"";
     private static final String LUMINIS_WEBVIEW_URL_XPATH = "/root/@webviewurl";
     private static final String LUMINIS_SCT_WEB_PAGE_XPATH = "/root/sct_web_page";
     private static final String FILE_PROBLEM_MESSAGE = "There were problems with analyzing file ";

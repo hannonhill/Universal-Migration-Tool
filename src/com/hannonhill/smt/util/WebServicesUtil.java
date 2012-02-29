@@ -336,17 +336,20 @@ public class WebServicesUtil
             fieldValue = JTidy.tidyContent(fieldValue);
             String path = fieldValue.startsWith(LinkRewriter.LUMINIS_FILE_PREFIX) ? fieldValue.substring(LinkRewriter.LUMINIS_FILE_PREFIX.length())
                     : XmlAnalyzer.getFirstSrcAttribute(fieldValue);
-            path = path.trim();
-            if (WebServices.doesAssetExist(path, projectInformation))
+            if (path != null && !path.trim().equals(""))
             {
-                StructuredDataNode fileNode = new StructuredDataNode();
-                fileNode.setIdentifier(identifier);
-                fileNode.setFilePath(path);
-                fileNode.setType(StructuredDataType.asset);
-                fileNode.setAssetType(StructuredDataAssetType.file);
-                List<StructuredDataNode> fileNodes = new ArrayList<StructuredDataNode>();
-                fileNodes.add(fileNode);
-                currentNode.getContentFields().put(identifier, fileNodes);
+                path = path.trim();
+                if (WebServices.doesAssetExist(path, projectInformation))
+                {
+                    StructuredDataNode fileNode = new StructuredDataNode();
+                    fileNode.setIdentifier(identifier);
+                    fileNode.setFilePath(path);
+                    fileNode.setType(StructuredDataType.asset);
+                    fileNode.setAssetType(StructuredDataAssetType.file);
+                    List<StructuredDataNode> fileNodes = new ArrayList<StructuredDataNode>();
+                    fileNodes.add(fileNode);
+                    currentNode.getContentFields().put(identifier, fileNodes);
+                }
             }
         }
         else if (field.getChooserType() == ChooserType.BLOCK)

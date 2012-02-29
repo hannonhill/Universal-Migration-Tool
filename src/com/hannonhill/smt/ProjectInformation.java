@@ -49,7 +49,9 @@ public class ProjectInformation
     private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type
                                                               // information (with the available metadata and
                                                               // dd fields)
-    private final List<File> filesToProcess; // All the XML files that need to be processed during migration
+    private final Set<File> filesToProcess; // All the XML files that need to be processed during migration -
+                                            // it is a set to avoid duplicates and because order doesn't
+                                            // really matter
     private final List<File> xhtmlFiles; // All XHTML files that need to be processed as XHTML Blocks for
                                          // Luminis migration
     private Set<String> gatheredExtensions; // a set of extensions found for pages (for example ".html",
@@ -90,7 +92,7 @@ public class ProjectInformation
         migrationStatus = new MigrationStatus();
         linkCheckingStatus = new LinkCheckingStatus();
         currentTask = null;
-        filesToProcess = new ArrayList<File>();
+        filesToProcess = new HashSet<File>();
         xhtmlFiles = new ArrayList<File>();
         gatheredExtensions = new HashSet<String>();
         gatheredRootLevelFolders = new HashSet<String>();
@@ -289,7 +291,7 @@ public class ProjectInformation
     /**
      * @return Returns the filesToProcess.
      */
-    public List<File> getFilesToProcess()
+    public Set<File> getFilesToProcess()
     {
         return filesToProcess;
     }

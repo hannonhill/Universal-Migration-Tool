@@ -204,7 +204,7 @@ public class WebServices
 
         // Check for duplicate paths
         if (projectInformation.getMigrationStatus().getCreatedAssetPaths().contains(pagePath.toLowerCase()))
-            throw new Exception("Duplicate path found - asset with given path already got created during this migration.");
+            throw new Exception("Duplicate path found - asset with given path already got created during this migration: " + pagePath.toLowerCase());
 
         // Set up the page object and assign it to the asset object
         Page page = WebServicesUtil.setupPageObject(xmlPage, projectInformation);

@@ -8,6 +8,7 @@ package com.hannonhill.smt.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.hannonhill.smt.CascadeAssetInformation;
 import com.hannonhill.smt.DetailedXmlPageInformation;
@@ -119,7 +120,7 @@ public class Migrator
      */
     private static void createSerenaPages(ProjectInformation projectInformation)
     {
-        List<File> files = projectInformation.getFilesToProcess();
+        Set<File> files = projectInformation.getFilesToProcess();
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
 
         for (File file : files)
@@ -190,7 +191,7 @@ public class Migrator
      */
     private static void createLuminisFiles(List<File> folderFiles, ProjectInformation projectInformation, String metadataSetId)
     {
-        List<File> filesToProcess = projectInformation.getFilesToProcess();
+        Set<File> filesToProcess = projectInformation.getFilesToProcess();
         for (File folderFile : folderFiles)
         {
             if (projectInformation.getMigrationStatus().isShouldStop())
@@ -311,7 +312,7 @@ public class Migrator
      */
     private static void createLuminisPages(ProjectInformation projectInformation)
     {
-        List<File> filesToProcess = projectInformation.getFilesToProcess();
+        Set<File> filesToProcess = projectInformation.getFilesToProcess();
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         String metadataSetId = null;
 
