@@ -319,17 +319,16 @@ public class WebServicesUtil
             {
                 assignSctComponents(sctComponentPaths, currentNode, identifier + "-block", projectInformation);
             }
-            else
-            {
-                fieldValue = JTidy.tidyContent(fieldValue);
-                StructuredDataNode textNode = new StructuredDataNode();
-                textNode.setIdentifier(identifier);
-                textNode.setText(fieldValue);
-                textNode.setType(StructuredDataType.text);
-                List<StructuredDataNode> textNodes = new ArrayList<StructuredDataNode>();
-                textNodes.add(textNode);
-                currentNode.getContentFields().put(identifier, textNodes);
-            }
+
+            fieldValue = removeSctComponents(fieldValue);
+            fieldValue = JTidy.tidyContent(fieldValue);
+            StructuredDataNode textNode = new StructuredDataNode();
+            textNode.setIdentifier(identifier);
+            textNode.setText(fieldValue);
+            textNode.setType(StructuredDataType.text);
+            List<StructuredDataNode> textNodes = new ArrayList<StructuredDataNode>();
+            textNodes.add(textNode);
+            currentNode.getContentFields().put(identifier, textNodes);
         }
         else if (field.getChooserType() == ChooserType.FILE)
         {
@@ -357,6 +356,27 @@ public class WebServicesUtil
             List<String> sctComponentPaths = getSctComponents(fieldValue);
             assignSctComponents(sctComponentPaths, currentNode, identifier, projectInformation);
         }
+    }
+
+    /**
+     * Removes the <sct-component> tags from the content
+     * 
+     * @param value
+     * @return
+     */
+    private static String removeSctComponents(String value)
+    {
+        int beginningIndex = value.indexOf("<sct-component");
+        if (beginningIndex == -1)
+            return value;
+
+        int endingIndex = value.indexOf("</sct-component>");
+        if (endingIndex == -1)
+            return value;
+
+        String beginningPart = value.substring(0, beginningIndex);
+        String endingPart = value.substring(endingIndex + 16);
+        return removeSctComponents(beginningPart + endingPart);
     }
 
     /**
