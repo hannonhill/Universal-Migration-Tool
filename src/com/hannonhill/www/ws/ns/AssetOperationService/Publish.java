@@ -10,12 +10,16 @@ package com.hannonhill.www.ws.ns.AssetOperationService;
 public class Publish  implements java.io.Serializable {
     private com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier;
 
+    private boolean unpublish;
+
     public Publish() {
     }
 
     public Publish(
-           com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier) {
+           com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier,
+           boolean unpublish) {
            this.identifier = identifier;
+           this.unpublish = unpublish;
     }
 
 
@@ -38,6 +42,26 @@ public class Publish  implements java.io.Serializable {
         this.identifier = identifier;
     }
 
+
+    /**
+     * Gets the unpublish value for this Publish.
+     * 
+     * @return unpublish
+     */
+    public boolean isUnpublish() {
+        return unpublish;
+    }
+
+
+    /**
+     * Sets the unpublish value for this Publish.
+     * 
+     * @param unpublish
+     */
+    public void setUnpublish(boolean unpublish) {
+        this.unpublish = unpublish;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Publish)) return false;
@@ -52,7 +76,8 @@ public class Publish  implements java.io.Serializable {
         _equals = true && 
             ((this.identifier==null && other.getIdentifier()==null) || 
              (this.identifier!=null &&
-              this.identifier.equals(other.getIdentifier())));
+              this.identifier.equals(other.getIdentifier()))) &&
+            this.unpublish == other.isUnpublish();
         __equalsCalc = null;
         return _equals;
     }
@@ -67,6 +92,7 @@ public class Publish  implements java.io.Serializable {
         if (getIdentifier() != null) {
             _hashCode += getIdentifier().hashCode();
         }
+        _hashCode += (isUnpublish() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -81,6 +107,12 @@ public class Publish  implements java.io.Serializable {
         elemField.setFieldName("identifier");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("unpublish");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "unpublish"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }

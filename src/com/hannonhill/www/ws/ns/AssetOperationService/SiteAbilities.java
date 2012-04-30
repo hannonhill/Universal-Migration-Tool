@@ -94,6 +94,16 @@ public class SiteAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean moveRenameAssets;
 
+    private java.lang.Boolean diagnosticTests;
+
+    private java.lang.Boolean alwaysAllowedToToggleDataChecks;
+
+    private java.lang.Boolean viewPublishQueue;
+
+    private java.lang.Boolean reorderPublishQueue;
+
+    private java.lang.Boolean cancelPublishJobs;
+
     public SiteAbilities() {
     }
 
@@ -140,7 +150,12 @@ public class SiteAbilities  implements java.io.Serializable {
            java.lang.Boolean recycleBinViewRestoreUserAssets,
            java.lang.Boolean recycleBinDeleteAssets,
            java.lang.Boolean recycleBinViewRestoreAllAssets,
-           java.lang.Boolean moveRenameAssets) {
+           java.lang.Boolean moveRenameAssets,
+           java.lang.Boolean diagnosticTests,
+           java.lang.Boolean alwaysAllowedToToggleDataChecks,
+           java.lang.Boolean viewPublishQueue,
+           java.lang.Boolean reorderPublishQueue,
+           java.lang.Boolean cancelPublishJobs) {
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.uploadImagesFromWysiwyg = uploadImagesFromWysiwyg;
            this.multiSelectCopy = multiSelectCopy;
@@ -184,6 +199,11 @@ public class SiteAbilities  implements java.io.Serializable {
            this.recycleBinDeleteAssets = recycleBinDeleteAssets;
            this.recycleBinViewRestoreAllAssets = recycleBinViewRestoreAllAssets;
            this.moveRenameAssets = moveRenameAssets;
+           this.diagnosticTests = diagnosticTests;
+           this.alwaysAllowedToToggleDataChecks = alwaysAllowedToToggleDataChecks;
+           this.viewPublishQueue = viewPublishQueue;
+           this.reorderPublishQueue = reorderPublishQueue;
+           this.cancelPublishJobs = cancelPublishJobs;
     }
 
 
@@ -1046,6 +1066,106 @@ public class SiteAbilities  implements java.io.Serializable {
         this.moveRenameAssets = moveRenameAssets;
     }
 
+
+    /**
+     * Gets the diagnosticTests value for this SiteAbilities.
+     * 
+     * @return diagnosticTests
+     */
+    public java.lang.Boolean getDiagnosticTests() {
+        return diagnosticTests;
+    }
+
+
+    /**
+     * Sets the diagnosticTests value for this SiteAbilities.
+     * 
+     * @param diagnosticTests
+     */
+    public void setDiagnosticTests(java.lang.Boolean diagnosticTests) {
+        this.diagnosticTests = diagnosticTests;
+    }
+
+
+    /**
+     * Gets the alwaysAllowedToToggleDataChecks value for this SiteAbilities.
+     * 
+     * @return alwaysAllowedToToggleDataChecks
+     */
+    public java.lang.Boolean getAlwaysAllowedToToggleDataChecks() {
+        return alwaysAllowedToToggleDataChecks;
+    }
+
+
+    /**
+     * Sets the alwaysAllowedToToggleDataChecks value for this SiteAbilities.
+     * 
+     * @param alwaysAllowedToToggleDataChecks
+     */
+    public void setAlwaysAllowedToToggleDataChecks(java.lang.Boolean alwaysAllowedToToggleDataChecks) {
+        this.alwaysAllowedToToggleDataChecks = alwaysAllowedToToggleDataChecks;
+    }
+
+
+    /**
+     * Gets the viewPublishQueue value for this SiteAbilities.
+     * 
+     * @return viewPublishQueue
+     */
+    public java.lang.Boolean getViewPublishQueue() {
+        return viewPublishQueue;
+    }
+
+
+    /**
+     * Sets the viewPublishQueue value for this SiteAbilities.
+     * 
+     * @param viewPublishQueue
+     */
+    public void setViewPublishQueue(java.lang.Boolean viewPublishQueue) {
+        this.viewPublishQueue = viewPublishQueue;
+    }
+
+
+    /**
+     * Gets the reorderPublishQueue value for this SiteAbilities.
+     * 
+     * @return reorderPublishQueue
+     */
+    public java.lang.Boolean getReorderPublishQueue() {
+        return reorderPublishQueue;
+    }
+
+
+    /**
+     * Sets the reorderPublishQueue value for this SiteAbilities.
+     * 
+     * @param reorderPublishQueue
+     */
+    public void setReorderPublishQueue(java.lang.Boolean reorderPublishQueue) {
+        this.reorderPublishQueue = reorderPublishQueue;
+    }
+
+
+    /**
+     * Gets the cancelPublishJobs value for this SiteAbilities.
+     * 
+     * @return cancelPublishJobs
+     */
+    public java.lang.Boolean getCancelPublishJobs() {
+        return cancelPublishJobs;
+    }
+
+
+    /**
+     * Sets the cancelPublishJobs value for this SiteAbilities.
+     * 
+     * @param cancelPublishJobs
+     */
+    public void setCancelPublishJobs(java.lang.Boolean cancelPublishJobs) {
+        this.cancelPublishJobs = cancelPublishJobs;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof SiteAbilities)) return false;
@@ -1186,7 +1306,22 @@ public class SiteAbilities  implements java.io.Serializable {
               this.recycleBinViewRestoreAllAssets.equals(other.getRecycleBinViewRestoreAllAssets()))) &&
             ((this.moveRenameAssets==null && other.getMoveRenameAssets()==null) || 
              (this.moveRenameAssets!=null &&
-              this.moveRenameAssets.equals(other.getMoveRenameAssets())));
+              this.moveRenameAssets.equals(other.getMoveRenameAssets()))) &&
+            ((this.diagnosticTests==null && other.getDiagnosticTests()==null) || 
+             (this.diagnosticTests!=null &&
+              this.diagnosticTests.equals(other.getDiagnosticTests()))) &&
+            ((this.alwaysAllowedToToggleDataChecks==null && other.getAlwaysAllowedToToggleDataChecks()==null) || 
+             (this.alwaysAllowedToToggleDataChecks!=null &&
+              this.alwaysAllowedToToggleDataChecks.equals(other.getAlwaysAllowedToToggleDataChecks()))) &&
+            ((this.viewPublishQueue==null && other.getViewPublishQueue()==null) || 
+             (this.viewPublishQueue!=null &&
+              this.viewPublishQueue.equals(other.getViewPublishQueue()))) &&
+            ((this.reorderPublishQueue==null && other.getReorderPublishQueue()==null) || 
+             (this.reorderPublishQueue!=null &&
+              this.reorderPublishQueue.equals(other.getReorderPublishQueue()))) &&
+            ((this.cancelPublishJobs==null && other.getCancelPublishJobs()==null) || 
+             (this.cancelPublishJobs!=null &&
+              this.cancelPublishJobs.equals(other.getCancelPublishJobs())));
         __equalsCalc = null;
         return _equals;
     }
@@ -1326,6 +1461,21 @@ public class SiteAbilities  implements java.io.Serializable {
         }
         if (getMoveRenameAssets() != null) {
             _hashCode += getMoveRenameAssets().hashCode();
+        }
+        if (getDiagnosticTests() != null) {
+            _hashCode += getDiagnosticTests().hashCode();
+        }
+        if (getAlwaysAllowedToToggleDataChecks() != null) {
+            _hashCode += getAlwaysAllowedToToggleDataChecks().hashCode();
+        }
+        if (getViewPublishQueue() != null) {
+            _hashCode += getViewPublishQueue().hashCode();
+        }
+        if (getReorderPublishQueue() != null) {
+            _hashCode += getReorderPublishQueue().hashCode();
+        }
+        if (getCancelPublishJobs() != null) {
+            _hashCode += getCancelPublishJobs().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1634,6 +1784,41 @@ public class SiteAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("moveRenameAssets");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "moveRenameAssets"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("diagnosticTests");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "diagnosticTests"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("alwaysAllowedToToggleDataChecks");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "alwaysAllowedToToggleDataChecks"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("viewPublishQueue");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "viewPublishQueue"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("reorderPublishQueue");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "reorderPublishQueue"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("cancelPublishJobs");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cancelPublishJobs"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

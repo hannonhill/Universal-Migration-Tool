@@ -24,13 +24,7 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
     private org.apache.axis.types.NonNegativeInteger depthOfIndex;
 
-    private java.lang.Boolean includePageContent;
-
-    private java.lang.Boolean includeCurrentPageXML;
-
-    private java.lang.Boolean renderCurrentPageAndHierarchy;
-
-    private java.lang.Boolean includeChildrenInHierarchy;
+    private com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockRenderingBehavior renderingBehavior;
 
     private java.lang.Boolean indexPages;
 
@@ -57,6 +51,8 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
     private com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockSortMethod sortMethod;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockSortOrder sortOrder;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockPageXml pageXML;
 
     public IndexBlock() {
     }
@@ -87,10 +83,7 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.Boolean indexedFolderRecycled,
            org.apache.axis.types.NonNegativeInteger maxRenderedAssets,
            org.apache.axis.types.NonNegativeInteger depthOfIndex,
-           java.lang.Boolean includePageContent,
-           java.lang.Boolean includeCurrentPageXML,
-           java.lang.Boolean renderCurrentPageAndHierarchy,
-           java.lang.Boolean includeChildrenInHierarchy,
+           com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockRenderingBehavior renderingBehavior,
            java.lang.Boolean indexPages,
            java.lang.Boolean indexBlocks,
            java.lang.Boolean indexLinks,
@@ -103,7 +96,8 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.Boolean indexWorkflowInfo,
            java.lang.Boolean appendCallingPageData,
            com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockSortMethod sortMethod,
-           com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockSortOrder sortOrder) {
+           com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockSortOrder sortOrder,
+           com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockPageXml pageXML) {
         super(
             id,
             name,
@@ -130,10 +124,7 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         this.indexedFolderRecycled = indexedFolderRecycled;
         this.maxRenderedAssets = maxRenderedAssets;
         this.depthOfIndex = depthOfIndex;
-        this.includePageContent = includePageContent;
-        this.includeCurrentPageXML = includeCurrentPageXML;
-        this.renderCurrentPageAndHierarchy = renderCurrentPageAndHierarchy;
-        this.includeChildrenInHierarchy = includeChildrenInHierarchy;
+        this.renderingBehavior = renderingBehavior;
         this.indexPages = indexPages;
         this.indexBlocks = indexBlocks;
         this.indexLinks = indexLinks;
@@ -147,6 +138,7 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         this.appendCallingPageData = appendCallingPageData;
         this.sortMethod = sortMethod;
         this.sortOrder = sortOrder;
+        this.pageXML = pageXML;
     }
 
 
@@ -311,82 +303,22 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
 
     /**
-     * Gets the includePageContent value for this IndexBlock.
+     * Gets the renderingBehavior value for this IndexBlock.
      * 
-     * @return includePageContent
+     * @return renderingBehavior
      */
-    public java.lang.Boolean getIncludePageContent() {
-        return includePageContent;
+    public com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockRenderingBehavior getRenderingBehavior() {
+        return renderingBehavior;
     }
 
 
     /**
-     * Sets the includePageContent value for this IndexBlock.
+     * Sets the renderingBehavior value for this IndexBlock.
      * 
-     * @param includePageContent
+     * @param renderingBehavior
      */
-    public void setIncludePageContent(java.lang.Boolean includePageContent) {
-        this.includePageContent = includePageContent;
-    }
-
-
-    /**
-     * Gets the includeCurrentPageXML value for this IndexBlock.
-     * 
-     * @return includeCurrentPageXML
-     */
-    public java.lang.Boolean getIncludeCurrentPageXML() {
-        return includeCurrentPageXML;
-    }
-
-
-    /**
-     * Sets the includeCurrentPageXML value for this IndexBlock.
-     * 
-     * @param includeCurrentPageXML
-     */
-    public void setIncludeCurrentPageXML(java.lang.Boolean includeCurrentPageXML) {
-        this.includeCurrentPageXML = includeCurrentPageXML;
-    }
-
-
-    /**
-     * Gets the renderCurrentPageAndHierarchy value for this IndexBlock.
-     * 
-     * @return renderCurrentPageAndHierarchy
-     */
-    public java.lang.Boolean getRenderCurrentPageAndHierarchy() {
-        return renderCurrentPageAndHierarchy;
-    }
-
-
-    /**
-     * Sets the renderCurrentPageAndHierarchy value for this IndexBlock.
-     * 
-     * @param renderCurrentPageAndHierarchy
-     */
-    public void setRenderCurrentPageAndHierarchy(java.lang.Boolean renderCurrentPageAndHierarchy) {
-        this.renderCurrentPageAndHierarchy = renderCurrentPageAndHierarchy;
-    }
-
-
-    /**
-     * Gets the includeChildrenInHierarchy value for this IndexBlock.
-     * 
-     * @return includeChildrenInHierarchy
-     */
-    public java.lang.Boolean getIncludeChildrenInHierarchy() {
-        return includeChildrenInHierarchy;
-    }
-
-
-    /**
-     * Sets the includeChildrenInHierarchy value for this IndexBlock.
-     * 
-     * @param includeChildrenInHierarchy
-     */
-    public void setIncludeChildrenInHierarchy(java.lang.Boolean includeChildrenInHierarchy) {
-        this.includeChildrenInHierarchy = includeChildrenInHierarchy;
+    public void setRenderingBehavior(com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockRenderingBehavior renderingBehavior) {
+        this.renderingBehavior = renderingBehavior;
     }
 
 
@@ -649,6 +581,26 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         this.sortOrder = sortOrder;
     }
 
+
+    /**
+     * Gets the pageXML value for this IndexBlock.
+     * 
+     * @return pageXML
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockPageXml getPageXML() {
+        return pageXML;
+    }
+
+
+    /**
+     * Sets the pageXML value for this IndexBlock.
+     * 
+     * @param pageXML
+     */
+    public void setPageXML(com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockPageXml pageXML) {
+        this.pageXML = pageXML;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof IndexBlock)) return false;
@@ -685,18 +637,9 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
             ((this.depthOfIndex==null && other.getDepthOfIndex()==null) || 
              (this.depthOfIndex!=null &&
               this.depthOfIndex.equals(other.getDepthOfIndex()))) &&
-            ((this.includePageContent==null && other.getIncludePageContent()==null) || 
-             (this.includePageContent!=null &&
-              this.includePageContent.equals(other.getIncludePageContent()))) &&
-            ((this.includeCurrentPageXML==null && other.getIncludeCurrentPageXML()==null) || 
-             (this.includeCurrentPageXML!=null &&
-              this.includeCurrentPageXML.equals(other.getIncludeCurrentPageXML()))) &&
-            ((this.renderCurrentPageAndHierarchy==null && other.getRenderCurrentPageAndHierarchy()==null) || 
-             (this.renderCurrentPageAndHierarchy!=null &&
-              this.renderCurrentPageAndHierarchy.equals(other.getRenderCurrentPageAndHierarchy()))) &&
-            ((this.includeChildrenInHierarchy==null && other.getIncludeChildrenInHierarchy()==null) || 
-             (this.includeChildrenInHierarchy!=null &&
-              this.includeChildrenInHierarchy.equals(other.getIncludeChildrenInHierarchy()))) &&
+            ((this.renderingBehavior==null && other.getRenderingBehavior()==null) || 
+             (this.renderingBehavior!=null &&
+              this.renderingBehavior.equals(other.getRenderingBehavior()))) &&
             ((this.indexPages==null && other.getIndexPages()==null) || 
              (this.indexPages!=null &&
               this.indexPages.equals(other.getIndexPages()))) &&
@@ -735,7 +678,10 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
               this.sortMethod.equals(other.getSortMethod()))) &&
             ((this.sortOrder==null && other.getSortOrder()==null) || 
              (this.sortOrder!=null &&
-              this.sortOrder.equals(other.getSortOrder())));
+              this.sortOrder.equals(other.getSortOrder()))) &&
+            ((this.pageXML==null && other.getPageXML()==null) || 
+             (this.pageXML!=null &&
+              this.pageXML.equals(other.getPageXML())));
         __equalsCalc = null;
         return _equals;
     }
@@ -771,17 +717,8 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         if (getDepthOfIndex() != null) {
             _hashCode += getDepthOfIndex().hashCode();
         }
-        if (getIncludePageContent() != null) {
-            _hashCode += getIncludePageContent().hashCode();
-        }
-        if (getIncludeCurrentPageXML() != null) {
-            _hashCode += getIncludeCurrentPageXML().hashCode();
-        }
-        if (getRenderCurrentPageAndHierarchy() != null) {
-            _hashCode += getRenderCurrentPageAndHierarchy().hashCode();
-        }
-        if (getIncludeChildrenInHierarchy() != null) {
-            _hashCode += getIncludeChildrenInHierarchy().hashCode();
+        if (getRenderingBehavior() != null) {
+            _hashCode += getRenderingBehavior().hashCode();
         }
         if (getIndexPages() != null) {
             _hashCode += getIndexPages().hashCode();
@@ -821,6 +758,9 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         }
         if (getSortOrder() != null) {
             _hashCode += getSortOrder().hashCode();
+        }
+        if (getPageXML() != null) {
+            _hashCode += getPageXML().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -887,30 +827,9 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("includePageContent");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "includePageContent"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("includeCurrentPageXML");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "includeCurrentPageXML"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("renderCurrentPageAndHierarchy");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "renderCurrentPageAndHierarchy"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("includeChildrenInHierarchy");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "includeChildrenInHierarchy"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setFieldName("renderingBehavior");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "renderingBehavior"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "index-block-rendering-behavior"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
@@ -1002,6 +921,13 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         elemField.setFieldName("sortOrder");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sortOrder"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "index-block-sort-order"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("pageXML");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "pageXML"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "index-block-page-xml"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

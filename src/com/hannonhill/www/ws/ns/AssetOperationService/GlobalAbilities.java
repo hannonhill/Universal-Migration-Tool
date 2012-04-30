@@ -164,6 +164,12 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean moveRenameAssets;
 
+    private java.lang.Boolean recycleBinChecker;
+
+    private java.lang.Boolean pathRepairTool;
+
+    private java.lang.Boolean databaseExportTool;
+
     public GlobalAbilities() {
     }
 
@@ -245,7 +251,10 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean editUsersInMemberGroups,
            java.lang.Boolean editAnyGroup,
            java.lang.Boolean editMemberGroups,
-           java.lang.Boolean moveRenameAssets) {
+           java.lang.Boolean moveRenameAssets,
+           java.lang.Boolean recycleBinChecker,
+           java.lang.Boolean pathRepairTool,
+           java.lang.Boolean databaseExportTool) {
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.accessSiteManagement = accessSiteManagement;
            this.createSites = createSites;
@@ -324,6 +333,9 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.editAnyGroup = editAnyGroup;
            this.editMemberGroups = editMemberGroups;
            this.moveRenameAssets = moveRenameAssets;
+           this.recycleBinChecker = recycleBinChecker;
+           this.pathRepairTool = pathRepairTool;
+           this.databaseExportTool = databaseExportTool;
     }
 
 
@@ -1886,6 +1898,66 @@ public class GlobalAbilities  implements java.io.Serializable {
         this.moveRenameAssets = moveRenameAssets;
     }
 
+
+    /**
+     * Gets the recycleBinChecker value for this GlobalAbilities.
+     * 
+     * @return recycleBinChecker
+     */
+    public java.lang.Boolean getRecycleBinChecker() {
+        return recycleBinChecker;
+    }
+
+
+    /**
+     * Sets the recycleBinChecker value for this GlobalAbilities.
+     * 
+     * @param recycleBinChecker
+     */
+    public void setRecycleBinChecker(java.lang.Boolean recycleBinChecker) {
+        this.recycleBinChecker = recycleBinChecker;
+    }
+
+
+    /**
+     * Gets the pathRepairTool value for this GlobalAbilities.
+     * 
+     * @return pathRepairTool
+     */
+    public java.lang.Boolean getPathRepairTool() {
+        return pathRepairTool;
+    }
+
+
+    /**
+     * Sets the pathRepairTool value for this GlobalAbilities.
+     * 
+     * @param pathRepairTool
+     */
+    public void setPathRepairTool(java.lang.Boolean pathRepairTool) {
+        this.pathRepairTool = pathRepairTool;
+    }
+
+
+    /**
+     * Gets the databaseExportTool value for this GlobalAbilities.
+     * 
+     * @return databaseExportTool
+     */
+    public java.lang.Boolean getDatabaseExportTool() {
+        return databaseExportTool;
+    }
+
+
+    /**
+     * Sets the databaseExportTool value for this GlobalAbilities.
+     * 
+     * @param databaseExportTool
+     */
+    public void setDatabaseExportTool(java.lang.Boolean databaseExportTool) {
+        this.databaseExportTool = databaseExportTool;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof GlobalAbilities)) return false;
@@ -2131,7 +2203,16 @@ public class GlobalAbilities  implements java.io.Serializable {
               this.editMemberGroups.equals(other.getEditMemberGroups()))) &&
             ((this.moveRenameAssets==null && other.getMoveRenameAssets()==null) || 
              (this.moveRenameAssets!=null &&
-              this.moveRenameAssets.equals(other.getMoveRenameAssets())));
+              this.moveRenameAssets.equals(other.getMoveRenameAssets()))) &&
+            ((this.recycleBinChecker==null && other.getRecycleBinChecker()==null) || 
+             (this.recycleBinChecker!=null &&
+              this.recycleBinChecker.equals(other.getRecycleBinChecker()))) &&
+            ((this.pathRepairTool==null && other.getPathRepairTool()==null) || 
+             (this.pathRepairTool!=null &&
+              this.pathRepairTool.equals(other.getPathRepairTool()))) &&
+            ((this.databaseExportTool==null && other.getDatabaseExportTool()==null) || 
+             (this.databaseExportTool!=null &&
+              this.databaseExportTool.equals(other.getDatabaseExportTool())));
         __equalsCalc = null;
         return _equals;
     }
@@ -2376,6 +2457,15 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         if (getMoveRenameAssets() != null) {
             _hashCode += getMoveRenameAssets().hashCode();
+        }
+        if (getRecycleBinChecker() != null) {
+            _hashCode += getRecycleBinChecker().hashCode();
+        }
+        if (getPathRepairTool() != null) {
+            _hashCode += getPathRepairTool().hashCode();
+        }
+        if (getDatabaseExportTool() != null) {
+            _hashCode += getDatabaseExportTool().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -2929,6 +3019,27 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("moveRenameAssets");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "moveRenameAssets"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("recycleBinChecker");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycleBinChecker"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("pathRepairTool");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "pathRepairTool"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("databaseExportTool");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "databaseExportTool"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

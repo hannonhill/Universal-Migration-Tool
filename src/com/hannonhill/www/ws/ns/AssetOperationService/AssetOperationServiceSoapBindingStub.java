@@ -16,9 +16,10 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
     static org.apache.axis.description.OperationDesc [] _operations;
 
     static {
-        _operations = new org.apache.axis.description.OperationDesc[20];
+        _operations = new org.apache.axis.description.OperationDesc[21];
         _initOperationDesc1();
         _initOperationDesc2();
+        _initOperationDesc3();
     }
 
     private static void _initOperationDesc1(){
@@ -81,6 +82,8 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authentication"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authentication"), com.hannonhill.www.ws.ns.AssetOperationService.Authentication.class, false, false);
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier"), com.hannonhill.www.ws.ns.AssetOperationService.Identifier.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "unpublish"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"), boolean.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "operationResult"));
         oper.setReturnClass(com.hannonhill.www.ws.ns.AssetOperationService.OperationResult.class);
@@ -248,6 +251,25 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
         _operations[15] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("siteCopy");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authentication"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authentication"), com.hannonhill.www.ws.ns.AssetOperationService.Authentication.class, false, false);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "originalSiteId"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "originalSiteName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        param.setOmittable(true);
+        oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "newSiteName"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "operationResult"));
+        oper.setReturnClass(com.hannonhill.www.ws.ns.AssetOperationService.OperationResult.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteCopyReturn"));
+        oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[16] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("move");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authentication"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authentication"), com.hannonhill.www.ws.ns.AssetOperationService.Authentication.class, false, false);
         oper.addParameter(param);
@@ -263,7 +285,7 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
         oper.setReturnQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "moveReturn"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[16] = oper;
+        _operations[17] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("readWorkflowInformation");
@@ -276,7 +298,7 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
         oper.setReturnQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "readWorkflowInformationReturn"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[17] = oper;
+        _operations[18] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("readAudits");
@@ -289,8 +311,13 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
         oper.setReturnQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "readAuditsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[18] = oper;
+        _operations[19] = oper;
 
+    }
+
+    private static void _initOperationDesc3(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("performWorkflowTransition");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authentication"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authentication"), com.hannonhill.www.ws.ns.AssetOperationService.Authentication.class, false, false);
@@ -302,7 +329,7 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
         oper.setReturnQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "performWorkflowTransitionReturn"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[19] = oper;
+        _operations[20] = oper;
 
     }
 
@@ -913,6 +940,20 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "index-block-page-xml");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockPageXml.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
+
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "index-block-rendering-behavior");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockRenderingBehavior.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
+
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "index-block-sort-method");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.IndexBlockSortMethod.class;
@@ -1073,20 +1114,6 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "pageConfigurationSetContainer");
-            cachedSerQNames.add(qName);
-            cls = com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSetContainer.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
-            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "pageRegion");
-            cachedSerQNames.add(qName);
-            cls = com.hannonhill.www.ws.ns.AssetOperationService.PageRegion.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
     }
     private void addBindings1() {
             java.lang.Class cls;
@@ -1102,6 +1129,20 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "pageConfigurationSetContainer");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.PageConfigurationSetContainer.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "pageRegion");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.PageRegion.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "path");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.Path.class;
@@ -1290,6 +1331,13 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteCopy");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.SiteCopy.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteDestinationContainer");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.SiteDestinationContainer.class;
@@ -1376,9 +1424,23 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "twitter-query-type");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.TwitterQueryType.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
+
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "twitterConnector");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.TwitterConnector.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "twitterFeedBlock");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.TwitterFeedBlock.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -1724,7 +1786,7 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
 }
     }
 
-    public com.hannonhill.www.ws.ns.AssetOperationService.OperationResult publish(com.hannonhill.www.ws.ns.AssetOperationService.Authentication authentication, com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier) throws java.rmi.RemoteException {
+    public com.hannonhill.www.ws.ns.AssetOperationService.OperationResult publish(com.hannonhill.www.ws.ns.AssetOperationService.Authentication authentication, com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier, boolean unpublish) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1740,7 +1802,7 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {authentication, identifier});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {authentication, identifier, new java.lang.Boolean(unpublish)});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;
@@ -2132,12 +2194,46 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
 }
     }
 
-    public com.hannonhill.www.ws.ns.AssetOperationService.OperationResult move(com.hannonhill.www.ws.ns.AssetOperationService.Authentication authentication, com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier, com.hannonhill.www.ws.ns.AssetOperationService.MoveParameters moveParameters, com.hannonhill.www.ws.ns.AssetOperationService.WorkflowConfiguration workflowConfiguration) throws java.rmi.RemoteException {
+    public com.hannonhill.www.ws.ns.AssetOperationService.OperationResult siteCopy(com.hannonhill.www.ws.ns.AssetOperationService.Authentication authentication, java.lang.String originalSiteId, java.lang.String originalSiteName, java.lang.String newSiteName) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[16]);
+        _call.setUseSOAPAction(true);
+        _call.setSOAPActionURI("");
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteCopy"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {authentication, originalSiteId, originalSiteName, newSiteName});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (com.hannonhill.www.ws.ns.AssetOperationService.OperationResult) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (com.hannonhill.www.ws.ns.AssetOperationService.OperationResult) org.apache.axis.utils.JavaUtils.convert(_resp, com.hannonhill.www.ws.ns.AssetOperationService.OperationResult.class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public com.hannonhill.www.ws.ns.AssetOperationService.OperationResult move(com.hannonhill.www.ws.ns.AssetOperationService.Authentication authentication, com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier, com.hannonhill.www.ws.ns.AssetOperationService.MoveParameters moveParameters, com.hannonhill.www.ws.ns.AssetOperationService.WorkflowConfiguration workflowConfiguration) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[17]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -2171,7 +2267,7 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[17]);
+        _call.setOperation(_operations[18]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -2205,7 +2301,7 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[18]);
+        _call.setOperation(_operations[19]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);
@@ -2239,7 +2335,7 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[19]);
+        _call.setOperation(_operations[20]);
         _call.setUseSOAPAction(true);
         _call.setSOAPActionURI("");
         _call.setEncodingStyle(null);

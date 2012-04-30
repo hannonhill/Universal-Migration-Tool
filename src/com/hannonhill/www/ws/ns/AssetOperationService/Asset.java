@@ -94,6 +94,8 @@ public class Asset  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.WorkflowDefinitionContainer workflowDefinitionContainer;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.TwitterFeedBlock twitterFeedBlock;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.Site site;
 
     public Asset() {
@@ -143,6 +145,7 @@ public class Asset  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.TransportContainer transportContainer,
            com.hannonhill.www.ws.ns.AssetOperationService.WorkflowDefinition workflowDefinition,
            com.hannonhill.www.ws.ns.AssetOperationService.WorkflowDefinitionContainer workflowDefinitionContainer,
+           com.hannonhill.www.ws.ns.AssetOperationService.TwitterFeedBlock twitterFeedBlock,
            com.hannonhill.www.ws.ns.AssetOperationService.Site site) {
            this.workflowConfiguration = workflowConfiguration;
            this.feedBlock = feedBlock;
@@ -187,6 +190,7 @@ public class Asset  implements java.io.Serializable {
            this.transportContainer = transportContainer;
            this.workflowDefinition = workflowDefinition;
            this.workflowDefinitionContainer = workflowDefinitionContainer;
+           this.twitterFeedBlock = twitterFeedBlock;
            this.site = site;
     }
 
@@ -1052,6 +1056,26 @@ public class Asset  implements java.io.Serializable {
 
 
     /**
+     * Gets the twitterFeedBlock value for this Asset.
+     * 
+     * @return twitterFeedBlock
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.TwitterFeedBlock getTwitterFeedBlock() {
+        return twitterFeedBlock;
+    }
+
+
+    /**
+     * Sets the twitterFeedBlock value for this Asset.
+     * 
+     * @param twitterFeedBlock
+     */
+    public void setTwitterFeedBlock(com.hannonhill.www.ws.ns.AssetOperationService.TwitterFeedBlock twitterFeedBlock) {
+        this.twitterFeedBlock = twitterFeedBlock;
+    }
+
+
+    /**
      * Gets the site value for this Asset.
      * 
      * @return site
@@ -1211,6 +1235,9 @@ public class Asset  implements java.io.Serializable {
             ((this.workflowDefinitionContainer==null && other.getWorkflowDefinitionContainer()==null) || 
              (this.workflowDefinitionContainer!=null &&
               this.workflowDefinitionContainer.equals(other.getWorkflowDefinitionContainer()))) &&
+            ((this.twitterFeedBlock==null && other.getTwitterFeedBlock()==null) || 
+             (this.twitterFeedBlock!=null &&
+              this.twitterFeedBlock.equals(other.getTwitterFeedBlock()))) &&
             ((this.site==null && other.getSite()==null) || 
              (this.site!=null &&
               this.site.equals(other.getSite())));
@@ -1353,6 +1380,9 @@ public class Asset  implements java.io.Serializable {
         }
         if (getWorkflowDefinitionContainer() != null) {
             _hashCode += getWorkflowDefinitionContainer().hashCode();
+        }
+        if (getTwitterFeedBlock() != null) {
+            _hashCode += getTwitterFeedBlock().hashCode();
         }
         if (getSite() != null) {
             _hashCode += getSite().hashCode();
@@ -1665,6 +1695,13 @@ public class Asset  implements java.io.Serializable {
         elemField.setFieldName("workflowDefinitionContainer");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "workflowDefinitionContainer"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "workflowDefinitionContainer"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("twitterFeedBlock");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "twitterFeedBlock"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "twitterFeedBlock"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

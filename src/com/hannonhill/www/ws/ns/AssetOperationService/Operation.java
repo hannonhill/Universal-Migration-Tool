@@ -30,6 +30,8 @@ public class Operation  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.Copy copy;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.SiteCopy siteCopy;
+
     public Operation() {
     }
 
@@ -44,7 +46,8 @@ public class Operation  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.EditAccessRights editAccessRights,
            com.hannonhill.www.ws.ns.AssetOperationService.CheckOut checkOut,
            com.hannonhill.www.ws.ns.AssetOperationService.CheckIn checkIn,
-           com.hannonhill.www.ws.ns.AssetOperationService.Copy copy) {
+           com.hannonhill.www.ws.ns.AssetOperationService.Copy copy,
+           com.hannonhill.www.ws.ns.AssetOperationService.SiteCopy siteCopy) {
            this.create = create;
            this.delete = delete;
            this.edit = edit;
@@ -56,6 +59,7 @@ public class Operation  implements java.io.Serializable {
            this.checkOut = checkOut;
            this.checkIn = checkIn;
            this.copy = copy;
+           this.siteCopy = siteCopy;
     }
 
 
@@ -278,6 +282,26 @@ public class Operation  implements java.io.Serializable {
         this.copy = copy;
     }
 
+
+    /**
+     * Gets the siteCopy value for this Operation.
+     * 
+     * @return siteCopy
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.SiteCopy getSiteCopy() {
+        return siteCopy;
+    }
+
+
+    /**
+     * Sets the siteCopy value for this Operation.
+     * 
+     * @param siteCopy
+     */
+    public void setSiteCopy(com.hannonhill.www.ws.ns.AssetOperationService.SiteCopy siteCopy) {
+        this.siteCopy = siteCopy;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Operation)) return false;
@@ -322,7 +346,10 @@ public class Operation  implements java.io.Serializable {
               this.checkIn.equals(other.getCheckIn()))) &&
             ((this.copy==null && other.getCopy()==null) || 
              (this.copy!=null &&
-              this.copy.equals(other.getCopy())));
+              this.copy.equals(other.getCopy()))) &&
+            ((this.siteCopy==null && other.getSiteCopy()==null) || 
+             (this.siteCopy!=null &&
+              this.siteCopy.equals(other.getSiteCopy())));
         __equalsCalc = null;
         return _equals;
     }
@@ -366,6 +393,9 @@ public class Operation  implements java.io.Serializable {
         }
         if (getCopy() != null) {
             _hashCode += getCopy().hashCode();
+        }
+        if (getSiteCopy() != null) {
+            _hashCode += getSiteCopy().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -451,6 +481,13 @@ public class Operation  implements java.io.Serializable {
         elemField.setFieldName("copy");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "copy"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "copy"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("siteCopy");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteCopy"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteCopy"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
