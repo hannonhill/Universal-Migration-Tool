@@ -1,18 +1,23 @@
 /*
  * Created on Nov 20, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.struts;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
 import org.apache.commons.lang.xwork.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.ProjectInformation;
@@ -24,9 +29,8 @@ import com.hannonhill.www.ws.ns.AssetOperationService.Site;
 /**
  * Action that displays and processes form with cascade url, username, password and site name
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class ProjectPropertiesAction extends BaseAction
 {
@@ -36,10 +40,9 @@ public class ProjectPropertiesAction extends BaseAction
     private String username = "";
     private String password = "";
     private String siteName = "";
+    private List<String> availableSites = new ArrayList<String>();
+    private InputStream inputStream;
 
-    /* (non-Javadoc)
-     * @see com.opensymphony.xwork2.ActionSupport#execute()
-     */
     @Override
     public String execute() throws Exception
     {
@@ -47,6 +50,73 @@ public class ProjectPropertiesAction extends BaseAction
             return processSubmit();
 
         return processView();
+    }
+
+    /**
+     * @return Returns the input stream for AJAX
+     */
+    public InputStream getInputStream()
+    {
+        return inputStream;
+    }
+
+    /**
+     * Reads available sites through web services if all the necessary properties have been provided
+     * 
+     * @return
+     * @throws Exception
+     */
+    public List<String> readAvailableSites() throws Exception
+    {
+        if (StringUtils.isEmpty(url) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password))
+            return new ArrayList<String>();
+
+        url = PathUtil.convertToFullAssetOperationURL(url);
+        return WebServices.getSiteNames(url, username, password);
+    }
+
+    /**
+     * Returns a semicolon separated list of site names through AJAX
+     * 
+     * @return
+     * @throws Exception
+     */
+    public String getAvailableSiteNamesByAjax() throws Exception
+    {
+        JSONObject result = new JSONObject();
+        JSONArray siteNames = new JSONArray();
+        List<String> availableSiteNames = null;
+
+        // Read the site names through web services
+        try
+        {
+            availableSiteNames = readAvailableSites();
+        }
+        catch (Exception e)
+        {
+            // If there was an error, output it to JSON
+            result.put("error", e.getMessage());
+        }
+
+        // If there was no error, output site names to JSON
+        if (availableSiteNames != null)
+        {
+            for (String siteName : availableSiteNames)
+                siteNames.put(siteName);
+            result.put("siteNames", siteNames);
+        }
+
+        // Output JSON to the inputStream
+        try
+        {
+            String returnString = result.toString();
+            inputStream = new ByteArrayInputStream(returnString.getBytes("UTF-8"));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return SUCCESS;
     }
 
     /**
@@ -106,7 +176,8 @@ public class ProjectPropertiesAction extends BaseAction
 
         // Clear the map in the projectInformation in case if it had some old data
         projectInformation.setContentTypes(new HashMap<String, ContentTypeInformation>());
-        // Convert each ContentType to the ContentTypeInformation object and add to the map in the projectInformation
+        // Convert each ContentType to the ContentTypeInformation object and add to the map in the
+        // projectInformation
         for (ContentType contentType : contentTypes)
             try
             {
@@ -130,6 +201,14 @@ public class ProjectPropertiesAction extends BaseAction
         username = projectInformation.getUsername();
         password = projectInformation.getPassword();
         siteName = projectInformation.getSiteName();
+        try
+        {
+            availableSites = readAvailableSites();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return INPUT;
     }
 
@@ -254,5 +333,22 @@ public class ProjectPropertiesAction extends BaseAction
     public void setSiteName(String siteName)
     {
         this.siteName = siteName == null ? "" : siteName.trim();
+    }
+
+    /**
+     * @return Returns the availableSites.
+     */
+    public List<String> getAvailableSites()
+    {
+
+        return availableSites;
+    }
+
+    /**
+     * @param availableSites the availableSites to set
+     */
+    public void setAvailableSites(List<String> availableSites)
+    {
+        this.availableSites = availableSites;
     }
 }

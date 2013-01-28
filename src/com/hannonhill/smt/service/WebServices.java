@@ -34,6 +34,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString;
 import com.hannonhill.www.ws.ns.AssetOperationService.File;
 import com.hannonhill.www.ws.ns.AssetOperationService.Folder;
 import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
+import com.hannonhill.www.ws.ns.AssetOperationService.ListSitesResult;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility;
 import com.hannonhill.www.ws.ns.AssetOperationService.MetadataSet;
 import com.hannonhill.www.ws.ns.AssetOperationService.OperationResult;
@@ -564,6 +565,31 @@ public class WebServices
     }
 
     /**
+     * Gets the names of the sites in Cascade
+     * 
+     * @param url
+     * @param username
+     * @param password
+     * @return
+     * @throws Exception
+     */
+    public static List<String> getSiteNames(String url, String username, String password) throws Exception
+    {
+        Authentication authentication = new Authentication(password, username);
+        List<String> result = new ArrayList<String>();
+        ListSitesResult sitesResult;
+        sitesResult = getServer(url).listSites(authentication);
+
+        if (!sitesResult.getSuccess().equals("true"))
+            throw new Exception("Error occured when getting all sites: " + sitesResult.getMessage());
+
+        for (Identifier site : sitesResult.getSites())
+            result.add(site.getPath().getPath());
+
+        return result;
+    }
+
+    /**
      * Recursively reads all assets from given folder and its descendants and stores their paths in
      * {@link ProjectInformation#getExistingCascadeFiles()},
      * {@link ProjectInformation#getExistingCascadeXhtmlBlocks()} and
@@ -882,5 +908,4 @@ public class WebServices
     {
         return new Authentication(projectInformation.getPassword(), projectInformation.getUsername());
     }
-
 }

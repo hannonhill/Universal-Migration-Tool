@@ -20,7 +20,11 @@ public class BatchResult  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.ReadAccessRightsResult readAccessRightsResult;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.ReadWorkflowSettingsResult readWorkflowSettingsResult;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.ReadAuditsResult readAuditsResult;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.ListSubscribersResult listSubscribersResult;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.SearchResult searchResult;
 
@@ -36,7 +40,9 @@ public class BatchResult  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.ListMessagesResult listMessagesResult,
            com.hannonhill.www.ws.ns.AssetOperationService.ReadResult readResult,
            com.hannonhill.www.ws.ns.AssetOperationService.ReadAccessRightsResult readAccessRightsResult,
+           com.hannonhill.www.ws.ns.AssetOperationService.ReadWorkflowSettingsResult readWorkflowSettingsResult,
            com.hannonhill.www.ws.ns.AssetOperationService.ReadAuditsResult readAuditsResult,
+           com.hannonhill.www.ws.ns.AssetOperationService.ListSubscribersResult listSubscribersResult,
            com.hannonhill.www.ws.ns.AssetOperationService.SearchResult searchResult,
            com.hannonhill.www.ws.ns.AssetOperationService.ReadWorkflowInformationResult readWorkflowInformationResult) {
            this.operationResult = operationResult;
@@ -45,7 +51,9 @@ public class BatchResult  implements java.io.Serializable {
            this.listMessagesResult = listMessagesResult;
            this.readResult = readResult;
            this.readAccessRightsResult = readAccessRightsResult;
+           this.readWorkflowSettingsResult = readWorkflowSettingsResult;
            this.readAuditsResult = readAuditsResult;
+           this.listSubscribersResult = listSubscribersResult;
            this.searchResult = searchResult;
            this.readWorkflowInformationResult = readWorkflowInformationResult;
     }
@@ -172,6 +180,26 @@ public class BatchResult  implements java.io.Serializable {
 
 
     /**
+     * Gets the readWorkflowSettingsResult value for this BatchResult.
+     * 
+     * @return readWorkflowSettingsResult
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.ReadWorkflowSettingsResult getReadWorkflowSettingsResult() {
+        return readWorkflowSettingsResult;
+    }
+
+
+    /**
+     * Sets the readWorkflowSettingsResult value for this BatchResult.
+     * 
+     * @param readWorkflowSettingsResult
+     */
+    public void setReadWorkflowSettingsResult(com.hannonhill.www.ws.ns.AssetOperationService.ReadWorkflowSettingsResult readWorkflowSettingsResult) {
+        this.readWorkflowSettingsResult = readWorkflowSettingsResult;
+    }
+
+
+    /**
      * Gets the readAuditsResult value for this BatchResult.
      * 
      * @return readAuditsResult
@@ -188,6 +216,26 @@ public class BatchResult  implements java.io.Serializable {
      */
     public void setReadAuditsResult(com.hannonhill.www.ws.ns.AssetOperationService.ReadAuditsResult readAuditsResult) {
         this.readAuditsResult = readAuditsResult;
+    }
+
+
+    /**
+     * Gets the listSubscribersResult value for this BatchResult.
+     * 
+     * @return listSubscribersResult
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.ListSubscribersResult getListSubscribersResult() {
+        return listSubscribersResult;
+    }
+
+
+    /**
+     * Sets the listSubscribersResult value for this BatchResult.
+     * 
+     * @param listSubscribersResult
+     */
+    public void setListSubscribersResult(com.hannonhill.www.ws.ns.AssetOperationService.ListSubscribersResult listSubscribersResult) {
+        this.listSubscribersResult = listSubscribersResult;
     }
 
 
@@ -260,9 +308,15 @@ public class BatchResult  implements java.io.Serializable {
             ((this.readAccessRightsResult==null && other.getReadAccessRightsResult()==null) || 
              (this.readAccessRightsResult!=null &&
               this.readAccessRightsResult.equals(other.getReadAccessRightsResult()))) &&
+            ((this.readWorkflowSettingsResult==null && other.getReadWorkflowSettingsResult()==null) || 
+             (this.readWorkflowSettingsResult!=null &&
+              this.readWorkflowSettingsResult.equals(other.getReadWorkflowSettingsResult()))) &&
             ((this.readAuditsResult==null && other.getReadAuditsResult()==null) || 
              (this.readAuditsResult!=null &&
               this.readAuditsResult.equals(other.getReadAuditsResult()))) &&
+            ((this.listSubscribersResult==null && other.getListSubscribersResult()==null) || 
+             (this.listSubscribersResult!=null &&
+              this.listSubscribersResult.equals(other.getListSubscribersResult()))) &&
             ((this.searchResult==null && other.getSearchResult()==null) || 
              (this.searchResult!=null &&
               this.searchResult.equals(other.getSearchResult()))) &&
@@ -298,8 +352,14 @@ public class BatchResult  implements java.io.Serializable {
         if (getReadAccessRightsResult() != null) {
             _hashCode += getReadAccessRightsResult().hashCode();
         }
+        if (getReadWorkflowSettingsResult() != null) {
+            _hashCode += getReadWorkflowSettingsResult().hashCode();
+        }
         if (getReadAuditsResult() != null) {
             _hashCode += getReadAuditsResult().hashCode();
+        }
+        if (getListSubscribersResult() != null) {
+            _hashCode += getListSubscribersResult().hashCode();
         }
         if (getSearchResult() != null) {
             _hashCode += getSearchResult().hashCode();
@@ -360,9 +420,23 @@ public class BatchResult  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("readWorkflowSettingsResult");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "readWorkflowSettingsResult"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "readWorkflowSettingsResult"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("readAuditsResult");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "readAuditsResult"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "readAuditsResult"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("listSubscribersResult");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "listSubscribersResult"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "listSubscribersResult"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

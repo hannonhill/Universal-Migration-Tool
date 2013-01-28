@@ -44,6 +44,12 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     private java.lang.String cronExpression;
 
+    private java.lang.String sendReportToUsers;
+
+    private java.lang.String sendReportToGroups;
+
+    private java.lang.Boolean sendReportOnErrorOnly;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration;
 
     private java.lang.String rootFolderId;
@@ -92,6 +98,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            org.apache.axis.types.NonNegativeInteger publishIntervalHours,
            com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] publishDaysOfWeek,
            java.lang.String cronExpression,
+           java.lang.String sendReportToUsers,
+           java.lang.String sendReportToGroups,
+           java.lang.Boolean sendReportOnErrorOnly,
            com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration,
            java.lang.String rootFolderId,
            java.lang.String rootAssetFactoryContainerId,
@@ -125,6 +134,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         this.publishIntervalHours = publishIntervalHours;
         this.publishDaysOfWeek = publishDaysOfWeek;
         this.cronExpression = cronExpression;
+        this.sendReportToUsers = sendReportToUsers;
+        this.sendReportToGroups = sendReportToGroups;
+        this.sendReportOnErrorOnly = sendReportOnErrorOnly;
         this.recycleBinExpiration = recycleBinExpiration;
         this.rootFolderId = rootFolderId;
         this.rootAssetFactoryContainerId = rootAssetFactoryContainerId;
@@ -501,6 +513,66 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
 
     /**
+     * Gets the sendReportToUsers value for this Site.
+     * 
+     * @return sendReportToUsers
+     */
+    public java.lang.String getSendReportToUsers() {
+        return sendReportToUsers;
+    }
+
+
+    /**
+     * Sets the sendReportToUsers value for this Site.
+     * 
+     * @param sendReportToUsers
+     */
+    public void setSendReportToUsers(java.lang.String sendReportToUsers) {
+        this.sendReportToUsers = sendReportToUsers;
+    }
+
+
+    /**
+     * Gets the sendReportToGroups value for this Site.
+     * 
+     * @return sendReportToGroups
+     */
+    public java.lang.String getSendReportToGroups() {
+        return sendReportToGroups;
+    }
+
+
+    /**
+     * Sets the sendReportToGroups value for this Site.
+     * 
+     * @param sendReportToGroups
+     */
+    public void setSendReportToGroups(java.lang.String sendReportToGroups) {
+        this.sendReportToGroups = sendReportToGroups;
+    }
+
+
+    /**
+     * Gets the sendReportOnErrorOnly value for this Site.
+     * 
+     * @return sendReportOnErrorOnly
+     */
+    public java.lang.Boolean getSendReportOnErrorOnly() {
+        return sendReportOnErrorOnly;
+    }
+
+
+    /**
+     * Sets the sendReportOnErrorOnly value for this Site.
+     * 
+     * @param sendReportOnErrorOnly
+     */
+    public void setSendReportOnErrorOnly(java.lang.Boolean sendReportOnErrorOnly) {
+        this.sendReportOnErrorOnly = sendReportOnErrorOnly;
+    }
+
+
+    /**
      * Gets the recycleBinExpiration value for this Site.
      * 
      * @return recycleBinExpiration
@@ -805,6 +877,15 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.cronExpression==null && other.getCronExpression()==null) || 
              (this.cronExpression!=null &&
               this.cronExpression.equals(other.getCronExpression()))) &&
+            ((this.sendReportToUsers==null && other.getSendReportToUsers()==null) || 
+             (this.sendReportToUsers!=null &&
+              this.sendReportToUsers.equals(other.getSendReportToUsers()))) &&
+            ((this.sendReportToGroups==null && other.getSendReportToGroups()==null) || 
+             (this.sendReportToGroups!=null &&
+              this.sendReportToGroups.equals(other.getSendReportToGroups()))) &&
+            ((this.sendReportOnErrorOnly==null && other.getSendReportOnErrorOnly()==null) || 
+             (this.sendReportOnErrorOnly!=null &&
+              this.sendReportOnErrorOnly.equals(other.getSendReportOnErrorOnly()))) &&
             ((this.recycleBinExpiration==null && other.getRecycleBinExpiration()==null) || 
              (this.recycleBinExpiration!=null &&
               this.recycleBinExpiration.equals(other.getRecycleBinExpiration()))) &&
@@ -921,6 +1002,15 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         }
         if (getCronExpression() != null) {
             _hashCode += getCronExpression().hashCode();
+        }
+        if (getSendReportToUsers() != null) {
+            _hashCode += getSendReportToUsers().hashCode();
+        }
+        if (getSendReportToGroups() != null) {
+            _hashCode += getSendReportToGroups().hashCode();
+        }
+        if (getSendReportOnErrorOnly() != null) {
+            _hashCode += getSendReportOnErrorOnly().hashCode();
         }
         if (getRecycleBinExpiration() != null) {
             _hashCode += getRecycleBinExpiration().hashCode();
@@ -1092,6 +1182,27 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setFieldName("cronExpression");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cronExpression"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendReportToUsers");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendReportToUsers"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendReportToGroups");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendReportToGroups"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendReportOnErrorOnly");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendReportOnErrorOnly"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

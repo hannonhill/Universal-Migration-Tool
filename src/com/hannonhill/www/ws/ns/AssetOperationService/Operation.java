@@ -24,6 +24,12 @@ public class Operation  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.EditAccessRights editAccessRights;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.ReadWorkflowSettings readWorkflowSettings;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.EditWorkflowSettings editWorkflowSettings;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.ListSubscribers listSubscribers;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.CheckOut checkOut;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.CheckIn checkIn;
@@ -44,6 +50,9 @@ public class Operation  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.Read read,
            com.hannonhill.www.ws.ns.AssetOperationService.ReadAccessRights readAccessRights,
            com.hannonhill.www.ws.ns.AssetOperationService.EditAccessRights editAccessRights,
+           com.hannonhill.www.ws.ns.AssetOperationService.ReadWorkflowSettings readWorkflowSettings,
+           com.hannonhill.www.ws.ns.AssetOperationService.EditWorkflowSettings editWorkflowSettings,
+           com.hannonhill.www.ws.ns.AssetOperationService.ListSubscribers listSubscribers,
            com.hannonhill.www.ws.ns.AssetOperationService.CheckOut checkOut,
            com.hannonhill.www.ws.ns.AssetOperationService.CheckIn checkIn,
            com.hannonhill.www.ws.ns.AssetOperationService.Copy copy,
@@ -56,6 +65,9 @@ public class Operation  implements java.io.Serializable {
            this.read = read;
            this.readAccessRights = readAccessRights;
            this.editAccessRights = editAccessRights;
+           this.readWorkflowSettings = readWorkflowSettings;
+           this.editWorkflowSettings = editWorkflowSettings;
+           this.listSubscribers = listSubscribers;
            this.checkOut = checkOut;
            this.checkIn = checkIn;
            this.copy = copy;
@@ -224,6 +236,66 @@ public class Operation  implements java.io.Serializable {
 
 
     /**
+     * Gets the readWorkflowSettings value for this Operation.
+     * 
+     * @return readWorkflowSettings
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.ReadWorkflowSettings getReadWorkflowSettings() {
+        return readWorkflowSettings;
+    }
+
+
+    /**
+     * Sets the readWorkflowSettings value for this Operation.
+     * 
+     * @param readWorkflowSettings
+     */
+    public void setReadWorkflowSettings(com.hannonhill.www.ws.ns.AssetOperationService.ReadWorkflowSettings readWorkflowSettings) {
+        this.readWorkflowSettings = readWorkflowSettings;
+    }
+
+
+    /**
+     * Gets the editWorkflowSettings value for this Operation.
+     * 
+     * @return editWorkflowSettings
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.EditWorkflowSettings getEditWorkflowSettings() {
+        return editWorkflowSettings;
+    }
+
+
+    /**
+     * Sets the editWorkflowSettings value for this Operation.
+     * 
+     * @param editWorkflowSettings
+     */
+    public void setEditWorkflowSettings(com.hannonhill.www.ws.ns.AssetOperationService.EditWorkflowSettings editWorkflowSettings) {
+        this.editWorkflowSettings = editWorkflowSettings;
+    }
+
+
+    /**
+     * Gets the listSubscribers value for this Operation.
+     * 
+     * @return listSubscribers
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.ListSubscribers getListSubscribers() {
+        return listSubscribers;
+    }
+
+
+    /**
+     * Sets the listSubscribers value for this Operation.
+     * 
+     * @param listSubscribers
+     */
+    public void setListSubscribers(com.hannonhill.www.ws.ns.AssetOperationService.ListSubscribers listSubscribers) {
+        this.listSubscribers = listSubscribers;
+    }
+
+
+    /**
      * Gets the checkOut value for this Operation.
      * 
      * @return checkOut
@@ -338,6 +410,15 @@ public class Operation  implements java.io.Serializable {
             ((this.editAccessRights==null && other.getEditAccessRights()==null) || 
              (this.editAccessRights!=null &&
               this.editAccessRights.equals(other.getEditAccessRights()))) &&
+            ((this.readWorkflowSettings==null && other.getReadWorkflowSettings()==null) || 
+             (this.readWorkflowSettings!=null &&
+              this.readWorkflowSettings.equals(other.getReadWorkflowSettings()))) &&
+            ((this.editWorkflowSettings==null && other.getEditWorkflowSettings()==null) || 
+             (this.editWorkflowSettings!=null &&
+              this.editWorkflowSettings.equals(other.getEditWorkflowSettings()))) &&
+            ((this.listSubscribers==null && other.getListSubscribers()==null) || 
+             (this.listSubscribers!=null &&
+              this.listSubscribers.equals(other.getListSubscribers()))) &&
             ((this.checkOut==null && other.getCheckOut()==null) || 
              (this.checkOut!=null &&
               this.checkOut.equals(other.getCheckOut()))) &&
@@ -384,6 +465,15 @@ public class Operation  implements java.io.Serializable {
         }
         if (getEditAccessRights() != null) {
             _hashCode += getEditAccessRights().hashCode();
+        }
+        if (getReadWorkflowSettings() != null) {
+            _hashCode += getReadWorkflowSettings().hashCode();
+        }
+        if (getEditWorkflowSettings() != null) {
+            _hashCode += getEditWorkflowSettings().hashCode();
+        }
+        if (getListSubscribers() != null) {
+            _hashCode += getListSubscribers().hashCode();
         }
         if (getCheckOut() != null) {
             _hashCode += getCheckOut().hashCode();
@@ -460,6 +550,27 @@ public class Operation  implements java.io.Serializable {
         elemField.setFieldName("editAccessRights");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editAccessRights"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editAccessRights"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("readWorkflowSettings");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "readWorkflowSettings"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "readWorkflowSettings"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("editWorkflowSettings");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editWorkflowSettings"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editWorkflowSettings"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("listSubscribers");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "listSubscribers"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "listSubscribers"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

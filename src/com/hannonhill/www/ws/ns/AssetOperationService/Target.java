@@ -46,6 +46,12 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
 
     private java.lang.String cronExpression;
 
+    private java.lang.String sendReportToUsers;
+
+    private java.lang.String sendReportToGroups;
+
+    private java.lang.Boolean sendReportOnErrorOnly;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children;
 
     public Target() {
@@ -73,6 +79,9 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
            org.apache.axis.types.NonNegativeInteger publishIntervalHours,
            com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] publishDaysOfWeek,
            java.lang.String cronExpression,
+           java.lang.String sendReportToUsers,
+           java.lang.String sendReportToGroups,
+           java.lang.Boolean sendReportOnErrorOnly,
            com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children) {
         super(
             id,
@@ -96,6 +105,9 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
         this.publishIntervalHours = publishIntervalHours;
         this.publishDaysOfWeek = publishDaysOfWeek;
         this.cronExpression = cronExpression;
+        this.sendReportToUsers = sendReportToUsers;
+        this.sendReportToGroups = sendReportToGroups;
+        this.sendReportOnErrorOnly = sendReportOnErrorOnly;
         this.children = children;
     }
 
@@ -481,6 +493,66 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
 
 
     /**
+     * Gets the sendReportToUsers value for this Target.
+     * 
+     * @return sendReportToUsers
+     */
+    public java.lang.String getSendReportToUsers() {
+        return sendReportToUsers;
+    }
+
+
+    /**
+     * Sets the sendReportToUsers value for this Target.
+     * 
+     * @param sendReportToUsers
+     */
+    public void setSendReportToUsers(java.lang.String sendReportToUsers) {
+        this.sendReportToUsers = sendReportToUsers;
+    }
+
+
+    /**
+     * Gets the sendReportToGroups value for this Target.
+     * 
+     * @return sendReportToGroups
+     */
+    public java.lang.String getSendReportToGroups() {
+        return sendReportToGroups;
+    }
+
+
+    /**
+     * Sets the sendReportToGroups value for this Target.
+     * 
+     * @param sendReportToGroups
+     */
+    public void setSendReportToGroups(java.lang.String sendReportToGroups) {
+        this.sendReportToGroups = sendReportToGroups;
+    }
+
+
+    /**
+     * Gets the sendReportOnErrorOnly value for this Target.
+     * 
+     * @return sendReportOnErrorOnly
+     */
+    public java.lang.Boolean getSendReportOnErrorOnly() {
+        return sendReportOnErrorOnly;
+    }
+
+
+    /**
+     * Sets the sendReportOnErrorOnly value for this Target.
+     * 
+     * @param sendReportOnErrorOnly
+     */
+    public void setSendReportOnErrorOnly(java.lang.Boolean sendReportOnErrorOnly) {
+        this.sendReportOnErrorOnly = sendReportOnErrorOnly;
+    }
+
+
+    /**
      * Gets the children value for this Target.
      * 
      * @return children
@@ -568,6 +640,15 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
             ((this.cronExpression==null && other.getCronExpression()==null) || 
              (this.cronExpression!=null &&
               this.cronExpression.equals(other.getCronExpression()))) &&
+            ((this.sendReportToUsers==null && other.getSendReportToUsers()==null) || 
+             (this.sendReportToUsers!=null &&
+              this.sendReportToUsers.equals(other.getSendReportToUsers()))) &&
+            ((this.sendReportToGroups==null && other.getSendReportToGroups()==null) || 
+             (this.sendReportToGroups!=null &&
+              this.sendReportToGroups.equals(other.getSendReportToGroups()))) &&
+            ((this.sendReportOnErrorOnly==null && other.getSendReportOnErrorOnly()==null) || 
+             (this.sendReportOnErrorOnly!=null &&
+              this.sendReportOnErrorOnly.equals(other.getSendReportOnErrorOnly()))) &&
             ((this.children==null && other.getChildren()==null) || 
              (this.children!=null &&
               java.util.Arrays.equals(this.children, other.getChildren())));
@@ -646,6 +727,15 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
         }
         if (getCronExpression() != null) {
             _hashCode += getCronExpression().hashCode();
+        }
+        if (getSendReportToUsers() != null) {
+            _hashCode += getSendReportToUsers().hashCode();
+        }
+        if (getSendReportToGroups() != null) {
+            _hashCode += getSendReportToGroups().hashCode();
+        }
+        if (getSendReportOnErrorOnly() != null) {
+            _hashCode += getSendReportOnErrorOnly().hashCode();
         }
         if (getChildren() != null) {
             for (int i=0;
@@ -797,6 +887,27 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
         elemField.setFieldName("cronExpression");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cronExpression"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendReportToUsers");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendReportToUsers"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendReportToGroups");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendReportToGroups"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendReportOnErrorOnly");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendReportOnErrorOnly"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

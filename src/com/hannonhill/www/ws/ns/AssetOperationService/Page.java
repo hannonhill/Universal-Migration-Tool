@@ -22,6 +22,8 @@ public class Page  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
 
     private com.hannonhill.www.ws.ns.AssetOperationService.PageConfiguration[] pageConfigurations;
 
+    private java.lang.Boolean maintainAbsoluteLinks;
+
     public Page() {
     }
 
@@ -53,7 +55,8 @@ public class Page  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
            java.lang.String contentTypePath,
            com.hannonhill.www.ws.ns.AssetOperationService.StructuredData structuredData,
            java.lang.String xhtml,
-           com.hannonhill.www.ws.ns.AssetOperationService.PageConfiguration[] pageConfigurations) {
+           com.hannonhill.www.ws.ns.AssetOperationService.PageConfiguration[] pageConfigurations,
+           java.lang.Boolean maintainAbsoluteLinks) {
         super(
             id,
             name,
@@ -83,6 +86,7 @@ public class Page  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
         this.structuredData = structuredData;
         this.xhtml = xhtml;
         this.pageConfigurations = pageConfigurations;
+        this.maintainAbsoluteLinks = maintainAbsoluteLinks;
     }
 
 
@@ -225,6 +229,26 @@ public class Page  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
         this.pageConfigurations = pageConfigurations;
     }
 
+
+    /**
+     * Gets the maintainAbsoluteLinks value for this Page.
+     * 
+     * @return maintainAbsoluteLinks
+     */
+    public java.lang.Boolean getMaintainAbsoluteLinks() {
+        return maintainAbsoluteLinks;
+    }
+
+
+    /**
+     * Sets the maintainAbsoluteLinks value for this Page.
+     * 
+     * @param maintainAbsoluteLinks
+     */
+    public void setMaintainAbsoluteLinks(java.lang.Boolean maintainAbsoluteLinks) {
+        this.maintainAbsoluteLinks = maintainAbsoluteLinks;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Page)) return false;
@@ -257,7 +281,10 @@ public class Page  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
               this.xhtml.equals(other.getXhtml()))) &&
             ((this.pageConfigurations==null && other.getPageConfigurations()==null) || 
              (this.pageConfigurations!=null &&
-              java.util.Arrays.equals(this.pageConfigurations, other.getPageConfigurations())));
+              java.util.Arrays.equals(this.pageConfigurations, other.getPageConfigurations()))) &&
+            ((this.maintainAbsoluteLinks==null && other.getMaintainAbsoluteLinks()==null) || 
+             (this.maintainAbsoluteLinks!=null &&
+              this.maintainAbsoluteLinks.equals(other.getMaintainAbsoluteLinks())));
         __equalsCalc = null;
         return _equals;
     }
@@ -297,6 +324,9 @@ public class Page  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
                     _hashCode += obj.hashCode();
                 }
             }
+        }
+        if (getMaintainAbsoluteLinks() != null) {
+            _hashCode += getMaintainAbsoluteLinks().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -357,6 +387,13 @@ public class Page  extends com.hannonhill.www.ws.ns.AssetOperationService.Publis
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "pageConfiguration"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("maintainAbsoluteLinks");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "maintainAbsoluteLinks"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }
 

@@ -1,5 +1,5 @@
 /**
- * Publish.java
+ * ReadWorkflowSettings.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 12, 2007 (02:39:05 EDT) WSDL2Java emitter.
@@ -7,41 +7,41 @@
 
 package com.hannonhill.www.ws.ns.AssetOperationService;
 
-public class Publish  implements java.io.Serializable {
-    private com.hannonhill.www.ws.ns.AssetOperationService.PublishInformation publishInformation;
+public class ReadWorkflowSettings  implements java.io.Serializable {
+    private com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier;
 
-    public Publish() {
+    public ReadWorkflowSettings() {
     }
 
-    public Publish(
-           com.hannonhill.www.ws.ns.AssetOperationService.PublishInformation publishInformation) {
-           this.publishInformation = publishInformation;
-    }
-
-
-    /**
-     * Gets the publishInformation value for this Publish.
-     * 
-     * @return publishInformation
-     */
-    public com.hannonhill.www.ws.ns.AssetOperationService.PublishInformation getPublishInformation() {
-        return publishInformation;
+    public ReadWorkflowSettings(
+           com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier) {
+           this.identifier = identifier;
     }
 
 
     /**
-     * Sets the publishInformation value for this Publish.
+     * Gets the identifier value for this ReadWorkflowSettings.
      * 
-     * @param publishInformation
+     * @return identifier
      */
-    public void setPublishInformation(com.hannonhill.www.ws.ns.AssetOperationService.PublishInformation publishInformation) {
-        this.publishInformation = publishInformation;
+    public com.hannonhill.www.ws.ns.AssetOperationService.Identifier getIdentifier() {
+        return identifier;
+    }
+
+
+    /**
+     * Sets the identifier value for this ReadWorkflowSettings.
+     * 
+     * @param identifier
+     */
+    public void setIdentifier(com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier) {
+        this.identifier = identifier;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof Publish)) return false;
-        Publish other = (Publish) obj;
+        if (!(obj instanceof ReadWorkflowSettings)) return false;
+        ReadWorkflowSettings other = (ReadWorkflowSettings) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -50,9 +50,9 @@ public class Publish  implements java.io.Serializable {
         __equalsCalc = obj;
         boolean _equals;
         _equals = true && 
-            ((this.publishInformation==null && other.getPublishInformation()==null) || 
-             (this.publishInformation!=null &&
-              this.publishInformation.equals(other.getPublishInformation())));
+            ((this.identifier==null && other.getIdentifier()==null) || 
+             (this.identifier!=null &&
+              this.identifier.equals(other.getIdentifier())));
         __equalsCalc = null;
         return _equals;
     }
@@ -64,8 +64,8 @@ public class Publish  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        if (getPublishInformation() != null) {
-            _hashCode += getPublishInformation().hashCode();
+        if (getIdentifier() != null) {
+            _hashCode += getIdentifier().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -73,14 +73,14 @@ public class Publish  implements java.io.Serializable {
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(Publish.class, true);
+        new org.apache.axis.description.TypeDesc(ReadWorkflowSettings.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publish"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "readWorkflowSettings"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("publishInformation");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishInformation"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishInformation"));
+        elemField.setFieldName("identifier");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }

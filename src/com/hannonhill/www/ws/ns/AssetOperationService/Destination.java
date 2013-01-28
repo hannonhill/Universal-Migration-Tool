@@ -22,6 +22,8 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     private java.lang.Boolean enabled;
 
+    private java.lang.Boolean checkedByDefault;
+
     private java.lang.Boolean publishASCII;
 
     private java.lang.Boolean usesScheduledPublishing;
@@ -33,6 +35,12 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
     private com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] publishDaysOfWeek;
 
     private java.lang.String cronExpression;
+
+    private java.lang.String sendReportToUsers;
+
+    private java.lang.String sendReportToGroups;
+
+    private java.lang.Boolean sendReportOnErrorOnly;
 
     private java.lang.String webUrl;
 
@@ -53,12 +61,16 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
            java.lang.String applicableGroups,
            java.lang.String directory,
            java.lang.Boolean enabled,
+           java.lang.Boolean checkedByDefault,
            java.lang.Boolean publishASCII,
            java.lang.Boolean usesScheduledPublishing,
            org.apache.axis.types.Time timeToPublish,
            org.apache.axis.types.NonNegativeInteger publishIntervalHours,
            com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] publishDaysOfWeek,
            java.lang.String cronExpression,
+           java.lang.String sendReportToUsers,
+           java.lang.String sendReportToGroups,
+           java.lang.Boolean sendReportOnErrorOnly,
            java.lang.String webUrl,
            java.lang.String siteId,
            java.lang.String siteName) {
@@ -72,12 +84,16 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.applicableGroups = applicableGroups;
         this.directory = directory;
         this.enabled = enabled;
+        this.checkedByDefault = checkedByDefault;
         this.publishASCII = publishASCII;
         this.usesScheduledPublishing = usesScheduledPublishing;
         this.timeToPublish = timeToPublish;
         this.publishIntervalHours = publishIntervalHours;
         this.publishDaysOfWeek = publishDaysOfWeek;
         this.cronExpression = cronExpression;
+        this.sendReportToUsers = sendReportToUsers;
+        this.sendReportToGroups = sendReportToGroups;
+        this.sendReportOnErrorOnly = sendReportOnErrorOnly;
         this.webUrl = webUrl;
         this.siteId = siteId;
         this.siteName = siteName;
@@ -225,6 +241,26 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
 
 
     /**
+     * Gets the checkedByDefault value for this Destination.
+     * 
+     * @return checkedByDefault
+     */
+    public java.lang.Boolean getCheckedByDefault() {
+        return checkedByDefault;
+    }
+
+
+    /**
+     * Sets the checkedByDefault value for this Destination.
+     * 
+     * @param checkedByDefault
+     */
+    public void setCheckedByDefault(java.lang.Boolean checkedByDefault) {
+        this.checkedByDefault = checkedByDefault;
+    }
+
+
+    /**
      * Gets the publishASCII value for this Destination.
      * 
      * @return publishASCII
@@ -345,6 +381,66 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
 
 
     /**
+     * Gets the sendReportToUsers value for this Destination.
+     * 
+     * @return sendReportToUsers
+     */
+    public java.lang.String getSendReportToUsers() {
+        return sendReportToUsers;
+    }
+
+
+    /**
+     * Sets the sendReportToUsers value for this Destination.
+     * 
+     * @param sendReportToUsers
+     */
+    public void setSendReportToUsers(java.lang.String sendReportToUsers) {
+        this.sendReportToUsers = sendReportToUsers;
+    }
+
+
+    /**
+     * Gets the sendReportToGroups value for this Destination.
+     * 
+     * @return sendReportToGroups
+     */
+    public java.lang.String getSendReportToGroups() {
+        return sendReportToGroups;
+    }
+
+
+    /**
+     * Sets the sendReportToGroups value for this Destination.
+     * 
+     * @param sendReportToGroups
+     */
+    public void setSendReportToGroups(java.lang.String sendReportToGroups) {
+        this.sendReportToGroups = sendReportToGroups;
+    }
+
+
+    /**
+     * Gets the sendReportOnErrorOnly value for this Destination.
+     * 
+     * @return sendReportOnErrorOnly
+     */
+    public java.lang.Boolean getSendReportOnErrorOnly() {
+        return sendReportOnErrorOnly;
+    }
+
+
+    /**
+     * Sets the sendReportOnErrorOnly value for this Destination.
+     * 
+     * @param sendReportOnErrorOnly
+     */
+    public void setSendReportOnErrorOnly(java.lang.Boolean sendReportOnErrorOnly) {
+        this.sendReportOnErrorOnly = sendReportOnErrorOnly;
+    }
+
+
+    /**
      * Gets the webUrl value for this Destination.
      * 
      * @return webUrl
@@ -436,6 +532,9 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
             ((this.enabled==null && other.getEnabled()==null) || 
              (this.enabled!=null &&
               this.enabled.equals(other.getEnabled()))) &&
+            ((this.checkedByDefault==null && other.getCheckedByDefault()==null) || 
+             (this.checkedByDefault!=null &&
+              this.checkedByDefault.equals(other.getCheckedByDefault()))) &&
             ((this.publishASCII==null && other.getPublishASCII()==null) || 
              (this.publishASCII!=null &&
               this.publishASCII.equals(other.getPublishASCII()))) &&
@@ -454,6 +553,15 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
             ((this.cronExpression==null && other.getCronExpression()==null) || 
              (this.cronExpression!=null &&
               this.cronExpression.equals(other.getCronExpression()))) &&
+            ((this.sendReportToUsers==null && other.getSendReportToUsers()==null) || 
+             (this.sendReportToUsers!=null &&
+              this.sendReportToUsers.equals(other.getSendReportToUsers()))) &&
+            ((this.sendReportToGroups==null && other.getSendReportToGroups()==null) || 
+             (this.sendReportToGroups!=null &&
+              this.sendReportToGroups.equals(other.getSendReportToGroups()))) &&
+            ((this.sendReportOnErrorOnly==null && other.getSendReportOnErrorOnly()==null) || 
+             (this.sendReportOnErrorOnly!=null &&
+              this.sendReportOnErrorOnly.equals(other.getSendReportOnErrorOnly()))) &&
             ((this.webUrl==null && other.getWebUrl()==null) || 
              (this.webUrl!=null &&
               this.webUrl.equals(other.getWebUrl()))) &&
@@ -495,6 +603,9 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         if (getEnabled() != null) {
             _hashCode += getEnabled().hashCode();
         }
+        if (getCheckedByDefault() != null) {
+            _hashCode += getCheckedByDefault().hashCode();
+        }
         if (getPublishASCII() != null) {
             _hashCode += getPublishASCII().hashCode();
         }
@@ -520,6 +631,15 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         }
         if (getCronExpression() != null) {
             _hashCode += getCronExpression().hashCode();
+        }
+        if (getSendReportToUsers() != null) {
+            _hashCode += getSendReportToUsers().hashCode();
+        }
+        if (getSendReportToGroups() != null) {
+            _hashCode += getSendReportToGroups().hashCode();
+        }
+        if (getSendReportOnErrorOnly() != null) {
+            _hashCode += getSendReportOnErrorOnly().hashCode();
         }
         if (getWebUrl() != null) {
             _hashCode += getWebUrl().hashCode();
@@ -590,6 +710,13 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("checkedByDefault");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "checkedByDefault"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("publishASCII");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishASCII"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
@@ -629,6 +756,27 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField.setFieldName("cronExpression");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cronExpression"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendReportToUsers");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendReportToUsers"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendReportToGroups");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendReportToGroups"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendReportOnErrorOnly");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendReportOnErrorOnly"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

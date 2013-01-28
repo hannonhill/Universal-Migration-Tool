@@ -18,7 +18,7 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility visibility;
 
-    private java.lang.String configurationXML;
+    private com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinitionValue[] possibleValues;
 
     public DynamicMetadataFieldDefinition() {
     }
@@ -29,13 +29,13 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldType fieldType,
            java.lang.Boolean required,
            com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility visibility,
-           java.lang.String configurationXML) {
+           com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinitionValue[] possibleValues) {
            this.name = name;
            this.label = label;
            this.fieldType = fieldType;
            this.required = required;
            this.visibility = visibility;
-           this.configurationXML = configurationXML;
+           this.possibleValues = possibleValues;
     }
 
 
@@ -140,22 +140,22 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
 
 
     /**
-     * Gets the configurationXML value for this DynamicMetadataFieldDefinition.
+     * Gets the possibleValues value for this DynamicMetadataFieldDefinition.
      * 
-     * @return configurationXML
+     * @return possibleValues
      */
-    public java.lang.String getConfigurationXML() {
-        return configurationXML;
+    public com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinitionValue[] getPossibleValues() {
+        return possibleValues;
     }
 
 
     /**
-     * Sets the configurationXML value for this DynamicMetadataFieldDefinition.
+     * Sets the possibleValues value for this DynamicMetadataFieldDefinition.
      * 
-     * @param configurationXML
+     * @param possibleValues
      */
-    public void setConfigurationXML(java.lang.String configurationXML) {
-        this.configurationXML = configurationXML;
+    public void setPossibleValues(com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinitionValue[] possibleValues) {
+        this.possibleValues = possibleValues;
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -185,9 +185,9 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
             ((this.visibility==null && other.getVisibility()==null) || 
              (this.visibility!=null &&
               this.visibility.equals(other.getVisibility()))) &&
-            ((this.configurationXML==null && other.getConfigurationXML()==null) || 
-             (this.configurationXML!=null &&
-              this.configurationXML.equals(other.getConfigurationXML())));
+            ((this.possibleValues==null && other.getPossibleValues()==null) || 
+             (this.possibleValues!=null &&
+              java.util.Arrays.equals(this.possibleValues, other.getPossibleValues())));
         __equalsCalc = null;
         return _equals;
     }
@@ -214,8 +214,16 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
         if (getVisibility() != null) {
             _hashCode += getVisibility().hashCode();
         }
-        if (getConfigurationXML() != null) {
-            _hashCode += getConfigurationXML().hashCode();
+        if (getPossibleValues() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getPossibleValues());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getPossibleValues(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -260,10 +268,12 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("configurationXML");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "configurationXML"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setFieldName("possibleValues");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "possibleValues"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dynamic-metadata-field-definition-value"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(false);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "possibleValue"));
         typeDesc.addFieldDesc(elemField);
     }
 

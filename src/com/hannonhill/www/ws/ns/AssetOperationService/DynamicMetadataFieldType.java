@@ -21,10 +21,12 @@ public class DynamicMetadataFieldType implements java.io.Serializable {
     public static final java.lang.String _radio = "radio";
     public static final java.lang.String _dropdown = "dropdown";
     public static final java.lang.String _checkbox = "checkbox";
+    public static final java.lang.String _multiselect = "multiselect";
     public static final DynamicMetadataFieldType text = new DynamicMetadataFieldType(_text);
     public static final DynamicMetadataFieldType radio = new DynamicMetadataFieldType(_radio);
     public static final DynamicMetadataFieldType dropdown = new DynamicMetadataFieldType(_dropdown);
     public static final DynamicMetadataFieldType checkbox = new DynamicMetadataFieldType(_checkbox);
+    public static final DynamicMetadataFieldType multiselect = new DynamicMetadataFieldType(_multiselect);
     public java.lang.String getValue() { return _value_;}
     public static DynamicMetadataFieldType fromValue(java.lang.String value)
           throws java.lang.IllegalArgumentException {
