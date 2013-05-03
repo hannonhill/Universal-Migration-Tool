@@ -1,6 +1,6 @@
-<project name="SMT">
+<project name="MT">
 
-    <description>Serena Migration Tool</description>
+    <description>Migration Tool</description>
 
     <property name="src.dir" value="src"/>
 	<property name="dist.dir" value="dist"/>
