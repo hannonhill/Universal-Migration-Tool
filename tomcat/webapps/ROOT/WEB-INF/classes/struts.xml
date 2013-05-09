@@ -36,19 +36,12 @@
         <action name="AnalyzeInformation" class="com.hannonhill.smt.struts.AnalyzeInformationAction">
         	<result name="input">/jsps/AnalyzeInformation.jsp</result>
         	<result name="success" type="redirectAction">
-        		<param name="actionName">AssignRootLevelFolders</param>
+        		<param name="actionName">AssignContentType</param>
         	</result>
         </action>
         
-        <action name="AssignRootLevelFolders" class="com.hannonhill.smt.struts.AssignRootLevelFoldersAction">
-        	<result name="input">/jsps/AssignRootLevelFolders.jsp</result>
-        	<result name="success" type="redirectAction">
-        		<param name="actionName">AssignContentTypes</param>
-        	</result>
-        </action>
-        
-        <action name="AssignContentTypes" class="com.hannonhill.smt.struts.AssignContentTypesAction">
-        	<result name="input">/jsps/AssignContentTypes.jsp</result>
+        <action name="AssignContentType" class="com.hannonhill.smt.struts.AssignContentTypeAction">
+        	<result name="input">/jsps/AssignContentType.jsp</result>
         	<result name="success" type="redirectAction">
         		<param name="actionName">AssignFields</param>
         	</result>

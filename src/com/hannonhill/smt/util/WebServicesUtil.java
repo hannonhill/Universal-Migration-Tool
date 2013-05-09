@@ -5,21 +5,21 @@
  */
 package com.hannonhill.smt.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.ChooserType;
 import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.DataDefinitionField;
-import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.MetadataSetField;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.TaskStatus;
+import com.hannonhill.smt.service.FileSystem;
 import com.hannonhill.smt.service.JTidy;
 import com.hannonhill.smt.service.LinkRewriter;
 import com.hannonhill.smt.service.Log;
@@ -43,25 +43,24 @@ import com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataType;
 public class WebServicesUtil
 {
     /**
-     * Creates a page object based on the information provided in the xmlPage and the mappings in
-     * projectInformation.
+     * Creates a Page object based on the information provided in the projectInformation and the actual file
+     * from which the Page needs to be created.
      * 
-     * @param xmlPage
+     * @param pageFile
      * @param projectInformation
      * @return
      * @throws Exception
      */
-    public static Page setupPageObject(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
+    public static Page setupPageObject(File pageFile, ProjectInformation projectInformation) throws Exception
     {
-        String path = xmlPage.getDeployPath();
+        String path = PathUtil.truncateExtension(PathUtil.getRelativePath(pageFile, projectInformation.getXmlDirectory()));
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
+        String pageFileContents = JTidy.tidyContent(FileSystem.getFileContents(pageFile));
         if (parentFolderPath.equals(""))
             parentFolderPath = "/";
 
-        String assetTypeName = xmlPage.getAssetType();
-        AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
-        String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
+        String contentTypePath = projectInformation.getContentTypePath();
         ContentTypeInformation contentType = projectInformation.getContentTypes().get(contentTypePath);
         Set<String> metadataFieldNames = contentType.getMetadataFields().keySet();
 
@@ -70,10 +69,10 @@ public class WebServicesUtil
         page.setName(pageName);
         page.setParentFolderPath(parentFolderPath);
         page.setSiteName(projectInformation.getSiteName());
-        page.setMetadata(createPageMetadata(xmlPage, assetType, metadataFieldNames, projectInformation.getMigrationStatus()));
+        page.setMetadata(createPageMetadata(projectInformation, pageFileContents, metadataFieldNames, projectInformation.getMigrationStatus()));
 
         // Create the structured data object with the tree of structured data nodes
-        StructuredData structuredData = createPageStructuredData(xmlPage, assetType, projectInformation);
+        StructuredData structuredData = createPageStructuredData(projectInformation, parentFolderPath + "/" + pageName, pageFileContents);
 
         // If page uses data definition, assign it to the page object
         if (contentType.isUsesDataDefinition())
@@ -99,50 +98,39 @@ public class WebServicesUtil
      * Creates the page's structured data object with the values from the xmlPage uses the mappings from the
      * assetType.
      * 
-     * @param xmlPage
-     * @param assetType
      * @param projectInformation
+     * @param fileContents
+     * @param assetPath
      * @return
      * @throws Exception
      */
-    private static StructuredData createPageStructuredData(DetailedXmlPageInformation xmlPage, AssetType assetType,
-            ProjectInformation projectInformation) throws Exception
+    private static StructuredData createPageStructuredData(ProjectInformation projectInformation, String fileContents, String assetPath)
+            throws Exception
     {
         // Create the root group object to which all the information will be attached
         StructuredDataGroup rootGroup = new StructuredDataGroup();
 
-        // For each xml metadata field, find a mapping and assign appropriate value in structured data
-        for (String xmlMetadataFieldName : xmlPage.getMetadataMap().keySet())
+        // For each field mapping assign appropriate value in structured data
+        for (String xPath : projectInformation.getFieldMapping().keySet())
         {
-            Field field = assetType.getMetadataFieldMapping().get(xmlMetadataFieldName);
+            Field field = projectInformation.getFieldMapping().get(xPath);
 
             if (field == null)
                 continue;
 
-            String fieldValue = xmlPage.getMetadataMap().get(xmlMetadataFieldName);
-            if (field instanceof DataDefinitionField)
-                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
-        }
+            String fieldValue = XmlUtil.evaluateXPathExpression(fileContents, xPath);
+            fieldValue = LinkRewriter.rewriteLinksInXml(fieldValue, assetPath, projectInformation);
 
-        // For each xml content field, find a mapping and assign appropriate value in structured data
-        for (String xmlContentFieldName : xmlPage.getContentMap().keySet())
-        {
-            Field field = assetType.getContentFieldMapping().get(xmlContentFieldName);
-
-            if (field == null)
-                continue;
-
-            String fieldValue = xmlPage.getContentMap().get(xmlContentFieldName);
             if (field instanceof DataDefinitionField)
                 assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
         }
 
         // For each static value field, assign the static value in structured data
-        for (Field field : assetType.getStaticValueMapping().keySet())
+        for (Field field : projectInformation.getStaticValueMapping().keySet())
             if (field instanceof DataDefinitionField)
             {
                 // Escape ampersands to make it a valid xml
-                String fieldValue = assetType.getStaticValueMapping().get(field).replaceAll("&", "&amp;");
+                String fieldValue = projectInformation.getStaticValueMapping().get(field).replaceAll("&", "&amp;");
                 assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
             }
 
@@ -153,14 +141,14 @@ public class WebServicesUtil
      * Creates the page's metadata object with the values from the xmlPage uses the mappings from the
      * assetType.
      * 
-     * @param xmlPage
-     * @param assetType
+     * @param projectInformation
+     * @param fileContents
      * @param availableMetadataFieldNames
      * @param taskStatus
      * @return
      * @throws Exception
      */
-    private static Metadata createPageMetadata(DetailedXmlPageInformation xmlPage, AssetType assetType, Set<String> availableMetadataFieldNames,
+    private static Metadata createPageMetadata(ProjectInformation projectInformation, String fileContents, Set<String> availableMetadataFieldNames,
             TaskStatus taskStatus) throws Exception
     {
         // Create the metadata object and the list of dynamic fields
@@ -175,43 +163,29 @@ public class WebServicesUtil
                     new FieldValue("")
                 }));
 
-        // For each xml metadata field, find a mapping and assign appropriate value in metadata
-        for (String xmlMetadataFieldName : xmlPage.getMetadataMap().keySet())
+        // For each field mapping assign appropriate value in metadata
+        for (String xPath : projectInformation.getFieldMapping().keySet())
         {
-            Field field = assetType.getMetadataFieldMapping().get(xmlMetadataFieldName);
+            Field field = projectInformation.getFieldMapping().get(xPath);
 
             if (field == null)
                 continue;
 
             if (field instanceof MetadataSetField)
             {
-                String fieldValue = trimMetadataFieldValue(field.getIdentifier(), xmlPage.getMetadataMap().get(xmlMetadataFieldName), taskStatus);
-                assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
-            }
-        }
-
-        // For each xml content field, find a mapping and assign appropriate value in metadata
-        for (String xmlContentFieldName : xmlPage.getContentMap().keySet())
-        {
-            Field field = assetType.getContentFieldMapping().get(xmlContentFieldName);
-
-            if (field == null)
-                continue;
-
-            if (field instanceof MetadataSetField)
-            {
-                String fieldValue = trimMetadataFieldValue(field.getIdentifier(), xmlPage.getContentMap().get(xmlContentFieldName), taskStatus);
+                String fieldValue = XmlUtil.evaluateXPathExpression(fileContents, xPath);
+                fieldValue = trimMetadataFieldValue(field.getIdentifier(), fieldValue, taskStatus);
                 assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
             }
         }
 
         // For each static value field, assign the static value in the metadata
-        for (Field field : assetType.getStaticValueMapping().keySet())
+        for (Field field : projectInformation.getStaticValueMapping().keySet())
             if (field instanceof MetadataSetField)
             {
                 // Escape ampersands to make it a valid xml
                 String fieldValue = trimMetadataFieldValue(field.getIdentifier(),
-                        assetType.getStaticValueMapping().get(field).replaceAll("&", "&amp;"), taskStatus);
+                        projectInformation.getStaticValueMapping().get(field).replaceAll("&", "&amp;"), taskStatus);
                 assignAppropriateFieldValue(metadata, dynamicFieldsList, (MetadataSetField) field, fieldValue);
             }
 

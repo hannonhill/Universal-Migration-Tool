@@ -6,7 +6,7 @@ Deploying SMT in an Eclipse debugger:
   b) In the "Servers" view, right click and select New -> Server
   c) From the list, choose Tomcat v6.0 Server
   d) In the Server runtime environment line, click "Add..."
-  e) Click Browse and locate the "tomcat" folder inside of this Migration Tool project
+  e) Click Browse and locate the "tomcat" folder inside of this Generic Migration Tool project
   f) Click Finish
   g) Name your Server appropriately
   d) Click Finish

@@ -1,7 +1,7 @@
 /*
  * Created on Dec 2, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.struts;
 
@@ -15,9 +15,9 @@ import com.hannonhill.smt.ProjectInformation;
 /**
  * Action responsible for displaying a migration summary
  * 
- * @author  Artur Tomusiak
+ * @author Artur Tomusiak
  * @version $Id$
- * @since   1.0
+ * @since 1.0
  */
 public class MigrationSummaryAction extends BaseAction
 {
@@ -68,14 +68,6 @@ public class MigrationSummaryAction extends BaseAction
         overwriteBehavior = getProjectInformation().getOverwriteBehavior();
 
         return INPUT;
-    }
-
-    /**
-     * @return Returns the number of asset types
-     */
-    public int getNAssetTypes()
-    {
-        return getProjectInformation().getAssetTypeNames().size();
     }
 
     /**

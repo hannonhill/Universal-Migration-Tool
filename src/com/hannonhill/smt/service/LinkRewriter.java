@@ -17,14 +17,11 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.ExternalRootLevelFolderAssignment;
-import com.hannonhill.smt.LuminisLink;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
 import com.hannonhill.smt.util.XmlUtil;
@@ -40,66 +37,6 @@ public class LinkRewriter
     public static final String LUMINIS_FILE_PREFIX = "[luminis-file]";
     private static final String DEFAULT_FILES_FOLDER = "files"; // Used when there is no webViewUrl to decide
                                                                 // where a file should go
-
-    /**
-     * Rewrites all the file and page links in the content and metadata fields of the Serena page. If it is a
-     * page link (ends with any extension of the extensions in possibleExtensions set and is relative), the
-     * extension will be stripped. Also, removes the Serena specific attributes: cmid and collagestyle from
-     * all tags.
-     * 
-     * @param page
-     * @param projectInformation
-     * @throws Exception
-     */
-    public static void rewriteLinkAndRemoveSerenaAttributes(DetailedXmlPageInformation page, ProjectInformation projectInformation) throws Exception
-    {
-        String pagePath = page.getDeployPath();
-        rewriteLinkAndRemoveSerenaAttributes(page.getContentMap(), pagePath, projectInformation);
-        rewriteLinkAndRemoveSerenaAttributes(page.getMetadataMap(), pagePath, projectInformation);
-    }
-
-    /**
-     * Rewrites all occurrences of "/id[number]" in the Luminis page to link to actual asset. The information
-     * about how to link it should be stored in {@link DetailedXmlPageInformation#getLuminisLinks()}.
-     * 
-     * @param page
-     * @param projectInformation
-     */
-    public static void rewriteLuminisLinks(DetailedXmlPageInformation page, ProjectInformation projectInformation)
-    {
-        rewriteLuminisLinks(page.getContentMap(), page, projectInformation);
-        rewriteLuminisLinks(page.getMetadataMap(), page, projectInformation);
-    }
-
-    /**
-     * Rewrites all occurrences of "/id[number]" in the LUminis page's content or metadata map passed as
-     * <code>map</code>.
-     * 
-     * @param map
-     * @param page
-     * @param projectInformation
-     */
-    private static void rewriteLuminisLinks(Map<String, String> map, DetailedXmlPageInformation page, ProjectInformation projectInformation)
-    {
-        for (LuminisLink link : page.getLuminisLinks())
-        {
-            String regex = "\"/id(" + link.getId() + ")\"";
-            String componentRegex = link.getLinkedItemName() + "</sct-component>";
-            String webViewUrl = getWebViewUrl(link.getLinkedItemFolder(), projectInformation.getLinkFileUrlToWebviewUrlMap());
-            for (String fieldIdentifier : map.keySet())
-            {
-                String content = map.get(fieldIdentifier);
-                String newPath = PathUtil.removeLeadingSlashes(webViewUrl + "/" + link.getLinkedItemName());
-                String newContent = content.replaceAll(regex, "\"/" + newPath + "\"");
-                if (newContent.startsWith("/id"))
-                    newContent = LUMINIS_FILE_PREFIX + newPath;
-
-                newContent = newContent.replaceAll(componentRegex, newPath + "</sct-component>");
-
-                map.put(fieldIdentifier, newContent);
-            }
-        }
-    }
 
     /**
      * Recursively tries to figure out webViewUrl of a folder by looking for linkFile.xml in that folder and
@@ -131,38 +68,17 @@ public class LinkRewriter
     }
 
     /**
-     * Rewrites all the file and page links in each value of the map. If it is a page link (ends with .html
-     * extension and is a relative), the .html extension will be stripped. Also, removes the Serena specific
-     * attributes: cmid and collagestyle from all tags.
-     * 
-     * @param map
-     * @param pagePath
-     * @param projectInformation
-     * @throws Exception
-     */
-    private static void rewriteLinkAndRemoveSerenaAttributes(Map<String, String> map, String pagePath, ProjectInformation projectInformation)
-            throws Exception
-    {
-        for (String fieldIdentifier : map.keySet())
-        {
-            String content = map.get(fieldIdentifier);
-            String newContent = rewriteLinkAndRemoveSerenaAttributes(content, pagePath, projectInformation);
-            map.put(fieldIdentifier, newContent);
-        }
-    }
-
-    /**
-     * Rewrites all the file and page links in the xml. If it is a page link (ends with .html extension and is
-     * a relative), the .html extension will be stripped. Also, removes the Serena specific attributes: cmid
-     * and collagestyle from all tags.
+     * Rewrites all the file and page links in the xml. If it is a page link (ends with any of the
+     * {@link XmlAnalyzer#FILE_TO_PAGE_EXTENSIONS} extension and is a relative), the extension will be
+     * stripped.
      * 
      * @param xml
-     * @param pagePath
+     * @param assetPath
      * @param projectInformation
      * @return
      * @throws Exception
      */
-    private static String rewriteLinkAndRemoveSerenaAttributes(String xml, String pagePath, ProjectInformation projectInformation) throws Exception
+    public static String rewriteLinksInXml(String xml, String assetPath, ProjectInformation projectInformation) throws Exception
     {
         // To make things faster, if it's an empty string, just quit
         if (xml == null || xml.equals(""))
@@ -179,7 +95,7 @@ public class LinkRewriter
         Document document = builder.parse(new InputSource(inputStream));
 
         Node rootNode = document.getChildNodes().item(0);
-        rewriteLinkAndRemoveSerenaAttributes(rootNode, pagePath, projectInformation);
+        rewriteLinkInNode(rootNode, assetPath, projectInformation);
 
         // convert document to string
         DOMSource domSource = new DOMSource(document);
@@ -241,14 +157,14 @@ public class LinkRewriter
 
     /**
      * Rewrites the file and page link in the xml tag node and all ancestor nodes. If it is a page link (ends
-     * with .html extension and is a relative), the .html extension will be stripped. Also, removes the Serena
-     * specific attributes: cmid and collagestyle from all tags.
+     * with any of the {@link XmlAnalyzer#FILE_TO_PAGE_EXTENSIONS} extension and is a relative), the extension
+     * will be stripped.
      * 
      * @param node
      * @param pagePath
      * @param projectInformation
      */
-    private static void rewriteLinkAndRemoveSerenaAttributes(Node node, String pagePath, ProjectInformation projectInformation)
+    private static void rewriteLinkInNode(Node node, String pagePath, ProjectInformation projectInformation)
     {
         if (node.getNodeName().equals("img"))
             rewriteLink(node, "src", pagePath, projectInformation);
@@ -259,11 +175,9 @@ public class LinkRewriter
         else if (node.getNodeName().equals("link"))
             rewriteLink(node, "href", pagePath, projectInformation);
 
-        removeSerenaAttributes(node);
-
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++)
-            rewriteLinkAndRemoveSerenaAttributes(children.item(i), pagePath, projectInformation);
+            rewriteLinkInNode(children.item(i), pagePath, projectInformation);
     }
 
     /**
@@ -313,27 +227,9 @@ public class LinkRewriter
     }
 
     /**
-     * Removes Serena specific attributes from the node if they exist
-     * 
-     * @param element
-     */
-    private static void removeSerenaAttributes(Node node)
-    {
-        NamedNodeMap attributes = node.getAttributes();
-        if (attributes != null)
-        {
-            if (attributes.getNamedItem("cmid") != null)
-                attributes.removeNamedItem("cmid");
-            if (attributes.getNamedItem("collagestyle") != null)
-                attributes.removeNamedItem("collagestyle");
-        }
-    }
-
-    /**
      * Rewrites a file or page link in the xml tag node's attribute of given attributeName if it is a relative
-     * link.
-     * If it is a page link (ends with .html extension and is a relative), the .html extension will be
-     * stripped. Keeps the anchor.
+     * link. If it is a page link (ends with any of the {@link XmlAnalyzer#FILE_TO_PAGE_EXTENSIONS} extension
+     * and is a relative), the extension will be stripped. Keeps the anchor.
      * 
      * @param element
      * @param attributeName
@@ -381,6 +277,10 @@ public class LinkRewriter
     private static String rewriteLink(String link, String pagePath, ProjectInformation projectInformation)
     {
         String newPath = PathUtil.convertRelativeToAbsolute(link, pagePath);
+        String extension = PathUtil.getExtension(newPath);
+        if (XmlAnalyzer.FILE_TO_PAGE_EXTENSIONS.contains(extension) || XmlAnalyzer.FILE_TO_BLOCK_EXTENSIONS.contains(extension))
+            newPath = PathUtil.truncateExtension(newPath);
+
         int deployPathLevels = pagePath.split("/").length - 1;
         int linkLevels = PathUtil.countLevelUps(link);
         // if there are same many link levels as the page path levels, it means the link goes to root
@@ -408,13 +308,6 @@ public class LinkRewriter
                                                                                      // site://sitename/folder/page
             }
         }
-
-        // If the link links to a file with extension that is one of the possible extensions used, that means
-        // it is a link to a page
-        // and therefore, the extension in the link needs to be stripped
-        String extension = PathUtil.getExtension(newPath);
-        if (projectInformation.getGatheredExtensions().contains(extension))
-            return PathUtil.truncateExtension(newPath);
 
         return newPath;
     }

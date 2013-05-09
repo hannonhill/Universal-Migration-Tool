@@ -12,7 +12,6 @@ import java.util.Map;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
-import com.hannonhill.smt.AssetType;
 import com.hannonhill.smt.ContentTypeInformation;
 import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.ExternalRootLevelFolderAssignment;
@@ -31,12 +30,8 @@ import com.hannonhill.smt.util.XmlUtil;
 public class MappingPersister
 {
     private static final String PROJECT_INFORMATION_TAG = "projectInformation";
-    private static final String ASSET_TYPES_TAG = "assetTypes";
-    private static final String ASSET_TYPE_TAG = "assetType";
-    private static final String NAME_TAG = "name";
     private static final String MAPPED_CONTENT_TYPE_PATH_TAG = "mappedContentTypePath";
-    private static final String METADATA_FIELD_MAPPINGS_TAG = "metadataFieldMappings";
-    private static final String CONTENT_FIELD_MAPPINGS_TAG = "contentFieldMappings";
+    private static final String FIELD_MAPPINGS_TAG = "fieldMappings";
     private static final String FIELD_MAPPING_TAG = "fieldMapping";
     private static final String FIELD_NAME_TAG = "fieldName";
     private static final String CASCADE_METADATA_FIELD_TAG = "cascadeMetadataField";
@@ -61,10 +56,19 @@ public class MappingPersister
         StringBuilder content = new StringBuilder();
         content.append("<" + PROJECT_INFORMATION_TAG + ">");
 
-        content.append("<" + ASSET_TYPES_TAG + ">");
-        for (AssetType assetType : projectInformation.getAssetTypes().values())
-            persistAssetType(content, projectInformation, assetType);
-        content.append("</" + ASSET_TYPES_TAG + ">");
+        String contentTypePath = projectInformation.getContentTypePath();
+        if (contentTypePath != null)
+            content.append("<" + MAPPED_CONTENT_TYPE_PATH_TAG + ">" + contentTypePath + "</" + MAPPED_CONTENT_TYPE_PATH_TAG + ">");
+
+        content.append("<" + FIELD_MAPPINGS_TAG + ">");
+        for (String metadataFieldName : projectInformation.getFieldMapping().keySet())
+            persistFieldMapping(content, projectInformation.getFieldMapping(), metadataFieldName);
+        content.append("</" + FIELD_MAPPINGS_TAG + ">");
+
+        content.append("<" + STATIC_VALUE_MAPPINGS_TAG + ">");
+        for (Field field : projectInformation.getStaticValueMapping().keySet())
+            persistStaticValueMapping(content, projectInformation.getStaticValueMapping(), field);
+        content.append("</" + STATIC_VALUE_MAPPINGS_TAG + ">");
 
         content.append("<" + ROOT_LEVEL_FOLDERS_TAG + ">");
         for (String folder : projectInformation.getExternalRootLevelFolderAssignemnts().keySet())
@@ -97,38 +101,32 @@ public class MappingPersister
 
             Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new FileInputStream(file)));
 
-            // clear existing asset types
-            projectInformation.getContentTypeMap().clear();
+            // Clear existing values
+            projectInformation.setContentTypePath(null);
+            projectInformation.getFieldMapping().clear();
+            projectInformation.getStaticValueMapping().clear();
 
+            ContentTypeInformation contentType = null;
             for (int i = 0; i < rootNode.getChildNodes().getLength(); i++)
             {
                 Node node = rootNode.getChildNodes().item(i);
-                if (node.getNodeName().equals(ASSET_TYPES_TAG))
-                    loadAssetTypes(projectInformation, node);
-                if (node.getNodeName().equals(ROOT_LEVEL_FOLDERS_TAG))
+                if (node.getNodeName().equals(MAPPED_CONTENT_TYPE_PATH_TAG))
+                {
+                    projectInformation.setContentTypePath(node.getTextContent());
+                    contentType = projectInformation.getContentTypes().get(projectInformation.getContentTypePath());
+                }
+                else if (node.getNodeName().equals(ROOT_LEVEL_FOLDERS_TAG))
                     loadRootLevelFolders(projectInformation, node);
+                else if (node.getNodeName().equals(FIELD_MAPPINGS_TAG))
+                    loadFieldMappings(node, projectInformation.getFieldMapping(), contentType);
+                else if (node.getNodeName().equals(STATIC_VALUE_MAPPINGS_TAG))
+                    loadStaticValueMappings(node, projectInformation.getStaticValueMapping(), contentType);
             }
         }
         catch (Exception e)
         {
             // If problem occured, don't do anything. Just show the stack trace.
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Loads the asset mappings which consist of field mappings as well
-     * 
-     * @param projectInformation
-     * @param assetTypesNode
-     */
-    private static void loadAssetTypes(ProjectInformation projectInformation, Node assetTypesNode)
-    {
-        for (int i = 0; i < assetTypesNode.getChildNodes().getLength(); i++)
-        {
-            Node node = assetTypesNode.getChildNodes().item(i);
-            if (node.getNodeName().equals(ASSET_TYPE_TAG))
-                loadAssetType(projectInformation, node);
         }
     }
 
@@ -173,66 +171,6 @@ public class MappingPersister
         }
         ExternalRootLevelFolderAssignment assignment = new ExternalRootLevelFolderAssignment(folder, crossSiteAssignment, externalLinkAssignment);
         projectInformation.getExternalRootLevelFolderAssignemnts().put(folder, assignment);
-    }
-
-    /**
-     * Finds the asset type with the name in the &lt;name&gt; child tag and assigns its available properties.
-     * If the asset type with given name could not be found, it gets ignored.
-     * 
-     * @param projectInformation
-     * @param assetTypeNode
-     */
-    private static void loadAssetType(ProjectInformation projectInformation, Node assetTypeNode)
-    {
-        // find the asset type name and the mapped content type path
-        String assetTypeName = null;
-        String mappedContentTypePath = null;
-        Node metadataFieldMappingsNode = null;
-        Node contentFieldMappingsNode = null;
-        Node staticValueMappingsNode = null;
-        for (int i = 0; i < assetTypeNode.getChildNodes().getLength(); i++)
-        {
-            Node node = assetTypeNode.getChildNodes().item(i);
-            String nodeName = node.getNodeName();
-            if (nodeName.equals(NAME_TAG))
-                assetTypeName = node.getTextContent();
-            else if (nodeName.equals(MAPPED_CONTENT_TYPE_PATH_TAG))
-                mappedContentTypePath = node.getTextContent();
-            else if (nodeName.equals(METADATA_FIELD_MAPPINGS_TAG))
-                metadataFieldMappingsNode = node;
-            else if (nodeName.equals(CONTENT_FIELD_MAPPINGS_TAG))
-                contentFieldMappingsNode = node;
-            else if (nodeName.equals(STATIC_VALUE_MAPPINGS_TAG))
-                staticValueMappingsNode = node;
-        }
-
-        // if they couldn't be found, then skip this one
-        if (assetTypeName == null || mappedContentTypePath == null)
-            return;
-
-        // Check if the asset type and content type like that still exists (it's possible that the contents of
-        // the serena xml files changed
-        // and it doesn't exist anymore or Content Type in Cascade got deleted in meantime) and if it doesn't
-        // exist, then just ignore this mapping.
-        AssetType assetType = projectInformation.getAssetTypes().get(assetTypeName);
-        ContentTypeInformation contentType = projectInformation.getContentTypes().get(mappedContentTypePath);
-
-        // If either asset type or content type could not be found, it means that this mapping is invalid, so
-        // just ignore it
-        if (assetType == null || contentType == null)
-            return;
-
-        projectInformation.getContentTypeMap().put(assetTypeName, mappedContentTypePath);
-
-        // clear existing mappings
-        assetType.getMetadataFieldMapping().clear();
-        assetType.getContentFieldMapping().clear();
-        assetType.getStaticValueMapping().clear();
-
-        // load new mappings
-        loadFieldMappings(metadataFieldMappingsNode, assetType.getMetadataFieldMapping(), contentType);
-        loadFieldMappings(contentFieldMappingsNode, assetType.getContentFieldMapping(), contentType);
-        loadStaticValueMappings(staticValueMappingsNode, assetType.getStaticValueMapping(), contentType);
     }
 
     /**
@@ -366,41 +304,6 @@ public class MappingPersister
     {
         return cascadeMetadataField != null ? contentType.getMetadataFields().get(cascadeMetadataField) : contentType.getDataDefinitionFields().get(
                 cascadeDataDefinitionField);
-    }
-
-    /**
-     * Adds the &lt;assetType&gt; tag to the content with all the information that needs to be stored about
-     * that asset type
-     * 
-     * @param content
-     * @param projectInformation
-     * @param assetType
-     */
-    private static void persistAssetType(StringBuilder content, ProjectInformation projectInformation, AssetType assetType)
-    {
-        content.append("<" + ASSET_TYPE_TAG + ">");
-        content.append("<" + NAME_TAG + ">" + assetType.getName() + "</" + NAME_TAG + ">");
-
-        String contentTypePath = projectInformation.getContentTypeMap().get(assetType.getName());
-        if (contentTypePath != null)
-            content.append("<" + MAPPED_CONTENT_TYPE_PATH_TAG + ">" + contentTypePath + "</" + MAPPED_CONTENT_TYPE_PATH_TAG + ">");
-
-        content.append("<" + METADATA_FIELD_MAPPINGS_TAG + ">");
-        for (String metadataFieldName : assetType.getMetadataFieldMapping().keySet())
-            persistFieldMapping(content, assetType.getMetadataFieldMapping(), metadataFieldName);
-        content.append("</" + METADATA_FIELD_MAPPINGS_TAG + ">");
-
-        content.append("<" + CONTENT_FIELD_MAPPINGS_TAG + ">");
-        for (String contentFieldName : assetType.getContentFieldMapping().keySet())
-            persistFieldMapping(content, assetType.getContentFieldMapping(), contentFieldName);
-        content.append("</" + CONTENT_FIELD_MAPPINGS_TAG + ">");
-
-        content.append("<" + STATIC_VALUE_MAPPINGS_TAG + ">");
-        for (Field field : assetType.getStaticValueMapping().keySet())
-            persistStaticValueMapping(content, assetType.getStaticValueMapping(), field);
-        content.append("</" + STATIC_VALUE_MAPPINGS_TAG + ">");
-
-        content.append("</" + ASSET_TYPE_TAG + ">");
     }
 
     /**

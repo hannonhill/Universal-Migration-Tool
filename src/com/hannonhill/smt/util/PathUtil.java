@@ -8,6 +8,7 @@ package com.hannonhill.smt.util;
 import java.io.File;
 
 import com.hannonhill.smt.CascadeAssetInformation;
+import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
 
 /**
@@ -294,5 +295,17 @@ public class PathUtil
             link = link.substring(3);
         }
         return counter;
+    }
+
+    /**
+     * Creates a Cascade path using a file system file path
+     * 
+     * @param file
+     * @param projectInformation
+     * @return
+     */
+    public static String createPagePathFromFileSystemFile(File file, ProjectInformation projectInformation)
+    {
+        return PathUtil.truncateExtension(PathUtil.getRelativePath(file, projectInformation.getXmlDirectory()));
     }
 }

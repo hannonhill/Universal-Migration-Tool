@@ -1,6 +1,6 @@
 <project name="MT">
 
-    <description>Migration Tool</description>
+    <description>Generic Migration Tool</description>
 
     <property name="src.dir" value="src"/>
 	<property name="dist.dir" value="dist"/>

@@ -14,7 +14,6 @@ import java.util.Set;
 
 import com.hannonhill.smt.CascadeAssetInformation;
 import com.hannonhill.smt.DataDefinitionField;
-import com.hannonhill.smt.DetailedXmlPageInformation;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.MetadataSetField;
 import com.hannonhill.smt.MigrationStatus;
@@ -181,23 +180,22 @@ public class WebServices
     }
 
     /**
-     * Creates a page in Cascade Server using information provided in the DetailedXmlPageInformation object.
-     * If the parent folder cannot be found,
-     * it will create it.
+     * Creates a page in Cascade Server based on the information provided in the projectInformation and the
+     * actual file
+     * from which the Page needs to be created.
      * 
-     * @param xmlPage
+     * @param pageFile
      * @param projectInformation
      * @return Returns the created page's id.
      * @throws Exception
      */
-    public static CascadeAssetInformation createPage(DetailedXmlPageInformation xmlPage, ProjectInformation projectInformation) throws Exception
+    public static CascadeAssetInformation createPage(java.io.File pageFile, ProjectInformation projectInformation) throws Exception
     {
-        String path = xmlPage.getDeployPath();
+        String path = PathUtil.createPagePathFromFileSystemFile(pageFile, projectInformation);
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
         String pagePath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + pageName);
-        String assetTypeName = xmlPage.getAssetType();
-        String contentTypePath = projectInformation.getContentTypeMap().get(assetTypeName);
+        String contentTypePath = projectInformation.getContentTypePath();
 
         // This should be caught before, but just a sanity check
         if (contentTypePath == null)
@@ -208,7 +206,7 @@ public class WebServices
             throw new Exception("Duplicate path found - asset with given path already got created during this migration: " + pagePath.toLowerCase());
 
         // Set up the page object and assign it to the asset object
-        Page page = WebServicesUtil.setupPageObject(xmlPage, projectInformation);
+        Page page = WebServicesUtil.setupPageObject(pageFile, projectInformation);
         Asset asset = new Asset();
         asset.setPage(page);
 
@@ -239,7 +237,7 @@ public class WebServices
                         && message.contains("could not be found"))
                 {
                     createFolder(parentFolderPath, projectInformation);
-                    return createPage(xmlPage, projectInformation);
+                    return createPage(pageFile, projectInformation);
                 }
 
                 throw new Exception("Page " + pagePath + " could not be created: " + createResult.getMessage() + " - Parent folder path is: -"
@@ -268,15 +266,13 @@ public class WebServices
     public static CascadeAssetInformation createXhtmlBlock(java.io.File file, ProjectInformation projectInformation, String metadataSetId)
             throws Exception
     {
-        String parentFolderPath = PathUtil
-                .removeLeadingSlashes(LinkRewriter.getWebViewUrl(file.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
-                        projectInformation.getLinkFileUrlToWebviewUrlMap()));
+        String blockPath = PathUtil.createPagePathFromFileSystemFile(file, projectInformation);
+        String parentFolderPath = PathUtil.getParentFolderPathFromPath(blockPath);
         // Don't create static components in the root folder. Instead, create them in
         // "_internal/blocks/static" folder
         if (parentFolderPath.equals("") || parentFolderPath.equals("/"))
             parentFolderPath = "_cascade/blocks/static";
         String blockName = PathUtil.truncateExtension(file.getName());
-        String blockPath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + blockName);
 
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
@@ -312,7 +308,7 @@ public class WebServices
         block.setParentFolderPath(parentFolderPath);
         block.setSiteName(projectInformation.getSiteName());
         block.setMetadataSetId(metadataSetId);
-        block.setXhtml(JTidy.tidyContent(FileSystem.getFileContents(file)));
+        block.setXhtml(LinkRewriter.rewriteLinksInXml(JTidy.tidyContent(FileSystem.getFileContents(file)), blockPath, projectInformation));
 
         Asset asset = new Asset();
         asset.setXhtmlDataDefinitionBlock(block);
@@ -391,15 +387,13 @@ public class WebServices
     private static void createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId, boolean logCreatingFile)
             throws Exception
     {
-        String parentFolderPath = PathUtil.removeLeadingSlashes(LinkRewriter.getWebViewUrl(
-                filesystemFile.getParent().substring(projectInformation.getLuminisLinkRootPath().length()),
-                projectInformation.getLinkFileUrlToWebviewUrlMap()));
+        String filePath = PathUtil.getRelativePath(filesystemFile, projectInformation.getXmlDirectory());
+        String parentFolderPath = PathUtil.getParentFolderPathFromPath(filePath);
+        String fileName = filesystemFile.getName();
 
         // Do not create files in root folder. Instead, put them in "files" folder
         if (parentFolderPath.equals(""))
             parentFolderPath = "files";
-        String fileName = filesystemFile.getName();
-        String filePath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + fileName);
 
         if (projectInformation.getExistingCascadeFiles().contains(filePath.toLowerCase()))
             return;

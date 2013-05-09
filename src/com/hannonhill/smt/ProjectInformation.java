@@ -6,10 +6,8 @@
 package com.hannonhill.smt;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,37 +31,25 @@ public class ProjectInformation
     private String password;
     private String siteName;
     private String xmlDirectory;
-    private Map<String, String> contentTypeMap; // the mapping from XML Asset Type name to Cascade Content
-                                                // Type path
-    private List<String> assetTypeNames; // repeated information - an ordered list of XML Asset Type names
-                                         // (the map above holds things that are not ordered)
-    private Map<String, AssetType> assetTypes; // All XML Asset Type names and the actual XML Asset Type which
-                                               // contains user entered field mappings (if mapped)
+    private String contentTypePath;
     private String overwriteBehavior; // Matches one of the constants
                                       // ProjectInformation.OVERWRITE_BEHAVIOR_???
     private Map<String, ExternalRootLevelFolderAssignment> externalRootLevelFolderAssignemnts;
+    private final Map<String, Field> fieldMapping = new HashMap<String, Field>(); // a mapping from an XPath
+                                                                                  // to a Cascade field
+    private final Map<Field, String> staticValueMapping = new HashMap<Field, String>(); // this mapping maps
+                                                                                        // from a Cascade
+                                                                                        // field to its static
+                                                                                        // value it should get
 
     // analyzed information
-    private File luminisFolder;
-    private String luminisLinkRootPath;
     private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type
                                                               // information (with the available metadata and
                                                               // dd fields)
-    private final Set<File> filesToProcess; // All the XML files that need to be processed during migration -
+    private final Set<File> filesToProcess; // All the files that need to be processed during migration -
                                             // it is a set to avoid duplicates and because order doesn't
                                             // really matter
-    private final List<File> xhtmlFiles; // All XHTML files that need to be processed as XHTML Blocks for
-                                         // Luminis migration
-    private Set<String> gatheredExtensions; // a set of extensions found for pages (for example ".html",
-                                            // ".htm")
-    private Set<String> gatheredRootLevelFolders; // a set of root level folders of XML pages
-    private Set<String> gatheredLinkedRootLevelFolders; // a set of root level folders in links in the XML
-                                                        // that link to assets
-    private final Map<File, DetailedXmlPageInformation> pagesToProcess; // a map of a filesToProcess files
-                                                                        // to detailed information about the
-                                                                        // page coming from linkFile.xml in
-                                                                        // Luminis dump
-    private final Map<String, String> linkFileUrlToWebviewUrlMap;
+    Set<String> gatheredExtensions = new HashSet<String>();
     private final Set<String> existingCascadeFiles; // Used for Luminis file import and link checking
     private final Set<String> existingCascadeXhtmlBlocks;// performance reasons - file paths are checked first
     // to avoid having to check if file exists each time a new
@@ -93,16 +79,8 @@ public class ProjectInformation
         linkCheckingStatus = new LinkCheckingStatus();
         currentTask = null;
         filesToProcess = new HashSet<File>();
-        xhtmlFiles = new ArrayList<File>();
-        gatheredExtensions = new HashSet<String>();
-        gatheredRootLevelFolders = new HashSet<String>();
-        gatheredLinkedRootLevelFolders = new HashSet<String>();
         contentTypes = new HashMap<String, ContentTypeInformation>();
-        contentTypeMap = new HashMap<String, String>();
         externalRootLevelFolderAssignemnts = new HashMap<String, ExternalRootLevelFolderAssignment>();
-        pagesToProcess = new HashMap<File, DetailedXmlPageInformation>();
-        luminisFolder = null;
-        linkFileUrlToWebviewUrlMap = new HashMap<String, String>();
         existingCascadeFiles = new HashSet<String>();
         existingCascadeXhtmlBlocks = new HashSet<String>();
         existingCascadePages = new HashSet<String>();
@@ -198,57 +176,6 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the contentTypeMap - the mapping from XML Asset Type name to Cascade Content Type path
-     */
-    public Map<String, String> getContentTypeMap()
-    {
-        return contentTypeMap;
-    }
-
-    /**
-     * @param contentTypeMap the contentTypeMap to set - the mapping from XML Asset Type name to Cascade
-     *        Content Type path
-     */
-    public void setContentTypeMap(Map<String, String> contentTypeMap)
-    {
-        this.contentTypeMap = contentTypeMap;
-    }
-
-    /**
-     * @return Returns the assetTypes.
-     */
-    public Map<String, AssetType> getAssetTypes()
-    {
-        return assetTypes;
-    }
-
-    /**
-     * @param assetTypes the assetTypes to set
-     */
-    public void setAssetTypes(Map<String, AssetType> assetTypes)
-    {
-        this.assetTypes = assetTypes;
-    }
-
-    /**
-     * @return Returns the assetTypeNames - an ordered list of XML Asset Type names that exist in the
-     *         contentTypeMap
-     */
-    public List<String> getAssetTypeNames()
-    {
-        return assetTypeNames;
-    }
-
-    /**
-     * @param assetTypeNames the assetTypeNames to set - an ordered list of XML Asset Type names that exist in
-     *        the contentTypeMap
-     */
-    public void setAssetTypeNames(List<String> assetTypeNames)
-    {
-        this.assetTypeNames = assetTypeNames;
-    }
-
-    /**
      * @return Returns the overwriteBehavior.
      */
     public String getOverwriteBehavior()
@@ -294,14 +221,6 @@ public class ProjectInformation
     public Set<File> getFilesToProcess()
     {
         return filesToProcess;
-    }
-
-    /**
-     * @return Returns the xhtmlFiles
-     */
-    public List<File> getXhtmlFiles()
-    {
-        return xhtmlFiles;
     }
 
     /**
@@ -369,38 +288,6 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the gatheredRootLevelFolders.
-     */
-    public Set<String> getGatheredRootLevelFolders()
-    {
-        return gatheredRootLevelFolders;
-    }
-
-    /**
-     * @param gatheredRootLevelFolders the gatheredRootLevelFolders to set
-     */
-    public void setGatheredRootLevelFolders(Set<String> gatheredRootLevelFolders)
-    {
-        this.gatheredRootLevelFolders = gatheredRootLevelFolders;
-    }
-
-    /**
-     * @return Returns the gatheredLinkedRootLevelFolders.
-     */
-    public Set<String> getGatheredLinkedRootLevelFolders()
-    {
-        return gatheredLinkedRootLevelFolders;
-    }
-
-    /**
-     * @param gatheredLinkedRootLevelFolders the gatheredLinkedRootLevelFolders to set
-     */
-    public void setGatheredLinkedRootLevelFolders(Set<String> gatheredLinkedRootLevelFolders)
-    {
-        this.gatheredLinkedRootLevelFolders = gatheredLinkedRootLevelFolders;
-    }
-
-    /**
      * @return Returns the externalRootLevelFolderAssignemnts.
      */
     public Map<String, ExternalRootLevelFolderAssignment> getExternalRootLevelFolderAssignemnts()
@@ -414,54 +301,6 @@ public class ProjectInformation
     public void setExternalRootLevelFolderAssignemnts(Map<String, ExternalRootLevelFolderAssignment> externalRootLevelFolderAssignemnts)
     {
         this.externalRootLevelFolderAssignemnts = externalRootLevelFolderAssignemnts;
-    }
-
-    /**
-     * @return Returns the luminisFolder.
-     */
-    public File getLuminisFolder()
-    {
-        return luminisFolder;
-    }
-
-    /**
-     * @param luminisFolder the luminisFolder to set
-     */
-    public void setLuminisFolder(File luminisFolder)
-    {
-        this.luminisFolder = luminisFolder;
-    }
-
-    /**
-     * @return Returns the luminisLinkRootPath.
-     */
-    public String getLuminisLinkRootPath()
-    {
-        return luminisLinkRootPath;
-    }
-
-    /**
-     * @param luminisLinkRootPath the luminisLinkRootPath to set
-     */
-    public void setLuminisLinkRootPath(String luminisLinkRootPath)
-    {
-        this.luminisLinkRootPath = luminisLinkRootPath;
-    }
-
-    /**
-     * @return Returns the pagesToProcess.
-     */
-    public Map<File, DetailedXmlPageInformation> getPagesToProcess()
-    {
-        return pagesToProcess;
-    }
-
-    /**
-     * @return Returns the linkFileUrlToWebviewUrlMap.
-     */
-    public Map<String, String> getLinkFileUrlToWebviewUrlMap()
-    {
-        return linkFileUrlToWebviewUrlMap;
     }
 
     /**
@@ -486,5 +325,37 @@ public class ProjectInformation
     public Set<String> getExistingCascadePages()
     {
         return existingCascadePages;
+    }
+
+    /**
+     * @return Returns the contentTypePath.
+     */
+    public String getContentTypePath()
+    {
+        return contentTypePath;
+    }
+
+    /**
+     * @param contentTypePath the contentTypePath to set
+     */
+    public void setContentTypePath(String contentTypePath)
+    {
+        this.contentTypePath = contentTypePath;
+    }
+
+    /**
+     * @return Returns the fieldMapping.
+     */
+    public Map<String, Field> getFieldMapping()
+    {
+        return fieldMapping;
+    }
+
+    /**
+     * @return Returns the staticValueMapping.
+     */
+    public Map<Field, String> getStaticValueMapping()
+    {
+        return staticValueMapping;
     }
 }

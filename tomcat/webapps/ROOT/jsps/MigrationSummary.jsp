@@ -2,11 +2,11 @@
 
 <html>
 	<head>
-		<title>Migration Tool</title>
+		<title>Generic Migration Tool</title>
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
-		<h1>Migration Tool</h1>
+		<h1>Generic Migration Tool</h1>
 		<div class="main">
 			<h2>Migration Summary</h2>
 			<h4><s:actionerror /></h4>

@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Migration Tool</title>
+		<title>Generic Migration Tool</title>
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="/javascript/json2.js?t=<s:property value="time"/>"></script>
 		<script type="text/javascript">
@@ -261,7 +261,7 @@
 		</script>
 	</head>
 	<body>
-		<h1>Migration Tool</h1>
+		<h1>Generic Migration Tool</h1>
 		<div class="main">
 			<h2>Migration Started</h2>
 			<h4><s:actionerror /></h4>
