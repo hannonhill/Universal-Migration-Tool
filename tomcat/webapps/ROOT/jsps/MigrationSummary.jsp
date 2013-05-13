@@ -23,41 +23,23 @@
 				</tr>
 				<tr>
 					<td colspan="2">
-						<table summary="Content Type Mappings" class="mappingReport">
-							<tr><th colspan="3">Content Type Mappings</th></tr>
-							<s:iterator value="projectInformation.contentTypeMap.entrySet()">
-								<tr><td><s:property value="key"/></td><td class="arrow">-&gt;</td><td><s:property value="value"/></td></tr>
-							</s:iterator>
+						<table summary="<s:property/>" class="mappingReport">
+							<tr><th colspan="3"><s:property/></th></tr>								
+							<s:if test="projectInformation.fieldMapping.size()>0">
+								<tr><th colspan="3">XPath</th></tr>
+								<s:iterator value="projectInformation.fieldMapping.entrySet()">
+									<tr><td><s:property value="key"/></td><td class="arrow">-&gt;</td><td><s:property value="value.label"/></td></tr>
+								</s:iterator>
+							</s:if>
+							<s:if test="projectInformation.staticValueMapping.size()>0">
+								<tr><th colspan="3">Static Value</th></tr>
+								<s:iterator value="projectInformation.staticValueMapping.entrySet()">
+									<tr><td><s:property value="value"/></td><td class="arrow">-&gt;</td><td><s:property value="key.label"/></td></tr>
+								</s:iterator>
+							</s:if>
 						</table>
 					</td>
 				</tr>
-				<s:iterator value="projectInformation.assetTypeNames" var="assetTypeName" >
-					<tr>
-						<td colspan="2">
-							<table summary="<s:property/>" class="mappingReport">
-								<tr><th colspan="3"><s:property/></th></tr>								
-								<s:if test="projectInformation.assetTypes.get(#assetTypeName).metadataFieldMapping.size()>0">
-									<tr><th colspan="3">Metadata</th></tr>
-									<s:iterator value="projectInformation.assetTypes.get(#assetTypeName).metadataFieldMapping.entrySet()">
-										<tr><td><s:property value="key"/></td><td class="arrow">-&gt;</td><td><s:property value="value.label"/></td></tr>
-									</s:iterator>
-								</s:if>
-								<s:if test="projectInformation.assetTypes.get(#assetTypeName).contentFieldMapping.size()>0">
-									<tr><th colspan="3">Content</th></tr>
-									<s:iterator value="projectInformation.assetTypes.get(#assetTypeName).contentFieldMapping.entrySet()">
-										<tr><td><s:property value="key"/></td><td class="arrow">-&gt;</td><td><s:property value="value.label"/></td></tr>
-									</s:iterator>
-								</s:if>
-								<s:if test="projectInformation.assetTypes.get(#assetTypeName).staticValueMapping.size()>0">
-									<tr><th colspan="3">Static Value</th></tr>
-									<s:iterator value="projectInformation.assetTypes.get(#assetTypeName).staticValueMapping.entrySet()">
-										<tr><td><s:property value="key.label"/></td><td class="arrow">-&gt;</td><td><s:property value="value"/></td></tr>
-									</s:iterator>
-								</s:if>
-							</table>
-						</td>
-					</tr>
-				</s:iterator>
 				<s:radio list="overwriteBehaviorList" name="overwriteBehavior" label="Overwrite Behavior"></s:radio>
 				<tr>
 					<td><button onclick="window.location='/AssignFields?assetType=<s:property value="nAssetTypes-1"/>';return false;">Previous</button></td>

@@ -29,7 +29,7 @@ public class PathUtil
      */
     public static String getRelativePath(File file, String xmlDirectoryPath)
     {
-        return file.getAbsolutePath().substring(xmlDirectoryPath.length());
+        return removeLeadingSlashes(file.getAbsolutePath().substring(xmlDirectoryPath.length()));
     }
 
     /**
@@ -40,7 +40,7 @@ public class PathUtil
      */
     public static String getNameFromPath(String path)
     {
-        return path.lastIndexOf('/') == -1 ? path : path.substring(path.lastIndexOf('/') + 1);
+        return removeLeadingSlashes(path.lastIndexOf('/') == -1 ? path : path.substring(path.lastIndexOf('/') + 1));
     }
 
     /**
@@ -75,7 +75,7 @@ public class PathUtil
      */
     public static String getParentFolderPathFromPath(String path)
     {
-        return path.lastIndexOf('/') == -1 ? "/" : path.substring(0, path.lastIndexOf('/'));
+        return removeLeadingSlashes(path.lastIndexOf('/') == -1 ? "/" : path.substring(0, path.lastIndexOf('/')));
     }
 
     /**
@@ -153,7 +153,7 @@ public class PathUtil
      */
     public static boolean isLinkCascade(String link)
     {
-        return link.startsWith("/");
+        return link.startsWith("/") || link.startsWith("site://");
     }
 
     /**
@@ -308,4 +308,43 @@ public class PathUtil
     {
         return PathUtil.truncateExtension(PathUtil.getRelativePath(file, projectInformation.getXmlDirectory()));
     }
+
+    /**
+     * Returns the SITENAME part of site://SITENAME/path/to/asset path. If the path does not contain site
+     * name, returns null.
+     * 
+     * @param path
+     * @return
+     */
+    public static String getSiteNameFromPath(String path)
+    {
+        if (path == null)
+            return null;
+
+        if (!path.startsWith("site://"))
+            return null;
+
+        String start = path.substring(7);
+        return start.substring(0, start.indexOf('/'));
+    }
+
+    /**
+     * Returns the path/to/asset part of site://SITENAME/path/to/asset path. If the path does not contain site
+     * name, returns full path.
+     * 
+     * @param path
+     * @return
+     */
+    public static String getCachePathFromPath(String path)
+    {
+        if (path == null)
+            return null;
+
+        if (!path.startsWith("site://"))
+            return path;
+
+        String site = path.substring(7);
+        return site.substring(site.indexOf('/') + 1);
+    }
+
 }

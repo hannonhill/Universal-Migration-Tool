@@ -68,7 +68,7 @@ public class MigrationAction extends BaseAction
                 object = createJSONObject(migrationStatus, currentTask);
 
                 int totalProgress = (projectInformation.getFilesToProcess().size()) * 2;
-                object.put("progress", 1000.0 * migrationStatus.getProgress() / totalProgress);
+                object.put("progress", totalProgress == 0 ? 0 : 1000.0 * migrationStatus.getProgress() / totalProgress);
                 object.put("created", migrationStatus.getAssetsCreated());
                 object.put("skipped", migrationStatus.getPagesSkipped());
                 object.put("withErrors", migrationStatus.getAssetsWithErrors());

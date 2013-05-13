@@ -56,7 +56,7 @@ public class WebServicesUtil
         String path = PathUtil.truncateExtension(PathUtil.getRelativePath(pageFile, projectInformation.getXmlDirectory()));
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
-        String pageFileContents = JTidy.tidyContent(FileSystem.getFileContents(pageFile));
+        String pageFileContents = JTidy.tidyContentConditionallyFullHtml(FileSystem.getFileContents(pageFile));
         if (parentFolderPath.equals(""))
             parentFolderPath = "/";
 
@@ -72,7 +72,7 @@ public class WebServicesUtil
         page.setMetadata(createPageMetadata(projectInformation, pageFileContents, metadataFieldNames, projectInformation.getMigrationStatus()));
 
         // Create the structured data object with the tree of structured data nodes
-        StructuredData structuredData = createPageStructuredData(projectInformation, parentFolderPath + "/" + pageName, pageFileContents);
+        StructuredData structuredData = createPageStructuredData(projectInformation, pageFileContents, parentFolderPath + "/" + pageName);
 
         // If page uses data definition, assign it to the page object
         if (contentType.isUsesDataDefinition())
@@ -288,14 +288,7 @@ public class WebServicesUtil
 
         if (field.getChooserType() == null)
         {
-            List<String> sctComponentPaths = getSctComponents(fieldValue);
-            if (sctComponentPaths.size() > 0)
-            {
-                assignSctComponents(sctComponentPaths, currentNode, identifier + "-block", projectInformation);
-            }
-
-            fieldValue = removeSctComponents(fieldValue);
-            fieldValue = JTidy.tidyContent(fieldValue);
+            fieldValue = JTidy.tidyContentConditionally(fieldValue);
             StructuredDataNode textNode = new StructuredDataNode();
             textNode.setIdentifier(identifier);
             textNode.setText(fieldValue);
@@ -306,7 +299,7 @@ public class WebServicesUtil
         }
         else if (field.getChooserType() == ChooserType.FILE)
         {
-            fieldValue = JTidy.tidyContent(fieldValue);
+            fieldValue = JTidy.tidyContentConditionally(fieldValue);
             String path = fieldValue.startsWith(LinkRewriter.LUMINIS_FILE_PREFIX) ? fieldValue.substring(LinkRewriter.LUMINIS_FILE_PREFIX.length())
                     : XmlAnalyzer.getFirstSrcAttribute(fieldValue);
             if (path != null && !path.trim().equals(""))
@@ -325,98 +318,6 @@ public class WebServicesUtil
                 }
             }
         }
-        else if (field.getChooserType() == ChooserType.BLOCK)
-        {
-            List<String> sctComponentPaths = getSctComponents(fieldValue);
-            assignSctComponents(sctComponentPaths, currentNode, identifier, projectInformation);
-        }
-    }
-
-    /**
-     * Removes the <sct-component> tags from the content
-     * 
-     * @param value
-     * @return
-     */
-    private static String removeSctComponents(String value)
-    {
-        int beginningIndex = value.indexOf("<sct-component");
-        if (beginningIndex == -1)
-            return value;
-
-        int endingIndex = value.indexOf("</sct-component>");
-        if (endingIndex == -1)
-            return value;
-
-        String beginningPart = value.substring(0, beginningIndex);
-        String endingPart = value.substring(endingIndex + 16);
-        return removeSctComponents(beginningPart + endingPart);
-    }
-
-    /**
-     * Creates {@link StructuredDataNode}s that are block choosers and assigns them to
-     * <code>currentNode</code>.
-     * 
-     * @param sctComponentPaths
-     * @param currentNode
-     * @param identifier
-     * @param projectInformation
-     * @throws Exception
-     */
-    private static void assignSctComponents(List<String> sctComponentPaths, StructuredDataGroup currentNode, String identifier,
-            ProjectInformation projectInformation) throws Exception
-    {
-        if (sctComponentPaths.size() == 0)
-            return;
-
-        List<StructuredDataNode> blockNodes = new ArrayList<StructuredDataNode>();
-        for (String sctComponentPath : sctComponentPaths)
-            if (WebServices.doesAssetExist(sctComponentPath, projectInformation))
-            {
-                StructuredDataNode blockNode = new StructuredDataNode();
-                blockNode.setIdentifier(identifier);
-                blockNode.setBlockPath(sctComponentPath);
-                blockNode.setType(StructuredDataType.asset);
-                blockNode.setAssetType(StructuredDataAssetType.block);
-                blockNodes.add(blockNode);
-            }
-
-        currentNode.getContentFields().put(identifier, blockNodes);
-    }
-
-    /**
-     * Returns a list of component paths found in the content
-     * 
-     * @param fieldValue
-     * @return
-     */
-    private static List<String> getSctComponents(String fieldValue)
-    {
-        // The xml might not be valid and JTidy removes the <sct-component> tags, so instead, look for closing
-        // </sct-component> tags and find text before that
-        List<String> result = new ArrayList<String>();
-        getSctComponents(fieldValue, result);
-        return result;
-    }
-
-    /**
-     * Recursively looks for paths of components
-     * 
-     * @param remainingValue
-     * @param result
-     */
-    private static void getSctComponents(String remainingValue, List<String> result)
-    {
-        int closingIndex = remainingValue.indexOf("</sct-component>");
-        if (closingIndex == -1)
-            return;
-
-        String currentPart = remainingValue.substring(0, closingIndex);
-        int openingIndex = currentPart.lastIndexOf(">");
-        if (openingIndex != -1)
-            result.add(currentPart.substring(openingIndex + 1));
-
-        getSctComponents(remainingValue.substring(closingIndex + 1), result);
     }
 
     /**

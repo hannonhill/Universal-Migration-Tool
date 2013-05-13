@@ -9,6 +9,7 @@
 			{
 				var isStaticValue = isLastSelected("xmlFieldNames");
 				var valueEl = document.getElementById("value");
+				valueEl.blur();
 				var value = valueEl.value;
 				if (value=='')
 				{
@@ -34,16 +35,22 @@
 				var xPath = isStaticValue ? null : value;
 				var staticValue = isStaticValue ? value : null;
 				addMapping(xPath, staticValue, cascadeFieldSelectedIndex);
+				valueEl.value='';
+				valueEl.focus();
 			}
 
 			function addMappingByName(xPath, staticValue, cascade, cascadeType)
 			{
 				var cascadeIndex = null;
+				var cascadeTypeLetter = cascadeType=="com.hannonhill.smt.MetadataSetField" ? "m" : "d";
+				cascade = cascadeTypeLetter + cascade;
+				
 				var cascadeFieldNamesEl = document.getElementById("cascadeFieldNames");
 				for(var i=0; i<cascadeFieldNamesEl.options.length; i++)
 					if (cascadeFieldNamesEl.options[i].value==cascade)
 						cascadeIndex = i;
 
+				
 				addMapping(xPath, staticValue, cascadeIndex);
 			}
 
@@ -82,9 +89,7 @@
 				row.appendChild(cell4);
 
 				var dropdownsEl = document.getElementById("dropdowns");
-				tableEl.removeChild(dropdownsEl);
-				tableEl.appendChild(row);
-				tableEl.appendChild(dropdownsEl);
+				tableEl.insertBefore(row, dropdownsEl);
 			}
 
 			function removeMapping(fieldName)
@@ -147,7 +152,6 @@
 				</tr>
 				<tr>
 					<td>
-						<input type="hidden" name="assetType" value="<s:property value="assetType"/>"/>
 						<s:if test="assetType==0">
 							<button onclick="window.location='/AssignContentType';return false;">Previous</button>
 						</s:if>

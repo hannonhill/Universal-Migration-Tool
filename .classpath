@@ -35,5 +35,7 @@
 	<classpathentry kind="lib" path="tomcat/webapps/ROOT/WEB-INF/lib/xalan.jar"/>
 	<classpathentry kind="lib" path="tomcat/webapps/ROOT/WEB-INF/lib/xwork-core-2.1.6.jar" sourcepath="/Users/tomusiaka/.m2/repository/com/opensymphony/xwork-core/2.1.6/xwork-core-2.1.6-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="tomcat/webapps/ROOT/WEB-INF/lib/jdom-1.1.jar" sourcepath="/Users/tomusiaka/.m2/repository/org/jdom/jdom/1.1/jdom-1.1-sources.jar"/>
+	<classpathentry kind="lib" path="tomcat/webapps/ROOT/WEB-INF/lib/jaxen-1.1-beta-7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

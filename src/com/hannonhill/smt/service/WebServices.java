@@ -308,7 +308,7 @@ public class WebServices
         block.setParentFolderPath(parentFolderPath);
         block.setSiteName(projectInformation.getSiteName());
         block.setMetadataSetId(metadataSetId);
-        block.setXhtml(LinkRewriter.rewriteLinksInXml(JTidy.tidyContent(FileSystem.getFileContents(file)), blockPath, projectInformation));
+        block.setXhtml(LinkRewriter.rewriteLinksInXml(JTidy.tidyContentConditionally(FileSystem.getFileContents(file)), blockPath, projectInformation));
 
         Asset asset = new Asset();
         asset.setXhtmlDataDefinitionBlock(block);
@@ -395,13 +395,16 @@ public class WebServices
         if (parentFolderPath.equals(""))
             parentFolderPath = "files";
 
-        if (projectInformation.getExistingCascadeFiles().contains(filePath.toLowerCase()))
-            return;
-
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         String relativePath = PathUtil.getRelativePath(filesystemFile, projectInformation.getXmlDirectory());
         if (logCreatingFile)
             Log.add("Creating file in Cascade " + relativePath + "... ", migrationStatus);
+
+        if (projectInformation.getExistingCascadeFiles().contains(filePath.toLowerCase()))
+        {
+            Log.add("file already exists<br/>", migrationStatus);
+            return;
+        }
 
         if (filesystemFile.length() > (MAX_FILE_SIZE_MB * 1024 * 1024))
             throw new Exception("File is too large. Maximum file size is " + MAX_FILE_SIZE_MB + " MB");
@@ -663,12 +666,17 @@ public class WebServices
      */
     private static Page readPageByPath(String path, ProjectInformation projectInformation) throws Exception
     {
+        String cachePath = PathUtil.getCachePathFromPath(path);
+        String siteName = PathUtil.getSiteNameFromPath(path);
+        if (siteName == null)
+            siteName = projectInformation.getSiteName();
+
         Authentication authentication = getAuthentication(projectInformation);
-        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.page, false);
+        Identifier identifier = new Identifier(null, new Path(cachePath, null, siteName), EntityTypeString.page, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true")
                 && (readResult.getMessage() == null || !readResult.getMessage().equals(
-                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'page'")))
+                        "Unable to identify an entity based on provided entity path '" + cachePath + "' and type 'page'")))
             throw new Exception("Error occured when reading a Page with path '" + path + "': " + readResult.getMessage());
 
         return readResult.getSuccess().equals("true") ? readResult.getAsset().getPage() : null;
@@ -706,12 +714,17 @@ public class WebServices
      */
     private static File readFileByPath(String path, ProjectInformation projectInformation) throws Exception
     {
+        String cachePath = PathUtil.getCachePathFromPath(path);
+        String siteName = PathUtil.getSiteNameFromPath(path);
+        if (siteName == null)
+            siteName = projectInformation.getSiteName();
+
         Authentication authentication = getAuthentication(projectInformation);
-        Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.file, false);
+        Identifier identifier = new Identifier(null, new Path(cachePath, null, siteName), EntityTypeString.file, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
         if (!readResult.getSuccess().equals("true")
                 && (readResult.getMessage() == null || !readResult.getMessage().equals(
-                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'file'")))
+                        "Unable to identify an entity based on provided entity path '" + cachePath + "' and type 'file'")))
             throw new Exception("Error occured when reading a Page with path '" + path + "': " + readResult.getMessage());
 
         return readResult.getSuccess().equals("true") ? readResult.getAsset().getFile() : null;

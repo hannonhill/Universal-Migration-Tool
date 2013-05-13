@@ -114,6 +114,7 @@ public class Migrator
                 continue;
 
             createFile(folderFile, projectInformation, metadataSetId);
+            projectInformation.getMigrationStatus().incrementProgress(2);
         }
     }
 

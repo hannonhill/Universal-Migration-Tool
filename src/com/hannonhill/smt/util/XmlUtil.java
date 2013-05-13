@@ -9,9 +9,13 @@ import java.io.ByteArrayInputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
 
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
+import org.jdom.xpath.XPath;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
@@ -99,8 +103,28 @@ public class XmlUtil
      */
     public static String evaluateXPathExpression(String xmlContents, String xPathExpression) throws Exception
     {
-        XPath xPath = XPathFactory.newInstance().newXPath();
+        // JTidy adds a namespace, which causes many issues with xpath
+        xmlContents = xmlContents.replaceAll("xmlns=\"http://www.w3.org/1999/xhtml\"", "");
+
+        SAXBuilder builder = new SAXBuilder();
         InputSource inputSource = new InputSource(new ByteArrayInputStream(xmlContents.getBytes("UTF-8")));
-        return xPath.evaluate(xPathExpression, inputSource);
+        Document doc = builder.build(inputSource);
+        StringBuilder result = new StringBuilder();
+        for (Object node : XPath.selectNodes(doc, xPathExpression))
+        {
+            if (node instanceof Attribute)
+                result.append(((Attribute) node).getValue());
+
+            else if (node instanceof Element)
+            {
+                XMLOutputter outputter = new XMLOutputter();
+                result.append(outputter.outputString((Element) node));
+            }
+            else
+                result.append(node.toString());
+
+        }
+
+        return result.toString();
     }
 }

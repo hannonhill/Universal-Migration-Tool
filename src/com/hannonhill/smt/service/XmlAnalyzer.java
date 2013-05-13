@@ -185,6 +185,17 @@ public class XmlAnalyzer
      */
     private static void analyzeFile(File file, ProjectInformation projectInformation)
     {
+        // Skip hidden files and folders
+        if (file.getName().startsWith("."))
+            return;
+
+        // Recursively analyze sub-folders
+        if (file.isDirectory())
+        {
+            analyzeFolder(file, projectInformation);
+            return;
+        }
+
         String fileNameWihtoutXmlExtension = PathUtil.truncateExtension(file.getName());
         String extension = PathUtil.getExtension(fileNameWihtoutXmlExtension);
         projectInformation.getGatheredExtensions().add(extension);

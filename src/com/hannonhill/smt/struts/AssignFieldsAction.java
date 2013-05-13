@@ -101,7 +101,7 @@ public class AssignFieldsAction extends BaseAction
      * Given field identifiers of fields with given index i (selectedXPaths, selectedCascadeMetadataFields,
      * selectedCascadeDataDefinitionFields) it picks two that are not "null" and creates a mapping for them.
      * The mapping is XPath -> cascade field or cascade field -> static value. The cascade field is retrieved
-     * from the contentType. The created mapping is added to the assetTypeObject.
+     * from the contentType. The created mapping is added to the projectInformation's appropriate mapping.
      * 
      * @param i
      * @param contentType
@@ -118,7 +118,7 @@ public class AssignFieldsAction extends BaseAction
         // JavaScript generates word "null" for null assignments, so we get the Cascade field name and field
         // type by looking for the "null" word
         boolean isDataDefinition = cascadeMetadataFieldIdentifier.equals("null");
-        boolean isStaticValue = staticValue.equals("null");
+        boolean isStaticValue = !staticValue.equals("null");
         String cascadeFieldIdentifier = isDataDefinition ? cascadeDataDefinitionFieldIdentifier : cascadeMetadataFieldIdentifier;
 
         // Get the actual field from the content type

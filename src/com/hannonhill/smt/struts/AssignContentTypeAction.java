@@ -65,9 +65,6 @@ public class AssignContentTypeAction extends BaseAction
             return processView();
         }
 
-        // clear out the rest of previously entered information that was stored in the session
-        projectInformation.getFieldMapping().clear();
-
         return SUCCESS;
     }
 
@@ -116,6 +113,6 @@ public class AssignContentTypeAction extends BaseAction
      */
     public String getPreviousLink()
     {
-        return "/UploadZip";
+        return "/AssignRootLevelFolders";
     }
 }

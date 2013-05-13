@@ -13,6 +13,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.w3c.tidy.Tidy;
+import org.xml.sax.InputSource;
+
+import com.hannonhill.smt.util.XmlUtil;
 
 /**
  * A service responsible for tidying cdata content into valid xml
@@ -25,19 +28,57 @@ public class JTidy
     private static final Pattern WORD_ELEMENTS_PATTERN = Pattern.compile("(<|\\s)[ovwx]:");
 
     /**
-     * Runs JTidy on the provided content and returns the result
+     * Runs JTidy on the provided content if it is not a valid XML and returns the result. If it is valid XML,
+     * it will stay untouched.
      * 
      * @param content
      * @return
      */
-    public static String tidyContent(String content)
+    public static String tidyContentConditionally(String content)
     {
-        content = cleanFromWord(content);
-        Tidy tidy = getTidy();
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        tidy.parse(new StringReader(content), outStream); // run tidy, providing a string reader and output
-                                                          // stream
-        return outStream.toString();
+        try
+        {
+            XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(content)));
+
+            // If no exception is thrown, return back the original contents
+            return content;
+        }
+        catch (Exception e)
+        {
+            content = cleanFromWord(content);
+            Tidy tidy = getTidy();
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            tidy.parse(new StringReader(content), outStream); // run tidy, providing a string reader and
+                                                              // output stream
+            return outStream.toString();
+        }
+    }
+
+    /**
+     * Runs JTidy on the provided full html content if it is not a valid XML and returns the result. If it is
+     * valid XML, it will stay untouched.
+     * 
+     * @param content
+     * @return
+     */
+    public static String tidyContentConditionallyFullHtml(String content)
+    {
+        try
+        {
+            XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(content)));
+
+            // If no exception is thrown, return back the original contents
+            return content;
+        }
+        catch (Exception e)
+        {
+            content = cleanFromWord(content);
+            Tidy tidy = getTidyFullHtml();
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            tidy.parse(new StringReader(content), outStream); // run tidy, providing a string reader and
+                                                              // output stream
+            return outStream.toString();
+        }
     }
 
     /**
@@ -53,6 +94,64 @@ public class JTidy
         xml = wordNamespaceMatcher.replaceAll("$1");
         xml = xml.replaceAll("<\\?xml(.*)\\/>", "");
         return xml;
+    }
+
+    /**
+     * Returns tidy just like {@link #getTidy()} but one setting is changes so that it handles full html
+     * document and not body only
+     * 
+     * @return
+     */
+    public static final Tidy getTidyFullHtml()
+    {
+        final Tidy tidy = new Tidy();
+
+        // We don't want a mark in the code saying it was tidied
+        tidy.setTidyMark(false);
+        // output numerical entities (i.e. &#160; rather than &nbsp;)
+        tidy.setNumEntities(true);
+        tidy.setPrintBodyOnly(false);
+        // do not turn naked ampersands into &amp;
+        tidy.setQuoteAmpersand(true);
+
+        // always map non-ascii characters to their entity equivalent
+        // for maximum compatibility
+        tidy.setRawOut(false);
+        // clean the heck out of some bad word html!
+        tidy.setWord2000(true);
+        // get rid of empty paragraph tags
+        tidy.setDropEmptyParas(true);
+        // don't trim empty elements (CSCD-2163)
+        tidy.setTrimEmptyElements(false);
+
+        // get rid of extra microsoft "cruft"
+        tidy.setMakeBare(true);
+
+        // CSCD-2197: we want our output to be XML and XHTML
+        // such that JTidy outputs certain nested elements correctly.
+        tidy.setXmlOut(true);
+        tidy.setXHTML(true);
+
+        tidy.setDocType("omit");
+
+        // don't output anything to stdout
+        tidy.setQuiet(true);
+
+        // we do this so that tidy doesn't output errors/warnings to the console
+        tidy.setErrout(new PrintWriter(new StringWriter()));
+
+        // always output something
+        tidy.setForceOutput(true);
+
+        // CSCD-2049: Convert <b> to <strong> and <i> to <em>
+        tidy.setLogicalEmphasis(true);
+
+        // disable wrapping.
+        tidy.setWraplen(0);
+
+        tidy.setSmartIndent(false);
+
+        return tidy;
     }
 
     /**
