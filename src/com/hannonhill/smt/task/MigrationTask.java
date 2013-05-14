@@ -61,7 +61,7 @@ public class MigrationTask extends Thread
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         Log.add("<br/><em>Migration summary:<br/>", migrationStatus);
         Log.add("Created: <span style=\"color: green;\">" + migrationStatus.getAssetsCreated() + "</span><br/>", migrationStatus);
-        Log.add("Skipped: <span style=\"color: blue;\">" + migrationStatus.getPagesSkipped() + "</span><br/>", migrationStatus);
+        Log.add("Skipped: <span style=\"color: blue;\">" + migrationStatus.getAssetsSkipped() + "</span><br/>", migrationStatus);
         Log.add("Errors: <span style=\"color: red;\">" + migrationStatus.getAssetsWithErrors() + "</span><br/>", migrationStatus);
         Log.add("Aligned: <span style=\"color: green;\">" + migrationStatus.getAssetsAligned() + "</span><br/>", migrationStatus);
         Log.add("Aligning errors: <span style=\"color: red;\">" + migrationStatus.getAssetsNotAligned() + "</span><br/>", migrationStatus);

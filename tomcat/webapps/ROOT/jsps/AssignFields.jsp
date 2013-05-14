@@ -152,12 +152,7 @@
 				</tr>
 				<tr>
 					<td>
-						<s:if test="assetType==0">
-							<button onclick="window.location='/AssignContentType';return false;">Previous</button>
-						</s:if>
-						<s:if test="assetType>0">
-							<button onclick="window.location='/AssignFields?assetType=<s:property value="assetType-1"/>';return false;">Previous</button>
-						</s:if>
+						<button onclick="window.location='/AssignContentType';return false;">Previous</button>
 					</td>
 					<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>
 				</tr>

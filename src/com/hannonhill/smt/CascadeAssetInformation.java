@@ -15,6 +15,7 @@ public class CascadeAssetInformation
 {
     private final String id;
     private final String path;
+    private final boolean alreadyExisted;
 
     /**
      * Constructor
@@ -26,6 +27,21 @@ public class CascadeAssetInformation
     {
         this.id = id;
         this.path = path;
+        this.alreadyExisted = false;
+    }
+
+    /**
+     * Constructor with alreadyExisted param
+     * 
+     * @param id
+     * @param path
+     * @param alreadyExisted
+     */
+    public CascadeAssetInformation(String id, String path, boolean alreadyExisted)
+    {
+        this.id = id;
+        this.path = path;
+        this.alreadyExisted = alreadyExisted;
     }
 
     /**
@@ -42,5 +58,13 @@ public class CascadeAssetInformation
     public String getPath()
     {
         return path;
+    }
+
+    /**
+     * @return Returns the alreadyExisted.
+     */
+    public boolean isAlreadyExisted()
+    {
+        return alreadyExisted;
     }
 }

@@ -34,7 +34,6 @@ import com.hannonhill.smt.util.XmlUtil;
  */
 public class LinkRewriter
 {
-    public static final String LUMINIS_FILE_PREFIX = "[luminis-file]";
     private static final String DEFAULT_FILES_FOLDER = "files"; // Used when there is no webViewUrl to decide
                                                                 // where a file should go
 
@@ -278,7 +277,7 @@ public class LinkRewriter
     {
         String newPath = PathUtil.convertRelativeToAbsolute(link, pagePath);
         String extension = PathUtil.getExtension(newPath);
-        if (XmlAnalyzer.FILE_TO_PAGE_EXTENSIONS.contains(extension) || XmlAnalyzer.FILE_TO_BLOCK_EXTENSIONS.contains(extension))
+        if (projectInformation.getPageExtensions().contains(extension) || projectInformation.getBlockExtensions().contains(extension))
             newPath = PathUtil.truncateExtension(newPath);
 
         int deployPathLevels = pagePath.split("/").length - 1;

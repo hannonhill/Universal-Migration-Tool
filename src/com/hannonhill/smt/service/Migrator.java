@@ -110,7 +110,7 @@ public class Migrator
                 continue;
 
             String extension = PathUtil.getExtension(name);
-            if (XmlAnalyzer.FILE_TO_PAGE_EXTENSIONS.contains(extension) || XmlAnalyzer.FILE_TO_BLOCK_EXTENSIONS.contains(extension))
+            if (projectInformation.getPageExtensions().contains(extension) || projectInformation.getBlockExtensions().contains(extension))
                 continue;
 
             createFile(folderFile, projectInformation, metadataSetId);
@@ -133,7 +133,7 @@ public class Migrator
                 return;
 
             String extension = PathUtil.getExtension(file.getName());
-            if (XmlAnalyzer.FILE_TO_BLOCK_EXTENSIONS.contains(extension))
+            if (projectInformation.getBlockExtensions().contains(extension))
                 createXhtmlBlock(file, projectInformation, metadataSetId);
         }
     }
@@ -180,10 +180,18 @@ public class Migrator
         {
             CascadeAssetInformation cascadeBlock = WebServices.createXhtmlBlock(file, projectInformation, metadataSetId);
             Log.add(PathUtil.generateBlockLink(cascadeBlock, projectInformation.getUrl()), migrationStatus);
-            migrationStatus.addCreatedBlock(cascadeBlock);
-            migrationStatus.incrementAssetsCreated();
             migrationStatus.incrementProgress(1);
-            Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+            migrationStatus.addCreatedBlock(cascadeBlock);
+            if (cascadeBlock.isAlreadyExisted())
+            {
+                Log.add("<span style=\"color: blue;\">already existed.</span><br/>", migrationStatus);
+                migrationStatus.incrementAssetsSkipped();
+            }
+            else
+            {
+                migrationStatus.incrementAssetsCreated();
+                Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+            }
         }
         catch (Exception e)
         {
@@ -264,7 +272,7 @@ public class Migrator
             String name = file.getName();
             String extension = PathUtil.getExtension(name);
 
-            if (!XmlAnalyzer.FILE_TO_PAGE_EXTENSIONS.contains(extension))
+            if (!projectInformation.getPageExtensions().contains(extension))
                 continue;
 
             try
@@ -278,12 +286,20 @@ public class Migrator
                 CascadeAssetInformation cascadePage = WebServices.createPage(file, projectInformation);
 
                 Log.add(PathUtil.generatePageLink(cascadePage, projectInformation.getUrl()), migrationStatus);
+                migrationStatus.incrementProgress(1);
+                migrationStatus.addCreatedPage(cascadePage);
 
                 // Add the page to the list because links will need to be realigned.
-                migrationStatus.addCreatedPage(cascadePage);
-                migrationStatus.incrementProgress(1);
-                migrationStatus.incrementAssetsCreated();
-                Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+                if (cascadePage.isAlreadyExisted())
+                {
+                    migrationStatus.incrementAssetsSkipped();
+                    Log.add("<span style=\"color: blue;\">already existed.</span><br/>", migrationStatus);
+                }
+                else
+                {
+                    migrationStatus.incrementAssetsCreated();
+                    Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+                }
             }
             catch (Exception e)
             {

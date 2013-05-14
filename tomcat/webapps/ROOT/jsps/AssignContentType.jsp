@@ -8,10 +8,12 @@
 	<body>
 		<h1>Generic Migration Tool</h1>
 		<div class="main">
-			<h2>Please select the Content Type</h2>
+			<h2>Please select the Content Type and file extensions</h2>
 			<h4><s:actionerror /></h4>
 			<s:form action="AssignContentType" method="POST">
 			    <s:select list="contentTypes" name="selectedContentType" label="Cascade Content Type"/>
+			    <s:textfield name="pageExtensions" label="Page extensions"/>
+			    <s:textfield name="blockExtensions" label="XHTML Block extensions"/>
 				<tr>
 					<td><button onclick="window.location='<s:property value="previousLink"/>';return false;">Previous</button></td>
 					<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>

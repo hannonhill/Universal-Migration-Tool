@@ -24,6 +24,7 @@ public class ProjectInformation
     public static final String OVERWRITE_BEHAVIOR_KEEP_EXISTING = "Keep existing (adds numbers to the end of new asset names)";
     public static final String OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING = "Overwrite existing (deletes and re-creates them)";
     public static final String OVERWRITE_BEHAVIOR_UPDATE_EXISTING = "Update existing (edits existing assets)";
+    public static final String OVERWRITE_BEHAVIOR_SKIP_EXISTING = "Skip existing (does nothing if asset already exists, always on for files)";
 
     // user entered information
     private String url;
@@ -56,6 +57,10 @@ public class ProjectInformation
     // file is brought in
     private final Set<String> existingCascadePages; // Also used for link checking performance reasons
 
+    private final Set<String> pageExtensions; // Extensions of files that need to be converted to pages
+    private final Set<String> blockExtensions; // Extensions of files that need to be converted to xhtml
+                                               // blocks
+
     // other useful information
     private MigrationStatus migrationStatus;
     private LinkCheckingStatus linkCheckingStatus;
@@ -84,6 +89,27 @@ public class ProjectInformation
         existingCascadeFiles = new HashSet<String>();
         existingCascadeXhtmlBlocks = new HashSet<String>();
         existingCascadePages = new HashSet<String>();
+        pageExtensions = new HashSet<String>();
+        blockExtensions = new HashSet<String>();
+
+        setDefaultExtensions();
+    }
+
+    /**
+     * Sets the default extensions
+     */
+    public void setDefaultExtensions()
+    {
+        pageExtensions.clear();
+        pageExtensions.add(".html");
+        pageExtensions.add(".php");
+        pageExtensions.add(".jsp");
+        pageExtensions.add(".htm");
+        pageExtensions.add(".asp");
+
+        blockExtensions.clear();
+        blockExtensions.add(".inc");
+        blockExtensions.add(".txt");
     }
 
     /**
@@ -357,5 +383,99 @@ public class ProjectInformation
     public Map<Field, String> getStaticValueMapping()
     {
         return staticValueMapping;
+    }
+
+    /**
+     * @return Returns the pageExtensions.
+     */
+    public Set<String> getPageExtensions()
+    {
+        return pageExtensions;
+    }
+
+    /**
+     * @return Returns a comma separated list of page extensions
+     */
+    public String getPageExtensionsString()
+    {
+        return convertSetToExtensions(pageExtensions);
+    }
+
+    /**
+     * Sets the page extensions from a comma separated list
+     * 
+     * @param extensions
+     */
+    public void setPageExtensions(String extensions)
+    {
+        pageExtensions.clear();
+        pageExtensions.addAll(convertExtensionsToSet(extensions));
+    }
+
+    /**
+     * @return Returns the blockExtensions.
+     */
+    public Set<String> getBlockExtensions()
+    {
+        return blockExtensions;
+    }
+
+    /**
+     * @return Returns a comma separated list of block extensions
+     */
+    public String getBlockExtensionsString()
+    {
+        return convertSetToExtensions(blockExtensions);
+    }
+
+    /**
+     * Sets the block extensions from a comma separated list
+     * 
+     * @param extensions
+     */
+    public void setBlockExtensions(String extensions)
+    {
+        blockExtensions.clear();
+        blockExtensions.addAll(convertExtensionsToSet(extensions));
+    }
+
+    /**
+     * Converts a set of extensions into a comma separated list
+     * 
+     * @param set
+     * @return
+     */
+    private String convertSetToExtensions(Set<String> set)
+    {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for (String extension : set)
+        {
+            if (!first)
+                result.append(", ");
+            first = false;
+            result.append(extension);
+        }
+        return result.toString();
+    }
+
+    /**
+     * Converts a comma separated list of extensions into a set
+     * 
+     * @param extensions
+     * @return
+     */
+    private Set<String> convertExtensionsToSet(String extensions)
+    {
+        Set<String> result = new HashSet<String>();
+
+        if (extensions == null || extensions.trim().equals(""))
+            return result;
+
+        String[] extensionsArray = extensions.split(",");
+        for (String extension : extensionsArray)
+            result.add(extension.trim());
+
+        return result;
     }
 }

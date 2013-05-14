@@ -300,8 +300,7 @@ public class WebServicesUtil
         else if (field.getChooserType() == ChooserType.FILE)
         {
             fieldValue = JTidy.tidyContentConditionally(fieldValue);
-            String path = fieldValue.startsWith(LinkRewriter.LUMINIS_FILE_PREFIX) ? fieldValue.substring(LinkRewriter.LUMINIS_FILE_PREFIX.length())
-                    : XmlAnalyzer.getFirstSrcAttribute(fieldValue);
+            String path = XmlAnalyzer.getFirstSrcAttribute(fieldValue);
             if (path != null && !path.trim().equals(""))
             {
                 path = path.trim();

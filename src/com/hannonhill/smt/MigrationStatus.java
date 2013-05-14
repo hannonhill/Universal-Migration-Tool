@@ -19,7 +19,7 @@ import java.util.Set;
 public class MigrationStatus extends TaskStatus
 {
     private int assetsCreated;
-    private int pagesSkipped;
+    private int assetsSkipped;
     private int assetsWithErrors;
 
     private int assetsAligned;
@@ -38,7 +38,7 @@ public class MigrationStatus extends TaskStatus
         super();
 
         assetsCreated = 0;
-        pagesSkipped = 0;
+        assetsSkipped = 0;
         assetsWithErrors = 0;
 
         assetsAligned = 0;
@@ -69,17 +69,17 @@ public class MigrationStatus extends TaskStatus
     /**
      * @return Returns the pagesSkipped.
      */
-    public int getPagesSkipped()
+    public int getAssetsSkipped()
     {
-        return pagesSkipped;
+        return assetsSkipped;
     }
 
     /**
      * Increments the number of pages skipped by 1
      */
-    public void incrementPagesSkipped()
+    public void incrementAssetsSkipped()
     {
-        pagesSkipped++;
+        assetsSkipped++;
     }
 
     /**
@@ -91,7 +91,7 @@ public class MigrationStatus extends TaskStatus
     }
 
     /**
-     * Increments the number of pages with errors by 1
+     * Increments the number of assets with errors by 1
      */
     public void incrementAssetsWithErrors()
     {
@@ -107,7 +107,7 @@ public class MigrationStatus extends TaskStatus
     }
 
     /**
-     * Increments the number of pages aligned by 1
+     * Increments the number of assets aligned by 1
      */
     public void incrementAssetsAligned()
     {
@@ -123,7 +123,7 @@ public class MigrationStatus extends TaskStatus
     }
 
     /**
-     * Increments the number of pages not aligned by 1
+     * Increments the number of assets not aligned by 1
      */
     public void incrementAssetsNotAligned()
     {

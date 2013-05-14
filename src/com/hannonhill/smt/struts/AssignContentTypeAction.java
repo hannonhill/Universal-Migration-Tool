@@ -28,6 +28,9 @@ public class AssignContentTypeAction extends BaseAction
     private String selectedContentType; // the Cascade Content Type path selected by the user after the form
                                         // submission
 
+    private String pageExtensions;
+    private String blockExtensions;
+
     @Override
     public String execute() throws Exception
     {
@@ -47,13 +50,24 @@ public class AssignContentTypeAction extends BaseAction
         ProjectInformation projectInformation = getProjectInformation();
 
         // Clear out the information
-        if (selectedContentType == null || selectedContentType.equals(""))
+        if (selectedContentType == null || selectedContentType.trim().equals(""))
         {
             addActionError("You must select the content type");
             return processView();
         }
 
         projectInformation.setContentTypePath(selectedContentType);
+
+        if (pageExtensions == null || pageExtensions.trim().equals(""))
+        {
+            addActionError("You must at least one page extension");
+            return processView();
+        }
+
+        projectInformation.getPageExtensions().clear();
+        projectInformation.setPageExtensions(pageExtensions);
+        projectInformation.getBlockExtensions().clear();
+        projectInformation.setBlockExtensions(blockExtensions);
 
         try
         {
@@ -81,6 +95,9 @@ public class AssignContentTypeAction extends BaseAction
         contentTypes.addAll(projectInformation.getContentTypes().keySet());
         selectedContentType = projectInformation.getContentTypePath();
         Collections.sort(contentTypes);
+
+        pageExtensions = projectInformation.getPageExtensionsString();
+        blockExtensions = projectInformation.getBlockExtensionsString();
         return INPUT;
     }
 
@@ -115,4 +132,37 @@ public class AssignContentTypeAction extends BaseAction
     {
         return "/AssignRootLevelFolders";
     }
+
+    /**
+     * @return Returns the pageExtensions.
+     */
+    public String getPageExtensions()
+    {
+        return pageExtensions;
+    }
+
+    /**
+     * @param pageExtensions the pageExtensions to set
+     */
+    public void setPageExtensions(String pageExtensions)
+    {
+        this.pageExtensions = pageExtensions;
+    }
+
+    /**
+     * @return Returns the blockExtensions.
+     */
+    public String getBlockExtensions()
+    {
+        return blockExtensions;
+    }
+
+    /**
+     * @param blockExtensions the blockExtensions to set
+     */
+    public void setBlockExtensions(String blockExtensions)
+    {
+        this.blockExtensions = blockExtensions;
+    }
+
 }

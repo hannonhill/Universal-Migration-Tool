@@ -16,7 +16,6 @@ import com.hannonhill.smt.ProjectInformation;
  * Action responsible for displaying a migration summary
  * 
  * @author Artur Tomusiak
- * @version $Id$
  * @since 1.0
  */
 public class MigrationSummaryAction extends BaseAction
@@ -26,9 +25,6 @@ public class MigrationSummaryAction extends BaseAction
     private final List<String> overwriteBehaviorList = new ArrayList<String>();
     private String overwriteBehavior;
 
-    /* (non-Javadoc)
-     * @see com.opensymphony.xwork2.ActionSupport#execute()
-     */
     @Override
     public String execute() throws Exception
     {
@@ -65,6 +61,7 @@ public class MigrationSummaryAction extends BaseAction
         overwriteBehaviorList.add(ProjectInformation.OVERWRITE_BEHAVIOR_KEEP_EXISTING);
         overwriteBehaviorList.add(ProjectInformation.OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING);
         overwriteBehaviorList.add(ProjectInformation.OVERWRITE_BEHAVIOR_UPDATE_EXISTING);
+        overwriteBehaviorList.add(ProjectInformation.OVERWRITE_BEHAVIOR_SKIP_EXISTING);
         overwriteBehavior = getProjectInformation().getOverwriteBehavior();
 
         return INPUT;

@@ -23,8 +23,8 @@
 				</tr>
 				<tr>
 					<td colspan="2">
-						<table summary="<s:property/>" class="mappingReport">
-							<tr><th colspan="3"><s:property/></th></tr>								
+						<table class="mappingReport">
+							<tr><th colspan="3">Mapping</th></tr>								
 							<s:if test="projectInformation.fieldMapping.size()>0">
 								<tr><th colspan="3">XPath</th></tr>
 								<s:iterator value="projectInformation.fieldMapping.entrySet()">
@@ -43,7 +43,7 @@
 				<s:radio list="overwriteBehaviorList" name="overwriteBehavior" label="Overwrite Behavior"></s:radio>
 				<tr>
 					<td><button onclick="window.location='/AssignFields?assetType=<s:property value="nAssetTypes-1"/>';return false;">Previous</button></td>
-					<td align="right"><input type="submit" value="Migration" name="submitButton"/></td>
+					<td align="right"><input type="submit" value="Go" style="color: green;font-size: 1.5em;" name="submitButton"/></td>
 				</tr>
 			</s:form>
 		</div>

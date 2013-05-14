@@ -8,10 +8,8 @@ package com.hannonhill.smt.service;
 import java.io.File;
 import java.io.StringReader;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -31,22 +29,6 @@ import com.hannonhill.smt.util.XmlUtil;
  */
 public class XmlAnalyzer
 {
-    public static Set<String> FILE_TO_PAGE_EXTENSIONS;
-    public static Set<String> FILE_TO_BLOCK_EXTENSIONS;
-
-    static
-    {
-        FILE_TO_PAGE_EXTENSIONS = new HashSet<String>();
-        FILE_TO_PAGE_EXTENSIONS.add(".html");
-        FILE_TO_PAGE_EXTENSIONS.add(".php");
-        FILE_TO_PAGE_EXTENSIONS.add(".jsp");
-        FILE_TO_PAGE_EXTENSIONS.add(".htm");
-        FILE_TO_PAGE_EXTENSIONS.add(".asp");
-
-        FILE_TO_BLOCK_EXTENSIONS = new HashSet<String>();
-        FILE_TO_BLOCK_EXTENSIONS.add(".block");
-    }
-
     /**
      * Analyzes a folder by going through each file in the folder and subfolders using
      * {@link #analyzeFile(File, ProjectInformation)}.

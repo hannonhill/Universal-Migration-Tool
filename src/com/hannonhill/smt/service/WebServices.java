@@ -197,6 +197,13 @@ public class WebServices
         String pagePath = PathUtil.removeLeadingSlashes(parentFolderPath + "/" + pageName);
         String contentTypePath = projectInformation.getContentTypePath();
 
+        String overwriteBehavior = projectInformation.getOverwriteBehavior();
+        if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_SKIP_EXISTING))
+        {
+            String existingPageId = getPageId(pagePath, projectInformation);
+            if (existingPageId != null)
+                return new CascadeAssetInformation(existingPageId, pagePath, true);
+        }
         // This should be caught before, but just a sanity check
         if (contentTypePath == null)
             return null;
@@ -212,7 +219,6 @@ public class WebServices
 
         // Check overwrite behavior. If overwrite behavior is to update existing, check if page with given
         // path exists and if so, get its id
-        String overwriteBehavior = projectInformation.getOverwriteBehavior();
         String existingPageId = null;
         if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_UPDATE_EXISTING))
             existingPageId = getPageId(pagePath, projectInformation);
@@ -274,6 +280,14 @@ public class WebServices
             parentFolderPath = "_cascade/blocks/static";
         String blockName = PathUtil.truncateExtension(file.getName());
 
+        String overwriteBehavior = projectInformation.getOverwriteBehavior();
+        if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_SKIP_EXISTING))
+        {
+            String existingBlockId = getXhtmlBlockId(blockPath, projectInformation);
+            if (existingBlockId != null)
+                return new CascadeAssetInformation(existingBlockId, blockPath, true);
+        }
+
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
         Log.add("Creating XHTML block in Cascade " + relativePath + "... ", migrationStatus);
@@ -286,7 +300,6 @@ public class WebServices
             parentFolderPath = PathUtil.getParentFolderPathFromPath(blockPath);
         }
 
-        String overwriteBehavior = projectInformation.getOverwriteBehavior();
         String existingBlockId = null;
 
         if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_UPDATE_EXISTING))
@@ -402,7 +415,8 @@ public class WebServices
 
         if (projectInformation.getExistingCascadeFiles().contains(filePath.toLowerCase()))
         {
-            Log.add("file already exists<br/>", migrationStatus);
+            migrationStatus.incrementAssetsSkipped();
+            Log.add("<span style=\"color:blue;\">file already exists</span><br/>", migrationStatus);
             return;
         }
 
@@ -447,6 +461,8 @@ public class WebServices
         projectInformation.getExistingCascadeFiles().add(filePath.toLowerCase());
 
         Log.add(PathUtil.generateFileLink(cascadeFile, projectInformation.getUrl()), migrationStatus);
+
+        migrationStatus.incrementAssetsCreated();
         Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
     }
 
