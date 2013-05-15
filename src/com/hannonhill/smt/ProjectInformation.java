@@ -81,6 +81,7 @@ public class ProjectInformation
         int lastSlash = currentDir.lastIndexOf('/') == -1 ? currentDir.lastIndexOf('\\') : currentDir.lastIndexOf('/');
         String parentToCurrentDir = currentDir.substring(0, lastSlash);
         uploadsDir = parentToCurrentDir + "/" + UPLOADS_DIR + "/";
+        System.out.println("Uploads directory path: " + uploadsDir);
         logsDir = parentToCurrentDir + "/" + LOGS_DIR + "/";
         overwriteBehavior = OVERWRITE_BEHAVIOR_KEEP_EXISTING;
         migrationStatus = new MigrationStatus();
