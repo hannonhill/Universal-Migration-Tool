@@ -77,12 +77,9 @@ public class ProjectInformation
     public ProjectInformation()
     {
         // this is supposed to be the bin folder (or eclipse folder if runnign from Eclipse)
-        String currentDir = System.getProperty("user.dir");
-        int lastSlash = currentDir.lastIndexOf('/') == -1 ? currentDir.lastIndexOf('\\') : currentDir.lastIndexOf('/');
-        String parentToCurrentDir = currentDir.substring(0, lastSlash);
-        uploadsDir = parentToCurrentDir + "/" + UPLOADS_DIR + "/";
-        System.out.println("Uploads directory path: " + uploadsDir);
-        logsDir = parentToCurrentDir + "/" + LOGS_DIR + "/";
+        String tomcatDir = System.getProperty("catalina.base");
+        uploadsDir = tomcatDir + "/" + UPLOADS_DIR + "/";
+        logsDir = tomcatDir + "/" + LOGS_DIR + "/";
         overwriteBehavior = OVERWRITE_BEHAVIOR_KEEP_EXISTING;
         migrationStatus = new MigrationStatus();
         linkCheckingStatus = new LinkCheckingStatus();
