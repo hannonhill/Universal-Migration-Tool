@@ -1,7 +1,7 @@
 /*
  * Created on Nov 20, 2009 by Artur Tomusiak
  * 
- * Copyright(c) 2000-2009 Hannon Hill Corporation.  All rights reserved.
+ * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.smt.struts;
 
@@ -17,9 +17,8 @@ import com.hannonhill.smt.service.FileSystem;
 /**
  * Action that displays and processes form with zip archive
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class UploadZipAction extends BaseAction
 {
@@ -32,9 +31,6 @@ public class UploadZipAction extends BaseAction
 
     private final List<String> availableFolders = new ArrayList<String>();
 
-    /* (non-Javadoc)
-     * @see com.opensymphony.xwork2.ActionSupport#execute()
-     */
     @Override
     public String execute() throws Exception
     {
@@ -59,7 +55,8 @@ public class UploadZipAction extends BaseAction
             return SUCCESS;
         }
 
-        // if not, then validate the form, unzip to a new directory, and then set it in project information and go to next action
+        // if not, then validate the form, unzip to a new directory, and then set it in project information
+        // and go to next action
         validateForm();
         if (getActionErrors().size() > 0)
         {
@@ -90,7 +87,8 @@ public class UploadZipAction extends BaseAction
             xmlDirectory = SELECTED_BELOW;
             availableFolders.add(xmlDirectory);
 
-            // If the xml directory was already selected (for example we are going back using "Previous" button,
+            // If the xml directory was already selected (for example we are going back using "Previous"
+            // button,
             // get it from the project information and use it instead of using SELECTED_BELOW
             String xmlDir = projectInformation.getXmlDirectory();
             if (xmlDir != null)
@@ -99,12 +97,14 @@ public class UploadZipAction extends BaseAction
         catch (Exception e)
         {
             addActionError("An error occured: " + e.getMessage());
+            e.printStackTrace();
         }
         return INPUT;
     }
 
     /**
-     * Unzips the contents of the uploaded zip file to a new directory and sets the directory in the project information.
+     * Unzips the contents of the uploaded zip file to a new directory and sets the directory in the project
+     * information.
      * 
      * @return
      */
