@@ -157,7 +157,8 @@ public class PathUtil
     }
 
     /**
-     * Removes leading slashs (one or more) if they are there
+     * Removes leading slashs (one or more) if they are there. Leaves leading slash if link is only the
+     * leading slash ("/").
      * 
      * @param link
      * @return
@@ -166,6 +167,9 @@ public class PathUtil
     {
         if (link == null)
             return "";
+
+        if (link.equals("/"))
+            return link;
 
         return link.startsWith("/") ? removeLeadingSlashes(link.substring(1)) : link;
     }

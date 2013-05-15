@@ -162,6 +162,7 @@ public class Migrator
 
             Log.add("<span style=\"color: red;\">Error when creating a file: " + message + "</span><br/>", migrationStatus);
             e.printStackTrace();
+            migrationStatus.incrementAssetsWithErrors();
         }
     }
 
@@ -281,11 +282,15 @@ public class Migrator
                 // path after the xml directory
                 String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
 
+                if (!XmlAnalyzer.allCharactersLegal(relativePath))
+                    relativePath = XmlAnalyzer.removeIllegalCharacters(relativePath);
+
                 Log.add("Creating a page from file " + relativePath + "... ", migrationStatus);
 
                 CascadeAssetInformation cascadePage = WebServices.createPage(file, projectInformation);
 
                 Log.add(PathUtil.generatePageLink(cascadePage, projectInformation.getUrl()), migrationStatus);
+
                 migrationStatus.incrementProgress(1);
                 migrationStatus.addCreatedPage(cascadePage);
 

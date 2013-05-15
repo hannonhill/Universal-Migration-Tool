@@ -204,7 +204,7 @@ public class LinkChecker
         {
             // If cache doesn't contain the link, check if it is a valid link through web services and then
             // add it to the cache
-            validLink = WebServices.doesAssetExist(path, projectInformation);
+            validLink = WebServices.getAssetId(path, projectInformation) != null;
 
             if (validLink)
                 linkCheckingStatus.getValidLinkCache().add(path);

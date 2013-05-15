@@ -38,7 +38,7 @@ public class JTidy
     {
         try
         {
-            XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(content)));
+            XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader("<system-xml>" + content + "</system-xml>")));
 
             // If no exception is thrown, return back the original contents
             return content;
@@ -63,9 +63,11 @@ public class JTidy
      */
     public static String tidyContentConditionallyFullHtml(String content)
     {
+        content = stripDoctype(content);
+
         try
         {
-            XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(content)));
+            XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader("<system-xml>" + content + "</system-xml>")));
 
             // If no exception is thrown, return back the original contents
             return content;
@@ -79,6 +81,20 @@ public class JTidy
                                                               // output stream
             return outStream.toString();
         }
+    }
+
+    /**
+     * Strips the doctype using regular expression
+     * 
+     * @param xml
+     * @return
+     */
+    public static final String stripDoctype(String xml)
+    {
+        Pattern p = Pattern.compile("<!DOCTYPE [^>]*>");
+        Matcher match = p.matcher(xml);
+        xml = match.replaceAll("");
+        return xml;
     }
 
     /**

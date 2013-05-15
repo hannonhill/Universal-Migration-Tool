@@ -221,7 +221,7 @@ public class LinkRewriter
 
         String withoutExtension = PathUtil.truncateExtension(withoutAnchor);
         String pathOnly = PathUtil.removeLeadingSlashes(withoutExtension);
-        if (projectInformation.getExistingCascadePages().contains(pathOnly.toLowerCase()))
+        if (projectInformation.getExistingCascadePages().keySet().contains(pathOnly.toLowerCase()))
             attribute.setNodeValue(withoutExtension + anchor);
     }
 

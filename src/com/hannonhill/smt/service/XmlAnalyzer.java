@@ -17,6 +17,7 @@ import org.xml.sax.InputSource;
 
 import com.hannonhill.smt.ChooserType;
 import com.hannonhill.smt.DataDefinitionField;
+import com.hannonhill.smt.ExternalRootLevelFolderAssignment;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.PathUtil;
 import com.hannonhill.smt.util.XmlUtil;
@@ -38,6 +39,17 @@ public class XmlAnalyzer
      */
     public static void analyzeFolder(File folder, ProjectInformation projectInformation)
     {
+        // Skip files with invalid characters in their path
+        String folderPath = PathUtil.getRelativePath(folder, projectInformation.getXmlDirectory());
+        String folderName = PathUtil.getNameFromPath(folderPath);
+        if (!allCharactersLegal(folderName))
+        {
+            String newPath = removeIllegalCharacters(folderPath);
+
+            ExternalRootLevelFolderAssignment rootFolderAssignment = new ExternalRootLevelFolderAssignment(folderPath, newPath, null);
+            projectInformation.getExternalRootLevelFolderAssignemnts().put(folderPath, rootFolderAssignment);
+        }
+
         List<File> files = FileSystem.getFolderContents(folder);
         for (File file : files)
             analyzeFile(file, projectInformation);
@@ -178,10 +190,62 @@ public class XmlAnalyzer
             return;
         }
 
+        // Skip files with invalid characters in their name
+        String filePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
+        String fileName = PathUtil.getNameFromPath(filePath);
+        if (!allCharactersLegal(fileName))
+            return;
+
         String fileNameWihtoutXmlExtension = PathUtil.truncateExtension(file.getName());
         String extension = PathUtil.getExtension(fileNameWihtoutXmlExtension);
         projectInformation.getGatheredExtensions().add(extension);
         projectInformation.getFilesToProcess().add(file);
     }
 
+    /**
+     * Returns true if all the characters in a name are legal
+     * 
+     * @param name
+     * @return
+     */
+    public static final boolean allCharactersLegal(String name)
+    {
+        for (char c : name.toCharArray())
+        {
+            if (!isLegalCharacter(c))
+            {
+                return false;
+            }
+        }
+        // No bad chars found
+        return true;
+    }
+
+    /**
+     * Removes illegal characters from provided string
+     * 
+     * @param name
+     * @return
+     */
+    public static final String removeIllegalCharacters(String name)
+    {
+        StringBuilder result = new StringBuilder();
+        for (char c : name.toCharArray())
+        {
+            if (isLegalCharacter(c))
+                result.append(c);
+        }
+        return result.toString();
+    }
+
+    /**
+     * Wrapper for easily changing how we identify a "legal" character.
+     * 
+     * @param c
+     * @return
+     */
+    private static final boolean isLegalCharacter(char c)
+    {
+        return Character.isUnicodeIdentifierPart(c) || Character.isWhitespace(c) || c == '.' || c == ',' || c == '-' || c == '+' || c == '/';
+    }
 }

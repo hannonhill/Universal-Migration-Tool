@@ -10,9 +10,7 @@ import java.io.ByteArrayInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.jdom.Attribute;
 import org.jdom.Document;
-import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
@@ -24,7 +22,6 @@ import org.xml.sax.InputSource;
  * Utility class with methods related to XML modifications
  * 
  * @author Artur Tomusiak
- * @version $Id$
  * @since 1.0
  */
 public class XmlUtil
@@ -43,6 +40,7 @@ public class XmlUtil
     {
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+        docBuilder.setErrorHandler(new EmptyErrorHandler());
         return docBuilder.parse(inputSource).getChildNodes().item(0);
     }
 
@@ -109,22 +107,7 @@ public class XmlUtil
         SAXBuilder builder = new SAXBuilder();
         InputSource inputSource = new InputSource(new ByteArrayInputStream(xmlContents.getBytes("UTF-8")));
         Document doc = builder.build(inputSource);
-        StringBuilder result = new StringBuilder();
-        for (Object node : XPath.selectNodes(doc, xPathExpression))
-        {
-            if (node instanceof Attribute)
-                result.append(((Attribute) node).getValue());
 
-            else if (node instanceof Element)
-            {
-                XMLOutputter outputter = new XMLOutputter();
-                result.append(outputter.outputString((Element) node));
-            }
-            else
-                result.append(node.toString());
-
-        }
-
-        return result.toString();
+        return new XMLOutputter().outputString(XPath.selectNodes(doc, xPathExpression));
     }
 }

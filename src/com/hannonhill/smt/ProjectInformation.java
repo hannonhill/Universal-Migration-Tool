@@ -51,11 +51,14 @@ public class ProjectInformation
                                             // it is a set to avoid duplicates and because order doesn't
                                             // really matter
     Set<String> gatheredExtensions = new HashSet<String>();
-    private final Set<String> existingCascadeFiles; // Used for Luminis file import and link checking
-    private final Set<String> existingCascadeXhtmlBlocks;// performance reasons - file paths are checked first
+
+    // path to id map
+    private final Map<String, String> existingCascadeFiles; // Used for Luminis file import and link checking
+    private final Map<String, String> existingCascadeXhtmlBlocks;// performance reasons - file paths are
+                                                                 // checked first
     // to avoid having to check if file exists each time a new
     // file is brought in
-    private final Set<String> existingCascadePages; // Also used for link checking performance reasons
+    private final Map<String, String> existingCascadePages; // Also used for link checking performance reasons
 
     private final Set<String> pageExtensions; // Extensions of files that need to be converted to pages
     private final Set<String> blockExtensions; // Extensions of files that need to be converted to xhtml
@@ -86,9 +89,9 @@ public class ProjectInformation
         filesToProcess = new HashSet<File>();
         contentTypes = new HashMap<String, ContentTypeInformation>();
         externalRootLevelFolderAssignemnts = new HashMap<String, ExternalRootLevelFolderAssignment>();
-        existingCascadeFiles = new HashSet<String>();
-        existingCascadeXhtmlBlocks = new HashSet<String>();
-        existingCascadePages = new HashSet<String>();
+        existingCascadeFiles = new HashMap<String, String>();
+        existingCascadeXhtmlBlocks = new HashMap<String, String>();
+        existingCascadePages = new HashMap<String, String>();
         pageExtensions = new HashSet<String>();
         blockExtensions = new HashSet<String>();
 
@@ -332,7 +335,7 @@ public class ProjectInformation
     /**
      * @return Returns the existingCascadeFiles.
      */
-    public Set<String> getExistingCascadeFiles()
+    public Map<String, String> getExistingCascadeFiles()
     {
         return existingCascadeFiles;
     }
@@ -340,7 +343,7 @@ public class ProjectInformation
     /**
      * @return Returns the existingCascadeXhtmlBlocks.
      */
-    public Set<String> getExistingCascadeXhtmlBlocks()
+    public Map<String, String> getExistingCascadeXhtmlBlocks()
     {
         return existingCascadeXhtmlBlocks;
     }
@@ -348,7 +351,7 @@ public class ProjectInformation
     /**
      * @return Returns the existingCascadePages.
      */
-    public Set<String> getExistingCascadePages()
+    public Map<String, String> getExistingCascadePages()
     {
         return existingCascadePages;
     }

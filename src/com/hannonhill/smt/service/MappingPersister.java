@@ -17,6 +17,7 @@ import com.hannonhill.smt.DataDefinitionField;
 import com.hannonhill.smt.ExternalRootLevelFolderAssignment;
 import com.hannonhill.smt.Field;
 import com.hannonhill.smt.MetadataSetField;
+import com.hannonhill.smt.MigrationStatus;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.smt.util.XmlUtil;
 
@@ -116,6 +117,8 @@ public class MappingPersister
             projectInformation.getFieldMapping().clear();
             projectInformation.getStaticValueMapping().clear();
             projectInformation.setDefaultExtensions();
+            projectInformation.getExternalRootLevelFolderAssignemnts().clear();
+            projectInformation.setMigrationStatus(new MigrationStatus());
 
             ContentTypeInformation contentType = null;
             for (int i = 0; i < rootNode.getChildNodes().getLength(); i++)

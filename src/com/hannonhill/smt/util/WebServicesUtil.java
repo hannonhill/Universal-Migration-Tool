@@ -54,6 +54,8 @@ public class WebServicesUtil
     public static Page setupPageObject(File pageFile, ProjectInformation projectInformation) throws Exception
     {
         String path = PathUtil.truncateExtension(PathUtil.getRelativePath(pageFile, projectInformation.getXmlDirectory()));
+        if (!XmlAnalyzer.allCharactersLegal(path))
+            path = XmlAnalyzer.removeIllegalCharacters(path);
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
         String pageFileContents = JTidy.tidyContentConditionallyFullHtml(FileSystem.getFileContents(pageFile));
@@ -115,14 +117,12 @@ public class WebServicesUtil
         {
             Field field = projectInformation.getFieldMapping().get(xPath);
 
-            if (field == null)
+            if (field == null || !(field instanceof DataDefinitionField))
                 continue;
 
             String fieldValue = XmlUtil.evaluateXPathExpression(fileContents, xPath);
             fieldValue = LinkRewriter.rewriteLinksInXml(fieldValue, assetPath, projectInformation);
-
-            if (field instanceof DataDefinitionField)
-                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
+            assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
         }
 
         // For each static value field, assign the static value in structured data
@@ -304,7 +304,7 @@ public class WebServicesUtil
             if (path != null && !path.trim().equals(""))
             {
                 path = path.trim();
-                if (WebServices.doesAssetExist(path, projectInformation))
+                if (WebServices.getAssetId(path, projectInformation) != null)
                 {
                     StructuredDataNode fileNode = new StructuredDataNode();
                     fileNode.setIdentifier(identifier);

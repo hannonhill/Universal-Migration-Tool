@@ -77,7 +77,7 @@
 				var cell3 = document.createElement("td");
 				cell3.appendChild(document.createTextNode(cascadeFieldType));
 				var cell4 = document.createElement("td");
-				var hiddenContent = "<input type=\"hidden\" name=\"selectedXPaths\" value=\""+(xPath!=null ? xPath : "null")+"\"/>";
+				var hiddenContent = "<input type=\"hidden\" name=\"selectedXPaths\" value=\""+(xPath!=null ? xPathEscaped : "null")+"\"/>";
 				hiddenContent += "<input type=\"hidden\" name=\"staticValues\" value=\""+staticValueEscaped+"\"/>";				
 				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeMetadataFields\" value=\""+(cascadeFieldTypeLetter=="m" ? cascadeFieldIdentifier : "null")+"\"/>";				
 				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeDataDefinitionFields\" value=\"" + (cascadeFieldTypeLetter=="d"?cascadeFieldIdentifier : "null") + "\"/>";				
@@ -124,7 +124,7 @@
 											<option value="sv">Static Value</option>
 										</select>
 										<br/>
-										<input type="text" id="value"/>
+										<input type="text" id="value" size="80"/>
 									</td>
 									<td colspan="2">
 										<select name="cascadeFieldNames" id="cascadeFieldNames" style="width: 100%">
@@ -160,7 +160,7 @@
 		</div>
 		<script type="text/javascript">
 		<s:iterator value="fieldMap.entrySet()">
-			addMappingByName("<s:property value="key"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
+			addMappingByName("<s:property value="key" escapeJavaScript="true" escape="false"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
 		</s:iterator>
 		<s:iterator value="staticValueMap.entrySet()">
 			addMappingByName(null, "<s:property value="value" escapeJavaScript="true" escape="false"/>", "<s:property value="key.identifier"/>", "<s:property value="key.class.name"/>");
