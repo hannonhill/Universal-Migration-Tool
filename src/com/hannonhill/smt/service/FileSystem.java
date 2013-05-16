@@ -25,6 +25,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import com.hannonhill.smt.ProjectInformation;
+import com.hannonhill.smt.util.PathUtil;
 
 /**
  * A service responsible for tasks related with files and folders
@@ -59,7 +60,10 @@ public class FileSystem
             if (entry.isDirectory())
                 (new File(uploadDir + "/" + entry.getName())).mkdirs();
             else
+            {
+                (new File(uploadDir + "/" + PathUtil.getParentFolderPathFromPath(entry.getName()))).mkdirs();
                 copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + "/" + entry.getName())));
+            }
         }
 
         zipFile.close();

@@ -106,12 +106,6 @@ public class MappingPersister
             String xmlFilePath = projectInformation.getXmlDirectory() + ".xml";
             File file = new File(xmlFilePath);
 
-            // If the file doesn't exist, don't do anything
-            if (!file.exists())
-                return;
-
-            Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new FileInputStream(file)));
-
             // Clear existing values
             projectInformation.setContentTypePath(null);
             projectInformation.getFieldMapping().clear();
@@ -119,6 +113,12 @@ public class MappingPersister
             projectInformation.setDefaultExtensions();
             projectInformation.getExternalRootLevelFolderAssignemnts().clear();
             projectInformation.setMigrationStatus(new MigrationStatus());
+
+            // If the file doesn't exist, don't do anything
+            if (!file.exists())
+                return;
+
+            Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new FileInputStream(file)));
 
             ContentTypeInformation contentType = null;
             for (int i = 0; i < rootNode.getChildNodes().getLength(); i++)

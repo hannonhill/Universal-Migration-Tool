@@ -410,10 +410,6 @@ public class WebServices
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(filePath);
         String fileName = filesystemFile.getName();
 
-        // Do not create files in root folder. Instead, put them in "files" folder
-        if (parentFolderPath.equals(""))
-            parentFolderPath = "files";
-
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         if (logCreatingFile)
             Log.add("Creating file in Cascade " + filePath + "... ", migrationStatus);
