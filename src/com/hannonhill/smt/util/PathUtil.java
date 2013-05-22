@@ -118,7 +118,7 @@ public class PathUtil
         for (; oldPartsIndex < oldParts.length; oldPartsIndex++)
             newPath.append("/" + oldParts[oldPartsIndex]);
 
-        return newPath.toString();
+        return "/" + removeLeadingSlashes(newPath.toString());
     }
 
     /**
