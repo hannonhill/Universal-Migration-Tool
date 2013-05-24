@@ -4,6 +4,18 @@
 	<head>
 		<title>Generic Migration Tool</title>
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
+		<link href="/css/jquery-ui-1.10.3.custom.min.css" media="screen" rel="stylesheet" type="text/css"></link>
+		<link href="/css/jquery.shadow.css" media="screen" rel="stylesheet" type="text/css"></link>		
+		<script type="text/javascript" src="/javascript/jquery-1.9.0.js"></script>
+		<script type="text/javascript" src="/javascript/jquery-ui-1.10.3.custom.min.js"></script>
+		<script type="text/javascript" src="/javascript/json2.js"></script>
+		<script type="text/javascript" src="/javascript/jquery.shadow.js"></script>	
+		<script type="text/javascript">
+			$(function() {
+				$('#page').shadow({type:'sides', sides:'vt-2'});
+				$('input[type=button], input[type=submit], button').button();
+			});
+		</script>
 		<script type="text/javascript" src="/javascript/json2.js?t=<s:property value="time"/>"></script>
 		<script type="text/javascript">
 			var currentProgress = 0;
@@ -261,43 +273,45 @@
 		</script>
 	</head>
 	<body>
-		<h1>Generic Migration Tool</h1>
-		<div class="main">
-			<h2>Migration Started</h2>
-			<h4><s:actionerror /></h4>
-			<div id="log"></div>
-			<div class="progress">
-				<div id="progress-bar">
-					<div id="progress-percent">0%</div>
-					&nbsp;
+		<div class="container">
+			<div id="page">		
+				<h1>Generic Migration Tool</h1>
+				<h2>Migration Started</h2>
+				<h4><s:actionerror /></h4>
+				<div id="log"></div>
+				<div class="progress">
+					<div id="progress-bar">
+						<div id="progress-percent">0%</div>
+						&nbsp;
+					</div>
+					<table class="status" id="migration-status">
+						<tr>
+							<td>Created: <span id="created">0</span></td>
+							<td>Skipped: <span id="skipped">0</span></td>
+							<td>Errors: <span id="errors">0</span></td>
+							<td>Aligned: <span id="aligned">0</span></td>
+							<td>Aligning errors: <span id="notAligned">0</span></td>
+						</tr>
+					</table>
+					<table class="status" id="link-checker-status" style="display: none;">
+						<tr>
+							<td>Checked: <span id="checked">0</span></td>
+							<td>Errors: <span id="checkingErrors">0</span></td>
+							<td>Correct Links: <span id="correctLinks">0</span></td>
+							<td>Broken Links: <span id="brokenLinks">0</span></td>
+						</tr>
+					</table>
 				</div>
-				<table class="status" id="migration-status">
-					<tr>
-						<td>Created: <span id="created">0</span></td>
-						<td>Skipped: <span id="skipped">0</span></td>
-						<td>Errors: <span id="errors">0</span></td>
-						<td>Aligned: <span id="aligned">0</span></td>
-						<td>Aligning errors: <span id="notAligned">0</span></td>
-					</tr>
-				</table>
-				<table class="status" id="link-checker-status" style="display: none;">
-					<tr>
-						<td>Checked: <span id="checked">0</span></td>
-						<td>Errors: <span id="checkingErrors">0</span></td>
-						<td>Correct Links: <span id="correctLinks">0</span></td>
-						<td>Broken Links: <span id="brokenLinks">0</span></td>
-					</tr>
-				</table>
+				<div style="text-align: center;padding-top: 20px;">
+					<button onclick="window.location='/MigrationSummary';return false;" id="goBack" style="display:none;">Go Back</button>
+					<button onclick="callStop();return false;" id="stopMigration">Stop Migration</button>
+					<button onclick="callStop();return false;" id="stopLinkChecker" style="display:none;">Stop Link Checker</button>
+					<button onclick="window.location='/StartFromBeginning';return false;" id="startOver">Start From Beginning</button>
+					<button onclick="startLinkChecker();return false;" id="startLinkChecker" style="display: none;">Start Link Checker</button>
+					<button onclick="startLinkChecker();return false;" id="restartLinkChecker" style="display: none;">Restart Link Checker</button>
+					<button onclick="restartMigration();return false;" id="restartMigration" style="display: none;">Restart Migration</button>
+				</div>	
 			</div>
-			<div style="text-align: center;">
-				<button onclick="window.location='/MigrationSummary';return false;" id="goBack" style="display:none;">Go Back</button>
-				<button onclick="callStop();return false;" id="stopMigration">Stop Migration</button>
-				<button onclick="callStop();return false;" id="stopLinkChecker" style="display:none;">Stop Link Checker</button>
-				<button onclick="window.location='/StartFromBeginning';return false;" id="startOver">Start From Beginning</button>
-				<button onclick="startLinkChecker();return false;" id="startLinkChecker" style="display: none;">Start Link Checker</button>
-				<button onclick="startLinkChecker();return false;" id="restartLinkChecker" style="display: none;">Restart Link Checker</button>
-				<button onclick="restartMigration();return false;" id="restartMigration" style="display: none;">Restart Migration</button>
-			</div>	
 		</div>
 		<script type="text/javascript">
 			<s:if test="projectInformation.currentTask=='link-checker'">switchUIToLinkChecker();</s:if>

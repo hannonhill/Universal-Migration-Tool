@@ -4,7 +4,37 @@
 	<head>
 		<title>Generic Migration Tool</title>
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
+		<link href="/css/jquery-ui-1.10.3.custom.min.css" media="screen" rel="stylesheet" type="text/css"></link>
+		<link href="/css/jquery.shadow.css" media="screen" rel="stylesheet" type="text/css"></link>		
+		<script type="text/javascript" src="/javascript/jquery-1.9.0.js"></script>
+		<script type="text/javascript" src="/javascript/jquery-ui-1.10.3.custom.min.js"></script>
+		<script type="text/javascript" src="/javascript/json2.js"></script>
+		<script type="text/javascript" src="/javascript/jquery.shadow.js"></script>	
 		<script type="text/javascript">
+			$(function() {
+				$('#page').shadow({type:'sides', sides:'vt-2'});
+				$('input[type=button], input[type=submit], button').button();
+			});
+			(function ($) 
+			{
+			    $.fn.styleTable = function (options) 
+			    {
+			        var defaults = {
+			            css: 'styleTable'
+			        };
+			        options = $.extend(defaults, options);
+
+			        return this.each(function () {
+
+			            input = $(this);
+			            input.addClass(options.css);
+
+			            input.addClass('ui-corner-all');
+
+			            input.find("th").addClass("ui-state-default");
+			        });
+			    };
+			})(jQuery);
 			function addMappingFromForm()
 			{
 				var isStaticValue = isLastSelected("xmlFieldNames");
@@ -90,6 +120,7 @@
 
 				var dropdownsEl = document.getElementById("dropdowns");
 				tableEl.insertBefore(row, dropdownsEl);
+				$('input[type=button], input[type=submit], button').button();
 			}
 
 			function removeMapping(fieldName)
@@ -108,55 +139,57 @@
 		</script>		
 	</head>
 	<body>
-		<h1>Generic Migration Tool</h1>
-		<div class="main">
-			<h2>Please assign field mappings</h2>
-			<h4><s:actionerror /></h4>
-			<s:form action="AssignFields" method="POST">
-				<tr>
-					<td colspan="2">
-						<table summary="Mappings" style="width:100%">
-							<tbody id="mappings"><tr><th>XML Field</th><th>Type</th><th>Cascade Field</th><th>Type</th><th></th></tr>
-								<tr id="dropdowns">
-									<td colspan="2">
-										<select name="xmlFieldNames" id="xmlFieldNames" style="width: 100%">
-											<option value="xPath">XPath</option>
-											<option value="sv">Static Value</option>
-										</select>
-										<br/>
-										<input type="text" id="value" size="80"/>
-									</td>
-									<td colspan="2">
-										<select name="cascadeFieldNames" id="cascadeFieldNames" style="width: 100%">
-											<optgroup label="-Metadata-">
-												<s:iterator value="cascadeMetadataFields">												
-													<option value="m<s:property value="identifier"/>">
-														<s:property value="label"/>
-													</option>
-												</s:iterator>
-											</optgroup>
-											<optgroup label="-Data Definition-">
-												<s:iterator value="cascadeDataDefinitionFields">												
-													<option value="d<s:property value="identifier"/>">
-														<s:property value="label"/>
-													</option>
-												</s:iterator>
-											</optgroup>
-										</select>
-									</td>
-									<td><button onclick="addMappingFromForm();return false;">+</button></td>
-								</tr>
-							</tbody>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<button onclick="window.location='/AssignContentType';return false;">Previous</button>
-					</td>
-					<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>
-				</tr>
-			</s:form>
+		<div class="container">
+			<div id="page">		
+				<h1>Generic Migration Tool</h1>
+				<h2>Please assign field mappings</h2>
+				<h4><s:actionerror /></h4>
+				<s:form action="AssignFields" method="POST">
+					<tr>
+						<td colspan="2">
+							<table summary="Mappings" style="width:100%">
+								<tbody id="mappings"><tr><th>From</th><th>To Cascade Field</th><th>Type</th><th>&nbsp;</th></tr>
+									<tr id="dropdowns">
+										<td colspan="2">
+											<select name="xmlFieldNames" id="xmlFieldNames" style="width: 100%">
+												<option value="xPath">XPath</option>
+												<option value="sv">Static Value</option>
+											</select>
+											<br/>
+											<input type="text" id="value" size="80"/>
+										</td>
+										<td>
+											<select name="cascadeFieldNames" id="cascadeFieldNames" style="width: 100%">
+												<optgroup label="-Metadata-">
+													<s:iterator value="cascadeMetadataFields">												
+														<option value="m<s:property value="identifier"/>">
+															<s:property value="label"/>
+														</option>
+													</s:iterator>
+												</optgroup>
+												<optgroup label="-Data Definition-">
+													<s:iterator value="cascadeDataDefinitionFields">												
+														<option value="d<s:property value="identifier"/>">
+															<s:property value="label"/>
+														</option>
+													</s:iterator>
+												</optgroup>
+											</select>
+										</td>
+										<td><button onclick="addMappingFromForm();return false;">+</button></td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button onclick="window.location='/AssignContentType';return false;">Previous</button>
+						</td>
+						<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>
+					</tr>
+				</s:form>
+			</div>
 		</div>
 		<script type="text/javascript">
 		<s:iterator value="fieldMap.entrySet()">
@@ -165,6 +198,8 @@
 		<s:iterator value="staticValueMap.entrySet()">
 			addMappingByName(null, "<s:property value="value" escapeJavaScript="true" escape="false"/>", "<s:property value="key.identifier"/>", "<s:property value="key.class.name"/>");
 		</s:iterator>
+		$('#mappings').parent().styleTable();
+		
 		</script>
 	</body>
 </html>
