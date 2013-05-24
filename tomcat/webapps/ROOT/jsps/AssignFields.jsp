@@ -156,10 +156,10 @@
 												<option value="sv">Static Value</option>
 											</select>
 											<br/>
-											<input type="text" id="value" size="80"/>
+											<input type="text" id="value" size="60"/>
 										</td>
 										<td>
-											<select name="cascadeFieldNames" id="cascadeFieldNames" style="width: 100%">
+											<select name="cascadeFieldNames" id="cascadeFieldNames" style="width: 150px">
 												<optgroup label="-Metadata-">
 													<s:iterator value="cascadeMetadataFields">												
 														<option value="m<s:property value="identifier"/>">
