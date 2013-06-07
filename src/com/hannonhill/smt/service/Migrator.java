@@ -43,7 +43,7 @@ public class Migrator
                 WebServices.realignXhtmlBlockLinks(block.getId(), projectInformation);
                 migrationStatus.incrementProgress(1);
                 migrationStatus.incrementAssetsAligned();
-                Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+                Log.add("<span class=\"text-success\">success.</span><br/>", migrationStatus);
             }
             catch (Exception e)
             {
@@ -54,7 +54,7 @@ public class Migrator
 
                 migrationStatus.incrementProgress(1);
                 migrationStatus.incrementAssetsNotAligned();
-                Log.add("<span style=\"color: red;\">Error: " + message + "</span><br/>", migrationStatus);
+                Log.add("<span class=\"text-error\">Error: " + message + "</span><br/>", migrationStatus);
                 e.printStackTrace();
             }
         }
@@ -70,7 +70,7 @@ public class Migrator
                 WebServices.realignLinks(page.getId(), projectInformation);
                 migrationStatus.incrementProgress(1);
                 migrationStatus.incrementAssetsAligned();
-                Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+                Log.add("<span class=\"text-success\">success.</span><br/>", migrationStatus);
             }
             catch (Exception e)
             {
@@ -81,7 +81,7 @@ public class Migrator
 
                 migrationStatus.incrementProgress(1);
                 migrationStatus.incrementAssetsNotAligned();
-                Log.add("<span style=\"color: red;\">Error: " + message + "</span><br/>", migrationStatus);
+                Log.add("<span class=\"text-error\">Error: " + message + "</span><br/>", migrationStatus);
                 e.printStackTrace();
             }
         }
@@ -160,7 +160,7 @@ public class Migrator
             if (message == null && e.getCause() != null)
                 message = e.getCause().getMessage();
 
-            Log.add("<span style=\"color: red;\">Error when creating a file: " + message + "</span><br/>", migrationStatus);
+            Log.add("<span class=\"text-error\">Error when creating a file: " + message + "</span><br/>", migrationStatus);
             e.printStackTrace();
             migrationStatus.incrementAssetsWithErrors();
         }
@@ -185,13 +185,13 @@ public class Migrator
             migrationStatus.addCreatedBlock(cascadeBlock);
             if (cascadeBlock.isAlreadyExisted())
             {
-                Log.add("<span style=\"color: blue;\">already existed.</span><br/>", migrationStatus);
+                Log.add("<span class=\"text-warning\">already existed.</span><br/>", migrationStatus);
                 migrationStatus.incrementAssetsSkipped();
             }
             else
             {
                 migrationStatus.incrementAssetsCreated();
-                Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+                Log.add("<span class=\"text-success\">success.</span><br/>", migrationStatus);
             }
         }
         catch (Exception e)
@@ -201,7 +201,7 @@ public class Migrator
             if (message == null && e.getCause() != null)
                 message = e.getCause().getMessage();
 
-            Log.add("<span style=\"color: red;\">Error: " + message + "</span><br/>", migrationStatus);
+            Log.add("<span class=\"text-error\">Error: " + message + "</span><br/>", migrationStatus);
 
             // Increment progress by 2, because no link alignment will be needed for it
             migrationStatus.incrementProgress(2);
@@ -236,7 +236,7 @@ public class Migrator
             if (message == null && e.getCause() != null)
                 message = e.getCause().getMessage();
 
-            Log.add("<span style=\"color: red;\">Error when reading site's metadata set: " + message + "</span><br/>", migrationStatus);
+            Log.add("<span class=\"text-error\">Error when reading site's metadata set: " + message + "</span><br/>", migrationStatus);
             e.printStackTrace();
             return;
         }
@@ -258,7 +258,7 @@ public class Migrator
             if (message == null && e.getCause() != null)
                 message = e.getCause().getMessage();
 
-            Log.add("<span style=\"color: red;\">Error when uploading files: " + message + "</span><br/>", migrationStatus);
+            Log.add("<span class=\"text-error\">Error when uploading files: " + message + "</span><br/>", migrationStatus);
             e.printStackTrace();
         }
 
@@ -298,12 +298,12 @@ public class Migrator
                 if (cascadePage.isAlreadyExisted())
                 {
                     migrationStatus.incrementAssetsSkipped();
-                    Log.add("<span style=\"color: blue;\">already existed.</span><br/>", migrationStatus);
+                    Log.add("<span class=\"text-warning\">already existed.</span><br/>", migrationStatus);
                 }
                 else
                 {
                     migrationStatus.incrementAssetsCreated();
-                    Log.add("<span style=\"color: green;\">success.</span><br/>", migrationStatus);
+                    Log.add("<span class=\"text-success\">success.</span><br/>", migrationStatus);
                 }
             }
             catch (Exception e)
@@ -313,7 +313,7 @@ public class Migrator
                 if (message == null && e.getCause() != null)
                     message = e.getCause().getMessage();
 
-                Log.add("<span style=\"color: red;\">Error: " + message + "</span><br/>", migrationStatus);
+                Log.add("<span class=\"text-error\">Error: " + message + "</span><br/>", migrationStatus);
 
                 // Increment progress by 2, because no link alignment will be needed for it
                 migrationStatus.incrementProgress(2);

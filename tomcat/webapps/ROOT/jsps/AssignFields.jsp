@@ -1,40 +1,118 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
+<!DOCTYPE html>
 <html>
-	<head>
+  <head>
+		<meta charset="utf-8">    
 		<title>Generic Migration Tool</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<link href="/css/bootstrap.min.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
-		<link href="/css/jquery-ui-1.10.3.custom.min.css" media="screen" rel="stylesheet" type="text/css"></link>
-		<link href="/css/jquery.shadow.css" media="screen" rel="stylesheet" type="text/css"></link>		
+
 		<script type="text/javascript" src="/javascript/jquery-1.9.0.js"></script>
-		<script type="text/javascript" src="/javascript/jquery-ui-1.10.3.custom.min.js"></script>
-		<script type="text/javascript" src="/javascript/json2.js"></script>
-		<script type="text/javascript" src="/javascript/jquery.shadow.js"></script>	
+	</head>
+	<body>
+		<div class="mt-header">
+      <div class="container">
+        <h1 class="brand">Cascade Server <span>Generic Migration Tool</span></h1>
+      </div>
+    </div>
+    <div id="page" class="container">
+      <div class="row">
+        <div class="span12">
+					<p class="lead">Please assign field mappings.</p>
+					
+					<div id="actionError" class="alert alert-block alert-error hide">
+					  <h5>The following error(s) were encountered:</h5>
+					  <div><s:actionerror /></div>
+					</div>
+					
+					<form action="/AssignFields" method="POST">
+						<div class="row">							
+							<div class="span3">
+								<div class="well well-small">
+									<div class="control-group">
+									    <label class="control-label" for="xmlFieldNames">From</label>
+									    <div class="controls">
+									    	<select name="xmlFieldNames" id="xmlFieldNames" class="input-block-level">
+													<option value="xPath">XPath</option>
+													<option value="sv">Static Value</option>
+												</select>
+									      <input class="input-block-level" type="text" id="value" value="" />
+									    </div>
+									  </div>
+									  <div class="control-group">
+									  	<label class="control-label" for="cascadeFieldNames">To Cascade Field</label>
+									    <div class="controls">
+									      <select name="cascadeFieldNames" id="cascadeFieldNames" class="input-block-level">
+													<optgroup label="-Metadata-">
+														<s:iterator value="cascadeMetadataFields">												
+															<option value="m<s:property value="identifier"/>">
+																<s:property value="label"/>
+															</option>
+														</s:iterator>
+													</optgroup>
+													<optgroup label="-Data Definition-">
+														<s:iterator value="cascadeDataDefinitionFields">												
+															<option value="d<s:property value="identifier"/>">
+																<s:property value="label"/>
+															</option>
+														</s:iterator>
+													</optgroup>
+												</select>
+									    </div>
+									  </div>
+									  <div class="control-group">
+									    <a class="btn js-add-mapping"><i class="icon-plus-sign"></i> Add Mapping</a>
+									  </div>
+								 </div>
+							</div>
+							<div class="span9">
+							  <table summary="Mappings" class="table table-striped">
+									<thead>
+										<tr>
+											<th style="width:35%">From</th>
+											<th style="width:35%">To Cascade Field</th>
+											<th style="width:20%">Type</th>
+											<th>&nbsp;</th>
+										</tr>
+									</thead>
+									<tbody id="mappings"></tbody>
+								</table>
+							</div>
+						</div>
+						<button class="btn pull-left" onclick="window.location='/AssignContentType';return false;">Previous</button>
+					 	<button type="submit" name="submitButton" class="btn btn-primary pull-right">Save and Next</button>
+					</form>
+				</div>
+			</div>
+		</div>
 		<script type="text/javascript">
 			$(function() {
-				$('#page').shadow({type:'sides', sides:'vt-2'});
-				$('input[type=button], input[type=submit], button').button();
+				var actionError = $("#actionError");
+				
+				if (actionError.find('div').text() !== "") {
+					actionError.removeClass('hide');
+				}
+				
+				$('.js-add-mapping').on('click', function() {
+					addMappingFromForm();					
+					return false;
+				});
+				
+				$('table').on('click', '.js-remove-mapping', function() {
+					$(this).parents('tr').remove();
+				});
+				
+				<s:iterator value="fieldMap.entrySet()">
+					addMappingByName("<s:property value="key" escapeJavaScript="true" escape="false"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
+				</s:iterator>
+				<s:iterator value="staticValueMap.entrySet()">
+					addMappingByName(null, "<s:property value="value" escapeJavaScript="true" escape="false"/>", "<s:property value="key.identifier"/>", "<s:property value="key.class.name"/>");
+				</s:iterator>
 			});
-			(function ($) 
-			{
-			    $.fn.styleTable = function (options) 
-			    {
-			        var defaults = {
-			            css: 'styleTable'
-			        };
-			        options = $.extend(defaults, options);
 
-			        return this.each(function () {
-
-			            input = $(this);
-			            input.addClass(options.css);
-
-			            input.addClass('ui-corner-all');
-
-			            input.find("th").addClass("ui-state-default");
-			        });
-			    };
-			})(jQuery);
 			function addMappingFromForm()
 			{
 				var isStaticValue = isLastSelected("xmlFieldNames");
@@ -64,6 +142,7 @@
 				var cascadeFieldSelectedIndex = cascadeFieldNamesEl.selectedIndex;
 				var xPath = isStaticValue ? null : value;
 				var staticValue = isStaticValue ? value : null;
+				
 				addMapping(xPath, staticValue, cascadeFieldSelectedIndex);
 				valueEl.value='';
 				valueEl.focus();
@@ -86,41 +165,28 @@
 
 			function addMapping(xPath, staticValue, cascadeFieldSelectedIndex)
 			{
-				var staticValueEscaped = staticValue==null?null:staticValue.replace(/&/g, '&amp;').replace(/\"/g, '&quot;');
-				var xPathEscaped = xPath == null ? null : xPath.replace(/&/g, '&amp;').replace(/\"/g, '&quot;');
-				
-				var cascadeFieldNamesEl = document.getElementById("cascadeFieldNames");
-				var cascadeFieldName = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].text;
-				var cascadeFieldIdentifierFull = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].value;
-				var cascadeFieldTypeLetter = cascadeFieldIdentifierFull.charAt(0);
-				var cascadeFieldIdentifier = cascadeFieldIdentifierFull.substring(1);
-				var cascadeFieldType = cascadeFieldTypeLetter == "m" ? "metadata" : "data definition";
-					
-				var randomnumber=Math.floor(Math.random()*100000000)
-				var tableEl = document.getElementById("mappings");
-				var row = document.createElement("tr");
-				row.id = "field"+randomnumber;
-				var cell1 = document.createElement("td");
-				cell1.appendChild(document.createTextNode(staticValue == null ? 'XPath: ' + xPath : 'Static: ' + staticValue));
-				var cell2 = document.createElement("td");
-				cell2.appendChild(document.createTextNode(cascadeFieldName));
-				var cell3 = document.createElement("td");
-				cell3.appendChild(document.createTextNode(cascadeFieldType));
-				var cell4 = document.createElement("td");
-				var hiddenContent = "<input type=\"hidden\" name=\"selectedXPaths\" value=\""+(xPath!=null ? xPathEscaped : "null")+"\"/>";
-				hiddenContent += "<input type=\"hidden\" name=\"staticValues\" value=\""+staticValueEscaped+"\"/>";				
-				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeMetadataFields\" value=\""+(cascadeFieldTypeLetter=="m" ? cascadeFieldIdentifier : "null")+"\"/>";				
-				hiddenContent += "<input type=\"hidden\" name=\"selectedCascadeDataDefinitionFields\" value=\"" + (cascadeFieldTypeLetter=="d"?cascadeFieldIdentifier : "null") + "\"/>";				
-				cell4.innerHTML = hiddenContent+"<button onclick=\"removeMapping('" + randomnumber + "');return false;\">&#8722;</button>";
+				var staticValueEscaped = staticValue === null ? null : staticValue.replace(/&/g, '&amp;').replace(/\"/g, '&quot;'),
+						xPathEscaped = xPath === null ? null : xPath.replace(/&/g, '&amp;').replace(/\"/g, '&quot;'),
+						cascadeFieldNamesEl = document.getElementById("cascadeFieldNames"),
+						cascadeFieldName = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].text,
+						cascadeFieldIdentifierFull = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].value,
+						cascadeFieldTypeLetter = cascadeFieldIdentifierFull.charAt(0),
+						cascadeFieldIdentifier = cascadeFieldIdentifierFull.substring(1),
+						cascadeFieldType = cascadeFieldTypeLetter == "m" ? "metadata" : "data definition",
+						row = $("<tr> \
+							<td>" + (staticValue == null ? 'XPath: ' + xPath : 'Static: ' + staticValue) + "</td> \
+							<td>" + cascadeFieldName + "</td> \
+							<td>" + cascadeFieldType + "</td> \
+							<td> \
+							<input type='hidden' name='selectedXPaths' value='" + (xPath !== null ? xPathEscaped : "null") + "' /> \
+							<input type='hidden' name='staticValues' value='" + staticValueEscaped + "'/> \
+							<input type='hidden' name='selectedCascadeMetadataFields' value='" + (cascadeFieldTypeLetter === "m" ? cascadeFieldIdentifier : "null") + "'/> \
+							<input type='hidden' name='selectedCascadeDataDefinitionFields' value='" + (cascadeFieldTypeLetter === "d" ? cascadeFieldIdentifier : "null") + "'/> \
+							<a class='btn btn-small js-remove-mapping' title='Remove'><i class='icon-remove-sign'></i></a> \
+							</td> \
+						</tr>");
 
-				row.appendChild(cell1);
-				row.appendChild(cell2);
-				row.appendChild(cell3);				
-				row.appendChild(cell4);
-
-				var dropdownsEl = document.getElementById("dropdowns");
-				tableEl.insertBefore(row, dropdownsEl);
-				$('input[type=button], input[type=submit], button').button();
+				$("#mappings").append(row);
 			}
 
 			function removeMapping(fieldName)
@@ -136,70 +202,6 @@
 				var el = document.getElementById(elementId);
 				return el.selectedIndex == (el.options.length - 1);
 			}
-		</script>		
-	</head>
-	<body>
-		<div class="container">
-			<div id="page">		
-				<h1>Generic Migration Tool</h1>
-				<h2>Please assign field mappings</h2>
-				<h4><s:actionerror /></h4>
-				<s:form action="AssignFields" method="POST">
-					<tr>
-						<td colspan="2">
-							<table summary="Mappings" style="width:100%">
-								<tbody id="mappings"><tr><th>From</th><th>To Cascade Field</th><th>Type</th><th>&nbsp;</th></tr>
-									<tr id="dropdowns">
-										<td colspan="2">
-											<select name="xmlFieldNames" id="xmlFieldNames" style="width: 100%">
-												<option value="xPath">XPath</option>
-												<option value="sv">Static Value</option>
-											</select>
-											<br/>
-											<input type="text" id="value" size="60"/>
-										</td>
-										<td>
-											<select name="cascadeFieldNames" id="cascadeFieldNames" style="width: 150px">
-												<optgroup label="-Metadata-">
-													<s:iterator value="cascadeMetadataFields">												
-														<option value="m<s:property value="identifier"/>">
-															<s:property value="label"/>
-														</option>
-													</s:iterator>
-												</optgroup>
-												<optgroup label="-Data Definition-">
-													<s:iterator value="cascadeDataDefinitionFields">												
-														<option value="d<s:property value="identifier"/>">
-															<s:property value="label"/>
-														</option>
-													</s:iterator>
-												</optgroup>
-											</select>
-										</td>
-										<td><button onclick="addMappingFromForm();return false;">+</button></td>
-									</tr>
-								</tbody>
-							</table>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<button onclick="window.location='/AssignContentType';return false;">Previous</button>
-						</td>
-						<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>
-					</tr>
-				</s:form>
-			</div>
-		</div>
-		<script type="text/javascript">
-		<s:iterator value="fieldMap.entrySet()">
-			addMappingByName("<s:property value="key" escapeJavaScript="true" escape="false"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
-		</s:iterator>
-		<s:iterator value="staticValueMap.entrySet()">
-			addMappingByName(null, "<s:property value="value" escapeJavaScript="true" escape="false"/>", "<s:property value="key.identifier"/>", "<s:property value="key.class.name"/>");
-		</s:iterator>
-		$('#mappings').parent().styleTable();
-		
-		</script>
+		</script>	
 	</body>
 </html>

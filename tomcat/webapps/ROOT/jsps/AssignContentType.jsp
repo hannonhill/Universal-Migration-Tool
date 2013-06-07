@@ -1,38 +1,69 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
+<!DOCTYPE html>
 <html>
-	<head>
+  <head>
+		<meta charset="utf-8">    
 		<title>Generic Migration Tool</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<link href="/css/bootstrap.min.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
-		<link href="/css/jquery-ui-1.10.3.custom.min.css" media="screen" rel="stylesheet" type="text/css"></link>
-		<link href="/css/jquery.shadow.css" media="screen" rel="stylesheet" type="text/css"></link>		
+
 		<script type="text/javascript" src="/javascript/jquery-1.9.0.js"></script>
-		<script type="text/javascript" src="/javascript/jquery-ui-1.10.3.custom.min.js"></script>
-		<script type="text/javascript" src="/javascript/json2.js"></script>
-		<script type="text/javascript" src="/javascript/jquery.shadow.js"></script>	
-		<script type="text/javascript">
-			$(function() {
-				$('#page').shadow({type:'sides', sides:'vt-2'});
-				$('input[type=button], input[type=submit], button').button();
-			});
-		</script>
 	</head>
 	<body>
-		<div class="container">
-			<div id="page">		
-				<h1>Generic Migration Tool</h1>
-				<h3>Please select the Content Type and file extensions</h3>
-				<h4><s:actionerror /></h4>
-				<s:form action="AssignContentType" method="POST">
-				    <s:select list="contentTypes" name="selectedContentType" label="Cascade Content Type"/>
-				    <s:textfield name="pageExtensions" label="Page extensions" size="60"/>
-				    <s:textfield name="blockExtensions" label="XHTML Block extensions" size="60"/>
-					<tr class="buttons">
-						<td><button onclick="window.location='<s:property value="previousLink"/>';return false;">Previous</button></td>
-						<td align="right"><input type="submit" value="Save and Next" name="submitButton"/></td>
-					</tr>
-				</s:form>
+		<div class="mt-header">
+      <div class="container">
+        <h1 class="brand">Cascade Server <span>Generic Migration Tool</span></h1>
+      </div>
+    </div>
+    <div id="page" class="container">
+      <div class="row">
+        <div class="span12">
+					<p class="lead">Please select the Content Type and file extensions.</p>
+					
+					<div id="actionError" class="alert alert-block alert-error hide">
+					  <h5>The following error(s) were encountered:</h5>
+					  <div><s:actionerror /></div>
+					</div>
+					
+					<form action="/AssignContentType" method="POST" class="form-horizontal">
+						<div class="control-group">
+                <label class="control-label" for="selectedContentType">Cascade Content Type</label>
+                <div class="controls">
+                  <select id="selectedContentType" name="selectedContentType" class="span4">
+                  <s:iterator value="contentTypes">
+										<option value="<s:property />"><s:property /></option>
+									</s:iterator>
+                  </select>                  
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="pageExtensions">Page Extensions</label>
+                <div class="controls">
+                  <input class="span4" type="text" id="pageExtensions" name="pageExtensions" value="<s:property value="pageExtensions"/>" />
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="blockExtensions">XHTML Block extensions</label>
+                <div class="controls">
+                  <input class="span4" type="text" id="blockExtensions" name="blockExtensions" value="<s:property value="blockExtensions"/>" />
+                </div>
+              </div>
+              <button class="btn pull-left" onclick="window.location='/UploadZip';return false;">Previous</button>
+					  	<button type="submit" name="submitButton" class="btn btn-primary pull-right">Save and Next</button>
+					</form>
+				</div>
 			</div>
 		</div>
+		<script type="text/javascript">
+			$(function() {
+				var actionError = $("#actionError");
+				if (actionError.find('div').text() !== "") {
+					actionError.removeClass('hide');
+				}
+			});
+		</script>
 	</body>
 </html>

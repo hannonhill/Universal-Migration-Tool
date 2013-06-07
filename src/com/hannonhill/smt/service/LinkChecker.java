@@ -60,7 +60,7 @@ public class LinkChecker
             }
             catch (Exception e)
             {
-                Log.add("<span style=\"color: red;\">Error: " + e.getMessage() + "</span><br/>", linkCheckingStatus);
+                Log.add("<span class=\"text-error\">Error: " + e.getMessage() + "</span><br/>", linkCheckingStatus);
                 e.printStackTrace();
                 linkCheckingStatus.incrementAssetsWithErrors();
             }
@@ -82,7 +82,7 @@ public class LinkChecker
             }
             catch (Exception e)
             {
-                Log.add("<span style=\"color: red;\">Error: " + e.getMessage() + "</span><br/>", linkCheckingStatus);
+                Log.add("<span class=\"text-error\">Error: " + e.getMessage() + "</span><br/>", linkCheckingStatus);
                 e.printStackTrace();
                 linkCheckingStatus.incrementAssetsWithErrors();
             }
@@ -218,7 +218,7 @@ public class LinkChecker
         else
         {
             linkCheckingStatus.incrementBrokenLinks();
-            Log.add("<span style=\"padding-left: 20px;color:orange;\">Broken link " + label + " pointing to " + path + "</span><br/>",
+            Log.add("<span class=\"text-warning\" style=\"padding-left: 20px;\">Broken link " + label + " pointing to " + path + "</span><br/>",
                     linkCheckingStatus);
         }
     }
