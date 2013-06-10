@@ -45,7 +45,7 @@
               <div class="control-group">
                 <label class="control-label" for="password">Password</label>
                 <div class="controls">
-                  <input class="span2" type="text" id="password" name="password" value="<s:property value="password"/>" />
+                  <input class="span2" type="password" id="password" name="password" value="<s:property value="password"/>" />
                 </div>
               </div>
               <div class="control-group">
