@@ -51,7 +51,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock;
  */
 public class WebServices
 {
-    private static final long MAX_FILE_SIZE_MB = 20l;
+    private static final long MAX_FILE_SIZE_MB = 500l;
 
     private static final MetadataSetField[] STANDARD_METADATA_FIELDS = new MetadataSetField[]
     {
