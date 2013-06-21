@@ -170,6 +170,8 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean databaseExportTool;
 
+    private java.lang.Boolean sendStaleAssetNotifications;
+
     public GlobalAbilities() {
     }
 
@@ -254,7 +256,8 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean moveRenameAssets,
            java.lang.Boolean recycleBinChecker,
            java.lang.Boolean pathRepairTool,
-           java.lang.Boolean databaseExportTool) {
+           java.lang.Boolean databaseExportTool,
+           java.lang.Boolean sendStaleAssetNotifications) {
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.accessSiteManagement = accessSiteManagement;
            this.createSites = createSites;
@@ -336,6 +339,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.recycleBinChecker = recycleBinChecker;
            this.pathRepairTool = pathRepairTool;
            this.databaseExportTool = databaseExportTool;
+           this.sendStaleAssetNotifications = sendStaleAssetNotifications;
     }
 
 
@@ -1958,6 +1962,26 @@ public class GlobalAbilities  implements java.io.Serializable {
         this.databaseExportTool = databaseExportTool;
     }
 
+
+    /**
+     * Gets the sendStaleAssetNotifications value for this GlobalAbilities.
+     * 
+     * @return sendStaleAssetNotifications
+     */
+    public java.lang.Boolean getSendStaleAssetNotifications() {
+        return sendStaleAssetNotifications;
+    }
+
+
+    /**
+     * Sets the sendStaleAssetNotifications value for this GlobalAbilities.
+     * 
+     * @param sendStaleAssetNotifications
+     */
+    public void setSendStaleAssetNotifications(java.lang.Boolean sendStaleAssetNotifications) {
+        this.sendStaleAssetNotifications = sendStaleAssetNotifications;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof GlobalAbilities)) return false;
@@ -2212,7 +2236,10 @@ public class GlobalAbilities  implements java.io.Serializable {
               this.pathRepairTool.equals(other.getPathRepairTool()))) &&
             ((this.databaseExportTool==null && other.getDatabaseExportTool()==null) || 
              (this.databaseExportTool!=null &&
-              this.databaseExportTool.equals(other.getDatabaseExportTool())));
+              this.databaseExportTool.equals(other.getDatabaseExportTool()))) &&
+            ((this.sendStaleAssetNotifications==null && other.getSendStaleAssetNotifications()==null) || 
+             (this.sendStaleAssetNotifications!=null &&
+              this.sendStaleAssetNotifications.equals(other.getSendStaleAssetNotifications())));
         __equalsCalc = null;
         return _equals;
     }
@@ -2466,6 +2493,9 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         if (getDatabaseExportTool() != null) {
             _hashCode += getDatabaseExportTool().hashCode();
+        }
+        if (getSendStaleAssetNotifications() != null) {
+            _hashCode += getSendStaleAssetNotifications().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -3040,6 +3070,13 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("databaseExportTool");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "databaseExportTool"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendStaleAssetNotifications");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendStaleAssetNotifications"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
