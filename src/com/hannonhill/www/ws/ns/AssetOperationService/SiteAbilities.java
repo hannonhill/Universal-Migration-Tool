@@ -104,6 +104,8 @@ public class SiteAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean cancelPublishJobs;
 
+    private java.lang.Boolean sendStaleAssetNotifications;
+
     public SiteAbilities() {
     }
 
@@ -155,7 +157,8 @@ public class SiteAbilities  implements java.io.Serializable {
            java.lang.Boolean alwaysAllowedToToggleDataChecks,
            java.lang.Boolean viewPublishQueue,
            java.lang.Boolean reorderPublishQueue,
-           java.lang.Boolean cancelPublishJobs) {
+           java.lang.Boolean cancelPublishJobs,
+           java.lang.Boolean sendStaleAssetNotifications) {
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.uploadImagesFromWysiwyg = uploadImagesFromWysiwyg;
            this.multiSelectCopy = multiSelectCopy;
@@ -204,6 +207,7 @@ public class SiteAbilities  implements java.io.Serializable {
            this.viewPublishQueue = viewPublishQueue;
            this.reorderPublishQueue = reorderPublishQueue;
            this.cancelPublishJobs = cancelPublishJobs;
+           this.sendStaleAssetNotifications = sendStaleAssetNotifications;
     }
 
 
@@ -1166,6 +1170,26 @@ public class SiteAbilities  implements java.io.Serializable {
         this.cancelPublishJobs = cancelPublishJobs;
     }
 
+
+    /**
+     * Gets the sendStaleAssetNotifications value for this SiteAbilities.
+     * 
+     * @return sendStaleAssetNotifications
+     */
+    public java.lang.Boolean getSendStaleAssetNotifications() {
+        return sendStaleAssetNotifications;
+    }
+
+
+    /**
+     * Sets the sendStaleAssetNotifications value for this SiteAbilities.
+     * 
+     * @param sendStaleAssetNotifications
+     */
+    public void setSendStaleAssetNotifications(java.lang.Boolean sendStaleAssetNotifications) {
+        this.sendStaleAssetNotifications = sendStaleAssetNotifications;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof SiteAbilities)) return false;
@@ -1321,7 +1345,10 @@ public class SiteAbilities  implements java.io.Serializable {
               this.reorderPublishQueue.equals(other.getReorderPublishQueue()))) &&
             ((this.cancelPublishJobs==null && other.getCancelPublishJobs()==null) || 
              (this.cancelPublishJobs!=null &&
-              this.cancelPublishJobs.equals(other.getCancelPublishJobs())));
+              this.cancelPublishJobs.equals(other.getCancelPublishJobs()))) &&
+            ((this.sendStaleAssetNotifications==null && other.getSendStaleAssetNotifications()==null) || 
+             (this.sendStaleAssetNotifications!=null &&
+              this.sendStaleAssetNotifications.equals(other.getSendStaleAssetNotifications())));
         __equalsCalc = null;
         return _equals;
     }
@@ -1476,6 +1503,9 @@ public class SiteAbilities  implements java.io.Serializable {
         }
         if (getCancelPublishJobs() != null) {
             _hashCode += getCancelPublishJobs().hashCode();
+        }
+        if (getSendStaleAssetNotifications() != null) {
+            _hashCode += getSendStaleAssetNotifications().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1819,6 +1849,13 @@ public class SiteAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("cancelPublishJobs");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cancelPublishJobs"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("sendStaleAssetNotifications");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendStaleAssetNotifications"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

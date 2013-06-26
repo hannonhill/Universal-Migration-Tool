@@ -22,6 +22,8 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     private com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.InlineEditableField[] inlineEditableFields;
+
     public ContentType() {
     }
 
@@ -39,7 +41,8 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
            java.lang.String metadataSetPath,
            java.lang.String dataDefinitionId,
            java.lang.String dataDefinitionPath,
-           com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations) {
+           com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations,
+           com.hannonhill.www.ws.ns.AssetOperationService.InlineEditableField[] inlineEditableFields) {
         super(
             id,
             name,
@@ -55,6 +58,7 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.dataDefinitionId = dataDefinitionId;
         this.dataDefinitionPath = dataDefinitionPath;
         this.contentTypePageConfigurations = contentTypePageConfigurations;
+        this.inlineEditableFields = inlineEditableFields;
     }
 
 
@@ -197,6 +201,26 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.contentTypePageConfigurations = contentTypePageConfigurations;
     }
 
+
+    /**
+     * Gets the inlineEditableFields value for this ContentType.
+     * 
+     * @return inlineEditableFields
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.InlineEditableField[] getInlineEditableFields() {
+        return inlineEditableFields;
+    }
+
+
+    /**
+     * Sets the inlineEditableFields value for this ContentType.
+     * 
+     * @param inlineEditableFields
+     */
+    public void setInlineEditableFields(com.hannonhill.www.ws.ns.AssetOperationService.InlineEditableField[] inlineEditableFields) {
+        this.inlineEditableFields = inlineEditableFields;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ContentType)) return false;
@@ -229,7 +253,10 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
               this.dataDefinitionPath.equals(other.getDataDefinitionPath()))) &&
             ((this.contentTypePageConfigurations==null && other.getContentTypePageConfigurations()==null) || 
              (this.contentTypePageConfigurations!=null &&
-              java.util.Arrays.equals(this.contentTypePageConfigurations, other.getContentTypePageConfigurations())));
+              java.util.Arrays.equals(this.contentTypePageConfigurations, other.getContentTypePageConfigurations()))) &&
+            ((this.inlineEditableFields==null && other.getInlineEditableFields()==null) || 
+             (this.inlineEditableFields!=null &&
+              java.util.Arrays.equals(this.inlineEditableFields, other.getInlineEditableFields())));
         __equalsCalc = null;
         return _equals;
     }
@@ -264,6 +291,17 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
                  i<java.lang.reflect.Array.getLength(getContentTypePageConfigurations());
                  i++) {
                 java.lang.Object obj = java.lang.reflect.Array.get(getContentTypePageConfigurations(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
+        if (getInlineEditableFields() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getInlineEditableFields());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getInlineEditableFields(), i);
                 if (obj != null &&
                     !obj.getClass().isArray()) {
                     _hashCode += obj.hashCode();
@@ -329,6 +367,14 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "contentTypePageConfiguration"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("inlineEditableFields");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "inlineEditableFields"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "inlineEditableField"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "inlineEditableField"));
         typeDesc.addFieldDesc(elemField);
     }
 

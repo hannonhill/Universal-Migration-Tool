@@ -205,12 +205,17 @@ public class WebServicesUtil
      */
     private static String trimMetadataFieldValue(String fieldName, String fieldValue, TaskStatus taskStatus)
     {
-        if (fieldValue == null || fieldValue.length() <= 250)
+        int maxLength = 250;
+
+        if (WebServices.LONG_METADATA_FIELDS.contains(fieldName))
+            maxLength = 65535;
+
+        if (fieldValue == null || fieldValue.length() <= maxLength)
             return fieldValue;
 
         Log.add("<span style=\"color:orange;\">Cascade metadata field \"" + fieldName + "\" contains " + fieldValue.length()
-                + " characters. Trimming to 250.</span>", taskStatus);
-        return fieldValue.substring(0, 250);
+                + " characters. Trimming to " + maxLength + ".</span>", taskStatus);
+        return fieldValue.substring(0, maxLength);
     }
 
     /**

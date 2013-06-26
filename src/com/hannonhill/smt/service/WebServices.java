@@ -51,7 +51,7 @@ import com.hannonhill.www.ws.ns.AssetOperationService.XhtmlDataDefinitionBlock;
  */
 public class WebServices
 {
-    private static final long MAX_FILE_SIZE_MB = 20l;
+    private static final long MAX_FILE_SIZE_MB = 500l;
 
     private static final MetadataSetField[] STANDARD_METADATA_FIELDS = new MetadataSetField[]
     {
@@ -60,6 +60,9 @@ public class WebServices
             new MetadataSetField("keywords", "Keywords", false), new MetadataSetField("metaDescription", "Description", false),
             new MetadataSetField("author", "Author", false)
     };
+
+    // Names of metadata fields whose values can be longer than 250 characters
+    public static final List<String> LONG_METADATA_FIELDS;
 
     public static final DataDefinitionField XHTML_DATA_DEFINITION_FIELD = new DataDefinitionField("xhtml", "XHTML", null, false);
 
@@ -72,6 +75,12 @@ public class WebServices
         STANDARD_METADATA_FIELD_IDENTIFIERS = new ArrayList<String>();
         for (Field standardMetadataField : STANDARD_METADATA_FIELDS)
             STANDARD_METADATA_FIELD_IDENTIFIERS.add(standardMetadataField.getIdentifier());
+
+        LONG_METADATA_FIELDS = new ArrayList<String>();
+        LONG_METADATA_FIELDS.add("keywords");
+        LONG_METADATA_FIELDS.add("summary");
+        LONG_METADATA_FIELDS.add("teaser");
+        LONG_METADATA_FIELDS.add("metaDescription");
     }
 
     /**
