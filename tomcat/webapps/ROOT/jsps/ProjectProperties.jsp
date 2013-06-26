@@ -75,7 +75,7 @@
 				<h3>Please enter Cascade Server information</h3>
 				<h4><s:actionerror /></h4>
 				<s:form action="ProjectProperties" method="POST">
-				    <s:textfield label="Cascade Server 7.2.x URL" name="url" value="%{url}" size="50" id="url"/>
+				    <s:textfield label="Cascade Server 7.4.x URL" name="url" value="%{url}" size="50" id="url"/>
 				    <s:textfield label="Username" name="username" value="%{username}" size="50" id="username"/>
 				    <s:password label="Password" name="password" value="%{password}" size="50" id="password" />
 				    <s:select label="Site Name" list="availableSites" name="siteName" id="siteName"/>
