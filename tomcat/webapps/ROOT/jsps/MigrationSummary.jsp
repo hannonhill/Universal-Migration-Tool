@@ -99,7 +99,7 @@
 							<label class="control-label" for="overwriteBehavior0"><strong>Overwrite Behavior</strong></label>
 					    <div class="controls span10">
 					    <s:iterator value="overwriteBehaviorList" status="stat">
-					    	<label class="radio"><input type="radio" name="overwriteBehavior" id="overwriteBehavior<s:property value="#stat.index" />" value="<s:property />" /> <s:property /></label>
+					    	<label class="radio"><input type="radio" name="overwriteBehavior" id="overwriteBehavior<s:property value="#stat.index" />" value="<s:property />"<s:if test="#stat.index==0"> checked="checked"</s:if> /> <s:property /></label>
 							</s:iterator>
 					    </div>
 					  </div>

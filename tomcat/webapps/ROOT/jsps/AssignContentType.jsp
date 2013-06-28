@@ -34,8 +34,9 @@
                 <div class="controls">
                   <select id="selectedContentType" name="selectedContentType" class="span4">
                   <s:iterator value="contentTypes">
-										<option value="<s:property />"><s:property /></option>
-									</s:iterator>
+                  	<s:set var="value"><s:property /></s:set>										
+                  	<option value="<s:property value="#value" />"<s:if test="selectedContentType==#value"> selected="selected"</s:if>><s:property value="#value" /></option>
+                  </s:iterator>
                   </select>                  
                 </div>
               </div>

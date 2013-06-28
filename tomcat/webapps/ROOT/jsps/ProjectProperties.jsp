@@ -45,7 +45,7 @@
               <div class="control-group">
                 <label class="control-label" for="password">Password</label>
                 <div class="controls">
-                  <input class="span2" type="password" id="password" name="password" value="<s:property value="password"/>" />
+                  <input class="span2" type="password" id="password" name="password" />
                 </div>
               </div>
               <div class="control-group">
@@ -54,7 +54,7 @@
                   <select id="siteName" name="siteName" class="span4"></select>
                 </div>
               </div>
-              <button type="submit" name="submitButton" class="btn btn-primary">Save and Next</button>
+              <button type="submit" name="submitButton" class="btn btn-primary pull-right">Save and Next</button>
             </fieldset>
           </form>
         </div>
