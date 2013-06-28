@@ -30,11 +30,11 @@
 					
 					<form action="/UploadZip" method="POST" class="form-horizontal" enctype="multipart/form-data">
 						<div class="control-group">
-					    <label class="control-label" for="xmlDirectory">XML Folder</label>
+					    <label class="control-label" for="xmlDirectory0">XML Folder</label>
 					    <div class="controls">
-					      <label class="radio">
-					        <input type="radio" id="xmlDirectory" name="xmlDirectory" value="Selected Below"/> Selected Below
-					      </label>
+					    <s:iterator value="availableFolders" status="stat">
+					    	<label class="radio"><input type="radio" name="xmlDirectory" id="xmlDirectory<s:property value="#stat.index" />" value="<s:property />"<s:if test="#stat.index==0"> checked="checked"</s:if> /> <s:property /></label>
+					    </s:iterator>
 					    </div>
 					  </div>
 					  <div class="control-group">
