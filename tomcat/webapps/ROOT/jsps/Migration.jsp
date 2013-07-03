@@ -51,15 +51,14 @@
 						</tr>
 					</table>
 				</div>
-					<div style="text-align: center;padding-top: 20px;">
-						<a class="btn" onclick="window.location='/MigrationSummary';return false;" id="goBack" style="display:none;">Go Back</a>
-						<a class="btn" onclick="callStop();return false;" id="stopMigration">Stop Migration</a>
-						<a class="btn" onclick="callStop();return false;" id="stopLinkChecker" style="display:none;">Stop Link Checker</a>
-						<a class="btn" onclick="window.location='/StartFromBeginning';return false;" id="startOver">Start From Beginning</a>
-						<a class="btn" onclick="startLinkChecker();return false;" id="startLinkChecker" style="display: none;">Start Link Checker</a>
-						<a class="btn" onclick="startLinkChecker();return false;" id="restartLinkChecker" style="display: none;">Restart Link Checker</a>
-						<a class="btn" onclick="restartMigration();return false;" id="restartMigration" style="display: none;">Restart Migration</a>
-					</div>
+				<div style="text-align: center;padding-top: 20px;">
+					<a class="btn" onclick="window.location='/MigrationSummary';return false;" id="goBack" style="display:none;">Go Back</a>
+					<a class="btn" onclick="callStop();return false;" id="stopMigration">Stop Migration</a>
+					<a class="btn" onclick="callStop();return false;" id="stopLinkChecker" style="display:none;">Stop Link Checker</a>
+					<a class="btn" onclick="window.location='/StartFromBeginning';return false;" id="startOver">Start From Beginning</a>
+					<a class="btn" onclick="startLinkChecker();return false;" id="startLinkChecker" style="display: none;">Start Link Checker</a>
+					<a class="btn" onclick="startLinkChecker();return false;" id="restartLinkChecker" style="display: none;">Restart Link Checker</a>
+					<a class="btn" onclick="restartMigration();return false;" id="restartMigration" style="display: none;">Restart Migration</a>
 				</div>
 			</div>
 		</div>

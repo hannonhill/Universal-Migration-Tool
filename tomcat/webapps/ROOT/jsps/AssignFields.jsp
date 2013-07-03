@@ -165,8 +165,8 @@
 
 			function addMapping(xPath, staticValue, cascadeFieldSelectedIndex)
 			{
-				var staticValueEscaped = staticValue === null ? null : staticValue.replace(/&/g, '&amp;').replace(/\"/g, '&quot;'),
-						xPathEscaped = xPath === null ? null : xPath.replace(/&/g, '&amp;').replace(/\"/g, '&quot;'),
+				var staticValueEscaped = staticValue === null ? null : staticValue.entityEncode(),
+						xPathEscaped = xPath === null ? null : xPath.entityEncode(),
 						cascadeFieldNamesEl = document.getElementById("cascadeFieldNames"),
 						cascadeFieldName = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].text,
 						cascadeFieldIdentifierFull = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].value,
@@ -202,6 +202,21 @@
 				var el = document.getElementById(elementId);
 				return el.selectedIndex == (el.options.length - 1);
 			}
+			
+			String.prototype.entityEncode = function() {
+				var entityMap = {
+				   "&": "&amp;",
+				   "<": "&lt;",
+				   ">": "&gt;",
+				   '"': '&quot;',
+				   "'": '&#39;',
+				   "/": '&#x2F;'
+				 };
+
+		    return this.replace(/[&<>"'\/]/g, function (s) {
+		      return entityMap[s];
+		    });
+			};
 		</script>	
 	</body>
 </html>
