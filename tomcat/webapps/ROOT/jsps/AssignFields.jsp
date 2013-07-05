@@ -213,7 +213,7 @@
 				   "/": '&#x2F;'
 				 };
 
-		    return this.replace(/[&<>"'\/]/g, function (s) {
+		    return this.replace(/[&<>"'\/](?![^& ]+;)/g, function (s) {
 		      return entityMap[s];
 		    });
 			};
