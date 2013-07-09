@@ -3,6 +3,10 @@ body {
 	font-size: 16px;
 }
 
+h3 {
+	font-size: 20px;
+}
+
 .form-horizontal .control-label {
 	width: 180px;
 }

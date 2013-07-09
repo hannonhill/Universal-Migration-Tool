@@ -33,14 +33,15 @@
 					    <label class="control-label" for="xmlDirectory0">XML Folder</label>
 					    <div class="controls">
 					    <s:iterator value="availableFolders" status="stat">
-					    	<label class="radio"><input type="radio" name="xmlDirectory" id="xmlDirectory<s:property value="#stat.index" />" value="<s:property />"<s:if test="#stat.index==0"> checked="checked"</s:if> /> <s:property /></label>
+					    	<s:set var="value"><s:property /></s:set>
+					    	<label class="radio"><input type="radio" name="xmlDirectory" id="xmlDirectory<s:property value="#stat.index" />" value="<s:property value="#value" />"<s:if test="#stat.index==0 || xmlDirectory==#value"> checked="checked"</s:if> /> <s:property value="#value" /></label>
 					    </s:iterator>
 					    </div>
 					  </div>
 					  <div class="control-group">
 					    <label class="control-label" for="UploadZip_zip">Zip File</label>
 					    <div class="controls">
-					      <input type="file" name="zip" value="" id="UploadZip_zip" onchange="$('#xmlDirectory').attr('checked',true);" />
+					      <input type="file" name="zip" value="" id="UploadZip_zip" />
 					    </div>
 					  </div>
 					  <button class="btn pull-left" onclick="window.location='/ProjectProperties';return false;">Previous</button>
@@ -55,6 +56,10 @@
 				if (actionError.find('div').text() !== "") {
 					actionError.removeClass('hide');
 				}
+				
+				$("#UploadZip_zip").on("change", function(){
+					$("input[id^='xmlDirectory']:last").attr("checked", true);
+				});
 			});
 		</script>		
 	</body>

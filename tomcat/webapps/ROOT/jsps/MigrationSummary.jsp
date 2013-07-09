@@ -29,7 +29,7 @@
 					</div>
 					
 					<form action="/MigrationSummary" method="POST">
-						<h5>Cascade Server Information</h5>
+						<h3>Cascade Server Information</h3>
 						<div class="row">
 							<div class="span3">Cascade Server URL</div>
 							<div class="span7"><strong><s:property value="projectInformation.url"/></strong></div>
@@ -44,7 +44,7 @@
 						</div>
 						<br />
 						<s:if test="projectInformation.externalRootLevelFolderAssignemnts.size()>0">
-							<h5>Folder Assignments</h5>
+							<h3>Folder Assignments</h3>
 							<table class="table table-striped">
 						  	<thead>
 						  		<tr>
@@ -69,7 +69,7 @@
 								</tbody>
 							</table>
 						</s:if>
-						<h5>Mapping</h5>	
+						<h3>Mapping</h3>	
 						<s:if test="projectInformation.fieldMapping.size()>0">							
 							<table class="table table-striped">
 								<thead>

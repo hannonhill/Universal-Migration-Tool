@@ -52,7 +52,7 @@
                   <input class="span4" type="text" id="blockExtensions" name="blockExtensions" value="<s:property value="blockExtensions"/>" />
                 </div>
               </div>
-              <button class="btn pull-left" onclick="window.location='/UploadZip';return false;">Previous</button>
+              <button class="btn pull-left" onclick="window.location='/AssignRootLevelFolders';return false;">Previous</button>
 					  	<button type="submit" name="submitButton" class="btn btn-primary pull-right">Save and Next</button>
 					</form>
 				</div>
