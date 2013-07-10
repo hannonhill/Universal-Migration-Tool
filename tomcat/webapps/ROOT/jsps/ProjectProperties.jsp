@@ -1,87 +1,144 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
-<html>
-	<head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+		<meta charset="utf-8">    
 		<title>Generic Migration Tool</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<link href="/css/bootstrap.min.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
-		<link href="/css/jquery-ui-1.10.3.custom.min.css" media="screen" rel="stylesheet" type="text/css"></link>
-		<link href="/css/jquery.shadow.css" media="screen" rel="stylesheet" type="text/css"></link>		
+
 		<script type="text/javascript" src="/javascript/jquery-1.9.0.js"></script>
-		<script type="text/javascript" src="/javascript/jquery-ui-1.10.3.custom.min.js"></script>
-		<script type="text/javascript" src="/javascript/json2.js"></script>
-		<script type="text/javascript" src="/javascript/jquery.shadow.js"></script>	
-		<script type="text/javascript">
-			$(function() {
-				$('#page').shadow({type:'sides', sides:'vt-2'});
-				$('input[type=button], input[type=submit], button').button();
-				
-				$('#url, #username, #password').change(function(){loadSiteNames();});
-				if ($('#siteName option').size()==0)
-					resetSiteNames();					
-			});
-			
-			function loadSiteNames()
-			{
-				var url = $.trim($('#url').val());
-				var username = $.trim($('#username').val());
-				var password = $.trim($('#password').val());
-				
-				if (url=='' || username=='' || password=='')
-					resetSiteNames();
-				
-				var currentlySelected = $('#siteName option:selected').val();
-				
-				resetSiteNames('Please wait...');
-				$.ajax({url: '/ProjectPropertiesGetAvailableSiteNamesAjax',
-					data: {url: url, username: username, password: password},
-					dataTypeString: 'json',
-					type: 'POST',
-					success: function(response)
-					{
-						if (response.error)
-						{
-							resetSiteNames(response.error);
-							return;
-						}
-						
-						var siteNames = response.siteNames;
-						if (!siteNames || siteNames.length==0)
-						{
-							resetSiteNames();
-							return;
-						}	
-						
-						$('#siteName option').remove();
-						for(var i=0;i<siteNames.length;i++)
-							$('#siteName').append($('<option></option>').attr("value", siteNames[i]).text(siteNames[i]));
-						
-						$('#siteName option[value="'+currentlySelected+'"]').prop('selected', true);
-					},
-					error: function(obj, e) {resetSiteNames("Error occurred: "+e);}
-				});
-			}
-			
-			function resetSiteNames(optionalValue)
-			{
-				$('#siteName option').remove();
-				$('#siteName').append($('<option></option>').attr("value", "-1").text(optionalValue ? optionalValue : "--- Select after providing information above ---"));				
-			}
-		</script>
 	</head>
 	<body>
-		<div class="container">
-			<div id="page">
-				<h1>Generic Migration Tool</h1>
-				<h3>Please enter Cascade Server information</h3>
-				<h4><s:actionerror /></h4>
-				<s:form action="ProjectProperties" method="POST">
-				    <s:textfield label="Cascade Server 7.4.x URL" name="url" value="%{url}" size="50" id="url"/>
-				    <s:textfield label="Username" name="username" value="%{username}" size="50" id="username"/>
-				    <s:password label="Password" name="password" value="%{password}" size="50" id="password" />
-				    <s:select label="Site Name" list="availableSites" name="siteName" id="siteName"/>
-				    <s:submit value="Save and Next" name="submitButton"/>
-				</s:form>
-			</div>
-		</div>
+		<div class="mt-header">
+      <div class="container">
+        <h1 class="brand">Cascade Server <span>Generic Migration Tool</span></h1>
+      </div>
+    </div>
+    <div id="page" class="container">
+      <div class="row">
+        <div class="span12">
+          <p class="lead">Please enter Cascade Server information below.</p>
+
+          <div id="actionError" class="alert alert-block alert-error hide">
+					  <h5>The following error(s) were encountered:</h5>
+					  <div><s:actionerror /></div>
+					</div>
+
+          <form action="/ProjectProperties" method="POST" class="form-horizontal">
+            <fieldset>
+              <div class="control-group">
+                <label class="control-label" for="url">Cascade Server 7.4.x URL</label>
+                <div class="controls">
+                  <input class="span4" type="text" id="url" placeholder="http://" name="url" value="<s:property value="url"/>" />
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="username">Username</label>
+                <div class="controls">
+                  <input class="span2" type="text" id="username" name="username" value="<s:property value="username"/>" />
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="password">Password</label>
+                <div class="controls">
+                  <input class="span2" type="password" id="password" name="password" />
+                </div>
+              </div>
+              <div class="control-group">
+                <label class="control-label" for="siteName">Site Name</label>
+                <div class="controls">
+                  <select id="siteName" name="siteName" class="span4"></select>
+                </div>
+              </div>
+              <button type="submit" name="submitButton" class="btn btn-primary pull-right">Save and Next</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+		<script type="text/javascript">
+			$(function() {
+				var actionError = $("#actionError"),
+						loadSiteNames = function() {
+							var url = $.trim($('#url').val()),
+									username = $.trim($('#username').val()),
+									password = $.trim($('#password').val()),
+									currentlySelected = $('#siteName option:selected').val();
+							
+							if (url === "" || username === "" || password === "") {
+								resetSiteNames();
+								return;
+							}
+							
+							resetSiteNames('Please wait...');
+							
+							$.ajax({
+								url: '/ProjectPropertiesGetAvailableSiteNamesAjax',
+								data: {
+									url: url, 
+									username: username, 
+									password: password
+								},
+								dataTypeString: 'json',
+								type: 'POST',
+								success: function(response) {
+									var optionHTML = ""
+											i = 0;
+									
+									actionError.addClass('hide');
+									
+									if (response.error) {
+										triggerError(response.error);
+										return;
+									}
+									
+									var siteNames = response.siteNames;
+									if (!siteNames || siteNames.length==0) {
+										triggerError();
+										return;
+									}	
+									
+									for(; i < siteNames.length; i++) {
+										var site = siteNames[i],
+												isSelected = (site === currentlySelected);
+										optionHTML += '<option value="'+site+'"'+(isSelected ? ' selected="selected"' : '')+'>'+site+'</option>';
+									}
+									
+									$('#siteName').html(optionHTML).attr("disabled", false);
+								},
+								error: function(obj, e) {
+									triggerError(e);
+								}
+							});
+						},
+						resetSiteNames = function(defaultVal) {
+							defaultVal = defaultVal || "Select after providing information above";
+							$('#siteName').attr("disabled",true).html('<option value="-1">' + defaultVal + '</option>');				
+						},				
+						triggerError = function(err) {
+							err = err || "";
+							
+							if (err !== "") {
+								actionError.removeClass('hide').find('div').text(err);
+							}
+							
+							resetSiteNames();
+						};				
+				
+				if (actionError.find('div').text() !== "") {
+					actionError.removeClass('hide');
+				}
+				
+				$('#url, #username, #password').change(loadSiteNames);
+				
+				if ($('#siteName option').size() == 0) {
+					resetSiteNames();
+				}
+			});		
+		</script>		
 	</body>
 </html>
