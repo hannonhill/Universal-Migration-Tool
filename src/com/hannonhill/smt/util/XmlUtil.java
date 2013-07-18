@@ -6,10 +6,12 @@
 package com.hannonhill.smt.util;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
@@ -108,6 +110,52 @@ public class XmlUtil
         InputSource inputSource = new InputSource(new ByteArrayInputStream(xmlContents.getBytes("UTF-8")));
         Document doc = builder.build(inputSource);
 
-        return new XMLOutputter().outputString(XPath.selectNodes(doc, xPathExpression));
+        List<?> result = XPath.selectNodes(doc, xPathExpression);
+
+        if (result.size() == 0)
+            return "";
+
+        // If the result contains Strings output them
+        if (result.get(0) instanceof String)
+            return outputStrings(result);
+
+        // If the result contains Attributes output their values
+        if (result.get(0) instanceof Attribute)
+            return outputAttributes(result);
+
+        // Otherwise, let the XMLOutputter handle outputting (it can't handle Attributes or Strings)
+        return new XMLOutputter().outputString(result);
+    }
+
+    /**
+     * Converts a list of Strings to a single String
+     * 
+     * @param strings
+     * @return
+     */
+    private static String outputStrings(List<?> strings)
+    {
+        StringBuilder builder = new StringBuilder();
+        for (Object string : strings)
+            builder.append(string);
+
+        return builder.toString();
+    }
+
+    /**
+     * Converts a list of Attributes to a String containing attribute values
+     * 
+     * @param attributes
+     * @return
+     */
+    private static String outputAttributes(List<?> attributes)
+    {
+        StringBuilder builder = new StringBuilder();
+        for (Object attribute : attributes)
+            // Verify that this is an attribute first, if it is not, ignore it
+            if (attribute instanceof Attribute)
+                builder.append(((Attribute) attribute).getValue());
+
+        return builder.toString();
     }
 }
