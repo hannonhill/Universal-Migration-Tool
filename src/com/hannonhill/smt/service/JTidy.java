@@ -84,7 +84,7 @@ public class JTidy
     }
 
     /**
-     * Strips the doctype using regular expression
+     * Strips the doctype using regular expression and strips the xml declaration
      * 
      * @param xml
      * @return
@@ -94,6 +94,7 @@ public class JTidy
         Pattern p = Pattern.compile("<!DOCTYPE [^>]*>");
         Matcher match = p.matcher(xml);
         xml = match.replaceAll("");
+        xml = xml.replaceAll("<\\?xml(.*)\\>", "");
         return xml;
     }
 
