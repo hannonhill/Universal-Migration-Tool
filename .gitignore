@@ -7,6 +7,6 @@ _PRE-COMPILED/6.4/.DS_Store
 _PRE-COMPILED/6.8/.DS_Store
 tomcat/.DS_Store
 tomcat/webapps/.DS_Store
-tomcat/logs
+tomcat/logs/*
 dist
 uploads
