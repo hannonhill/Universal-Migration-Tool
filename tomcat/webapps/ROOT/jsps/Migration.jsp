@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Generic Migration Tool</title>
+		<title>Universal Migration Tool</title>
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 		<link href="/css/jquery-ui-1.10.3.custom.min.css" media="screen" rel="stylesheet" type="text/css"></link>
 		<link href="/css/jquery.shadow.css" media="screen" rel="stylesheet" type="text/css"></link>		
@@ -250,12 +250,12 @@
 
 			function closeEditorMigrationWarning()
 			{
-				return 'If you navigate away, you will not be able to see the migration progress or the log but the migration will continue running. The log is saved on the SMT server\'s filesystem.'
+				return 'If you navigate away, you will not be able to see the migration progress or the log but the migration will continue running. The log is saved on the UMT server\'s filesystem.'
 			}
 			
 			function closeEditorLinkCheckingWarning()
 			{
-				return 'If you navigate away, you will not be able to see the link checking progress or the log but the link checking will continue running. The log is saved on the SMT server\'s filesystem.'
+				return 'If you navigate away, you will not be able to see the link checking progress or the log but the link checking will continue running. The log is saved on the UMT server\'s filesystem.'
 			}
 
 			function enableButtons(goBack, stopMigration, stopLinkChecker, startOver, startLinkChecker, restartLinkChecker, restartMigration)
@@ -275,7 +275,7 @@
 	<body>
 		<div class="container">
 			<div id="page">		
-				<h1>Generic Migration Tool</h1>
+				<h1>Universal Migration Tool</h1>
 				<h2>Migration Started</h2>
 				<h4><s:actionerror /></h4>
 				<div id="log"></div>

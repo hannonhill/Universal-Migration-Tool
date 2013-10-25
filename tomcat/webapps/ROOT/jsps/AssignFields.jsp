@@ -2,7 +2,7 @@
 
 <html>
 	<head>
-		<title>Generic Migration Tool</title>
+		<title>Universal Migration Tool</title>
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 		<link href="/css/jquery-ui-1.10.3.custom.min.css" media="screen" rel="stylesheet" type="text/css"></link>
 		<link href="/css/jquery.shadow.css" media="screen" rel="stylesheet" type="text/css"></link>		
@@ -141,7 +141,7 @@
 	<body>
 		<div class="container">
 			<div id="page">		
-				<h1>Generic Migration Tool</h1>
+				<h1>Universal Migration Tool</h1>
 				<h2>Please assign field mappings</h2>
 				<h4><s:actionerror /></h4>
 				<s:form action="AssignFields" method="POST">
