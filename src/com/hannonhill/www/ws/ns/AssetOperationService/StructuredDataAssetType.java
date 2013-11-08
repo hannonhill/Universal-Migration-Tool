@@ -17,14 +17,16 @@ public class StructuredDataAssetType implements java.io.Serializable {
         _table_.put(_value_,this);
     }
 
-    public static final java.lang.String _block = "block";
-    public static final java.lang.String _file = "file";
-    public static final java.lang.String _page = "page";
-    public static final java.lang.String _symlink = "symlink";
-    public static final StructuredDataAssetType block = new StructuredDataAssetType(_block);
-    public static final StructuredDataAssetType file = new StructuredDataAssetType(_file);
-    public static final StructuredDataAssetType page = new StructuredDataAssetType(_page);
-    public static final StructuredDataAssetType symlink = new StructuredDataAssetType(_symlink);
+    public static final java.lang.String _value1 = "block";
+    public static final java.lang.String _value2 = "file";
+    public static final java.lang.String _value3 = "page";
+    public static final java.lang.String _value4 = "symlink";
+    public static final java.lang.String _value5 = "page,file,symlink";
+    public static final StructuredDataAssetType value1 = new StructuredDataAssetType(_value1);
+    public static final StructuredDataAssetType value2 = new StructuredDataAssetType(_value2);
+    public static final StructuredDataAssetType value3 = new StructuredDataAssetType(_value3);
+    public static final StructuredDataAssetType value4 = new StructuredDataAssetType(_value4);
+    public static final StructuredDataAssetType value5 = new StructuredDataAssetType(_value5);
     public java.lang.String getValue() { return _value_;}
     public static StructuredDataAssetType fromValue(java.lang.String value)
           throws java.lang.IllegalArgumentException {

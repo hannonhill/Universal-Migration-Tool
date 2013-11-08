@@ -315,7 +315,7 @@ public class WebServicesUtil
                     fileNode.setIdentifier(identifier);
                     fileNode.setFilePath(path);
                     fileNode.setType(StructuredDataType.asset);
-                    fileNode.setAssetType(StructuredDataAssetType.file);
+                    fileNode.setAssetType(StructuredDataAssetType.fromString("file"));
                     List<StructuredDataNode> fileNodes = new ArrayList<StructuredDataNode>();
                     fileNodes.add(fileNode);
                     currentNode.getContentFields().put(identifier, fileNodes);
