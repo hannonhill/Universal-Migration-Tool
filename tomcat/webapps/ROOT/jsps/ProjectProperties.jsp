@@ -15,7 +15,7 @@
 	<body>
 		<div class="mt-header">
       <div class="container">
-        <h1 class="brand">Cascade Server <span>Universal Migration Tool</span></h1>
+        <h1 class="brand">Cascade Server <span>Universal Migration Tool for Windows</span></h1>
       </div>
     </div>
     <div id="page" class="container">

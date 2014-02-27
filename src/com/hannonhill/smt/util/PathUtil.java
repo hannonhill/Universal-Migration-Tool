@@ -40,6 +40,7 @@ public class PathUtil
      */
     public static String getNameFromPath(String path)
     {
+        path = convertBackslashes(path);
         return removeLeadingSlashes(path.lastIndexOf('/') == -1 ? path : path.substring(path.lastIndexOf('/') + 1));
     }
 
@@ -67,6 +68,14 @@ public class PathUtil
         return name.lastIndexOf('.') == -1 ? "" : name.substring(name.lastIndexOf('.'));
     }
 
+    public static String convertBackslashes(String path)
+    {
+        if (path.contains("\\"))
+            return path.replaceAll("\\\\", "/");
+
+        return path;
+    }
+
     /**
      * Parses the path and returns the parent folder path part of it or '/' if the path is a the root level.
      * 
@@ -75,6 +84,8 @@ public class PathUtil
      */
     public static String getParentFolderPathFromPath(String path)
     {
+        path = convertBackslashes(path);
+
         return removeLeadingSlashes(path.lastIndexOf('/') == -1 ? "/" : path.substring(0, path.lastIndexOf('/')));
     }
 
@@ -165,6 +176,8 @@ public class PathUtil
      */
     public static String removeLeadingSlashes(String link)
     {
+        link = convertBackslashes(link);
+
         if (link == null)
             return "";
 

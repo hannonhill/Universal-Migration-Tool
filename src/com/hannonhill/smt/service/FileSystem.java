@@ -18,9 +18,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -58,11 +56,11 @@ public class FileSystem
             ZipEntry entry = entries.nextElement();
 
             if (entry.isDirectory())
-                (new File(uploadDir + "/" + entry.getName())).mkdirs();
+                (new File(uploadDir + "\\" + entry.getName())).mkdirs();
             else
             {
-                (new File(uploadDir + "/" + PathUtil.getParentFolderPathFromPath(entry.getName()))).mkdirs();
-                copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + "/" + entry.getName())));
+                (new File(uploadDir + "\\" + PathUtil.getParentFolderPathFromPath(entry.getName()))).mkdirs();
+                copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + "\\" + entry.getName())));
             }
         }
 
@@ -99,62 +97,6 @@ public class FileSystem
     }
 
     /**
-     * Returns all the files with given extension in the folder and all sub-folders
-     * 
-     * @param projectInformation
-     * @param extension For example ".xml" for xml files
-     * @return
-     */
-    public static List<File> getAllFiles(File folder, String extension)
-    {
-        List<File> files = getAllFilesRecursive(folder, extension);
-        return removeDuplicatePaths(files);
-    }
-
-    /**
-     * Recursively collects files with given extension in the folder and all sub-folders
-     * 
-     * @param folder
-     * @param extension
-     * @return
-     */
-    private static List<File> getAllFilesRecursive(File folder, String extension)
-    {
-        List<File> files = new ArrayList<File>();
-        for (String fileString : folder.list())
-        {
-            File file = new File(folder.getAbsolutePath() + "/" + fileString);
-
-            if (!file.isFile())
-                files.addAll(getAllFiles(file, extension));
-            else if (file.getName().endsWith(extension))
-                files.add(file);
-        }
-        return files;
-    }
-
-    /**
-     * Returns a list with files with unique absolute paths
-     * 
-     * @param files
-     * @return
-     */
-    private static List<File> removeDuplicatePaths(List<File> files)
-    {
-        Set<String> paths = new HashSet<String>();
-        List<File> result = new ArrayList<File>();
-
-        for (File file : files)
-            if (!paths.contains(file.getAbsolutePath().toLowerCase()))
-            {
-                result.add(file);
-                paths.add(file.getAbsolutePath().toLowerCase());
-            }
-
-        return result;
-    }
-
-    /**
      * Returns folder contents in a form of a list of {@link File}s
      * 
      * @param folder
@@ -164,7 +106,7 @@ public class FileSystem
     {
         List<File> result = new ArrayList<File>();
         for (String fileString : folder.list())
-            result.add(new File(folder.getAbsolutePath() + "/" + fileString));
+            result.add(new File(folder.getAbsolutePath() + "\\" + fileString));
         return result;
     }
 
