@@ -10,7 +10,7 @@ You can download the binary and source versions in the [releases area](https://g
 
 ## Requirements
 
-Due to an issue [#2](hannonhill/Universal-Migration-Tool#2) with file paths on Windows, this tool should be run in a *nix environment.
+Due to an issue [#2](https://github.com/hannonhill/Universal-Migration-Tool/issues/2) with file paths on Windows, this tool should be run in a *nix environment.
 
 Oracle Java 1.6/1.7 JRE or JDK is required
 
