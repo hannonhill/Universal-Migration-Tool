@@ -20,7 +20,7 @@ Cascade Server's [Web Service API](http://www.hannonhill.com/kb/Web-Services/) n
 
 1. Download and unpack version of the tool that corresponds to the version of Cascade Server that you're running.
 1. Ensure that either `JRE_HOME` or `JAVA_HOME` is set in your `PATH` and points to your installed Oracle Java version, _or_
-1. Add a `JRE_HOME` or `JAVA_HOME` environment variable to `bin/catalina.sh` [around this line](https://github.com/hannonhill/Universal-Migration-Tool/blob/9bc3d8b78fcf8b1377a5bac6d3eba4ccd8e53da6/tomcat/bin/catalina.sh#L81)
+1. Add a `JRE_HOME` or `JAVA_HOME` environment variable to `bin/catalina.sh` [around this line](https://github.com/hannonhill/Universal-Migration-Tool/blob/7f4f551f7c4f36c8155b48113ad2ad5fc37ffc8c/tomcat/bin/catalina.sh#L81)
 1. Ensure that the `tomcat` directory contains a `logs` directory and create one if it does not exist
 1. Start Tomcat by running from a shell: `bin/startup.sh`
 1. Once you see `INFO: Server startup in 1676 ms` in the `logs/catalina.out` the tool should be reachable at: `http://localhost:8081` (or whatever hostname is used to reach this machine)
