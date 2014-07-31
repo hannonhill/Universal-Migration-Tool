@@ -172,6 +172,10 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean sendStaleAssetNotifications;
 
+    private java.lang.Boolean brokenLinkReportAccess;
+
+    private java.lang.Boolean brokenLinkReportMarkFixed;
+
     public GlobalAbilities() {
     }
 
@@ -257,7 +261,9 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean recycleBinChecker,
            java.lang.Boolean pathRepairTool,
            java.lang.Boolean databaseExportTool,
-           java.lang.Boolean sendStaleAssetNotifications) {
+           java.lang.Boolean sendStaleAssetNotifications,
+           java.lang.Boolean brokenLinkReportAccess,
+           java.lang.Boolean brokenLinkReportMarkFixed) {
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.accessSiteManagement = accessSiteManagement;
            this.createSites = createSites;
@@ -340,6 +346,8 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.pathRepairTool = pathRepairTool;
            this.databaseExportTool = databaseExportTool;
            this.sendStaleAssetNotifications = sendStaleAssetNotifications;
+           this.brokenLinkReportAccess = brokenLinkReportAccess;
+           this.brokenLinkReportMarkFixed = brokenLinkReportMarkFixed;
     }
 
 
@@ -1982,6 +1990,46 @@ public class GlobalAbilities  implements java.io.Serializable {
         this.sendStaleAssetNotifications = sendStaleAssetNotifications;
     }
 
+
+    /**
+     * Gets the brokenLinkReportAccess value for this GlobalAbilities.
+     * 
+     * @return brokenLinkReportAccess
+     */
+    public java.lang.Boolean getBrokenLinkReportAccess() {
+        return brokenLinkReportAccess;
+    }
+
+
+    /**
+     * Sets the brokenLinkReportAccess value for this GlobalAbilities.
+     * 
+     * @param brokenLinkReportAccess
+     */
+    public void setBrokenLinkReportAccess(java.lang.Boolean brokenLinkReportAccess) {
+        this.brokenLinkReportAccess = brokenLinkReportAccess;
+    }
+
+
+    /**
+     * Gets the brokenLinkReportMarkFixed value for this GlobalAbilities.
+     * 
+     * @return brokenLinkReportMarkFixed
+     */
+    public java.lang.Boolean getBrokenLinkReportMarkFixed() {
+        return brokenLinkReportMarkFixed;
+    }
+
+
+    /**
+     * Sets the brokenLinkReportMarkFixed value for this GlobalAbilities.
+     * 
+     * @param brokenLinkReportMarkFixed
+     */
+    public void setBrokenLinkReportMarkFixed(java.lang.Boolean brokenLinkReportMarkFixed) {
+        this.brokenLinkReportMarkFixed = brokenLinkReportMarkFixed;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof GlobalAbilities)) return false;
@@ -2239,7 +2287,13 @@ public class GlobalAbilities  implements java.io.Serializable {
               this.databaseExportTool.equals(other.getDatabaseExportTool()))) &&
             ((this.sendStaleAssetNotifications==null && other.getSendStaleAssetNotifications()==null) || 
              (this.sendStaleAssetNotifications!=null &&
-              this.sendStaleAssetNotifications.equals(other.getSendStaleAssetNotifications())));
+              this.sendStaleAssetNotifications.equals(other.getSendStaleAssetNotifications()))) &&
+            ((this.brokenLinkReportAccess==null && other.getBrokenLinkReportAccess()==null) || 
+             (this.brokenLinkReportAccess!=null &&
+              this.brokenLinkReportAccess.equals(other.getBrokenLinkReportAccess()))) &&
+            ((this.brokenLinkReportMarkFixed==null && other.getBrokenLinkReportMarkFixed()==null) || 
+             (this.brokenLinkReportMarkFixed!=null &&
+              this.brokenLinkReportMarkFixed.equals(other.getBrokenLinkReportMarkFixed())));
         __equalsCalc = null;
         return _equals;
     }
@@ -2496,6 +2550,12 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         if (getSendStaleAssetNotifications() != null) {
             _hashCode += getSendStaleAssetNotifications().hashCode();
+        }
+        if (getBrokenLinkReportAccess() != null) {
+            _hashCode += getBrokenLinkReportAccess().hashCode();
+        }
+        if (getBrokenLinkReportMarkFixed() != null) {
+            _hashCode += getBrokenLinkReportMarkFixed().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -3077,6 +3137,20 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("sendStaleAssetNotifications");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "sendStaleAssetNotifications"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("brokenLinkReportAccess");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "brokenLinkReportAccess"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("brokenLinkReportMarkFixed");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "brokenLinkReportMarkFixed"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

@@ -2683,6 +2683,14 @@
 
              <element maxOccurs="1" minOccurs="0" name="sendStaleAssetNotifications" type="xsd:boolean"/>
 
+        <!-- NOT REQUIRED - default false -->
+
+             <element maxOccurs="1" minOccurs="0" name="brokenLinkReportAccess" type="xsd:boolean"/>
+
+        <!-- NOT REQUIRED - default false -->
+
+             <element maxOccurs="1" minOccurs="0" name="brokenLinkReportMarkFixed" type="xsd:boolean"/>
+
           </sequence>
 
        </complexType>
@@ -2889,6 +2897,14 @@
         <!-- NOT REQUIRED - default false -->
 
              <element maxOccurs="1" minOccurs="0" name="sendStaleAssetNotifications" type="xsd:boolean"/>
+
+        <!-- NOT REQUIRED - default false -->
+
+             <element maxOccurs="1" minOccurs="0" name="brokenLinkReportAccess" type="xsd:boolean"/>
+
+        <!-- NOT REQUIRED - default false -->
+
+             <element maxOccurs="1" minOccurs="0" name="brokenLinkReportMarkFixed" type="xsd:boolean"/>
 
           </sequence>
 
@@ -3246,8 +3262,15 @@
             <!-- REQUIRED The recycle bin expiration time -->
 
                    <element maxOccurs="1" minOccurs="1" name="recycleBinExpiration" type="impl:recycleBinExpiration"/>
- 
-            
+
+            <!-- REQUIRED Un-publish assets when they are moved to an expiration folder -->
+
+                   <element maxOccurs="1" minOccurs="1" name="unpublishOnExpiration" type="xsd:boolean"/>
+
+            <!-- REQUIRED Generate broken link report on a schedule specified in Global preferences -->
+
+                   <element maxOccurs="1" minOccurs="1" name="linkCheckerEnabled" type="xsd:boolean"/>
+
             <!-- The root folder id and containers idds - used only when reading a site. Unused in other cases
                  NOT REQUIRED ignored -->
 

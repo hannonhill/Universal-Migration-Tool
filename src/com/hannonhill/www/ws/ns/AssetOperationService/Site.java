@@ -52,6 +52,10 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     private com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration;
 
+    private boolean unpublishOnExpiration;
+
+    private boolean linkCheckerEnabled;
+
     private java.lang.String rootFolderId;
 
     private java.lang.String rootAssetFactoryContainerId;
@@ -102,6 +106,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            java.lang.String sendReportToGroups,
            java.lang.Boolean sendReportOnErrorOnly,
            com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration,
+           boolean unpublishOnExpiration,
+           boolean linkCheckerEnabled,
            java.lang.String rootFolderId,
            java.lang.String rootAssetFactoryContainerId,
            java.lang.String rootPageConfigurationSetContainerId,
@@ -138,6 +144,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         this.sendReportToGroups = sendReportToGroups;
         this.sendReportOnErrorOnly = sendReportOnErrorOnly;
         this.recycleBinExpiration = recycleBinExpiration;
+        this.unpublishOnExpiration = unpublishOnExpiration;
+        this.linkCheckerEnabled = linkCheckerEnabled;
         this.rootFolderId = rootFolderId;
         this.rootAssetFactoryContainerId = rootAssetFactoryContainerId;
         this.rootPageConfigurationSetContainerId = rootPageConfigurationSetContainerId;
@@ -593,6 +601,46 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
 
     /**
+     * Gets the unpublishOnExpiration value for this Site.
+     * 
+     * @return unpublishOnExpiration
+     */
+    public boolean isUnpublishOnExpiration() {
+        return unpublishOnExpiration;
+    }
+
+
+    /**
+     * Sets the unpublishOnExpiration value for this Site.
+     * 
+     * @param unpublishOnExpiration
+     */
+    public void setUnpublishOnExpiration(boolean unpublishOnExpiration) {
+        this.unpublishOnExpiration = unpublishOnExpiration;
+    }
+
+
+    /**
+     * Gets the linkCheckerEnabled value for this Site.
+     * 
+     * @return linkCheckerEnabled
+     */
+    public boolean isLinkCheckerEnabled() {
+        return linkCheckerEnabled;
+    }
+
+
+    /**
+     * Sets the linkCheckerEnabled value for this Site.
+     * 
+     * @param linkCheckerEnabled
+     */
+    public void setLinkCheckerEnabled(boolean linkCheckerEnabled) {
+        this.linkCheckerEnabled = linkCheckerEnabled;
+    }
+
+
+    /**
      * Gets the rootFolderId value for this Site.
      * 
      * @return rootFolderId
@@ -889,6 +937,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.recycleBinExpiration==null && other.getRecycleBinExpiration()==null) || 
              (this.recycleBinExpiration!=null &&
               this.recycleBinExpiration.equals(other.getRecycleBinExpiration()))) &&
+            this.unpublishOnExpiration == other.isUnpublishOnExpiration() &&
+            this.linkCheckerEnabled == other.isLinkCheckerEnabled() &&
             ((this.rootFolderId==null && other.getRootFolderId()==null) || 
              (this.rootFolderId!=null &&
               this.rootFolderId.equals(other.getRootFolderId()))) &&
@@ -1015,6 +1065,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         if (getRecycleBinExpiration() != null) {
             _hashCode += getRecycleBinExpiration().hashCode();
         }
+        _hashCode += (isUnpublishOnExpiration() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (isLinkCheckerEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         if (getRootFolderId() != null) {
             _hashCode += getRootFolderId().hashCode();
         }
@@ -1210,6 +1262,18 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setFieldName("recycleBinExpiration");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycleBinExpiration"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycleBinExpiration"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("unpublishOnExpiration");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "unpublishOnExpiration"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("linkCheckerEnabled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "linkCheckerEnabled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
