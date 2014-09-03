@@ -21,12 +21,16 @@ public class SerializationType implements java.io.Serializable {
     public static final java.lang.String _XML = "XML";
     public static final java.lang.String _PDF = "PDF";
     public static final java.lang.String _RTF = "RTF";
-    public static final java.lang.String _WML = "WML";
+    public static final java.lang.String _JSON = "JSON";
+    public static final java.lang.String _JS = "JS";
+    public static final java.lang.String _CSS = "CSS";
     public static final SerializationType HTML = new SerializationType(_HTML);
     public static final SerializationType XML = new SerializationType(_XML);
     public static final SerializationType PDF = new SerializationType(_PDF);
     public static final SerializationType RTF = new SerializationType(_RTF);
-    public static final SerializationType WML = new SerializationType(_WML);
+    public static final SerializationType JSON = new SerializationType(_JSON);
+    public static final SerializationType JS = new SerializationType(_JS);
+    public static final SerializationType CSS = new SerializationType(_CSS);
     public java.lang.String getValue() { return _value_;}
     public static SerializationType fromValue(java.lang.String value)
           throws java.lang.IllegalArgumentException {
