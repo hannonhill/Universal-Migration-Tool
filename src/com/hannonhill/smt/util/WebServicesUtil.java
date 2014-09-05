@@ -220,8 +220,7 @@ public class WebServicesUtil
 
     /**
      * Assigns given fieldValue of given fieldName to metadata object if it is a standard metadata field or
-     * adds it to the list of
-     * dynamicFields.
+     * adds it to the list of dynamicFields.
      * 
      * @param metadata
      * @param dynamicFields
@@ -306,6 +305,10 @@ public class WebServicesUtil
         {
             fieldValue = JTidy.tidyContentConditionally(fieldValue);
             String path = XmlAnalyzer.getFirstSrcAttribute(fieldValue);
+
+            if (path == null)
+                path = fieldValue;
+
             if (path != null && !path.trim().equals(""))
             {
                 path = path.trim();
