@@ -38,6 +38,10 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
 
     private java.lang.Boolean usesScheduledPublishing;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.ScheduledDestinationMode scheduledPublishDestinationMode;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] scheduledPublishDestinations;
+
     private org.apache.axis.types.Time timeToPublish;
 
     private org.apache.axis.types.NonNegativeInteger publishIntervalHours;
@@ -75,6 +79,8 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
            java.lang.Boolean includeTargetPath,
            java.lang.Boolean removeBaseFolder,
            java.lang.Boolean usesScheduledPublishing,
+           com.hannonhill.www.ws.ns.AssetOperationService.ScheduledDestinationMode scheduledPublishDestinationMode,
+           com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] scheduledPublishDestinations,
            org.apache.axis.types.Time timeToPublish,
            org.apache.axis.types.NonNegativeInteger publishIntervalHours,
            com.hannonhill.www.ws.ns.AssetOperationService.DayOfWeek[] publishDaysOfWeek,
@@ -101,6 +107,8 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
         this.includeTargetPath = includeTargetPath;
         this.removeBaseFolder = removeBaseFolder;
         this.usesScheduledPublishing = usesScheduledPublishing;
+        this.scheduledPublishDestinationMode = scheduledPublishDestinationMode;
+        this.scheduledPublishDestinations = scheduledPublishDestinations;
         this.timeToPublish = timeToPublish;
         this.publishIntervalHours = publishIntervalHours;
         this.publishDaysOfWeek = publishDaysOfWeek;
@@ -413,6 +421,46 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
 
 
     /**
+     * Gets the scheduledPublishDestinationMode value for this Target.
+     * 
+     * @return scheduledPublishDestinationMode
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.ScheduledDestinationMode getScheduledPublishDestinationMode() {
+        return scheduledPublishDestinationMode;
+    }
+
+
+    /**
+     * Sets the scheduledPublishDestinationMode value for this Target.
+     * 
+     * @param scheduledPublishDestinationMode
+     */
+    public void setScheduledPublishDestinationMode(com.hannonhill.www.ws.ns.AssetOperationService.ScheduledDestinationMode scheduledPublishDestinationMode) {
+        this.scheduledPublishDestinationMode = scheduledPublishDestinationMode;
+    }
+
+
+    /**
+     * Gets the scheduledPublishDestinations value for this Target.
+     * 
+     * @return scheduledPublishDestinations
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] getScheduledPublishDestinations() {
+        return scheduledPublishDestinations;
+    }
+
+
+    /**
+     * Sets the scheduledPublishDestinations value for this Target.
+     * 
+     * @param scheduledPublishDestinations
+     */
+    public void setScheduledPublishDestinations(com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] scheduledPublishDestinations) {
+        this.scheduledPublishDestinations = scheduledPublishDestinations;
+    }
+
+
+    /**
      * Gets the timeToPublish value for this Target.
      * 
      * @return timeToPublish
@@ -628,6 +676,12 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
             ((this.usesScheduledPublishing==null && other.getUsesScheduledPublishing()==null) || 
              (this.usesScheduledPublishing!=null &&
               this.usesScheduledPublishing.equals(other.getUsesScheduledPublishing()))) &&
+            ((this.scheduledPublishDestinationMode==null && other.getScheduledPublishDestinationMode()==null) || 
+             (this.scheduledPublishDestinationMode!=null &&
+              this.scheduledPublishDestinationMode.equals(other.getScheduledPublishDestinationMode()))) &&
+            ((this.scheduledPublishDestinations==null && other.getScheduledPublishDestinations()==null) || 
+             (this.scheduledPublishDestinations!=null &&
+              java.util.Arrays.equals(this.scheduledPublishDestinations, other.getScheduledPublishDestinations()))) &&
             ((this.timeToPublish==null && other.getTimeToPublish()==null) || 
              (this.timeToPublish!=null &&
               this.timeToPublish.equals(other.getTimeToPublish()))) &&
@@ -707,6 +761,20 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
         }
         if (getUsesScheduledPublishing() != null) {
             _hashCode += getUsesScheduledPublishing().hashCode();
+        }
+        if (getScheduledPublishDestinationMode() != null) {
+            _hashCode += getScheduledPublishDestinationMode().hashCode();
+        }
+        if (getScheduledPublishDestinations() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getScheduledPublishDestinations());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getScheduledPublishDestinations(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         if (getTimeToPublish() != null) {
             _hashCode += getTimeToPublish().hashCode();
@@ -860,6 +928,21 @@ public class Target  extends com.hannonhill.www.ws.ns.AssetOperationService.Name
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("scheduledPublishDestinationMode");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "scheduledPublishDestinationMode"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "scheduledDestinationMode"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("scheduledPublishDestinations");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "scheduledPublishDestinations"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "destination"));
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("timeToPublish");

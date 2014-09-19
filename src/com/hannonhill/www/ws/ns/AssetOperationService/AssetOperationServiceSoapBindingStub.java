@@ -725,15 +725,6 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "contentTypePageConfigurationDestinations");
-            cachedSerQNames.add(qName);
-            cls = com.hannonhill.www.ws.ns.AssetOperationService.Identifier[].class;
-            cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier");
-            qName2 = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "destination");
-            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
-            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
-
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "contentTypePageConfigurationPublishMode");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfigurationPublishMode.class;
@@ -828,6 +819,15 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "destination-list");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.Identifier[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier");
+            qName2 = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "destination");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dublin-aware-asset");
             cachedSerQNames.add(qName);
@@ -1420,6 +1420,13 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "role-types");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.RoleTypes.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
+
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "scheduledDestinationMode");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.ScheduledDestinationMode.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
