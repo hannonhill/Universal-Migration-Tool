@@ -6,7 +6,9 @@
 package com.hannonhill.smt.util;
 
 import java.io.File;
-
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import com.hannonhill.smt.CascadeAssetInformation;
 import com.hannonhill.smt.ProjectInformation;
 import com.hannonhill.www.ws.ns.AssetOperationService.Identifier;
@@ -23,13 +25,13 @@ public class PathUtil
      * Returns a part of absolute path that starts from the xml directory path (xml directory path is cut
      * off).
      * 
-     * @param file
+     * @param pageFile
      * @param xmlDirectoryPath
      * @return
      */
-    public static String getRelativePath(File file, String xmlDirectoryPath)
+    public static String getRelativePath(Path pageFile, String xmlDirectoryPath)
     {
-        return removeLeadingSlashes(file.getAbsolutePath().substring(xmlDirectoryPath.length()));
+    	return removeLeadingSlashes(pageFile.toString().substring(xmlDirectoryPath.length()));
     }
 
     /**
@@ -40,8 +42,11 @@ public class PathUtil
      */
     public static String getNameFromPath(String path)
     {
-        return removeLeadingSlashes(path.lastIndexOf('/') == -1 ? path : path.substring(path.lastIndexOf('/') + 1));
-    }
+        if(path.contains(File.separator))
+        	return removeLeadingSlashes(path.lastIndexOf(File.separator) == -1 ? path : path.substring(path.lastIndexOf(File.separator) + 1));
+        else
+        	return removeLeadingSlashes(path.lastIndexOf('/') == -1 ? path : path.substring(path.lastIndexOf('/') + 1));  
+     }
 
     /**
      * Truncates the extension of the file name. For example x.html will return x. If there is no extension,
@@ -53,7 +58,7 @@ public class PathUtil
     public static String truncateExtension(String name)
     {
         return name.lastIndexOf('.') == -1 ? name : name.substring(0, name.lastIndexOf('.'));
-    }
+           }
 
     /**
      * Returns the extension of the file name. For example x.html will return .html. If there is no extension,
@@ -65,18 +70,20 @@ public class PathUtil
     public static String getExtension(String name)
     {
         return name.lastIndexOf('.') == -1 ? "" : name.substring(name.lastIndexOf('.'));
-    }
+         }
 
     /**
      * Parses the path and returns the parent folder path part of it or '/' if the path is a the root level.
-     * 
      * @param path
      * @return
      */
     public static String getParentFolderPathFromPath(String path)
-    {
-        return removeLeadingSlashes(path.lastIndexOf('/') == -1 ? "/" : path.substring(0, path.lastIndexOf('/')));
-    }
+    {     	
+    	if(path.contains(File.separator))
+    		return path.lastIndexOf(File.separator) == -1 ? File.separator : removeLeadingSlashes(path.substring(0, path.lastIndexOf(File.separator)));
+    	else
+        return path.lastIndexOf('/') == -1 ? "/" : removeLeadingSlashes(path.substring(0, path.lastIndexOf('/')));
+   }
 
     /**
      * Converts a relative path starting from currentLocation to an absolute path
@@ -119,7 +126,7 @@ public class PathUtil
             newPath.append("/" + oldParts[oldPartsIndex]);
 
         return "/" + removeLeadingSlashes(newPath.toString());
-    }
+     }
 
     /**
      * Returns true if the link is relative, meaning it doesn't start with "/" or protocol (like "http://")
@@ -157,7 +164,7 @@ public class PathUtil
     }
 
     /**
-     * Removes leading slashs (one or more) if they are there. Leaves leading slash if link is only the
+     * Removes leading slashes (one or more) if they are there. Leaves leading slash if link is only the
      * leading slash ("/").
      * 
      * @param link
@@ -167,12 +174,9 @@ public class PathUtil
     {
         if (link == null)
             return "";
+        return link.startsWith(File.separator) | link.startsWith("/") ? link.substring(1) : link;
 
-        if (link.equals("/"))
-            return link;
-
-        return link.startsWith("/") ? removeLeadingSlashes(link.substring(1)) : link;
-    }
+  }
 
     /**
      * Returns the part of the link that does not include the anchor part
@@ -295,7 +299,7 @@ public class PathUtil
         int counter = 0;
         while (link.startsWith("../"))
         {
-            counter++;
+            counter++; 
             link = link.substring(3);
         }
         return counter;
@@ -308,10 +312,10 @@ public class PathUtil
      * @param projectInformation
      * @return
      */
-    public static String createPagePathFromFileSystemFile(File file, ProjectInformation projectInformation)
+    public static String createPagePathFromFileSystemFile(Path file, ProjectInformation projectInformation)
     {
         return PathUtil.truncateExtension(PathUtil.getRelativePath(file, projectInformation.getXmlDirectory()));
-    }
+        }
 
     /**
      * Returns the SITENAME part of site://SITENAME/path/to/asset path. If the path does not contain site

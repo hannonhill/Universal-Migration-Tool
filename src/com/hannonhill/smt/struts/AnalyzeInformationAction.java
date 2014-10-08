@@ -6,6 +6,7 @@
 package com.hannonhill.smt.struts;
 
 import java.io.File;
+import java.nio.file.FileSystems;
 import java.util.HashSet;
 
 import com.hannonhill.smt.ProjectInformation;
@@ -57,8 +58,8 @@ public class AnalyzeInformationAction extends BaseAction
         // analyze folders recursively
         try
         {
-            XmlAnalyzer.analyzeFolder(new File(projectInformation.getXmlDirectory()), projectInformation);
-        }
+            XmlAnalyzer.analyzeFolder(FileSystems.getDefault().getPath(projectInformation.getXmlDirectory()), projectInformation);
+             }
         catch (Exception e)
         {
 
