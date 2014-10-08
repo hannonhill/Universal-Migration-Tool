@@ -6,6 +6,11 @@
 package com.hannonhill.smt.util;
 
 import java.io.File;
+import java.nio.file.DirectoryIteratorException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,15 +56,16 @@ public class WebServicesUtil
      * @return
      * @throws Exception
      */
-    public static Page setupPageObject(File pageFile, ProjectInformation projectInformation) throws Exception
+    public static Page setupPageObject(Path pageFile, ProjectInformation projectInformation) throws Exception
     {
         String path = PathUtil.truncateExtension(PathUtil.getRelativePath(pageFile, projectInformation.getXmlDirectory()));
+        path = path.replace(java.io.File.separator, "/");
         if (!XmlAnalyzer.allCharactersLegal(path))
             path = XmlAnalyzer.removeIllegalCharacters(path);
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
         String pageFileContents = JTidy.tidyContentConditionallyFullHtml(FileSystem.getFileContents(pageFile));
-        if (parentFolderPath.equals(""))
+         if (parentFolderPath.equals(""))
             parentFolderPath = "/";
 
         String contentTypePath = projectInformation.getContentTypePath();
@@ -305,10 +311,6 @@ public class WebServicesUtil
         {
             fieldValue = JTidy.tidyContentConditionally(fieldValue);
             String path = XmlAnalyzer.getFirstSrcAttribute(fieldValue);
-
-            if (path == null)
-                path = fieldValue;
-
             if (path != null && !path.trim().equals(""))
             {
                 path = path.trim();

@@ -32,7 +32,7 @@
         +-->
     <target name="compile" depends="clean">
         <echo>Compiling classes</echo>
-        <javac destdir="${classes.dir}" classpathref="classpath" source="1.6" target="1.6" debug="on" >
+        <javac destdir="${classes.dir}" classpathref="classpath" source="1.7" target="1.7" debug="on" >
             <src path="src" />
         </javac>
     </target>

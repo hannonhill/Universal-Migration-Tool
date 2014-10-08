@@ -6,6 +6,7 @@
 package com.hannonhill.smt.service;
 
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -198,9 +199,10 @@ public class WebServices
      * @return Returns the created page's id.
      * @throws Exception
      */
-    public static CascadeAssetInformation createPage(java.io.File pageFile, ProjectInformation projectInformation) throws Exception
+    public static CascadeAssetInformation createPage(java.nio.file.Path pageFile, ProjectInformation projectInformation) throws Exception
     {
         String path = PathUtil.createPagePathFromFileSystemFile(pageFile, projectInformation);
+        path = path.replace(java.io.File.separator, "/");
         if (!XmlAnalyzer.allCharactersLegal(path))
             path = XmlAnalyzer.removeIllegalCharacters(path);
 
@@ -280,10 +282,11 @@ public class WebServices
      * @return
      * @throws Exception
      */
-    public static CascadeAssetInformation createXhtmlBlock(java.io.File file, ProjectInformation projectInformation, String metadataSetId)
+    public static CascadeAssetInformation createXhtmlBlock(java.nio.file.Path file, ProjectInformation projectInformation, String metadataSetId)
             throws Exception
     {
         String blockPath = PathUtil.createPagePathFromFileSystemFile(file, projectInformation);
+        blockPath = blockPath.replace(java.io.File.separator, "/");
         if (!XmlAnalyzer.allCharactersLegal(blockPath))
             blockPath = XmlAnalyzer.removeIllegalCharacters(blockPath);
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(blockPath);
@@ -291,7 +294,7 @@ public class WebServices
         // "_internal/blocks/static" folder
         if (parentFolderPath.equals("") || parentFolderPath.equals("/"))
             parentFolderPath = "_cascade/blocks/static";
-        String blockName = PathUtil.truncateExtension(file.getName());
+        String blockName = PathUtil.truncateExtension(file.getFileName().toString());
 
         String overwriteBehavior = projectInformation.getOverwriteBehavior();
         if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_SKIP_EXISTING))
@@ -390,34 +393,36 @@ public class WebServices
      * not exist. The path of the file is figured out using webViewUrl in linkFile.xml in current or ancestor
      * folders. If file with that path already exists, it is left as it is.
      * 
-     * @param filesystemFile
+     * @param folderFile
      * @param projectInformation
      * @param metadataSetId
      * @throws Exception
      */
-    public static void createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId) throws Exception
+    public static void createFile(java.nio.file.Path folderFile, ProjectInformation projectInformation, String metadataSetId) throws Exception
     {
-        createFile(filesystemFile, projectInformation, metadataSetId, true);
+    	createFile(folderFile, projectInformation, metadataSetId, true);
     }
 
     /**
      * See {@link #createFile(java.io.File, ProjectInformation, String)}
      * 
-     * @param filesystemFile
+     * @param folderFile
      * @param projectInformation
      * @param metadataSetId
      * @param logCreatingFile whether or not the "Creating file ..." message should be logged
      * @throws Exception
      */
-    private static void createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId, boolean logCreatingFile)
+    private static void createFile(java.nio.file.Path folderFile, ProjectInformation projectInformation, String metadataSetId, boolean logCreatingFile)
             throws Exception
     {
-        String filePath = PathUtil.getRelativePath(filesystemFile, projectInformation.getXmlDirectory());
+        String filePath = PathUtil.getRelativePath(folderFile, projectInformation.getXmlDirectory());
+      //Added for Windows Paths
+       filePath = filePath.replace(java.io.File.separator, "/");
         if (!XmlAnalyzer.allCharactersLegal(filePath))
             filePath = XmlAnalyzer.removeIllegalCharacters(filePath);
 
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(filePath);
-        String fileName = filesystemFile.getName();
+        String fileName = folderFile.getFileName().toString();
 
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         if (logCreatingFile)
@@ -430,7 +435,7 @@ public class WebServices
             return;
         }
 
-        if (filesystemFile.length() > (MAX_FILE_SIZE_MB * 1024 * 1024))
+        if (Files.size(folderFile)  > (MAX_FILE_SIZE_MB * 1024 * 1024))
             throw new Exception("File is too large. Maximum file size is " + MAX_FILE_SIZE_MB + " MB");
 
         // Set up the file object and assign it to the asset object
@@ -441,7 +446,7 @@ public class WebServices
         file.setMetadataSetId(metadataSetId);
         file.setShouldBeIndexed(true);
         file.setShouldBePublished(true);
-        file.setData(FileSystem.getBytesFromFile(filesystemFile));
+        file.setData(FileSystem.getBytesFromFile(folderFile));
 
         Asset asset = new Asset();
         asset.setFile(file);
@@ -458,7 +463,7 @@ public class WebServices
                     && message.contains("could not be found"))
             {
                 createFolder(parentFolderPath, projectInformation);
-                createFile(filesystemFile, projectInformation, metadataSetId, false);
+                createFile(folderFile, projectInformation, metadataSetId, false);
                 return;
             }
 
