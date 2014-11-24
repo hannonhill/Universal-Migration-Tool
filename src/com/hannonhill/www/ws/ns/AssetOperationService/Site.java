@@ -60,6 +60,8 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     private boolean linkCheckerEnabled;
 
+    private boolean externalLinkCheckOnPublish;
+
     private java.lang.String rootFolderId;
 
     private java.lang.String rootAssetFactoryContainerId;
@@ -114,6 +116,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            com.hannonhill.www.ws.ns.AssetOperationService.RecycleBinExpiration recycleBinExpiration,
            boolean unpublishOnExpiration,
            boolean linkCheckerEnabled,
+           boolean externalLinkCheckOnPublish,
            java.lang.String rootFolderId,
            java.lang.String rootAssetFactoryContainerId,
            java.lang.String rootPageConfigurationSetContainerId,
@@ -154,6 +157,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         this.recycleBinExpiration = recycleBinExpiration;
         this.unpublishOnExpiration = unpublishOnExpiration;
         this.linkCheckerEnabled = linkCheckerEnabled;
+        this.externalLinkCheckOnPublish = externalLinkCheckOnPublish;
         this.rootFolderId = rootFolderId;
         this.rootAssetFactoryContainerId = rootAssetFactoryContainerId;
         this.rootPageConfigurationSetContainerId = rootPageConfigurationSetContainerId;
@@ -689,6 +693,26 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
 
     /**
+     * Gets the externalLinkCheckOnPublish value for this Site.
+     * 
+     * @return externalLinkCheckOnPublish
+     */
+    public boolean isExternalLinkCheckOnPublish() {
+        return externalLinkCheckOnPublish;
+    }
+
+
+    /**
+     * Sets the externalLinkCheckOnPublish value for this Site.
+     * 
+     * @param externalLinkCheckOnPublish
+     */
+    public void setExternalLinkCheckOnPublish(boolean externalLinkCheckOnPublish) {
+        this.externalLinkCheckOnPublish = externalLinkCheckOnPublish;
+    }
+
+
+    /**
      * Gets the rootFolderId value for this Site.
      * 
      * @return rootFolderId
@@ -993,6 +1017,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
               this.recycleBinExpiration.equals(other.getRecycleBinExpiration()))) &&
             this.unpublishOnExpiration == other.isUnpublishOnExpiration() &&
             this.linkCheckerEnabled == other.isLinkCheckerEnabled() &&
+            this.externalLinkCheckOnPublish == other.isExternalLinkCheckOnPublish() &&
             ((this.rootFolderId==null && other.getRootFolderId()==null) || 
              (this.rootFolderId!=null &&
               this.rootFolderId.equals(other.getRootFolderId()))) &&
@@ -1135,6 +1160,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         }
         _hashCode += (isUnpublishOnExpiration() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         _hashCode += (isLinkCheckerEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (isExternalLinkCheckOnPublish() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         if (getRootFolderId() != null) {
             _hashCode += getRootFolderId().hashCode();
         }
@@ -1356,6 +1382,12 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("linkCheckerEnabled");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "linkCheckerEnabled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("externalLinkCheckOnPublish");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "externalLinkCheckOnPublish"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

@@ -31,7 +31,7 @@
           <form action="/ProjectProperties" method="POST" class="form-horizontal">
             <fieldset>
               <div class="control-group">
-                <label class="control-label" for="url">Cascade Server 7.12.2 URL</label>
+                <label class="control-label" for="url">Cascade Server 7.12.3 URL</label>
                 <div class="controls">
                   <input class="span4" type="text" id="url" placeholder="http://" name="url" value="<s:property value="url"/>" />
                 </div>
