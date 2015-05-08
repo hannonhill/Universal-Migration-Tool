@@ -176,6 +176,8 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean brokenLinkReportMarkFixed;
 
+    private java.lang.Boolean changeIdentity;
+
     public GlobalAbilities() {
     }
 
@@ -263,7 +265,8 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean databaseExportTool,
            java.lang.Boolean sendStaleAssetNotifications,
            java.lang.Boolean brokenLinkReportAccess,
-           java.lang.Boolean brokenLinkReportMarkFixed) {
+           java.lang.Boolean brokenLinkReportMarkFixed,
+           java.lang.Boolean changeIdentity) {
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.accessSiteManagement = accessSiteManagement;
            this.createSites = createSites;
@@ -348,6 +351,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.sendStaleAssetNotifications = sendStaleAssetNotifications;
            this.brokenLinkReportAccess = brokenLinkReportAccess;
            this.brokenLinkReportMarkFixed = brokenLinkReportMarkFixed;
+           this.changeIdentity = changeIdentity;
     }
 
 
@@ -2030,6 +2034,26 @@ public class GlobalAbilities  implements java.io.Serializable {
         this.brokenLinkReportMarkFixed = brokenLinkReportMarkFixed;
     }
 
+
+    /**
+     * Gets the changeIdentity value for this GlobalAbilities.
+     * 
+     * @return changeIdentity
+     */
+    public java.lang.Boolean getChangeIdentity() {
+        return changeIdentity;
+    }
+
+
+    /**
+     * Sets the changeIdentity value for this GlobalAbilities.
+     * 
+     * @param changeIdentity
+     */
+    public void setChangeIdentity(java.lang.Boolean changeIdentity) {
+        this.changeIdentity = changeIdentity;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof GlobalAbilities)) return false;
@@ -2293,7 +2317,10 @@ public class GlobalAbilities  implements java.io.Serializable {
               this.brokenLinkReportAccess.equals(other.getBrokenLinkReportAccess()))) &&
             ((this.brokenLinkReportMarkFixed==null && other.getBrokenLinkReportMarkFixed()==null) || 
              (this.brokenLinkReportMarkFixed!=null &&
-              this.brokenLinkReportMarkFixed.equals(other.getBrokenLinkReportMarkFixed())));
+              this.brokenLinkReportMarkFixed.equals(other.getBrokenLinkReportMarkFixed()))) &&
+            ((this.changeIdentity==null && other.getChangeIdentity()==null) || 
+             (this.changeIdentity!=null &&
+              this.changeIdentity.equals(other.getChangeIdentity())));
         __equalsCalc = null;
         return _equals;
     }
@@ -2556,6 +2583,9 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         if (getBrokenLinkReportMarkFixed() != null) {
             _hashCode += getBrokenLinkReportMarkFixed().hashCode();
+        }
+        if (getChangeIdentity() != null) {
+            _hashCode += getChangeIdentity().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -3151,6 +3181,13 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("brokenLinkReportMarkFixed");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "brokenLinkReportMarkFixed"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("changeIdentity");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "changeIdentity"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
