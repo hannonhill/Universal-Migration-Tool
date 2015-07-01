@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.jdom.Attribute;
 import org.jdom.Document;
+import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
@@ -30,9 +31,8 @@ public class XmlUtil
 {
     /**
      * Converts the xml from given input source into a structure of Node elements, returning the root node. If
-     * the source comes from a String, use
-     * new InputSource(new StringReader(xmlString)). If the source comes from a File, use new InputSource(new
-     * FileInputStream(file)).
+     * the source comes from a String, use new InputSource(new StringReader(xmlString)). If the source comes
+     * from a File, use new InputSource(new FileInputStream(file)).
      * 
      * @param inputSource
      * @return
@@ -70,8 +70,7 @@ public class XmlUtil
 
     /**
      * A safe way of getting attribute value of attribute with given name. If attribute with given name
-     * doesn't exist, returns null
-     * (instead of NPE).
+     * doesn't exist, returns null (instead of NPE).
      * 
      * @param node
      * @param attributeName
@@ -123,8 +122,30 @@ public class XmlUtil
         if (result.get(0) instanceof Attribute)
             return outputAttributes(result);
 
+        // If the result contains Text objects, output them using getText() since XMLOutputter fails to
+        // unescape XML entities
+        if (result.get(0) instanceof Text)
+            return outputTexts(result);
+
         // Otherwise, let the XMLOutputter handle outputting (it can't handle Attributes or Strings)
         return new XMLOutputter().outputString(result);
+    }
+
+    /**
+     * Converts a list of {@link Text} objects to String
+     * 
+     * @param texts
+     * @return
+     */
+    private static String outputTexts(List<?> texts)
+    {
+        StringBuilder builder = new StringBuilder();
+        for (Object text : texts)
+            // Verify that this is an attribute first, if it is not, ignore it
+            if (text instanceof Text)
+                builder.append(((Text) text).getText());
+
+        return builder.toString();
     }
 
     /**
