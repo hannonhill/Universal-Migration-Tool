@@ -120,8 +120,11 @@ public class WebServicesUtil
             if (field == null || !(field instanceof DataDefinitionField))
                 continue;
 
+            DataDefinitionField ddField = (DataDefinitionField) field;
             String fieldValue = XmlUtil.evaluateXPathExpression(fileContents, xPath);
-            fieldValue = LinkRewriter.rewriteLinksInXml(fieldValue, assetPath, projectInformation);
+            if (ddField.isWysiwyg())
+                fieldValue = LinkRewriter.rewriteLinksInXml(fieldValue, assetPath, projectInformation);
+
             assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
         }
 

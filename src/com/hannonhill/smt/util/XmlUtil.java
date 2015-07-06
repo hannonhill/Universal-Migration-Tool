@@ -122,9 +122,9 @@ public class XmlUtil
         if (result.get(0) instanceof Attribute)
             return outputAttributes(result);
 
-        // If the result contains Text objects, output them using getText() since XMLOutputter fails to
-        // unescape XML entities
-        if (result.get(0) instanceof Text)
+        // If the xpath expression expects a text (ends with "/text()"), output the Text objects using
+        // getText() method since XMLOutputter fails to unescape XML entities
+        if (xPathExpression.endsWith("/text()"))
             return outputTexts(result);
 
         // Otherwise, let the XMLOutputter handle outputting (it can't handle Attributes or Strings)

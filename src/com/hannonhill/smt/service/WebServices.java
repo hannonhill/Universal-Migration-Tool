@@ -64,7 +64,7 @@ public class WebServices
     // Names of metadata fields whose values can be longer than 250 characters
     public static final List<String> LONG_METADATA_FIELDS;
 
-    public static final DataDefinitionField XHTML_DATA_DEFINITION_FIELD = new DataDefinitionField("xhtml", "XHTML", null, false);
+    public static final DataDefinitionField XHTML_DATA_DEFINITION_FIELD = new DataDefinitionField("xhtml", "XHTML", null, false, true);
 
     // Identifiers of the standard metadata fields
     public static final List<String> STANDARD_METADATA_FIELD_IDENTIFIERS;
@@ -160,8 +160,8 @@ public class WebServices
 
     /**
      * Returns a map of data definition field identifier to actual fields of a data definition that is
-     * assigned to a content type with given contentTypePath.
-     * If no data definition is assigned to the content type, returns null.
+     * assigned to a content type with given contentTypePath. If no data definition is assigned to the content
+     * type, returns null.
      * 
      * @param projectInformation
      * @param contentType
@@ -190,8 +190,7 @@ public class WebServices
 
     /**
      * Creates a page in Cascade Server based on the information provided in the projectInformation and the
-     * actual file
-     * from which the Page needs to be created.
+     * actual file from which the Page needs to be created.
      * 
      * @param pageFile
      * @param projectInformation
@@ -811,8 +810,7 @@ public class WebServices
 
     /**
      * Asks Cascade Server to delete a page with given path. If page didn't exist, the error will be ignored.
-     * If
-     * some other problem occured, an exception will be thrown.
+     * If some other problem occured, an exception will be thrown.
      * 
      * @param path
      * @param projectInformation

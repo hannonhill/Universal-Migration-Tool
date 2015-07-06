@@ -88,8 +88,7 @@ public class XmlAnalyzer
 
     /**
      * Checks if current node contains an src attribute and if not, then recursively checks all the ancestor
-     * nodes and returns
-     * the values first one that contains.
+     * nodes and returns the values first one that contains.
      * 
      * @param node
      * @return
@@ -150,13 +149,13 @@ public class XmlAnalyzer
             if (node.getNodeName().equals("group"))
                 analyzeDataDefinitionGroup(node.getChildNodes(), identifierPrefix + identifier + "/", labelPrefix + label + "/", returnMap);
             else if (node.getNodeName().equals("text"))
-                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, null, isMultiple(node)));
+                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, null, isMultiple(node), isWysiwyg(node)));
             else if (node.getNodeName().equals("asset") && node.getAttributes().getNamedItem("type") != null
                     && node.getAttributes().getNamedItem("type").getTextContent().equals("file"))
-                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, ChooserType.FILE, isMultiple(node)));
+                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, ChooserType.FILE, isMultiple(node), false));
             else if (node.getNodeName().equals("asset") && node.getAttributes().getNamedItem("type") != null
                     && node.getAttributes().getNamedItem("type").getTextContent().equals("block"))
-                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, ChooserType.BLOCK, isMultiple(node)));
+                returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, ChooserType.BLOCK, isMultiple(node), false));
         }
     }
 
@@ -169,6 +168,18 @@ public class XmlAnalyzer
     private static boolean isMultiple(Node node)
     {
         return node.getAttributes().getNamedItem("multiple") != null && node.getAttributes().getNamedItem("multiple").getTextContent().equals("true");
+    }
+
+    /**
+     * Returns true if provided node is a text node with wysiwyg="true" attribute
+     * 
+     * @param node
+     * @return
+     */
+    private static boolean isWysiwyg(Node node)
+    {
+        return node.getNodeName().equals("text") && node.getAttributes().getNamedItem("wysiwyg") != null
+                && node.getAttributes().getNamedItem("wysiwyg").getTextContent().equals("true");
     }
 
     /**

@@ -16,6 +16,7 @@ public class DataDefinitionField extends Field
     // Null if not a chooser field
     private final ChooserType chooserType;
     private final boolean multiple;
+    private final boolean wysiwyg;
 
     /**
      * Constructor for data defintion field
@@ -25,11 +26,12 @@ public class DataDefinitionField extends Field
      * @param chooserType
      * @param multiple
      */
-    public DataDefinitionField(String identifier, String label, ChooserType chooserType, boolean multiple)
+    public DataDefinitionField(String identifier, String label, ChooserType chooserType, boolean multiple, boolean wysiwyg)
     {
         super(identifier, label);
         this.chooserType = chooserType;
         this.multiple = multiple;
+        this.wysiwyg = wysiwyg;
     }
 
     /**
@@ -46,5 +48,13 @@ public class DataDefinitionField extends Field
     public boolean isMultiple()
     {
         return multiple;
+    }
+
+    /**
+     * @return Returns the wysiwyg.
+     */
+    public boolean isWysiwyg()
+    {
+        return wysiwyg;
     }
 }
