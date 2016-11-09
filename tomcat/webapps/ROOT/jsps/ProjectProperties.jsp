@@ -15,13 +15,13 @@
 	<body>
 		<div class="mt-header">
       <div class="container">
-        <h1 class="brand">Cascade Server <span>Universal Migration Tool</span></h1>
+        <h1 class="brand">Cascade CMS <span>Universal Migration Tool</span></h1>
       </div>
     </div>
     <div id="page" class="container">
       <div class="row">
         <div class="span12">
-          <p class="lead">Please enter Cascade Server information below.</p>
+          <p class="lead">Please enter Cascade CMS information below.</p>
 
           <div id="actionError" class="alert alert-block alert-error hide">
 					  <h5>The following error(s) were encountered:</h5>
@@ -31,7 +31,7 @@
           <form action="/ProjectProperties" method="POST" class="form-horizontal">
             <fieldset>
               <div class="control-group">
-                <label class="control-label" for="url">Cascade Server 8.0.x URL</label>
+                <label class="control-label" for="url">Cascade CMS 8.1.x URL</label>
                 <div class="controls">
                   <input class="span4" type="text" id="url" placeholder="http://" name="url" value="<s:property value="url"/>" />
                 </div>

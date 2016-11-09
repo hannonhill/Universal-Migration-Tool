@@ -66,6 +66,8 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean alwaysAllowedToToggleDataChecks;
 
+    private java.lang.Boolean accessManageSiteArea;
+
     private java.lang.Boolean accessAdminArea;
 
     private java.lang.Boolean accessAssetFactories;
@@ -100,8 +102,6 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean publishWritableAdminAreaAssets;
 
-    private java.lang.Boolean newSiteWizard;
-
     private java.lang.Boolean integrateFolder;
 
     private java.lang.Boolean importZipArchive;
@@ -119,8 +119,6 @@ public class GlobalAbilities  implements java.io.Serializable {
     private java.lang.Boolean accessConfiguration;
 
     private java.lang.Boolean editSystemPreferences;
-
-    private java.lang.Boolean siteMigration;
 
     private java.lang.Boolean broadcastMessages;
 
@@ -163,10 +161,6 @@ public class GlobalAbilities  implements java.io.Serializable {
     private java.lang.Boolean editMemberGroups;
 
     private java.lang.Boolean moveRenameAssets;
-
-    private java.lang.Boolean recycleBinChecker;
-
-    private java.lang.Boolean pathRepairTool;
 
     private java.lang.Boolean databaseExportTool;
 
@@ -211,6 +205,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean bypassDestinationGroupsWhenPublishing,
            java.lang.Boolean bypassWorkflowDefintionGroupsForFolders,
            java.lang.Boolean alwaysAllowedToToggleDataChecks,
+           java.lang.Boolean accessManageSiteArea,
            java.lang.Boolean accessAdminArea,
            java.lang.Boolean accessAssetFactories,
            java.lang.Boolean accessConfigurationSets,
@@ -228,7 +223,6 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean accessSecurityArea,
            java.lang.Boolean publishReadableAdminAreaAssets,
            java.lang.Boolean publishWritableAdminAreaAssets,
-           java.lang.Boolean newSiteWizard,
            java.lang.Boolean integrateFolder,
            java.lang.Boolean importZipArchive,
            java.lang.Boolean optimizeDatabase,
@@ -238,7 +232,6 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean searchingIndexing,
            java.lang.Boolean accessConfiguration,
            java.lang.Boolean editSystemPreferences,
-           java.lang.Boolean siteMigration,
            java.lang.Boolean broadcastMessages,
            java.lang.Boolean recycleBinViewRestoreUserAssets,
            java.lang.Boolean recycleBinDeleteAssets,
@@ -260,8 +253,6 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean editAnyGroup,
            java.lang.Boolean editMemberGroups,
            java.lang.Boolean moveRenameAssets,
-           java.lang.Boolean recycleBinChecker,
-           java.lang.Boolean pathRepairTool,
            java.lang.Boolean databaseExportTool,
            java.lang.Boolean sendStaleAssetNotifications,
            java.lang.Boolean brokenLinkReportAccess,
@@ -296,6 +287,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.bypassDestinationGroupsWhenPublishing = bypassDestinationGroupsWhenPublishing;
            this.bypassWorkflowDefintionGroupsForFolders = bypassWorkflowDefintionGroupsForFolders;
            this.alwaysAllowedToToggleDataChecks = alwaysAllowedToToggleDataChecks;
+           this.accessManageSiteArea = accessManageSiteArea;
            this.accessAdminArea = accessAdminArea;
            this.accessAssetFactories = accessAssetFactories;
            this.accessConfigurationSets = accessConfigurationSets;
@@ -313,7 +305,6 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.accessSecurityArea = accessSecurityArea;
            this.publishReadableAdminAreaAssets = publishReadableAdminAreaAssets;
            this.publishWritableAdminAreaAssets = publishWritableAdminAreaAssets;
-           this.newSiteWizard = newSiteWizard;
            this.integrateFolder = integrateFolder;
            this.importZipArchive = importZipArchive;
            this.optimizeDatabase = optimizeDatabase;
@@ -323,7 +314,6 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.searchingIndexing = searchingIndexing;
            this.accessConfiguration = accessConfiguration;
            this.editSystemPreferences = editSystemPreferences;
-           this.siteMigration = siteMigration;
            this.broadcastMessages = broadcastMessages;
            this.recycleBinViewRestoreUserAssets = recycleBinViewRestoreUserAssets;
            this.recycleBinDeleteAssets = recycleBinDeleteAssets;
@@ -345,8 +335,6 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.editAnyGroup = editAnyGroup;
            this.editMemberGroups = editMemberGroups;
            this.moveRenameAssets = moveRenameAssets;
-           this.recycleBinChecker = recycleBinChecker;
-           this.pathRepairTool = pathRepairTool;
            this.databaseExportTool = databaseExportTool;
            this.sendStaleAssetNotifications = sendStaleAssetNotifications;
            this.brokenLinkReportAccess = brokenLinkReportAccess;
@@ -936,6 +924,26 @@ public class GlobalAbilities  implements java.io.Serializable {
 
 
     /**
+     * Gets the accessManageSiteArea value for this GlobalAbilities.
+     * 
+     * @return accessManageSiteArea
+     */
+    public java.lang.Boolean getAccessManageSiteArea() {
+        return accessManageSiteArea;
+    }
+
+
+    /**
+     * Sets the accessManageSiteArea value for this GlobalAbilities.
+     * 
+     * @param accessManageSiteArea
+     */
+    public void setAccessManageSiteArea(java.lang.Boolean accessManageSiteArea) {
+        this.accessManageSiteArea = accessManageSiteArea;
+    }
+
+
+    /**
      * Gets the accessAdminArea value for this GlobalAbilities.
      * 
      * @return accessAdminArea
@@ -1276,26 +1284,6 @@ public class GlobalAbilities  implements java.io.Serializable {
 
 
     /**
-     * Gets the newSiteWizard value for this GlobalAbilities.
-     * 
-     * @return newSiteWizard
-     */
-    public java.lang.Boolean getNewSiteWizard() {
-        return newSiteWizard;
-    }
-
-
-    /**
-     * Sets the newSiteWizard value for this GlobalAbilities.
-     * 
-     * @param newSiteWizard
-     */
-    public void setNewSiteWizard(java.lang.Boolean newSiteWizard) {
-        this.newSiteWizard = newSiteWizard;
-    }
-
-
-    /**
      * Gets the integrateFolder value for this GlobalAbilities.
      * 
      * @return integrateFolder
@@ -1472,26 +1460,6 @@ public class GlobalAbilities  implements java.io.Serializable {
      */
     public void setEditSystemPreferences(java.lang.Boolean editSystemPreferences) {
         this.editSystemPreferences = editSystemPreferences;
-    }
-
-
-    /**
-     * Gets the siteMigration value for this GlobalAbilities.
-     * 
-     * @return siteMigration
-     */
-    public java.lang.Boolean getSiteMigration() {
-        return siteMigration;
-    }
-
-
-    /**
-     * Sets the siteMigration value for this GlobalAbilities.
-     * 
-     * @param siteMigration
-     */
-    public void setSiteMigration(java.lang.Boolean siteMigration) {
-        this.siteMigration = siteMigration;
     }
 
 
@@ -1916,46 +1884,6 @@ public class GlobalAbilities  implements java.io.Serializable {
 
 
     /**
-     * Gets the recycleBinChecker value for this GlobalAbilities.
-     * 
-     * @return recycleBinChecker
-     */
-    public java.lang.Boolean getRecycleBinChecker() {
-        return recycleBinChecker;
-    }
-
-
-    /**
-     * Sets the recycleBinChecker value for this GlobalAbilities.
-     * 
-     * @param recycleBinChecker
-     */
-    public void setRecycleBinChecker(java.lang.Boolean recycleBinChecker) {
-        this.recycleBinChecker = recycleBinChecker;
-    }
-
-
-    /**
-     * Gets the pathRepairTool value for this GlobalAbilities.
-     * 
-     * @return pathRepairTool
-     */
-    public java.lang.Boolean getPathRepairTool() {
-        return pathRepairTool;
-    }
-
-
-    /**
-     * Sets the pathRepairTool value for this GlobalAbilities.
-     * 
-     * @param pathRepairTool
-     */
-    public void setPathRepairTool(java.lang.Boolean pathRepairTool) {
-        this.pathRepairTool = pathRepairTool;
-    }
-
-
-    /**
      * Gets the databaseExportTool value for this GlobalAbilities.
      * 
      * @return databaseExportTool
@@ -2153,6 +2081,9 @@ public class GlobalAbilities  implements java.io.Serializable {
             ((this.alwaysAllowedToToggleDataChecks==null && other.getAlwaysAllowedToToggleDataChecks()==null) || 
              (this.alwaysAllowedToToggleDataChecks!=null &&
               this.alwaysAllowedToToggleDataChecks.equals(other.getAlwaysAllowedToToggleDataChecks()))) &&
+            ((this.accessManageSiteArea==null && other.getAccessManageSiteArea()==null) || 
+             (this.accessManageSiteArea!=null &&
+              this.accessManageSiteArea.equals(other.getAccessManageSiteArea()))) &&
             ((this.accessAdminArea==null && other.getAccessAdminArea()==null) || 
              (this.accessAdminArea!=null &&
               this.accessAdminArea.equals(other.getAccessAdminArea()))) &&
@@ -2204,9 +2135,6 @@ public class GlobalAbilities  implements java.io.Serializable {
             ((this.publishWritableAdminAreaAssets==null && other.getPublishWritableAdminAreaAssets()==null) || 
              (this.publishWritableAdminAreaAssets!=null &&
               this.publishWritableAdminAreaAssets.equals(other.getPublishWritableAdminAreaAssets()))) &&
-            ((this.newSiteWizard==null && other.getNewSiteWizard()==null) || 
-             (this.newSiteWizard!=null &&
-              this.newSiteWizard.equals(other.getNewSiteWizard()))) &&
             ((this.integrateFolder==null && other.getIntegrateFolder()==null) || 
              (this.integrateFolder!=null &&
               this.integrateFolder.equals(other.getIntegrateFolder()))) &&
@@ -2234,9 +2162,6 @@ public class GlobalAbilities  implements java.io.Serializable {
             ((this.editSystemPreferences==null && other.getEditSystemPreferences()==null) || 
              (this.editSystemPreferences!=null &&
               this.editSystemPreferences.equals(other.getEditSystemPreferences()))) &&
-            ((this.siteMigration==null && other.getSiteMigration()==null) || 
-             (this.siteMigration!=null &&
-              this.siteMigration.equals(other.getSiteMigration()))) &&
             ((this.broadcastMessages==null && other.getBroadcastMessages()==null) || 
              (this.broadcastMessages!=null &&
               this.broadcastMessages.equals(other.getBroadcastMessages()))) &&
@@ -2300,12 +2225,6 @@ public class GlobalAbilities  implements java.io.Serializable {
             ((this.moveRenameAssets==null && other.getMoveRenameAssets()==null) || 
              (this.moveRenameAssets!=null &&
               this.moveRenameAssets.equals(other.getMoveRenameAssets()))) &&
-            ((this.recycleBinChecker==null && other.getRecycleBinChecker()==null) || 
-             (this.recycleBinChecker!=null &&
-              this.recycleBinChecker.equals(other.getRecycleBinChecker()))) &&
-            ((this.pathRepairTool==null && other.getPathRepairTool()==null) || 
-             (this.pathRepairTool!=null &&
-              this.pathRepairTool.equals(other.getPathRepairTool()))) &&
             ((this.databaseExportTool==null && other.getDatabaseExportTool()==null) || 
              (this.databaseExportTool!=null &&
               this.databaseExportTool.equals(other.getDatabaseExportTool()))) &&
@@ -2419,6 +2338,9 @@ public class GlobalAbilities  implements java.io.Serializable {
         if (getAlwaysAllowedToToggleDataChecks() != null) {
             _hashCode += getAlwaysAllowedToToggleDataChecks().hashCode();
         }
+        if (getAccessManageSiteArea() != null) {
+            _hashCode += getAccessManageSiteArea().hashCode();
+        }
         if (getAccessAdminArea() != null) {
             _hashCode += getAccessAdminArea().hashCode();
         }
@@ -2470,9 +2392,6 @@ public class GlobalAbilities  implements java.io.Serializable {
         if (getPublishWritableAdminAreaAssets() != null) {
             _hashCode += getPublishWritableAdminAreaAssets().hashCode();
         }
-        if (getNewSiteWizard() != null) {
-            _hashCode += getNewSiteWizard().hashCode();
-        }
         if (getIntegrateFolder() != null) {
             _hashCode += getIntegrateFolder().hashCode();
         }
@@ -2499,9 +2418,6 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         if (getEditSystemPreferences() != null) {
             _hashCode += getEditSystemPreferences().hashCode();
-        }
-        if (getSiteMigration() != null) {
-            _hashCode += getSiteMigration().hashCode();
         }
         if (getBroadcastMessages() != null) {
             _hashCode += getBroadcastMessages().hashCode();
@@ -2565,12 +2481,6 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         if (getMoveRenameAssets() != null) {
             _hashCode += getMoveRenameAssets().hashCode();
-        }
-        if (getRecycleBinChecker() != null) {
-            _hashCode += getRecycleBinChecker().hashCode();
-        }
-        if (getPathRepairTool() != null) {
-            _hashCode += getPathRepairTool().hashCode();
         }
         if (getDatabaseExportTool() != null) {
             _hashCode += getDatabaseExportTool().hashCode();
@@ -2801,6 +2711,13 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("accessManageSiteArea");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "accessManageSiteArea"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("accessAdminArea");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "accessAdminArea"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
@@ -2920,13 +2837,6 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("newSiteWizard");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "newSiteWizard"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("integrateFolder");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "integrateFolder"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
@@ -2985,13 +2895,6 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("editSystemPreferences");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editSystemPreferences"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("siteMigration");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteMigration"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
@@ -3139,20 +3042,6 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("moveRenameAssets");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "moveRenameAssets"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("recycleBinChecker");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "recycleBinChecker"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("pathRepairTool");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "pathRepairTool"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

@@ -24,6 +24,10 @@ public class MetadataSet  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     private com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility endDateFieldVisibility;
 
+    private java.lang.Boolean expirationFolderFieldRequired;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility expirationFolderFieldVisibility;
+
     private java.lang.Boolean keywordsFieldRequired;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility keywordsFieldVisibility;
@@ -69,6 +73,8 @@ public class MetadataSet  extends com.hannonhill.www.ws.ns.AssetOperationService
            com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility displayNameFieldVisibility,
            java.lang.Boolean endDateFieldRequired,
            com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility endDateFieldVisibility,
+           java.lang.Boolean expirationFolderFieldRequired,
+           com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility expirationFolderFieldVisibility,
            java.lang.Boolean keywordsFieldRequired,
            com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility keywordsFieldVisibility,
            java.lang.Boolean reviewDateFieldRequired,
@@ -98,6 +104,8 @@ public class MetadataSet  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.displayNameFieldVisibility = displayNameFieldVisibility;
         this.endDateFieldRequired = endDateFieldRequired;
         this.endDateFieldVisibility = endDateFieldVisibility;
+        this.expirationFolderFieldRequired = expirationFolderFieldRequired;
+        this.expirationFolderFieldVisibility = expirationFolderFieldVisibility;
         this.keywordsFieldRequired = keywordsFieldRequired;
         this.keywordsFieldVisibility = keywordsFieldVisibility;
         this.reviewDateFieldRequired = reviewDateFieldRequired;
@@ -271,6 +279,46 @@ public class MetadataSet  extends com.hannonhill.www.ws.ns.AssetOperationService
      */
     public void setEndDateFieldVisibility(com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility endDateFieldVisibility) {
         this.endDateFieldVisibility = endDateFieldVisibility;
+    }
+
+
+    /**
+     * Gets the expirationFolderFieldRequired value for this MetadataSet.
+     * 
+     * @return expirationFolderFieldRequired
+     */
+    public java.lang.Boolean getExpirationFolderFieldRequired() {
+        return expirationFolderFieldRequired;
+    }
+
+
+    /**
+     * Sets the expirationFolderFieldRequired value for this MetadataSet.
+     * 
+     * @param expirationFolderFieldRequired
+     */
+    public void setExpirationFolderFieldRequired(java.lang.Boolean expirationFolderFieldRequired) {
+        this.expirationFolderFieldRequired = expirationFolderFieldRequired;
+    }
+
+
+    /**
+     * Gets the expirationFolderFieldVisibility value for this MetadataSet.
+     * 
+     * @return expirationFolderFieldVisibility
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility getExpirationFolderFieldVisibility() {
+        return expirationFolderFieldVisibility;
+    }
+
+
+    /**
+     * Sets the expirationFolderFieldVisibility value for this MetadataSet.
+     * 
+     * @param expirationFolderFieldVisibility
+     */
+    public void setExpirationFolderFieldVisibility(com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility expirationFolderFieldVisibility) {
+        this.expirationFolderFieldVisibility = expirationFolderFieldVisibility;
     }
 
 
@@ -569,6 +617,12 @@ public class MetadataSet  extends com.hannonhill.www.ws.ns.AssetOperationService
             ((this.endDateFieldVisibility==null && other.getEndDateFieldVisibility()==null) || 
              (this.endDateFieldVisibility!=null &&
               this.endDateFieldVisibility.equals(other.getEndDateFieldVisibility()))) &&
+            ((this.expirationFolderFieldRequired==null && other.getExpirationFolderFieldRequired()==null) || 
+             (this.expirationFolderFieldRequired!=null &&
+              this.expirationFolderFieldRequired.equals(other.getExpirationFolderFieldRequired()))) &&
+            ((this.expirationFolderFieldVisibility==null && other.getExpirationFolderFieldVisibility()==null) || 
+             (this.expirationFolderFieldVisibility!=null &&
+              this.expirationFolderFieldVisibility.equals(other.getExpirationFolderFieldVisibility()))) &&
             ((this.keywordsFieldRequired==null && other.getKeywordsFieldRequired()==null) || 
              (this.keywordsFieldRequired!=null &&
               this.keywordsFieldRequired.equals(other.getKeywordsFieldRequired()))) &&
@@ -642,6 +696,12 @@ public class MetadataSet  extends com.hannonhill.www.ws.ns.AssetOperationService
         }
         if (getEndDateFieldVisibility() != null) {
             _hashCode += getEndDateFieldVisibility().hashCode();
+        }
+        if (getExpirationFolderFieldRequired() != null) {
+            _hashCode += getExpirationFolderFieldRequired().hashCode();
+        }
+        if (getExpirationFolderFieldVisibility() != null) {
+            _hashCode += getExpirationFolderFieldVisibility().hashCode();
         }
         if (getKeywordsFieldRequired() != null) {
             _hashCode += getKeywordsFieldRequired().hashCode();
@@ -752,6 +812,20 @@ public class MetadataSet  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("endDateFieldVisibility");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "endDateFieldVisibility"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "metadata-field-visibility"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("expirationFolderFieldRequired");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "expirationFolderFieldRequired"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("expirationFolderFieldVisibility");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "expirationFolderFieldVisibility"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "metadata-field-visibility"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

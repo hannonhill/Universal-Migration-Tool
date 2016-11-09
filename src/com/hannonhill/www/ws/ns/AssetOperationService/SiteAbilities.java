@@ -54,7 +54,7 @@ public class SiteAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean bypassWorkflowDefintionGroupsForFolders;
 
-    private java.lang.Boolean accessAdminArea;
+    private java.lang.Boolean accessManageSiteArea;
 
     private java.lang.Boolean accessAssetFactories;
 
@@ -137,7 +137,7 @@ public class SiteAbilities  implements java.io.Serializable {
            java.lang.Boolean bypassAssetFactoryGroupsNewMenu,
            java.lang.Boolean bypassDestinationGroupsWhenPublishing,
            java.lang.Boolean bypassWorkflowDefintionGroupsForFolders,
-           java.lang.Boolean accessAdminArea,
+           java.lang.Boolean accessManageSiteArea,
            java.lang.Boolean accessAssetFactories,
            java.lang.Boolean accessConfigurationSets,
            java.lang.Boolean accessDataDefinitions,
@@ -188,7 +188,7 @@ public class SiteAbilities  implements java.io.Serializable {
            this.bypassAssetFactoryGroupsNewMenu = bypassAssetFactoryGroupsNewMenu;
            this.bypassDestinationGroupsWhenPublishing = bypassDestinationGroupsWhenPublishing;
            this.bypassWorkflowDefintionGroupsForFolders = bypassWorkflowDefintionGroupsForFolders;
-           this.accessAdminArea = accessAdminArea;
+           this.accessManageSiteArea = accessManageSiteArea;
            this.accessAssetFactories = accessAssetFactories;
            this.accessConfigurationSets = accessConfigurationSets;
            this.accessDataDefinitions = accessDataDefinitions;
@@ -680,22 +680,22 @@ public class SiteAbilities  implements java.io.Serializable {
 
 
     /**
-     * Gets the accessAdminArea value for this SiteAbilities.
+     * Gets the accessManageSiteArea value for this SiteAbilities.
      * 
-     * @return accessAdminArea
+     * @return accessManageSiteArea
      */
-    public java.lang.Boolean getAccessAdminArea() {
-        return accessAdminArea;
+    public java.lang.Boolean getAccessManageSiteArea() {
+        return accessManageSiteArea;
     }
 
 
     /**
-     * Sets the accessAdminArea value for this SiteAbilities.
+     * Sets the accessManageSiteArea value for this SiteAbilities.
      * 
-     * @param accessAdminArea
+     * @param accessManageSiteArea
      */
-    public void setAccessAdminArea(java.lang.Boolean accessAdminArea) {
-        this.accessAdminArea = accessAdminArea;
+    public void setAccessManageSiteArea(java.lang.Boolean accessManageSiteArea) {
+        this.accessManageSiteArea = accessManageSiteArea;
     }
 
 
@@ -1319,9 +1319,9 @@ public class SiteAbilities  implements java.io.Serializable {
             ((this.bypassWorkflowDefintionGroupsForFolders==null && other.getBypassWorkflowDefintionGroupsForFolders()==null) || 
              (this.bypassWorkflowDefintionGroupsForFolders!=null &&
               this.bypassWorkflowDefintionGroupsForFolders.equals(other.getBypassWorkflowDefintionGroupsForFolders()))) &&
-            ((this.accessAdminArea==null && other.getAccessAdminArea()==null) || 
-             (this.accessAdminArea!=null &&
-              this.accessAdminArea.equals(other.getAccessAdminArea()))) &&
+            ((this.accessManageSiteArea==null && other.getAccessManageSiteArea()==null) || 
+             (this.accessManageSiteArea!=null &&
+              this.accessManageSiteArea.equals(other.getAccessManageSiteArea()))) &&
             ((this.accessAssetFactories==null && other.getAccessAssetFactories()==null) || 
              (this.accessAssetFactories!=null &&
               this.accessAssetFactories.equals(other.getAccessAssetFactories()))) &&
@@ -1483,8 +1483,8 @@ public class SiteAbilities  implements java.io.Serializable {
         if (getBypassWorkflowDefintionGroupsForFolders() != null) {
             _hashCode += getBypassWorkflowDefintionGroupsForFolders().hashCode();
         }
-        if (getAccessAdminArea() != null) {
-            _hashCode += getAccessAdminArea().hashCode();
+        if (getAccessManageSiteArea() != null) {
+            _hashCode += getAccessManageSiteArea().hashCode();
         }
         if (getAccessAssetFactories() != null) {
             _hashCode += getAccessAssetFactories().hashCode();
@@ -1739,8 +1739,8 @@ public class SiteAbilities  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("accessAdminArea");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "accessAdminArea"));
+        elemField.setFieldName("accessManageSiteArea");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "accessManageSiteArea"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
