@@ -10,6 +10,8 @@ package com.hannonhill.www.ws.ns.AssetOperationService;
 public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperationService.ContaineredAsset  implements java.io.Serializable {
     private java.lang.String applicableGroups;
 
+    private java.lang.String description;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children;
 
     public AssetFactoryContainer() {
@@ -24,6 +26,7 @@ public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperat
            java.lang.String siteId,
            java.lang.String siteName,
            java.lang.String applicableGroups,
+           java.lang.String description,
            com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children) {
         super(
             id,
@@ -34,6 +37,7 @@ public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperat
             siteId,
             siteName);
         this.applicableGroups = applicableGroups;
+        this.description = description;
         this.children = children;
     }
 
@@ -55,6 +59,26 @@ public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperat
      */
     public void setApplicableGroups(java.lang.String applicableGroups) {
         this.applicableGroups = applicableGroups;
+    }
+
+
+    /**
+     * Gets the description value for this AssetFactoryContainer.
+     * 
+     * @return description
+     */
+    public java.lang.String getDescription() {
+        return description;
+    }
+
+
+    /**
+     * Sets the description value for this AssetFactoryContainer.
+     * 
+     * @param description
+     */
+    public void setDescription(java.lang.String description) {
+        this.description = description;
     }
 
 
@@ -92,6 +116,9 @@ public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperat
             ((this.applicableGroups==null && other.getApplicableGroups()==null) || 
              (this.applicableGroups!=null &&
               this.applicableGroups.equals(other.getApplicableGroups()))) &&
+            ((this.description==null && other.getDescription()==null) || 
+             (this.description!=null &&
+              this.description.equals(other.getDescription()))) &&
             ((this.children==null && other.getChildren()==null) || 
              (this.children!=null &&
               java.util.Arrays.equals(this.children, other.getChildren())));
@@ -108,6 +135,9 @@ public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperat
         int _hashCode = super.hashCode();
         if (getApplicableGroups() != null) {
             _hashCode += getApplicableGroups().hashCode();
+        }
+        if (getDescription() != null) {
+            _hashCode += getDescription().hashCode();
         }
         if (getChildren() != null) {
             for (int i=0;
@@ -133,6 +163,13 @@ public class AssetFactoryContainer  extends com.hannonhill.www.ws.ns.AssetOperat
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("applicableGroups");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "applicableGroups"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("description");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "description"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

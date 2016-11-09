@@ -18,6 +18,8 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
 
     private java.lang.Boolean baseAssetRecycled;
 
+    private java.lang.String description;
+
     private java.lang.String placementFolderId;
 
     private java.lang.String placementFolderPath;
@@ -54,6 +56,7 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
            java.lang.String baseAssetId,
            java.lang.String baseAssetPath,
            java.lang.Boolean baseAssetRecycled,
+           java.lang.String description,
            java.lang.String placementFolderId,
            java.lang.String placementFolderPath,
            java.lang.Boolean placementFolderRecycled,
@@ -77,6 +80,7 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
         this.baseAssetId = baseAssetId;
         this.baseAssetPath = baseAssetPath;
         this.baseAssetRecycled = baseAssetRecycled;
+        this.description = description;
         this.placementFolderId = placementFolderId;
         this.placementFolderPath = placementFolderPath;
         this.placementFolderRecycled = placementFolderRecycled;
@@ -187,6 +191,26 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
      */
     public void setBaseAssetRecycled(java.lang.Boolean baseAssetRecycled) {
         this.baseAssetRecycled = baseAssetRecycled;
+    }
+
+
+    /**
+     * Gets the description value for this AssetFactory.
+     * 
+     * @return description
+     */
+    public java.lang.String getDescription() {
+        return description;
+    }
+
+
+    /**
+     * Sets the description value for this AssetFactory.
+     * 
+     * @param description
+     */
+    public void setDescription(java.lang.String description) {
+        this.description = description;
     }
 
 
@@ -416,6 +440,9 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
             ((this.baseAssetRecycled==null && other.getBaseAssetRecycled()==null) || 
              (this.baseAssetRecycled!=null &&
               this.baseAssetRecycled.equals(other.getBaseAssetRecycled()))) &&
+            ((this.description==null && other.getDescription()==null) || 
+             (this.description!=null &&
+              this.description.equals(other.getDescription()))) &&
             ((this.placementFolderId==null && other.getPlacementFolderId()==null) || 
              (this.placementFolderId!=null &&
               this.placementFolderId.equals(other.getPlacementFolderId()))) &&
@@ -471,6 +498,9 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
         }
         if (getBaseAssetRecycled() != null) {
             _hashCode += getBaseAssetRecycled().hashCode();
+        }
+        if (getDescription() != null) {
+            _hashCode += getDescription().hashCode();
         }
         if (getPlacementFolderId() != null) {
             _hashCode += getPlacementFolderId().hashCode();
@@ -551,6 +581,13 @@ public class AssetFactory  extends com.hannonhill.www.ws.ns.AssetOperationServic
         elemField.setFieldName("baseAssetRecycled");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "baseAssetRecycled"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("description");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "description"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
