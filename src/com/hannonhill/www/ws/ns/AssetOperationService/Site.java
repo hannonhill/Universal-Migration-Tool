@@ -14,23 +14,19 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     private java.lang.String defaultMetadataSetPath;
 
-    private java.lang.String cssFileId;
-
-    private java.lang.String cssFilePath;
-
-    private java.lang.Boolean cssFileRecycled;
-
     private java.lang.String siteAssetFactoryContainerId;
 
     private java.lang.String siteAssetFactoryContainerPath;
+
+    private java.lang.String defaultEditorConfigurationId;
+
+    private java.lang.String defaultEditorConfigurationPath;
 
     private java.lang.String siteStartingPageId;
 
     private java.lang.String siteStartingPagePath;
 
     private java.lang.Boolean siteStartingPageRecycled;
-
-    private java.lang.String cssClasses;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.RoleAssignment[] roleAssignments;
 
@@ -93,15 +89,13 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            java.lang.String url,
            java.lang.String defaultMetadataSetId,
            java.lang.String defaultMetadataSetPath,
-           java.lang.String cssFileId,
-           java.lang.String cssFilePath,
-           java.lang.Boolean cssFileRecycled,
            java.lang.String siteAssetFactoryContainerId,
            java.lang.String siteAssetFactoryContainerPath,
+           java.lang.String defaultEditorConfigurationId,
+           java.lang.String defaultEditorConfigurationPath,
            java.lang.String siteStartingPageId,
            java.lang.String siteStartingPagePath,
            java.lang.Boolean siteStartingPageRecycled,
-           java.lang.String cssClasses,
            com.hannonhill.www.ws.ns.AssetOperationService.RoleAssignment[] roleAssignments,
            java.lang.Boolean usesScheduledPublishing,
            com.hannonhill.www.ws.ns.AssetOperationService.ScheduledDestinationMode scheduledPublishDestinationMode,
@@ -134,15 +128,13 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         this.url = url;
         this.defaultMetadataSetId = defaultMetadataSetId;
         this.defaultMetadataSetPath = defaultMetadataSetPath;
-        this.cssFileId = cssFileId;
-        this.cssFilePath = cssFilePath;
-        this.cssFileRecycled = cssFileRecycled;
         this.siteAssetFactoryContainerId = siteAssetFactoryContainerId;
         this.siteAssetFactoryContainerPath = siteAssetFactoryContainerPath;
+        this.defaultEditorConfigurationId = defaultEditorConfigurationId;
+        this.defaultEditorConfigurationPath = defaultEditorConfigurationPath;
         this.siteStartingPageId = siteStartingPageId;
         this.siteStartingPagePath = siteStartingPagePath;
         this.siteStartingPageRecycled = siteStartingPageRecycled;
-        this.cssClasses = cssClasses;
         this.roleAssignments = roleAssignments;
         this.usesScheduledPublishing = usesScheduledPublishing;
         this.scheduledPublishDestinationMode = scheduledPublishDestinationMode;
@@ -233,66 +225,6 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
 
     /**
-     * Gets the cssFileId value for this Site.
-     * 
-     * @return cssFileId
-     */
-    public java.lang.String getCssFileId() {
-        return cssFileId;
-    }
-
-
-    /**
-     * Sets the cssFileId value for this Site.
-     * 
-     * @param cssFileId
-     */
-    public void setCssFileId(java.lang.String cssFileId) {
-        this.cssFileId = cssFileId;
-    }
-
-
-    /**
-     * Gets the cssFilePath value for this Site.
-     * 
-     * @return cssFilePath
-     */
-    public java.lang.String getCssFilePath() {
-        return cssFilePath;
-    }
-
-
-    /**
-     * Sets the cssFilePath value for this Site.
-     * 
-     * @param cssFilePath
-     */
-    public void setCssFilePath(java.lang.String cssFilePath) {
-        this.cssFilePath = cssFilePath;
-    }
-
-
-    /**
-     * Gets the cssFileRecycled value for this Site.
-     * 
-     * @return cssFileRecycled
-     */
-    public java.lang.Boolean getCssFileRecycled() {
-        return cssFileRecycled;
-    }
-
-
-    /**
-     * Sets the cssFileRecycled value for this Site.
-     * 
-     * @param cssFileRecycled
-     */
-    public void setCssFileRecycled(java.lang.Boolean cssFileRecycled) {
-        this.cssFileRecycled = cssFileRecycled;
-    }
-
-
-    /**
      * Gets the siteAssetFactoryContainerId value for this Site.
      * 
      * @return siteAssetFactoryContainerId
@@ -329,6 +261,46 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
      */
     public void setSiteAssetFactoryContainerPath(java.lang.String siteAssetFactoryContainerPath) {
         this.siteAssetFactoryContainerPath = siteAssetFactoryContainerPath;
+    }
+
+
+    /**
+     * Gets the defaultEditorConfigurationId value for this Site.
+     * 
+     * @return defaultEditorConfigurationId
+     */
+    public java.lang.String getDefaultEditorConfigurationId() {
+        return defaultEditorConfigurationId;
+    }
+
+
+    /**
+     * Sets the defaultEditorConfigurationId value for this Site.
+     * 
+     * @param defaultEditorConfigurationId
+     */
+    public void setDefaultEditorConfigurationId(java.lang.String defaultEditorConfigurationId) {
+        this.defaultEditorConfigurationId = defaultEditorConfigurationId;
+    }
+
+
+    /**
+     * Gets the defaultEditorConfigurationPath value for this Site.
+     * 
+     * @return defaultEditorConfigurationPath
+     */
+    public java.lang.String getDefaultEditorConfigurationPath() {
+        return defaultEditorConfigurationPath;
+    }
+
+
+    /**
+     * Sets the defaultEditorConfigurationPath value for this Site.
+     * 
+     * @param defaultEditorConfigurationPath
+     */
+    public void setDefaultEditorConfigurationPath(java.lang.String defaultEditorConfigurationPath) {
+        this.defaultEditorConfigurationPath = defaultEditorConfigurationPath;
     }
 
 
@@ -389,26 +361,6 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
      */
     public void setSiteStartingPageRecycled(java.lang.Boolean siteStartingPageRecycled) {
         this.siteStartingPageRecycled = siteStartingPageRecycled;
-    }
-
-
-    /**
-     * Gets the cssClasses value for this Site.
-     * 
-     * @return cssClasses
-     */
-    public java.lang.String getCssClasses() {
-        return cssClasses;
-    }
-
-
-    /**
-     * Sets the cssClasses value for this Site.
-     * 
-     * @param cssClasses
-     */
-    public void setCssClasses(java.lang.String cssClasses) {
-        this.cssClasses = cssClasses;
     }
 
 
@@ -952,21 +904,18 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.defaultMetadataSetPath==null && other.getDefaultMetadataSetPath()==null) || 
              (this.defaultMetadataSetPath!=null &&
               this.defaultMetadataSetPath.equals(other.getDefaultMetadataSetPath()))) &&
-            ((this.cssFileId==null && other.getCssFileId()==null) || 
-             (this.cssFileId!=null &&
-              this.cssFileId.equals(other.getCssFileId()))) &&
-            ((this.cssFilePath==null && other.getCssFilePath()==null) || 
-             (this.cssFilePath!=null &&
-              this.cssFilePath.equals(other.getCssFilePath()))) &&
-            ((this.cssFileRecycled==null && other.getCssFileRecycled()==null) || 
-             (this.cssFileRecycled!=null &&
-              this.cssFileRecycled.equals(other.getCssFileRecycled()))) &&
             ((this.siteAssetFactoryContainerId==null && other.getSiteAssetFactoryContainerId()==null) || 
              (this.siteAssetFactoryContainerId!=null &&
               this.siteAssetFactoryContainerId.equals(other.getSiteAssetFactoryContainerId()))) &&
             ((this.siteAssetFactoryContainerPath==null && other.getSiteAssetFactoryContainerPath()==null) || 
              (this.siteAssetFactoryContainerPath!=null &&
               this.siteAssetFactoryContainerPath.equals(other.getSiteAssetFactoryContainerPath()))) &&
+            ((this.defaultEditorConfigurationId==null && other.getDefaultEditorConfigurationId()==null) || 
+             (this.defaultEditorConfigurationId!=null &&
+              this.defaultEditorConfigurationId.equals(other.getDefaultEditorConfigurationId()))) &&
+            ((this.defaultEditorConfigurationPath==null && other.getDefaultEditorConfigurationPath()==null) || 
+             (this.defaultEditorConfigurationPath!=null &&
+              this.defaultEditorConfigurationPath.equals(other.getDefaultEditorConfigurationPath()))) &&
             ((this.siteStartingPageId==null && other.getSiteStartingPageId()==null) || 
              (this.siteStartingPageId!=null &&
               this.siteStartingPageId.equals(other.getSiteStartingPageId()))) &&
@@ -976,9 +925,6 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.siteStartingPageRecycled==null && other.getSiteStartingPageRecycled()==null) || 
              (this.siteStartingPageRecycled!=null &&
               this.siteStartingPageRecycled.equals(other.getSiteStartingPageRecycled()))) &&
-            ((this.cssClasses==null && other.getCssClasses()==null) || 
-             (this.cssClasses!=null &&
-              this.cssClasses.equals(other.getCssClasses()))) &&
             ((this.roleAssignments==null && other.getRoleAssignments()==null) || 
              (this.roleAssignments!=null &&
               java.util.Arrays.equals(this.roleAssignments, other.getRoleAssignments()))) &&
@@ -1071,20 +1017,17 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         if (getDefaultMetadataSetPath() != null) {
             _hashCode += getDefaultMetadataSetPath().hashCode();
         }
-        if (getCssFileId() != null) {
-            _hashCode += getCssFileId().hashCode();
-        }
-        if (getCssFilePath() != null) {
-            _hashCode += getCssFilePath().hashCode();
-        }
-        if (getCssFileRecycled() != null) {
-            _hashCode += getCssFileRecycled().hashCode();
-        }
         if (getSiteAssetFactoryContainerId() != null) {
             _hashCode += getSiteAssetFactoryContainerId().hashCode();
         }
         if (getSiteAssetFactoryContainerPath() != null) {
             _hashCode += getSiteAssetFactoryContainerPath().hashCode();
+        }
+        if (getDefaultEditorConfigurationId() != null) {
+            _hashCode += getDefaultEditorConfigurationId().hashCode();
+        }
+        if (getDefaultEditorConfigurationPath() != null) {
+            _hashCode += getDefaultEditorConfigurationPath().hashCode();
         }
         if (getSiteStartingPageId() != null) {
             _hashCode += getSiteStartingPageId().hashCode();
@@ -1094,9 +1037,6 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         }
         if (getSiteStartingPageRecycled() != null) {
             _hashCode += getSiteStartingPageRecycled().hashCode();
-        }
-        if (getCssClasses() != null) {
-            _hashCode += getCssClasses().hashCode();
         }
         if (getRoleAssignments() != null) {
             for (int i=0;
@@ -1225,27 +1165,6 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("cssFileId");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cssFileId"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("cssFilePath");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cssFilePath"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("cssFileRecycled");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cssFileRecycled"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("siteAssetFactoryContainerId");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteAssetFactoryContainerId"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
@@ -1255,6 +1174,20 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("siteAssetFactoryContainerPath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteAssetFactoryContainerPath"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("defaultEditorConfigurationId");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "defaultEditorConfigurationId"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("defaultEditorConfigurationPath");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "defaultEditorConfigurationPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
@@ -1277,13 +1210,6 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setFieldName("siteStartingPageRecycled");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteStartingPageRecycled"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("cssClasses");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cssClasses"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

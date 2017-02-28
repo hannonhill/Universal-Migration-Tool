@@ -20,6 +20,10 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     private java.lang.String dataDefinitionPath;
 
+    private java.lang.String editorConfigurationId;
+
+    private java.lang.String editorConfigurationPath;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.InlineEditableField[] inlineEditableFields;
@@ -41,6 +45,8 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
            java.lang.String metadataSetPath,
            java.lang.String dataDefinitionId,
            java.lang.String dataDefinitionPath,
+           java.lang.String editorConfigurationId,
+           java.lang.String editorConfigurationPath,
            com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations,
            com.hannonhill.www.ws.ns.AssetOperationService.InlineEditableField[] inlineEditableFields) {
         super(
@@ -57,6 +63,8 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.metadataSetPath = metadataSetPath;
         this.dataDefinitionId = dataDefinitionId;
         this.dataDefinitionPath = dataDefinitionPath;
+        this.editorConfigurationId = editorConfigurationId;
+        this.editorConfigurationPath = editorConfigurationPath;
         this.contentTypePageConfigurations = contentTypePageConfigurations;
         this.inlineEditableFields = inlineEditableFields;
     }
@@ -183,6 +191,46 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
 
 
     /**
+     * Gets the editorConfigurationId value for this ContentType.
+     * 
+     * @return editorConfigurationId
+     */
+    public java.lang.String getEditorConfigurationId() {
+        return editorConfigurationId;
+    }
+
+
+    /**
+     * Sets the editorConfigurationId value for this ContentType.
+     * 
+     * @param editorConfigurationId
+     */
+    public void setEditorConfigurationId(java.lang.String editorConfigurationId) {
+        this.editorConfigurationId = editorConfigurationId;
+    }
+
+
+    /**
+     * Gets the editorConfigurationPath value for this ContentType.
+     * 
+     * @return editorConfigurationPath
+     */
+    public java.lang.String getEditorConfigurationPath() {
+        return editorConfigurationPath;
+    }
+
+
+    /**
+     * Sets the editorConfigurationPath value for this ContentType.
+     * 
+     * @param editorConfigurationPath
+     */
+    public void setEditorConfigurationPath(java.lang.String editorConfigurationPath) {
+        this.editorConfigurationPath = editorConfigurationPath;
+    }
+
+
+    /**
      * Gets the contentTypePageConfigurations value for this ContentType.
      * 
      * @return contentTypePageConfigurations
@@ -251,6 +299,12 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
             ((this.dataDefinitionPath==null && other.getDataDefinitionPath()==null) || 
              (this.dataDefinitionPath!=null &&
               this.dataDefinitionPath.equals(other.getDataDefinitionPath()))) &&
+            ((this.editorConfigurationId==null && other.getEditorConfigurationId()==null) || 
+             (this.editorConfigurationId!=null &&
+              this.editorConfigurationId.equals(other.getEditorConfigurationId()))) &&
+            ((this.editorConfigurationPath==null && other.getEditorConfigurationPath()==null) || 
+             (this.editorConfigurationPath!=null &&
+              this.editorConfigurationPath.equals(other.getEditorConfigurationPath()))) &&
             ((this.contentTypePageConfigurations==null && other.getContentTypePageConfigurations()==null) || 
              (this.contentTypePageConfigurations!=null &&
               java.util.Arrays.equals(this.contentTypePageConfigurations, other.getContentTypePageConfigurations()))) &&
@@ -285,6 +339,12 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         }
         if (getDataDefinitionPath() != null) {
             _hashCode += getDataDefinitionPath().hashCode();
+        }
+        if (getEditorConfigurationId() != null) {
+            _hashCode += getEditorConfigurationId().hashCode();
+        }
+        if (getEditorConfigurationPath() != null) {
+            _hashCode += getEditorConfigurationPath().hashCode();
         }
         if (getContentTypePageConfigurations() != null) {
             for (int i=0;
@@ -356,6 +416,20 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("dataDefinitionPath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "dataDefinitionPath"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("editorConfigurationId");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editorConfigurationId"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("editorConfigurationPath");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editorConfigurationPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
