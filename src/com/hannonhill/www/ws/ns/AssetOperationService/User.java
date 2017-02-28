@@ -22,8 +22,6 @@ public class User  implements java.io.Serializable {
 
     private java.lang.String groups;
 
-    private java.lang.String defaultGroup;
-
     private java.lang.String role;
 
     private java.lang.String defaultSiteId;
@@ -41,7 +39,6 @@ public class User  implements java.io.Serializable {
            java.lang.String password,
            java.lang.Boolean enabled,
            java.lang.String groups,
-           java.lang.String defaultGroup,
            java.lang.String role,
            java.lang.String defaultSiteId,
            java.lang.String defaultSiteName) {
@@ -52,7 +49,6 @@ public class User  implements java.io.Serializable {
            this.password = password;
            this.enabled = enabled;
            this.groups = groups;
-           this.defaultGroup = defaultGroup;
            this.role = role;
            this.defaultSiteId = defaultSiteId;
            this.defaultSiteName = defaultSiteName;
@@ -200,26 +196,6 @@ public class User  implements java.io.Serializable {
 
 
     /**
-     * Gets the defaultGroup value for this User.
-     * 
-     * @return defaultGroup
-     */
-    public java.lang.String getDefaultGroup() {
-        return defaultGroup;
-    }
-
-
-    /**
-     * Sets the defaultGroup value for this User.
-     * 
-     * @param defaultGroup
-     */
-    public void setDefaultGroup(java.lang.String defaultGroup) {
-        this.defaultGroup = defaultGroup;
-    }
-
-
-    /**
      * Gets the role value for this User.
      * 
      * @return role
@@ -311,9 +287,6 @@ public class User  implements java.io.Serializable {
             ((this.groups==null && other.getGroups()==null) || 
              (this.groups!=null &&
               this.groups.equals(other.getGroups()))) &&
-            ((this.defaultGroup==null && other.getDefaultGroup()==null) || 
-             (this.defaultGroup!=null &&
-              this.defaultGroup.equals(other.getDefaultGroup()))) &&
             ((this.role==null && other.getRole()==null) || 
              (this.role!=null &&
               this.role.equals(other.getRole()))) &&
@@ -354,9 +327,6 @@ public class User  implements java.io.Serializable {
         }
         if (getGroups() != null) {
             _hashCode += getGroups().hashCode();
-        }
-        if (getDefaultGroup() != null) {
-            _hashCode += getDefaultGroup().hashCode();
         }
         if (getRole() != null) {
             _hashCode += getRole().hashCode();
@@ -420,13 +390,6 @@ public class User  implements java.io.Serializable {
         elemField.setFieldName("groups");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "groups"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("defaultGroup");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "defaultGroup"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

@@ -98,6 +98,8 @@ public class Asset  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.Site site;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.EditorConfiguration editorConfiguration;
+
     public Asset() {
     }
 
@@ -146,7 +148,8 @@ public class Asset  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.WorkflowDefinition workflowDefinition,
            com.hannonhill.www.ws.ns.AssetOperationService.WorkflowDefinitionContainer workflowDefinitionContainer,
            com.hannonhill.www.ws.ns.AssetOperationService.TwitterFeedBlock twitterFeedBlock,
-           com.hannonhill.www.ws.ns.AssetOperationService.Site site) {
+           com.hannonhill.www.ws.ns.AssetOperationService.Site site,
+           com.hannonhill.www.ws.ns.AssetOperationService.EditorConfiguration editorConfiguration) {
            this.workflowConfiguration = workflowConfiguration;
            this.feedBlock = feedBlock;
            this.indexBlock = indexBlock;
@@ -192,6 +195,7 @@ public class Asset  implements java.io.Serializable {
            this.workflowDefinitionContainer = workflowDefinitionContainer;
            this.twitterFeedBlock = twitterFeedBlock;
            this.site = site;
+           this.editorConfiguration = editorConfiguration;
     }
 
 
@@ -1094,6 +1098,26 @@ public class Asset  implements java.io.Serializable {
         this.site = site;
     }
 
+
+    /**
+     * Gets the editorConfiguration value for this Asset.
+     * 
+     * @return editorConfiguration
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.EditorConfiguration getEditorConfiguration() {
+        return editorConfiguration;
+    }
+
+
+    /**
+     * Sets the editorConfiguration value for this Asset.
+     * 
+     * @param editorConfiguration
+     */
+    public void setEditorConfiguration(com.hannonhill.www.ws.ns.AssetOperationService.EditorConfiguration editorConfiguration) {
+        this.editorConfiguration = editorConfiguration;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Asset)) return false;
@@ -1240,7 +1264,10 @@ public class Asset  implements java.io.Serializable {
               this.twitterFeedBlock.equals(other.getTwitterFeedBlock()))) &&
             ((this.site==null && other.getSite()==null) || 
              (this.site!=null &&
-              this.site.equals(other.getSite())));
+              this.site.equals(other.getSite()))) &&
+            ((this.editorConfiguration==null && other.getEditorConfiguration()==null) || 
+             (this.editorConfiguration!=null &&
+              this.editorConfiguration.equals(other.getEditorConfiguration())));
         __equalsCalc = null;
         return _equals;
     }
@@ -1386,6 +1413,9 @@ public class Asset  implements java.io.Serializable {
         }
         if (getSite() != null) {
             _hashCode += getSite().hashCode();
+        }
+        if (getEditorConfiguration() != null) {
+            _hashCode += getEditorConfiguration().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1709,6 +1739,13 @@ public class Asset  implements java.io.Serializable {
         elemField.setFieldName("site");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "site"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "site"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("editorConfiguration");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editorConfiguration"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editorConfiguration"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

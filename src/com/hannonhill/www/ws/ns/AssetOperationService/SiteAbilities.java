@@ -80,8 +80,6 @@ public class SiteAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean publishWritableAdminAreaAssets;
 
-    private java.lang.Boolean integrateFolder;
-
     private java.lang.Boolean importZipArchive;
 
     private java.lang.Boolean bulkChange;
@@ -109,6 +107,10 @@ public class SiteAbilities  implements java.io.Serializable {
     private java.lang.Boolean brokenLinkReportAccess;
 
     private java.lang.Boolean brokenLinkReportMarkFixed;
+
+    private java.lang.Boolean accessEditorConfigurations;
+
+    private java.lang.Boolean bypassWysiwygEditorRestrictions;
 
     public SiteAbilities() {
     }
@@ -150,7 +152,6 @@ public class SiteAbilities  implements java.io.Serializable {
            java.lang.Boolean accessConnectors,
            java.lang.Boolean publishReadableAdminAreaAssets,
            java.lang.Boolean publishWritableAdminAreaAssets,
-           java.lang.Boolean integrateFolder,
            java.lang.Boolean importZipArchive,
            java.lang.Boolean bulkChange,
            java.lang.Boolean recycleBinViewRestoreUserAssets,
@@ -164,7 +165,9 @@ public class SiteAbilities  implements java.io.Serializable {
            java.lang.Boolean cancelPublishJobs,
            java.lang.Boolean sendStaleAssetNotifications,
            java.lang.Boolean brokenLinkReportAccess,
-           java.lang.Boolean brokenLinkReportMarkFixed) {
+           java.lang.Boolean brokenLinkReportMarkFixed,
+           java.lang.Boolean accessEditorConfigurations,
+           java.lang.Boolean bypassWysiwygEditorRestrictions) {
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.uploadImagesFromWysiwyg = uploadImagesFromWysiwyg;
            this.multiSelectCopy = multiSelectCopy;
@@ -201,7 +204,6 @@ public class SiteAbilities  implements java.io.Serializable {
            this.accessConnectors = accessConnectors;
            this.publishReadableAdminAreaAssets = publishReadableAdminAreaAssets;
            this.publishWritableAdminAreaAssets = publishWritableAdminAreaAssets;
-           this.integrateFolder = integrateFolder;
            this.importZipArchive = importZipArchive;
            this.bulkChange = bulkChange;
            this.recycleBinViewRestoreUserAssets = recycleBinViewRestoreUserAssets;
@@ -216,6 +218,8 @@ public class SiteAbilities  implements java.io.Serializable {
            this.sendStaleAssetNotifications = sendStaleAssetNotifications;
            this.brokenLinkReportAccess = brokenLinkReportAccess;
            this.brokenLinkReportMarkFixed = brokenLinkReportMarkFixed;
+           this.accessEditorConfigurations = accessEditorConfigurations;
+           this.bypassWysiwygEditorRestrictions = bypassWysiwygEditorRestrictions;
     }
 
 
@@ -940,26 +944,6 @@ public class SiteAbilities  implements java.io.Serializable {
 
 
     /**
-     * Gets the integrateFolder value for this SiteAbilities.
-     * 
-     * @return integrateFolder
-     */
-    public java.lang.Boolean getIntegrateFolder() {
-        return integrateFolder;
-    }
-
-
-    /**
-     * Sets the integrateFolder value for this SiteAbilities.
-     * 
-     * @param integrateFolder
-     */
-    public void setIntegrateFolder(java.lang.Boolean integrateFolder) {
-        this.integrateFolder = integrateFolder;
-    }
-
-
-    /**
      * Gets the importZipArchive value for this SiteAbilities.
      * 
      * @return importZipArchive
@@ -1238,6 +1222,46 @@ public class SiteAbilities  implements java.io.Serializable {
         this.brokenLinkReportMarkFixed = brokenLinkReportMarkFixed;
     }
 
+
+    /**
+     * Gets the accessEditorConfigurations value for this SiteAbilities.
+     * 
+     * @return accessEditorConfigurations
+     */
+    public java.lang.Boolean getAccessEditorConfigurations() {
+        return accessEditorConfigurations;
+    }
+
+
+    /**
+     * Sets the accessEditorConfigurations value for this SiteAbilities.
+     * 
+     * @param accessEditorConfigurations
+     */
+    public void setAccessEditorConfigurations(java.lang.Boolean accessEditorConfigurations) {
+        this.accessEditorConfigurations = accessEditorConfigurations;
+    }
+
+
+    /**
+     * Gets the bypassWysiwygEditorRestrictions value for this SiteAbilities.
+     * 
+     * @return bypassWysiwygEditorRestrictions
+     */
+    public java.lang.Boolean getBypassWysiwygEditorRestrictions() {
+        return bypassWysiwygEditorRestrictions;
+    }
+
+
+    /**
+     * Sets the bypassWysiwygEditorRestrictions value for this SiteAbilities.
+     * 
+     * @param bypassWysiwygEditorRestrictions
+     */
+    public void setBypassWysiwygEditorRestrictions(java.lang.Boolean bypassWysiwygEditorRestrictions) {
+        this.bypassWysiwygEditorRestrictions = bypassWysiwygEditorRestrictions;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof SiteAbilities)) return false;
@@ -1358,9 +1382,6 @@ public class SiteAbilities  implements java.io.Serializable {
             ((this.publishWritableAdminAreaAssets==null && other.getPublishWritableAdminAreaAssets()==null) || 
              (this.publishWritableAdminAreaAssets!=null &&
               this.publishWritableAdminAreaAssets.equals(other.getPublishWritableAdminAreaAssets()))) &&
-            ((this.integrateFolder==null && other.getIntegrateFolder()==null) || 
-             (this.integrateFolder!=null &&
-              this.integrateFolder.equals(other.getIntegrateFolder()))) &&
             ((this.importZipArchive==null && other.getImportZipArchive()==null) || 
              (this.importZipArchive!=null &&
               this.importZipArchive.equals(other.getImportZipArchive()))) &&
@@ -1402,7 +1423,13 @@ public class SiteAbilities  implements java.io.Serializable {
               this.brokenLinkReportAccess.equals(other.getBrokenLinkReportAccess()))) &&
             ((this.brokenLinkReportMarkFixed==null && other.getBrokenLinkReportMarkFixed()==null) || 
              (this.brokenLinkReportMarkFixed!=null &&
-              this.brokenLinkReportMarkFixed.equals(other.getBrokenLinkReportMarkFixed())));
+              this.brokenLinkReportMarkFixed.equals(other.getBrokenLinkReportMarkFixed()))) &&
+            ((this.accessEditorConfigurations==null && other.getAccessEditorConfigurations()==null) || 
+             (this.accessEditorConfigurations!=null &&
+              this.accessEditorConfigurations.equals(other.getAccessEditorConfigurations()))) &&
+            ((this.bypassWysiwygEditorRestrictions==null && other.getBypassWysiwygEditorRestrictions()==null) || 
+             (this.bypassWysiwygEditorRestrictions!=null &&
+              this.bypassWysiwygEditorRestrictions.equals(other.getBypassWysiwygEditorRestrictions())));
         __equalsCalc = null;
         return _equals;
     }
@@ -1522,9 +1549,6 @@ public class SiteAbilities  implements java.io.Serializable {
         if (getPublishWritableAdminAreaAssets() != null) {
             _hashCode += getPublishWritableAdminAreaAssets().hashCode();
         }
-        if (getIntegrateFolder() != null) {
-            _hashCode += getIntegrateFolder().hashCode();
-        }
         if (getImportZipArchive() != null) {
             _hashCode += getImportZipArchive().hashCode();
         }
@@ -1566,6 +1590,12 @@ public class SiteAbilities  implements java.io.Serializable {
         }
         if (getBrokenLinkReportMarkFixed() != null) {
             _hashCode += getBrokenLinkReportMarkFixed().hashCode();
+        }
+        if (getAccessEditorConfigurations() != null) {
+            _hashCode += getAccessEditorConfigurations().hashCode();
+        }
+        if (getBypassWysiwygEditorRestrictions() != null) {
+            _hashCode += getBypassWysiwygEditorRestrictions().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1830,13 +1860,6 @@ public class SiteAbilities  implements java.io.Serializable {
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("integrateFolder");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "integrateFolder"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("importZipArchive");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "importZipArchive"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
@@ -1930,6 +1953,20 @@ public class SiteAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("brokenLinkReportMarkFixed");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "brokenLinkReportMarkFixed"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("accessEditorConfigurations");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "accessEditorConfigurations"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("bypassWysiwygEditorRestrictions");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "bypassWysiwygEditorRestrictions"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

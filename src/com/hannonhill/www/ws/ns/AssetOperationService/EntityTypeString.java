@@ -34,6 +34,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final java.lang.String _contenttype = "contenttype";
     public static final java.lang.String _contenttypecontainer = "contenttypecontainer";
     public static final java.lang.String _destination = "destination";
+    public static final java.lang.String _editorconfiguration = "editorconfiguration";
     public static final java.lang.String _file = "file";
     public static final java.lang.String _folder = "folder";
     public static final java.lang.String _group = "group";
@@ -85,6 +86,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final EntityTypeString contenttype = new EntityTypeString(_contenttype);
     public static final EntityTypeString contenttypecontainer = new EntityTypeString(_contenttypecontainer);
     public static final EntityTypeString destination = new EntityTypeString(_destination);
+    public static final EntityTypeString editorconfiguration = new EntityTypeString(_editorconfiguration);
     public static final EntityTypeString file = new EntityTypeString(_file);
     public static final EntityTypeString folder = new EntityTypeString(_folder);
     public static final EntityTypeString group = new EntityTypeString(_group);
