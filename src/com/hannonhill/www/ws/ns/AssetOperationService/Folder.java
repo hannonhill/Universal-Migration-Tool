@@ -10,6 +10,8 @@ package com.hannonhill.www.ws.ns.AssetOperationService;
 public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.PublishableAsset  implements java.io.Serializable {
     private com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children;
 
+    private java.lang.Boolean includeInStaleContent;
+
     public Folder() {
     }
 
@@ -25,6 +27,8 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
+           java.lang.Boolean reviewOnSchedule,
+           org.apache.axis.types.NonNegativeInteger reviewEvery,
            com.hannonhill.www.ws.ns.AssetOperationService.Metadata metadata,
            java.lang.String metadataSetId,
            java.lang.String metadataSetPath,
@@ -35,7 +39,8 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
            java.lang.Boolean shouldBeIndexed,
            java.util.Calendar lastPublishedDate,
            java.lang.String lastPublishedBy,
-           com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children) {
+           com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] children,
+           java.lang.Boolean includeInStaleContent) {
         super(
             id,
             name,
@@ -48,6 +53,8 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
             createdBy,
             siteId,
             siteName,
+            reviewOnSchedule,
+            reviewEvery,
             metadata,
             metadataSetId,
             metadataSetPath,
@@ -59,6 +66,7 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
             lastPublishedDate,
             lastPublishedBy);
         this.children = children;
+        this.includeInStaleContent = includeInStaleContent;
     }
 
 
@@ -81,6 +89,26 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
         this.children = children;
     }
 
+
+    /**
+     * Gets the includeInStaleContent value for this Folder.
+     * 
+     * @return includeInStaleContent
+     */
+    public java.lang.Boolean getIncludeInStaleContent() {
+        return includeInStaleContent;
+    }
+
+
+    /**
+     * Sets the includeInStaleContent value for this Folder.
+     * 
+     * @param includeInStaleContent
+     */
+    public void setIncludeInStaleContent(java.lang.Boolean includeInStaleContent) {
+        this.includeInStaleContent = includeInStaleContent;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Folder)) return false;
@@ -95,7 +123,10 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
         _equals = super.equals(obj) && 
             ((this.children==null && other.getChildren()==null) || 
              (this.children!=null &&
-              java.util.Arrays.equals(this.children, other.getChildren())));
+              java.util.Arrays.equals(this.children, other.getChildren()))) &&
+            ((this.includeInStaleContent==null && other.getIncludeInStaleContent()==null) || 
+             (this.includeInStaleContent!=null &&
+              this.includeInStaleContent.equals(other.getIncludeInStaleContent())));
         __equalsCalc = null;
         return _equals;
     }
@@ -118,6 +149,9 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
                 }
             }
         }
+        if (getIncludeInStaleContent() != null) {
+            _hashCode += getIncludeInStaleContent().hashCode();
+        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -135,6 +169,13 @@ public class Folder  extends com.hannonhill.www.ws.ns.AssetOperationService.Publ
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "child"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("includeInStaleContent");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "includeInStaleContent"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }
 

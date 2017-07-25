@@ -29,6 +29,8 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
+           java.lang.Boolean reviewOnSchedule,
+           org.apache.axis.types.NonNegativeInteger reviewEvery,
            com.hannonhill.www.ws.ns.AssetOperationService.Metadata metadata,
            java.lang.String metadataSetId,
            java.lang.String metadataSetPath) {
@@ -43,7 +45,9 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
             createdDate,
             createdBy,
             siteId,
-            siteName);
+            siteName,
+            reviewOnSchedule,
+            reviewEvery);
         this.metadata = metadata;
         this.metadataSetId = metadataSetId;
         this.metadataSetPath = metadataSetPath;

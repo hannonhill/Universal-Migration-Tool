@@ -37,6 +37,8 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
+           java.lang.Boolean reviewOnSchedule,
+           org.apache.axis.types.NonNegativeInteger reviewEvery,
            java.lang.String targetId,
            java.lang.String targetPath,
            java.lang.String formatId,
@@ -55,7 +57,9 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
             createdDate,
             createdBy,
             siteId,
-            siteName);
+            siteName,
+            reviewOnSchedule,
+            reviewEvery);
         this.targetId = targetId;
         this.targetPath = targetPath;
         this.formatId = formatId;

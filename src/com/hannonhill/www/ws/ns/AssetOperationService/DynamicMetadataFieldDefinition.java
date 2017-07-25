@@ -20,6 +20,8 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinitionValue[] possibleValues;
 
+    private java.lang.String helpText;
+
     public DynamicMetadataFieldDefinition() {
     }
 
@@ -29,13 +31,15 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldType fieldType,
            java.lang.Boolean required,
            com.hannonhill.www.ws.ns.AssetOperationService.MetadataFieldVisibility visibility,
-           com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinitionValue[] possibleValues) {
+           com.hannonhill.www.ws.ns.AssetOperationService.DynamicMetadataFieldDefinitionValue[] possibleValues,
+           java.lang.String helpText) {
            this.name = name;
            this.label = label;
            this.fieldType = fieldType;
            this.required = required;
            this.visibility = visibility;
            this.possibleValues = possibleValues;
+           this.helpText = helpText;
     }
 
 
@@ -158,6 +162,26 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
         this.possibleValues = possibleValues;
     }
 
+
+    /**
+     * Gets the helpText value for this DynamicMetadataFieldDefinition.
+     * 
+     * @return helpText
+     */
+    public java.lang.String getHelpText() {
+        return helpText;
+    }
+
+
+    /**
+     * Sets the helpText value for this DynamicMetadataFieldDefinition.
+     * 
+     * @param helpText
+     */
+    public void setHelpText(java.lang.String helpText) {
+        this.helpText = helpText;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof DynamicMetadataFieldDefinition)) return false;
@@ -187,7 +211,10 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
               this.visibility.equals(other.getVisibility()))) &&
             ((this.possibleValues==null && other.getPossibleValues()==null) || 
              (this.possibleValues!=null &&
-              java.util.Arrays.equals(this.possibleValues, other.getPossibleValues())));
+              java.util.Arrays.equals(this.possibleValues, other.getPossibleValues()))) &&
+            ((this.helpText==null && other.getHelpText()==null) || 
+             (this.helpText!=null &&
+              this.helpText.equals(other.getHelpText())));
         __equalsCalc = null;
         return _equals;
     }
@@ -224,6 +251,9 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
                     _hashCode += obj.hashCode();
                 }
             }
+        }
+        if (getHelpText() != null) {
+            _hashCode += getHelpText().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -274,6 +304,13 @@ public class DynamicMetadataFieldDefinition  implements java.io.Serializable {
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
         elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "possibleValue"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("helpText");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "helpText"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }
 
