@@ -48,6 +48,8 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     private java.lang.String webUrl;
 
+    private java.lang.String extensionsToStrip;
+
     private java.lang.String siteId;
 
     private java.lang.String siteName;
@@ -78,6 +80,7 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
            java.lang.String sendReportToGroups,
            java.lang.Boolean sendReportOnErrorOnly,
            java.lang.String webUrl,
+           java.lang.String extensionsToStrip,
            java.lang.String siteId,
            java.lang.String siteName) {
         super(
@@ -103,6 +106,7 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.sendReportToGroups = sendReportToGroups;
         this.sendReportOnErrorOnly = sendReportOnErrorOnly;
         this.webUrl = webUrl;
+        this.extensionsToStrip = extensionsToStrip;
         this.siteId = siteId;
         this.siteName = siteName;
     }
@@ -509,6 +513,26 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
 
 
     /**
+     * Gets the extensionsToStrip value for this Destination.
+     * 
+     * @return extensionsToStrip
+     */
+    public java.lang.String getExtensionsToStrip() {
+        return extensionsToStrip;
+    }
+
+
+    /**
+     * Sets the extensionsToStrip value for this Destination.
+     * 
+     * @param extensionsToStrip
+     */
+    public void setExtensionsToStrip(java.lang.String extensionsToStrip) {
+        this.extensionsToStrip = extensionsToStrip;
+    }
+
+
+    /**
      * Gets the siteId value for this Destination.
      * 
      * @return siteId
@@ -619,6 +643,9 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
             ((this.webUrl==null && other.getWebUrl()==null) || 
              (this.webUrl!=null &&
               this.webUrl.equals(other.getWebUrl()))) &&
+            ((this.extensionsToStrip==null && other.getExtensionsToStrip()==null) || 
+             (this.extensionsToStrip!=null &&
+              this.extensionsToStrip.equals(other.getExtensionsToStrip()))) &&
             ((this.siteId==null && other.getSiteId()==null) || 
              (this.siteId!=null &&
               this.siteId.equals(other.getSiteId()))) &&
@@ -711,6 +738,9 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         }
         if (getWebUrl() != null) {
             _hashCode += getWebUrl().hashCode();
+        }
+        if (getExtensionsToStrip() != null) {
+            _hashCode += getExtensionsToStrip().hashCode();
         }
         if (getSiteId() != null) {
             _hashCode += getSiteId().hashCode();
@@ -866,6 +896,13 @@ public class Destination  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("webUrl");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "webUrl"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("extensionsToStrip");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "extensionsToStrip"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);

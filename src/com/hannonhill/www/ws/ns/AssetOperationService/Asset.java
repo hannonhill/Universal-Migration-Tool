@@ -88,6 +88,8 @@ public class Asset  implements java.io.Serializable {
 
     private com.hannonhill.www.ws.ns.AssetOperationService.DatabaseTransport databaseTransport;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.CloudTransport cloudTransport;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.TransportContainer transportContainer;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.WorkflowDefinition workflowDefinition;
@@ -144,6 +146,7 @@ public class Asset  implements java.io.Serializable {
            com.hannonhill.www.ws.ns.AssetOperationService.FileSystemTransport fileSystemTransport,
            com.hannonhill.www.ws.ns.AssetOperationService.FtpTransport ftpTransport,
            com.hannonhill.www.ws.ns.AssetOperationService.DatabaseTransport databaseTransport,
+           com.hannonhill.www.ws.ns.AssetOperationService.CloudTransport cloudTransport,
            com.hannonhill.www.ws.ns.AssetOperationService.TransportContainer transportContainer,
            com.hannonhill.www.ws.ns.AssetOperationService.WorkflowDefinition workflowDefinition,
            com.hannonhill.www.ws.ns.AssetOperationService.WorkflowDefinitionContainer workflowDefinitionContainer,
@@ -190,6 +193,7 @@ public class Asset  implements java.io.Serializable {
            this.fileSystemTransport = fileSystemTransport;
            this.ftpTransport = ftpTransport;
            this.databaseTransport = databaseTransport;
+           this.cloudTransport = cloudTransport;
            this.transportContainer = transportContainer;
            this.workflowDefinition = workflowDefinition;
            this.workflowDefinitionContainer = workflowDefinitionContainer;
@@ -1000,6 +1004,26 @@ public class Asset  implements java.io.Serializable {
 
 
     /**
+     * Gets the cloudTransport value for this Asset.
+     * 
+     * @return cloudTransport
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.CloudTransport getCloudTransport() {
+        return cloudTransport;
+    }
+
+
+    /**
+     * Sets the cloudTransport value for this Asset.
+     * 
+     * @param cloudTransport
+     */
+    public void setCloudTransport(com.hannonhill.www.ws.ns.AssetOperationService.CloudTransport cloudTransport) {
+        this.cloudTransport = cloudTransport;
+    }
+
+
+    /**
      * Gets the transportContainer value for this Asset.
      * 
      * @return transportContainer
@@ -1250,6 +1274,9 @@ public class Asset  implements java.io.Serializable {
             ((this.databaseTransport==null && other.getDatabaseTransport()==null) || 
              (this.databaseTransport!=null &&
               this.databaseTransport.equals(other.getDatabaseTransport()))) &&
+            ((this.cloudTransport==null && other.getCloudTransport()==null) || 
+             (this.cloudTransport!=null &&
+              this.cloudTransport.equals(other.getCloudTransport()))) &&
             ((this.transportContainer==null && other.getTransportContainer()==null) || 
              (this.transportContainer!=null &&
               this.transportContainer.equals(other.getTransportContainer()))) &&
@@ -1398,6 +1425,9 @@ public class Asset  implements java.io.Serializable {
         }
         if (getDatabaseTransport() != null) {
             _hashCode += getDatabaseTransport().hashCode();
+        }
+        if (getCloudTransport() != null) {
+            _hashCode += getCloudTransport().hashCode();
         }
         if (getTransportContainer() != null) {
             _hashCode += getTransportContainer().hashCode();
@@ -1704,6 +1734,13 @@ public class Asset  implements java.io.Serializable {
         elemField.setFieldName("databaseTransport");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "databaseTransport"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "databaseTransport"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("cloudTransport");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cloudTransport"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "cloudTransport"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

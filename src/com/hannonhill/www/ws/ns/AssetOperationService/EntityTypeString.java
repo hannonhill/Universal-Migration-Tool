@@ -64,6 +64,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final java.lang.String _transport_fs = "transport_fs";
     public static final java.lang.String _transport_ftp = "transport_ftp";
     public static final java.lang.String _transport_db = "transport_db";
+    public static final java.lang.String _transport_cloud = "transport_cloud";
     public static final java.lang.String _transportcontainer = "transportcontainer";
     public static final java.lang.String _user = "user";
     public static final java.lang.String _workflow = "workflow";
@@ -116,6 +117,7 @@ public class EntityTypeString implements java.io.Serializable {
     public static final EntityTypeString transport_fs = new EntityTypeString(_transport_fs);
     public static final EntityTypeString transport_ftp = new EntityTypeString(_transport_ftp);
     public static final EntityTypeString transport_db = new EntityTypeString(_transport_db);
+    public static final EntityTypeString transport_cloud = new EntityTypeString(_transport_cloud);
     public static final EntityTypeString transportcontainer = new EntityTypeString(_transportcontainer);
     public static final EntityTypeString user = new EntityTypeString(_user);
     public static final EntityTypeString workflow = new EntityTypeString(_workflow);

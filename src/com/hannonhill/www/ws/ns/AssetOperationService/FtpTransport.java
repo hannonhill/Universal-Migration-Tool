@@ -12,15 +12,19 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
 
     private org.apache.axis.types.PositiveInteger port;
 
+    private java.lang.Boolean doPASV;
+
     private java.lang.String username;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.AuthMode authMode;
+
+    private java.lang.String privateKey;
 
     private java.lang.String password;
 
     private java.lang.String directory;
 
-    private java.lang.Boolean doSFTP;
-
-    private java.lang.Boolean doPASV;
+    private com.hannonhill.www.ws.ns.AssetOperationService.FtpProtocolType ftpProtocolType;
 
     public FtpTransport() {
     }
@@ -35,11 +39,13 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
            java.lang.String siteName,
            java.lang.String hostName,
            org.apache.axis.types.PositiveInteger port,
+           java.lang.Boolean doPASV,
            java.lang.String username,
+           com.hannonhill.www.ws.ns.AssetOperationService.AuthMode authMode,
+           java.lang.String privateKey,
            java.lang.String password,
            java.lang.String directory,
-           java.lang.Boolean doSFTP,
-           java.lang.Boolean doPASV) {
+           com.hannonhill.www.ws.ns.AssetOperationService.FtpProtocolType ftpProtocolType) {
         super(
             id,
             name,
@@ -50,11 +56,13 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
             siteName);
         this.hostName = hostName;
         this.port = port;
+        this.doPASV = doPASV;
         this.username = username;
+        this.authMode = authMode;
+        this.privateKey = privateKey;
         this.password = password;
         this.directory = directory;
-        this.doSFTP = doSFTP;
-        this.doPASV = doPASV;
+        this.ftpProtocolType = ftpProtocolType;
     }
 
 
@@ -99,6 +107,26 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
 
 
     /**
+     * Gets the doPASV value for this FtpTransport.
+     * 
+     * @return doPASV
+     */
+    public java.lang.Boolean getDoPASV() {
+        return doPASV;
+    }
+
+
+    /**
+     * Sets the doPASV value for this FtpTransport.
+     * 
+     * @param doPASV
+     */
+    public void setDoPASV(java.lang.Boolean doPASV) {
+        this.doPASV = doPASV;
+    }
+
+
+    /**
      * Gets the username value for this FtpTransport.
      * 
      * @return username
@@ -115,6 +143,46 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
      */
     public void setUsername(java.lang.String username) {
         this.username = username;
+    }
+
+
+    /**
+     * Gets the authMode value for this FtpTransport.
+     * 
+     * @return authMode
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.AuthMode getAuthMode() {
+        return authMode;
+    }
+
+
+    /**
+     * Sets the authMode value for this FtpTransport.
+     * 
+     * @param authMode
+     */
+    public void setAuthMode(com.hannonhill.www.ws.ns.AssetOperationService.AuthMode authMode) {
+        this.authMode = authMode;
+    }
+
+
+    /**
+     * Gets the privateKey value for this FtpTransport.
+     * 
+     * @return privateKey
+     */
+    public java.lang.String getPrivateKey() {
+        return privateKey;
+    }
+
+
+    /**
+     * Sets the privateKey value for this FtpTransport.
+     * 
+     * @param privateKey
+     */
+    public void setPrivateKey(java.lang.String privateKey) {
+        this.privateKey = privateKey;
     }
 
 
@@ -159,42 +227,22 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
 
 
     /**
-     * Gets the doSFTP value for this FtpTransport.
+     * Gets the ftpProtocolType value for this FtpTransport.
      * 
-     * @return doSFTP
+     * @return ftpProtocolType
      */
-    public java.lang.Boolean getDoSFTP() {
-        return doSFTP;
+    public com.hannonhill.www.ws.ns.AssetOperationService.FtpProtocolType getFtpProtocolType() {
+        return ftpProtocolType;
     }
 
 
     /**
-     * Sets the doSFTP value for this FtpTransport.
+     * Sets the ftpProtocolType value for this FtpTransport.
      * 
-     * @param doSFTP
+     * @param ftpProtocolType
      */
-    public void setDoSFTP(java.lang.Boolean doSFTP) {
-        this.doSFTP = doSFTP;
-    }
-
-
-    /**
-     * Gets the doPASV value for this FtpTransport.
-     * 
-     * @return doPASV
-     */
-    public java.lang.Boolean getDoPASV() {
-        return doPASV;
-    }
-
-
-    /**
-     * Sets the doPASV value for this FtpTransport.
-     * 
-     * @param doPASV
-     */
-    public void setDoPASV(java.lang.Boolean doPASV) {
-        this.doPASV = doPASV;
+    public void setFtpProtocolType(com.hannonhill.www.ws.ns.AssetOperationService.FtpProtocolType ftpProtocolType) {
+        this.ftpProtocolType = ftpProtocolType;
     }
 
     private java.lang.Object __equalsCalc = null;
@@ -215,21 +263,27 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
             ((this.port==null && other.getPort()==null) || 
              (this.port!=null &&
               this.port.equals(other.getPort()))) &&
+            ((this.doPASV==null && other.getDoPASV()==null) || 
+             (this.doPASV!=null &&
+              this.doPASV.equals(other.getDoPASV()))) &&
             ((this.username==null && other.getUsername()==null) || 
              (this.username!=null &&
               this.username.equals(other.getUsername()))) &&
+            ((this.authMode==null && other.getAuthMode()==null) || 
+             (this.authMode!=null &&
+              this.authMode.equals(other.getAuthMode()))) &&
+            ((this.privateKey==null && other.getPrivateKey()==null) || 
+             (this.privateKey!=null &&
+              this.privateKey.equals(other.getPrivateKey()))) &&
             ((this.password==null && other.getPassword()==null) || 
              (this.password!=null &&
               this.password.equals(other.getPassword()))) &&
             ((this.directory==null && other.getDirectory()==null) || 
              (this.directory!=null &&
               this.directory.equals(other.getDirectory()))) &&
-            ((this.doSFTP==null && other.getDoSFTP()==null) || 
-             (this.doSFTP!=null &&
-              this.doSFTP.equals(other.getDoSFTP()))) &&
-            ((this.doPASV==null && other.getDoPASV()==null) || 
-             (this.doPASV!=null &&
-              this.doPASV.equals(other.getDoPASV())));
+            ((this.ftpProtocolType==null && other.getFtpProtocolType()==null) || 
+             (this.ftpProtocolType!=null &&
+              this.ftpProtocolType.equals(other.getFtpProtocolType())));
         __equalsCalc = null;
         return _equals;
     }
@@ -247,8 +301,17 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
         if (getPort() != null) {
             _hashCode += getPort().hashCode();
         }
+        if (getDoPASV() != null) {
+            _hashCode += getDoPASV().hashCode();
+        }
         if (getUsername() != null) {
             _hashCode += getUsername().hashCode();
+        }
+        if (getAuthMode() != null) {
+            _hashCode += getAuthMode().hashCode();
+        }
+        if (getPrivateKey() != null) {
+            _hashCode += getPrivateKey().hashCode();
         }
         if (getPassword() != null) {
             _hashCode += getPassword().hashCode();
@@ -256,11 +319,8 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
         if (getDirectory() != null) {
             _hashCode += getDirectory().hashCode();
         }
-        if (getDoSFTP() != null) {
-            _hashCode += getDoSFTP().hashCode();
-        }
-        if (getDoPASV() != null) {
-            _hashCode += getDoPASV().hashCode();
+        if (getFtpProtocolType() != null) {
+            _hashCode += getFtpProtocolType().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -285,15 +345,37 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("doPASV");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "doPASV"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("username");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "username"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("authMode");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authMode"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "authMode"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("privateKey");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "privateKey"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("password");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "password"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
@@ -304,17 +386,9 @@ public class FtpTransport  extends com.hannonhill.www.ws.ns.AssetOperationServic
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("doSFTP");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "doSFTP"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(false);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("doPASV");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "doPASV"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
+        elemField.setFieldName("ftpProtocolType");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "ftpProtocolType"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "ftpProtocolType"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }

@@ -10,6 +10,8 @@ package com.hannonhill.www.ws.ns.AssetOperationService;
 public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedAsset  implements java.io.Serializable {
     private java.lang.String url;
 
+    private java.lang.String extensionsToStrip;
+
     private java.lang.String defaultMetadataSetId;
 
     private java.lang.String defaultMetadataSetPath;
@@ -58,6 +60,14 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     private boolean externalLinkCheckOnPublish;
 
+    private boolean inheritDataChecksEnabled;
+
+    private boolean spellCheckEnabled;
+
+    private boolean linkCheckEnabled;
+
+    private boolean accessibilityCheckEnabled;
+
     private java.lang.String rootFolderId;
 
     private java.lang.String rootAssetFactoryContainerId;
@@ -87,6 +97,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            java.lang.String id,
            java.lang.String name,
            java.lang.String url,
+           java.lang.String extensionsToStrip,
            java.lang.String defaultMetadataSetId,
            java.lang.String defaultMetadataSetPath,
            java.lang.String siteAssetFactoryContainerId,
@@ -111,6 +122,10 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            boolean unpublishOnExpiration,
            boolean linkCheckerEnabled,
            boolean externalLinkCheckOnPublish,
+           boolean inheritDataChecksEnabled,
+           boolean spellCheckEnabled,
+           boolean linkCheckEnabled,
+           boolean accessibilityCheckEnabled,
            java.lang.String rootFolderId,
            java.lang.String rootAssetFactoryContainerId,
            java.lang.String rootPageConfigurationSetContainerId,
@@ -126,6 +141,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             id,
             name);
         this.url = url;
+        this.extensionsToStrip = extensionsToStrip;
         this.defaultMetadataSetId = defaultMetadataSetId;
         this.defaultMetadataSetPath = defaultMetadataSetPath;
         this.siteAssetFactoryContainerId = siteAssetFactoryContainerId;
@@ -150,6 +166,10 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         this.unpublishOnExpiration = unpublishOnExpiration;
         this.linkCheckerEnabled = linkCheckerEnabled;
         this.externalLinkCheckOnPublish = externalLinkCheckOnPublish;
+        this.inheritDataChecksEnabled = inheritDataChecksEnabled;
+        this.spellCheckEnabled = spellCheckEnabled;
+        this.linkCheckEnabled = linkCheckEnabled;
+        this.accessibilityCheckEnabled = accessibilityCheckEnabled;
         this.rootFolderId = rootFolderId;
         this.rootAssetFactoryContainerId = rootAssetFactoryContainerId;
         this.rootPageConfigurationSetContainerId = rootPageConfigurationSetContainerId;
@@ -181,6 +201,26 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
      */
     public void setUrl(java.lang.String url) {
         this.url = url;
+    }
+
+
+    /**
+     * Gets the extensionsToStrip value for this Site.
+     * 
+     * @return extensionsToStrip
+     */
+    public java.lang.String getExtensionsToStrip() {
+        return extensionsToStrip;
+    }
+
+
+    /**
+     * Sets the extensionsToStrip value for this Site.
+     * 
+     * @param extensionsToStrip
+     */
+    public void setExtensionsToStrip(java.lang.String extensionsToStrip) {
+        this.extensionsToStrip = extensionsToStrip;
     }
 
 
@@ -665,6 +705,86 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
 
     /**
+     * Gets the inheritDataChecksEnabled value for this Site.
+     * 
+     * @return inheritDataChecksEnabled
+     */
+    public boolean isInheritDataChecksEnabled() {
+        return inheritDataChecksEnabled;
+    }
+
+
+    /**
+     * Sets the inheritDataChecksEnabled value for this Site.
+     * 
+     * @param inheritDataChecksEnabled
+     */
+    public void setInheritDataChecksEnabled(boolean inheritDataChecksEnabled) {
+        this.inheritDataChecksEnabled = inheritDataChecksEnabled;
+    }
+
+
+    /**
+     * Gets the spellCheckEnabled value for this Site.
+     * 
+     * @return spellCheckEnabled
+     */
+    public boolean isSpellCheckEnabled() {
+        return spellCheckEnabled;
+    }
+
+
+    /**
+     * Sets the spellCheckEnabled value for this Site.
+     * 
+     * @param spellCheckEnabled
+     */
+    public void setSpellCheckEnabled(boolean spellCheckEnabled) {
+        this.spellCheckEnabled = spellCheckEnabled;
+    }
+
+
+    /**
+     * Gets the linkCheckEnabled value for this Site.
+     * 
+     * @return linkCheckEnabled
+     */
+    public boolean isLinkCheckEnabled() {
+        return linkCheckEnabled;
+    }
+
+
+    /**
+     * Sets the linkCheckEnabled value for this Site.
+     * 
+     * @param linkCheckEnabled
+     */
+    public void setLinkCheckEnabled(boolean linkCheckEnabled) {
+        this.linkCheckEnabled = linkCheckEnabled;
+    }
+
+
+    /**
+     * Gets the accessibilityCheckEnabled value for this Site.
+     * 
+     * @return accessibilityCheckEnabled
+     */
+    public boolean isAccessibilityCheckEnabled() {
+        return accessibilityCheckEnabled;
+    }
+
+
+    /**
+     * Sets the accessibilityCheckEnabled value for this Site.
+     * 
+     * @param accessibilityCheckEnabled
+     */
+    public void setAccessibilityCheckEnabled(boolean accessibilityCheckEnabled) {
+        this.accessibilityCheckEnabled = accessibilityCheckEnabled;
+    }
+
+
+    /**
      * Gets the rootFolderId value for this Site.
      * 
      * @return rootFolderId
@@ -898,6 +1018,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.url==null && other.getUrl()==null) || 
              (this.url!=null &&
               this.url.equals(other.getUrl()))) &&
+            ((this.extensionsToStrip==null && other.getExtensionsToStrip()==null) || 
+             (this.extensionsToStrip!=null &&
+              this.extensionsToStrip.equals(other.getExtensionsToStrip()))) &&
             ((this.defaultMetadataSetId==null && other.getDefaultMetadataSetId()==null) || 
              (this.defaultMetadataSetId!=null &&
               this.defaultMetadataSetId.equals(other.getDefaultMetadataSetId()))) &&
@@ -964,6 +1087,10 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             this.unpublishOnExpiration == other.isUnpublishOnExpiration() &&
             this.linkCheckerEnabled == other.isLinkCheckerEnabled() &&
             this.externalLinkCheckOnPublish == other.isExternalLinkCheckOnPublish() &&
+            this.inheritDataChecksEnabled == other.isInheritDataChecksEnabled() &&
+            this.spellCheckEnabled == other.isSpellCheckEnabled() &&
+            this.linkCheckEnabled == other.isLinkCheckEnabled() &&
+            this.accessibilityCheckEnabled == other.isAccessibilityCheckEnabled() &&
             ((this.rootFolderId==null && other.getRootFolderId()==null) || 
              (this.rootFolderId!=null &&
               this.rootFolderId.equals(other.getRootFolderId()))) &&
@@ -1010,6 +1137,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         int _hashCode = super.hashCode();
         if (getUrl() != null) {
             _hashCode += getUrl().hashCode();
+        }
+        if (getExtensionsToStrip() != null) {
+            _hashCode += getExtensionsToStrip().hashCode();
         }
         if (getDefaultMetadataSetId() != null) {
             _hashCode += getDefaultMetadataSetId().hashCode();
@@ -1101,6 +1231,10 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         _hashCode += (isUnpublishOnExpiration() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         _hashCode += (isLinkCheckerEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         _hashCode += (isExternalLinkCheckOnPublish() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (isInheritDataChecksEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (isSpellCheckEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (isLinkCheckEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (isAccessibilityCheckEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         if (getRootFolderId() != null) {
             _hashCode += getRootFolderId().hashCode();
         }
@@ -1149,6 +1283,13 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "url"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("extensionsToStrip");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "extensionsToStrip"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("defaultMetadataSetId");
@@ -1314,6 +1455,30 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("externalLinkCheckOnPublish");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "externalLinkCheckOnPublish"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("inheritDataChecksEnabled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "inheritDataChecksEnabled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("spellCheckEnabled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "spellCheckEnabled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("linkCheckEnabled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "linkCheckEnabled"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("accessibilityCheckEnabled");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "accessibilityCheckEnabled"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
