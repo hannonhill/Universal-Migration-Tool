@@ -28,6 +28,8 @@ public class User  implements java.io.Serializable {
 
     private java.lang.String defaultSiteName;
 
+    private java.lang.String ldapDN;
+
     public User() {
     }
 
@@ -41,7 +43,8 @@ public class User  implements java.io.Serializable {
            java.lang.String groups,
            java.lang.String role,
            java.lang.String defaultSiteId,
-           java.lang.String defaultSiteName) {
+           java.lang.String defaultSiteName,
+           java.lang.String ldapDN) {
            this.username = username;
            this.fullName = fullName;
            this.email = email;
@@ -52,6 +55,7 @@ public class User  implements java.io.Serializable {
            this.role = role;
            this.defaultSiteId = defaultSiteId;
            this.defaultSiteName = defaultSiteName;
+           this.ldapDN = ldapDN;
     }
 
 
@@ -254,6 +258,26 @@ public class User  implements java.io.Serializable {
         this.defaultSiteName = defaultSiteName;
     }
 
+
+    /**
+     * Gets the ldapDN value for this User.
+     * 
+     * @return ldapDN
+     */
+    public java.lang.String getLdapDN() {
+        return ldapDN;
+    }
+
+
+    /**
+     * Sets the ldapDN value for this User.
+     * 
+     * @param ldapDN
+     */
+    public void setLdapDN(java.lang.String ldapDN) {
+        this.ldapDN = ldapDN;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof User)) return false;
@@ -295,7 +319,10 @@ public class User  implements java.io.Serializable {
               this.defaultSiteId.equals(other.getDefaultSiteId()))) &&
             ((this.defaultSiteName==null && other.getDefaultSiteName()==null) || 
              (this.defaultSiteName!=null &&
-              this.defaultSiteName.equals(other.getDefaultSiteName())));
+              this.defaultSiteName.equals(other.getDefaultSiteName()))) &&
+            ((this.ldapDN==null && other.getLdapDN()==null) || 
+             (this.ldapDN!=null &&
+              this.ldapDN.equals(other.getLdapDN())));
         __equalsCalc = null;
         return _equals;
     }
@@ -336,6 +363,9 @@ public class User  implements java.io.Serializable {
         }
         if (getDefaultSiteName() != null) {
             _hashCode += getDefaultSiteName().hashCode();
+        }
+        if (getLdapDN() != null) {
+            _hashCode += getLdapDN().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -411,6 +441,13 @@ public class User  implements java.io.Serializable {
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ldapDN");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "ldapDN"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }
 
