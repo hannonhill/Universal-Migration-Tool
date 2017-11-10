@@ -124,6 +124,22 @@ public class WebServicesUtil
             String fieldValue = XmlUtil.evaluateXPathExpression(fileContents, xPath);
             if (ddField.isWysiwyg())
                 fieldValue = LinkRewriter.rewriteLinksInXml(fieldValue, assetPath, projectInformation);
+            else if (ddField.getChooserType() == ChooserType.FILE)
+            {
+                // For a file chooser, get the passed <img> tag, get path from its src attribute, convert the
+                // relative path to absolute, find an asset with corresponding path and use that asset's id as
+                // field value
+                fieldValue = JTidy.tidyContentConditionally(fieldValue);
+                String relativePath = XmlAnalyzer.getFirstSrcAttribute(fieldValue);
+
+                if (relativePath != null && !relativePath.trim().equals(""))
+                {
+                    String absolutePath = PathUtil.convertRelativeToAbsolute(relativePath.trim(), assetPath);
+                    fieldValue = WebServices.getAssetId(absolutePath, projectInformation);
+                }
+                else
+                    fieldValue = null;
+            }
 
             assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
         }
@@ -163,7 +179,7 @@ public class WebServicesUtil
             if (!WebServices.STANDARD_METADATA_FIELD_IDENTIFIERS.contains(metadataFieldName))
                 dynamicFieldsList.add(new DynamicMetadataField(metadataFieldName, new FieldValue[]
                 {
-                    new FieldValue("")
+                        new FieldValue("")
                 }));
 
         // For each field mapping assign appropriate value in metadata
@@ -254,7 +270,7 @@ public class WebServicesUtil
             // Add the current one
             dynamicFields.add(new DynamicMetadataField(fieldName, new FieldValue[]
             {
-                new FieldValue(fieldValue)
+                    new FieldValue(fieldValue)
             }));
         }
     }
@@ -306,27 +322,14 @@ public class WebServicesUtil
         }
         else if (field.getChooserType() == ChooserType.FILE)
         {
-            fieldValue = JTidy.tidyContentConditionally(fieldValue);
-            String path = XmlAnalyzer.getFirstSrcAttribute(fieldValue);
-
-            if (path == null)
-                path = fieldValue;
-
-            if (path != null && !path.trim().equals(""))
-            {
-                path = path.trim();
-                if (WebServices.getAssetId(path, projectInformation) != null)
-                {
-                    StructuredDataNode fileNode = new StructuredDataNode();
-                    fileNode.setIdentifier(identifier);
-                    fileNode.setFilePath(path);
-                    fileNode.setType(StructuredDataType.asset);
-                    fileNode.setAssetType(StructuredDataAssetType.fromString("file"));
-                    List<StructuredDataNode> fileNodes = new ArrayList<StructuredDataNode>();
-                    fileNodes.add(fileNode);
-                    currentNode.getContentFields().put(identifier, fileNodes);
-                }
-            }
+            StructuredDataNode fileNode = new StructuredDataNode();
+            fileNode.setIdentifier(identifier);
+            fileNode.setFileId(fieldValue);
+            fileNode.setType(StructuredDataType.asset);
+            fileNode.setAssetType(StructuredDataAssetType.fromString("file"));
+            List<StructuredDataNode> fileNodes = new ArrayList<StructuredDataNode>();
+            fileNodes.add(fileNode);
+            currentNode.getContentFields().put(identifier, fileNodes);
         }
     }
 
