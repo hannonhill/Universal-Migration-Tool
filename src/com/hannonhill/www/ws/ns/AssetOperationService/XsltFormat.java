@@ -25,8 +25,6 @@ public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
-           java.lang.Boolean reviewOnSchedule,
-           org.apache.axis.types.NonNegativeInteger reviewEvery,
            java.lang.String xml) {
         super(
             id,
@@ -39,9 +37,7 @@ public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.
             createdDate,
             createdBy,
             siteId,
-            siteName,
-            reviewOnSchedule,
-            reviewEvery);
+            siteName);
         this.xml = xml;
     }
 

@@ -29,11 +29,11 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
-           java.lang.Boolean reviewOnSchedule,
-           org.apache.axis.types.NonNegativeInteger reviewEvery,
            com.hannonhill.www.ws.ns.AssetOperationService.Metadata metadata,
            java.lang.String metadataSetId,
            java.lang.String metadataSetPath,
+           java.lang.Boolean reviewOnSchedule,
+           org.apache.axis.types.NonNegativeInteger reviewEvery,
            java.lang.String expirationFolderId,
            java.lang.String expirationFolderPath,
            java.lang.Boolean expirationFolderRecycled) {
@@ -49,11 +49,11 @@ public class ExpiringAsset  extends com.hannonhill.www.ws.ns.AssetOperationServi
             createdBy,
             siteId,
             siteName,
-            reviewOnSchedule,
-            reviewEvery,
             metadata,
             metadataSetId,
-            metadataSetPath);
+            metadataSetPath,
+            reviewOnSchedule,
+            reviewEvery);
         this.expirationFolderId = expirationFolderId;
         this.expirationFolderPath = expirationFolderPath;
         this.expirationFolderRecycled = expirationFolderRecycled;

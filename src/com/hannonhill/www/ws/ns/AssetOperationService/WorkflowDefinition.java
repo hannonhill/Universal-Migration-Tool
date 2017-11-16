@@ -18,6 +18,8 @@ public class WorkflowDefinition  extends com.hannonhill.www.ws.ns.AssetOperation
 
     private java.lang.Boolean edit;
 
+    private java.lang.Boolean move;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.WorkflowNamingBehavior namingBehavior;
 
     private java.lang.String xml;
@@ -38,6 +40,7 @@ public class WorkflowDefinition  extends com.hannonhill.www.ws.ns.AssetOperation
            java.lang.Boolean create,
            java.lang.Boolean delete,
            java.lang.Boolean edit,
+           java.lang.Boolean move,
            com.hannonhill.www.ws.ns.AssetOperationService.WorkflowNamingBehavior namingBehavior,
            java.lang.String xml) {
         super(
@@ -53,6 +56,7 @@ public class WorkflowDefinition  extends com.hannonhill.www.ws.ns.AssetOperation
         this.create = create;
         this.delete = delete;
         this.edit = edit;
+        this.move = move;
         this.namingBehavior = namingBehavior;
         this.xml = xml;
     }
@@ -159,6 +163,26 @@ public class WorkflowDefinition  extends com.hannonhill.www.ws.ns.AssetOperation
 
 
     /**
+     * Gets the move value for this WorkflowDefinition.
+     * 
+     * @return move
+     */
+    public java.lang.Boolean getMove() {
+        return move;
+    }
+
+
+    /**
+     * Sets the move value for this WorkflowDefinition.
+     * 
+     * @param move
+     */
+    public void setMove(java.lang.Boolean move) {
+        this.move = move;
+    }
+
+
+    /**
      * Gets the namingBehavior value for this WorkflowDefinition.
      * 
      * @return namingBehavior
@@ -224,6 +248,9 @@ public class WorkflowDefinition  extends com.hannonhill.www.ws.ns.AssetOperation
             ((this.edit==null && other.getEdit()==null) || 
              (this.edit!=null &&
               this.edit.equals(other.getEdit()))) &&
+            ((this.move==null && other.getMove()==null) || 
+             (this.move!=null &&
+              this.move.equals(other.getMove()))) &&
             ((this.namingBehavior==null && other.getNamingBehavior()==null) || 
              (this.namingBehavior!=null &&
               this.namingBehavior.equals(other.getNamingBehavior()))) &&
@@ -255,6 +282,9 @@ public class WorkflowDefinition  extends com.hannonhill.www.ws.ns.AssetOperation
         }
         if (getEdit() != null) {
             _hashCode += getEdit().hashCode();
+        }
+        if (getMove() != null) {
+            _hashCode += getMove().hashCode();
         }
         if (getNamingBehavior() != null) {
             _hashCode += getNamingBehavior().hashCode();
@@ -303,6 +333,13 @@ public class WorkflowDefinition  extends com.hannonhill.www.ws.ns.AssetOperation
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("edit");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "edit"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("move");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "move"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

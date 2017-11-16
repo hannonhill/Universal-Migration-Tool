@@ -29,8 +29,6 @@ public class Reference  extends com.hannonhill.www.ws.ns.AssetOperationService.F
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
-           java.lang.Boolean reviewOnSchedule,
-           org.apache.axis.types.NonNegativeInteger reviewEvery,
            java.lang.String referencedAssetId,
            java.lang.String referencedAssetPath,
            com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString referencedAssetType) {
@@ -45,9 +43,7 @@ public class Reference  extends com.hannonhill.www.ws.ns.AssetOperationService.F
             createdDate,
             createdBy,
             siteId,
-            siteName,
-            reviewOnSchedule,
-            reviewEvery);
+            siteName);
         this.referencedAssetId = referencedAssetId;
         this.referencedAssetPath = referencedAssetPath;
         this.referencedAssetType = referencedAssetType;

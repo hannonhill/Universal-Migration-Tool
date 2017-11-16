@@ -68,6 +68,14 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
     private boolean accessibilityCheckEnabled;
 
+    private boolean inheritNamingRules;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleCase namingRuleCase;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleSpacing namingRuleSpacing;
+
+    private com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleAsset[] namingRuleAssets;
+
     private java.lang.String rootFolderId;
 
     private java.lang.String rootAssetFactoryContainerId;
@@ -126,6 +134,10 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            boolean spellCheckEnabled,
            boolean linkCheckEnabled,
            boolean accessibilityCheckEnabled,
+           boolean inheritNamingRules,
+           com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleCase namingRuleCase,
+           com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleSpacing namingRuleSpacing,
+           com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleAsset[] namingRuleAssets,
            java.lang.String rootFolderId,
            java.lang.String rootAssetFactoryContainerId,
            java.lang.String rootPageConfigurationSetContainerId,
@@ -170,6 +182,10 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         this.spellCheckEnabled = spellCheckEnabled;
         this.linkCheckEnabled = linkCheckEnabled;
         this.accessibilityCheckEnabled = accessibilityCheckEnabled;
+        this.inheritNamingRules = inheritNamingRules;
+        this.namingRuleCase = namingRuleCase;
+        this.namingRuleSpacing = namingRuleSpacing;
+        this.namingRuleAssets = namingRuleAssets;
         this.rootFolderId = rootFolderId;
         this.rootAssetFactoryContainerId = rootAssetFactoryContainerId;
         this.rootPageConfigurationSetContainerId = rootPageConfigurationSetContainerId;
@@ -785,6 +801,86 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
 
 
     /**
+     * Gets the inheritNamingRules value for this Site.
+     * 
+     * @return inheritNamingRules
+     */
+    public boolean isInheritNamingRules() {
+        return inheritNamingRules;
+    }
+
+
+    /**
+     * Sets the inheritNamingRules value for this Site.
+     * 
+     * @param inheritNamingRules
+     */
+    public void setInheritNamingRules(boolean inheritNamingRules) {
+        this.inheritNamingRules = inheritNamingRules;
+    }
+
+
+    /**
+     * Gets the namingRuleCase value for this Site.
+     * 
+     * @return namingRuleCase
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleCase getNamingRuleCase() {
+        return namingRuleCase;
+    }
+
+
+    /**
+     * Sets the namingRuleCase value for this Site.
+     * 
+     * @param namingRuleCase
+     */
+    public void setNamingRuleCase(com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleCase namingRuleCase) {
+        this.namingRuleCase = namingRuleCase;
+    }
+
+
+    /**
+     * Gets the namingRuleSpacing value for this Site.
+     * 
+     * @return namingRuleSpacing
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleSpacing getNamingRuleSpacing() {
+        return namingRuleSpacing;
+    }
+
+
+    /**
+     * Sets the namingRuleSpacing value for this Site.
+     * 
+     * @param namingRuleSpacing
+     */
+    public void setNamingRuleSpacing(com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleSpacing namingRuleSpacing) {
+        this.namingRuleSpacing = namingRuleSpacing;
+    }
+
+
+    /**
+     * Gets the namingRuleAssets value for this Site.
+     * 
+     * @return namingRuleAssets
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleAsset[] getNamingRuleAssets() {
+        return namingRuleAssets;
+    }
+
+
+    /**
+     * Sets the namingRuleAssets value for this Site.
+     * 
+     * @param namingRuleAssets
+     */
+    public void setNamingRuleAssets(com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleAsset[] namingRuleAssets) {
+        this.namingRuleAssets = namingRuleAssets;
+    }
+
+
+    /**
      * Gets the rootFolderId value for this Site.
      * 
      * @return rootFolderId
@@ -1091,6 +1187,16 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             this.spellCheckEnabled == other.isSpellCheckEnabled() &&
             this.linkCheckEnabled == other.isLinkCheckEnabled() &&
             this.accessibilityCheckEnabled == other.isAccessibilityCheckEnabled() &&
+            this.inheritNamingRules == other.isInheritNamingRules() &&
+            ((this.namingRuleCase==null && other.getNamingRuleCase()==null) || 
+             (this.namingRuleCase!=null &&
+              this.namingRuleCase.equals(other.getNamingRuleCase()))) &&
+            ((this.namingRuleSpacing==null && other.getNamingRuleSpacing()==null) || 
+             (this.namingRuleSpacing!=null &&
+              this.namingRuleSpacing.equals(other.getNamingRuleSpacing()))) &&
+            ((this.namingRuleAssets==null && other.getNamingRuleAssets()==null) || 
+             (this.namingRuleAssets!=null &&
+              java.util.Arrays.equals(this.namingRuleAssets, other.getNamingRuleAssets()))) &&
             ((this.rootFolderId==null && other.getRootFolderId()==null) || 
              (this.rootFolderId!=null &&
               this.rootFolderId.equals(other.getRootFolderId()))) &&
@@ -1235,6 +1341,24 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         _hashCode += (isSpellCheckEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         _hashCode += (isLinkCheckEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
         _hashCode += (isAccessibilityCheckEnabled() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        _hashCode += (isInheritNamingRules() ? Boolean.TRUE : Boolean.FALSE).hashCode();
+        if (getNamingRuleCase() != null) {
+            _hashCode += getNamingRuleCase().hashCode();
+        }
+        if (getNamingRuleSpacing() != null) {
+            _hashCode += getNamingRuleSpacing().hashCode();
+        }
+        if (getNamingRuleAssets() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getNamingRuleAssets());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getNamingRuleAssets(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
         if (getRootFolderId() != null) {
             _hashCode += getRootFolderId().hashCode();
         }
@@ -1481,6 +1605,34 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "accessibilityCheckEnabled"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("inheritNamingRules");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "inheritNamingRules"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("namingRuleCase");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleCase"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleCase"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("namingRuleSpacing");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleSpacing"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleSpacing"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("namingRuleAssets");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleAssets"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleAsset"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleAsset"));
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("rootFolderId");

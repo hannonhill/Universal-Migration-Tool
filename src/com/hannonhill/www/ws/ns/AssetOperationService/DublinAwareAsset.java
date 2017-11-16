@@ -14,6 +14,10 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
 
     private java.lang.String metadataSetPath;
 
+    private java.lang.Boolean reviewOnSchedule;
+
+    private org.apache.axis.types.NonNegativeInteger reviewEvery;
+
     public DublinAwareAsset() {
     }
 
@@ -29,11 +33,11 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
-           java.lang.Boolean reviewOnSchedule,
-           org.apache.axis.types.NonNegativeInteger reviewEvery,
            com.hannonhill.www.ws.ns.AssetOperationService.Metadata metadata,
            java.lang.String metadataSetId,
-           java.lang.String metadataSetPath) {
+           java.lang.String metadataSetPath,
+           java.lang.Boolean reviewOnSchedule,
+           org.apache.axis.types.NonNegativeInteger reviewEvery) {
         super(
             id,
             name,
@@ -45,12 +49,12 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
             createdDate,
             createdBy,
             siteId,
-            siteName,
-            reviewOnSchedule,
-            reviewEvery);
+            siteName);
         this.metadata = metadata;
         this.metadataSetId = metadataSetId;
         this.metadataSetPath = metadataSetPath;
+        this.reviewOnSchedule = reviewOnSchedule;
+        this.reviewEvery = reviewEvery;
     }
 
 
@@ -113,6 +117,46 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
         this.metadataSetPath = metadataSetPath;
     }
 
+
+    /**
+     * Gets the reviewOnSchedule value for this DublinAwareAsset.
+     * 
+     * @return reviewOnSchedule
+     */
+    public java.lang.Boolean getReviewOnSchedule() {
+        return reviewOnSchedule;
+    }
+
+
+    /**
+     * Sets the reviewOnSchedule value for this DublinAwareAsset.
+     * 
+     * @param reviewOnSchedule
+     */
+    public void setReviewOnSchedule(java.lang.Boolean reviewOnSchedule) {
+        this.reviewOnSchedule = reviewOnSchedule;
+    }
+
+
+    /**
+     * Gets the reviewEvery value for this DublinAwareAsset.
+     * 
+     * @return reviewEvery
+     */
+    public org.apache.axis.types.NonNegativeInteger getReviewEvery() {
+        return reviewEvery;
+    }
+
+
+    /**
+     * Sets the reviewEvery value for this DublinAwareAsset.
+     * 
+     * @param reviewEvery
+     */
+    public void setReviewEvery(org.apache.axis.types.NonNegativeInteger reviewEvery) {
+        this.reviewEvery = reviewEvery;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof DublinAwareAsset)) return false;
@@ -133,7 +177,13 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
               this.metadataSetId.equals(other.getMetadataSetId()))) &&
             ((this.metadataSetPath==null && other.getMetadataSetPath()==null) || 
              (this.metadataSetPath!=null &&
-              this.metadataSetPath.equals(other.getMetadataSetPath())));
+              this.metadataSetPath.equals(other.getMetadataSetPath()))) &&
+            ((this.reviewOnSchedule==null && other.getReviewOnSchedule()==null) || 
+             (this.reviewOnSchedule!=null &&
+              this.reviewOnSchedule.equals(other.getReviewOnSchedule()))) &&
+            ((this.reviewEvery==null && other.getReviewEvery()==null) || 
+             (this.reviewEvery!=null &&
+              this.reviewEvery.equals(other.getReviewEvery())));
         __equalsCalc = null;
         return _equals;
     }
@@ -153,6 +203,12 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
         }
         if (getMetadataSetPath() != null) {
             _hashCode += getMetadataSetPath().hashCode();
+        }
+        if (getReviewOnSchedule() != null) {
+            _hashCode += getReviewOnSchedule().hashCode();
+        }
+        if (getReviewEvery() != null) {
+            _hashCode += getReviewEvery().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -184,6 +240,20 @@ public class DublinAwareAsset  extends com.hannonhill.www.ws.ns.AssetOperationSe
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("reviewOnSchedule");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "reviewOnSchedule"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("reviewEvery");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "reviewEvery"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "nonNegativeInteger"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }
 

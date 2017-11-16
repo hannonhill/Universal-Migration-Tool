@@ -26,10 +26,6 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
 
     private java.lang.String siteName;
 
-    private java.lang.Boolean reviewOnSchedule;
-
-    private org.apache.axis.types.NonNegativeInteger reviewEvery;
-
     public FolderContainedAsset() {
     }
 
@@ -44,9 +40,7 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
            java.util.Calendar createdDate,
            java.lang.String createdBy,
            java.lang.String siteId,
-           java.lang.String siteName,
-           java.lang.Boolean reviewOnSchedule,
-           org.apache.axis.types.NonNegativeInteger reviewEvery) {
+           java.lang.String siteName) {
         super(
             id,
             name);
@@ -59,8 +53,6 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         this.createdBy = createdBy;
         this.siteId = siteId;
         this.siteName = siteName;
-        this.reviewOnSchedule = reviewOnSchedule;
-        this.reviewEvery = reviewEvery;
     }
 
 
@@ -243,46 +235,6 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         this.siteName = siteName;
     }
 
-
-    /**
-     * Gets the reviewOnSchedule value for this FolderContainedAsset.
-     * 
-     * @return reviewOnSchedule
-     */
-    public java.lang.Boolean getReviewOnSchedule() {
-        return reviewOnSchedule;
-    }
-
-
-    /**
-     * Sets the reviewOnSchedule value for this FolderContainedAsset.
-     * 
-     * @param reviewOnSchedule
-     */
-    public void setReviewOnSchedule(java.lang.Boolean reviewOnSchedule) {
-        this.reviewOnSchedule = reviewOnSchedule;
-    }
-
-
-    /**
-     * Gets the reviewEvery value for this FolderContainedAsset.
-     * 
-     * @return reviewEvery
-     */
-    public org.apache.axis.types.NonNegativeInteger getReviewEvery() {
-        return reviewEvery;
-    }
-
-
-    /**
-     * Sets the reviewEvery value for this FolderContainedAsset.
-     * 
-     * @param reviewEvery
-     */
-    public void setReviewEvery(org.apache.axis.types.NonNegativeInteger reviewEvery) {
-        this.reviewEvery = reviewEvery;
-    }
-
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof FolderContainedAsset)) return false;
@@ -321,13 +273,7 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
               this.siteId.equals(other.getSiteId()))) &&
             ((this.siteName==null && other.getSiteName()==null) || 
              (this.siteName!=null &&
-              this.siteName.equals(other.getSiteName()))) &&
-            ((this.reviewOnSchedule==null && other.getReviewOnSchedule()==null) || 
-             (this.reviewOnSchedule!=null &&
-              this.reviewOnSchedule.equals(other.getReviewOnSchedule()))) &&
-            ((this.reviewEvery==null && other.getReviewEvery()==null) || 
-             (this.reviewEvery!=null &&
-              this.reviewEvery.equals(other.getReviewEvery())));
+              this.siteName.equals(other.getSiteName())));
         __equalsCalc = null;
         return _equals;
     }
@@ -365,12 +311,6 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         }
         if (getSiteName() != null) {
             _hashCode += getSiteName().hashCode();
-        }
-        if (getReviewOnSchedule() != null) {
-            _hashCode += getReviewOnSchedule().hashCode();
-        }
-        if (getReviewEvery() != null) {
-            _hashCode += getReviewEvery().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -442,20 +382,6 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         elemField.setFieldName("siteName");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteName"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("reviewOnSchedule");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "reviewOnSchedule"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
-        elemField.setMinOccurs(0);
-        elemField.setNillable(true);
-        typeDesc.addFieldDesc(elemField);
-        elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("reviewEvery");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "reviewEvery"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "nonNegativeInteger"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

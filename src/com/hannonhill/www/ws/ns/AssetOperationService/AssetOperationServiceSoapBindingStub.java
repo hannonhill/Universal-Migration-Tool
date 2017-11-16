@@ -1285,6 +1285,36 @@ public class AssetOperationServiceSoapBindingStub extends org.apache.axis.client
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleAsset");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleAsset.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
+
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleAssets");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleAsset[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleAsset");
+            qName2 = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleAsset");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleCase");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleCase.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
+
+            qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "namingRuleSpacing");
+            cachedSerQNames.add(qName);
+            cls = com.hannonhill.www.ws.ns.AssetOperationService.NamingRuleSpacing.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(enumsf);
+            cachedDeserFactories.add(enumdf);
+
             qName = new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "operation");
             cachedSerQNames.add(qName);
             cls = com.hannonhill.www.ws.ns.AssetOperationService.Operation.class;
