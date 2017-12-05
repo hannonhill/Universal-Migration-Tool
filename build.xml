@@ -1,8 +1,8 @@
 <project name="UMT">
 
-    <description>Universal Migration Tool</description>
+  <description>Universal Migration Tool</description>
 
-    <property name="src.dir" value="src"/>
+  <property name="src.dir" value="src"/>
 	<property name="dist.dir" value="dist"/>
  	<property name="lib.dir" value="tomcat/lib"/>
  	<property name="work.dir" value="tomcat/work"/>
@@ -13,29 +13,30 @@
  	<property name="wsdl.dir" value="wsdl"/>	
 	<property name="webinf.dir" value="tomcat/webapps/ROOT/WEB-INF"/>
 	<property name="app.lib.dir" value="${webinf.dir}/lib"/>
+	<property name="umt.java.version" value="1.8"/>
  
-    <!--+
-        | Default classpath
-        +-->
-    <path id="classpath">
-        <fileset dir="${lib.dir}">
-        	<include name="**/*.jar" />
-        </fileset>
-    	<fileset dir="${app.lib.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-        <pathelement path="${java.class.path}/" />
-    </path>
-    
-    <!--+
-        | Compiles the Java source files
-        +-->
-    <target name="compile" depends="clean">
-        <echo>Compiling classes</echo>
-        <javac destdir="${classes.dir}" classpathref="classpath" source="1.6" target="1.6" debug="on" >
-            <src path="src" />
-        </javac>
-    </target>
+  <!--+
+      | Default classpath
+      +-->
+  <path id="classpath">
+      <fileset dir="${lib.dir}">
+      	<include name="**/*.jar" />
+      </fileset>
+    <fileset dir="${app.lib.dir}">
+      <include name="**/*.jar" />
+    </fileset>
+    <pathelement path="${java.class.path}/" />
+  </path>
+  
+  <!--+
+      | Compiles the Java source files
+      +-->
+  <target name="compile" depends="clean">
+    <echo>Compiling classes</echo>
+    <javac destdir="${classes.dir}" classpathref="classpath" source="${umt.java.version}" target="${umt.java.version}">
+      <src path="${src.dir}"/>
+    </javac>
+  </target>
 	
 	<target name="dist" depends="compile">
 		<war destfile="${dist.dir}/ROOT.war" webxml="${webinf.dir}/web.xml">
@@ -47,7 +48,7 @@
 		</war>
 	</target>
     
-    <target name="generate-stubs" depends="clean">
+  <target name="generate-stubs" depends="clean">
 		<taskdef name="wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask" classpathref="classpath" />
 		<mkdir dir="${src.dir}"/>
 		<wsdl2java
@@ -58,12 +59,12 @@
 		/>
 	</target>
     
-    <target name="clean">
-        <echo>Cleaning the project</echo>
-        <delete dir="${classes.com.dir}" />
-        <delete dir="${work.dir}" />
-        <delete dir="${wtpwebapps.dir}" />
-    </target>
+  <target name="clean">
+      <echo>Cleaning the project</echo>
+      <delete dir="${classes.com.dir}" />
+      <delete dir="${work.dir}" />
+      <delete dir="${wtpwebapps.dir}" />
+  </target>
     
     
 </project>
