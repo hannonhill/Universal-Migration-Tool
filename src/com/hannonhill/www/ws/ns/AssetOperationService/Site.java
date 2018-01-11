@@ -10,6 +10,8 @@ package com.hannonhill.www.ws.ns.AssetOperationService;
 public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedAsset  implements java.io.Serializable {
     private java.lang.String url;
 
+    private java.lang.String siteImproveUrl;
+
     private java.lang.String extensionsToStrip;
 
     private java.lang.String defaultMetadataSetId;
@@ -105,6 +107,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
            java.lang.String id,
            java.lang.String name,
            java.lang.String url,
+           java.lang.String siteImproveUrl,
            java.lang.String extensionsToStrip,
            java.lang.String defaultMetadataSetId,
            java.lang.String defaultMetadataSetPath,
@@ -153,6 +156,7 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             id,
             name);
         this.url = url;
+        this.siteImproveUrl = siteImproveUrl;
         this.extensionsToStrip = extensionsToStrip;
         this.defaultMetadataSetId = defaultMetadataSetId;
         this.defaultMetadataSetPath = defaultMetadataSetPath;
@@ -217,6 +221,26 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
      */
     public void setUrl(java.lang.String url) {
         this.url = url;
+    }
+
+
+    /**
+     * Gets the siteImproveUrl value for this Site.
+     * 
+     * @return siteImproveUrl
+     */
+    public java.lang.String getSiteImproveUrl() {
+        return siteImproveUrl;
+    }
+
+
+    /**
+     * Sets the siteImproveUrl value for this Site.
+     * 
+     * @param siteImproveUrl
+     */
+    public void setSiteImproveUrl(java.lang.String siteImproveUrl) {
+        this.siteImproveUrl = siteImproveUrl;
     }
 
 
@@ -1114,6 +1138,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
             ((this.url==null && other.getUrl()==null) || 
              (this.url!=null &&
               this.url.equals(other.getUrl()))) &&
+            ((this.siteImproveUrl==null && other.getSiteImproveUrl()==null) || 
+             (this.siteImproveUrl!=null &&
+              this.siteImproveUrl.equals(other.getSiteImproveUrl()))) &&
             ((this.extensionsToStrip==null && other.getExtensionsToStrip()==null) || 
              (this.extensionsToStrip!=null &&
               this.extensionsToStrip.equals(other.getExtensionsToStrip()))) &&
@@ -1243,6 +1270,9 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         int _hashCode = super.hashCode();
         if (getUrl() != null) {
             _hashCode += getUrl().hashCode();
+        }
+        if (getSiteImproveUrl() != null) {
+            _hashCode += getSiteImproveUrl().hashCode();
         }
         if (getExtensionsToStrip() != null) {
             _hashCode += getExtensionsToStrip().hashCode();
@@ -1406,6 +1436,13 @@ public class Site  extends com.hannonhill.www.ws.ns.AssetOperationService.NamedA
         elemField.setFieldName("url");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "url"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("siteImproveUrl");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "siteImproveUrl"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

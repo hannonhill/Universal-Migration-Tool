@@ -80,6 +80,8 @@ public class GlobalAbilities  implements java.io.Serializable {
 
     private java.lang.Boolean accessDefaultEditorConfiguration;
 
+    private java.lang.Boolean modifyDictionary;
+
     public GlobalAbilities() {
     }
 
@@ -119,7 +121,8 @@ public class GlobalAbilities  implements java.io.Serializable {
            java.lang.Boolean editMemberGroups,
            java.lang.Boolean databaseExportTool,
            java.lang.Boolean changeIdentity,
-           java.lang.Boolean accessDefaultEditorConfiguration) {
+           java.lang.Boolean accessDefaultEditorConfiguration,
+           java.lang.Boolean modifyDictionary) {
            this.bypassAllPermissionsChecks = bypassAllPermissionsChecks;
            this.accessSiteManagement = accessSiteManagement;
            this.createSites = createSites;
@@ -156,6 +159,7 @@ public class GlobalAbilities  implements java.io.Serializable {
            this.databaseExportTool = databaseExportTool;
            this.changeIdentity = changeIdentity;
            this.accessDefaultEditorConfiguration = accessDefaultEditorConfiguration;
+           this.modifyDictionary = modifyDictionary;
     }
 
 
@@ -878,6 +882,26 @@ public class GlobalAbilities  implements java.io.Serializable {
         this.accessDefaultEditorConfiguration = accessDefaultEditorConfiguration;
     }
 
+
+    /**
+     * Gets the modifyDictionary value for this GlobalAbilities.
+     * 
+     * @return modifyDictionary
+     */
+    public java.lang.Boolean getModifyDictionary() {
+        return modifyDictionary;
+    }
+
+
+    /**
+     * Sets the modifyDictionary value for this GlobalAbilities.
+     * 
+     * @param modifyDictionary
+     */
+    public void setModifyDictionary(java.lang.Boolean modifyDictionary) {
+        this.modifyDictionary = modifyDictionary;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof GlobalAbilities)) return false;
@@ -997,7 +1021,10 @@ public class GlobalAbilities  implements java.io.Serializable {
               this.changeIdentity.equals(other.getChangeIdentity()))) &&
             ((this.accessDefaultEditorConfiguration==null && other.getAccessDefaultEditorConfiguration()==null) || 
              (this.accessDefaultEditorConfiguration!=null &&
-              this.accessDefaultEditorConfiguration.equals(other.getAccessDefaultEditorConfiguration())));
+              this.accessDefaultEditorConfiguration.equals(other.getAccessDefaultEditorConfiguration()))) &&
+            ((this.modifyDictionary==null && other.getModifyDictionary()==null) || 
+             (this.modifyDictionary!=null &&
+              this.modifyDictionary.equals(other.getModifyDictionary())));
         __equalsCalc = null;
         return _equals;
     }
@@ -1116,6 +1143,9 @@ public class GlobalAbilities  implements java.io.Serializable {
         }
         if (getAccessDefaultEditorConfiguration() != null) {
             _hashCode += getAccessDefaultEditorConfiguration().hashCode();
+        }
+        if (getModifyDictionary() != null) {
+            _hashCode += getModifyDictionary().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1375,6 +1405,13 @@ public class GlobalAbilities  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("accessDefaultEditorConfiguration");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "accessDefaultEditorConfiguration"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("modifyDictionary");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "modifyDictionary"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

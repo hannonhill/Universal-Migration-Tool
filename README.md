@@ -1,6 +1,6 @@
 ## Migration Tool
 
-This is an open-source content migration tool for importing existing web content into [Cascade Server](http://www.hannonhill.com/products/).
+This is an open-source content migration tool for importing existing web content into [Cascade CMS](https://www.hannonhill.com/products/cascade-cms/).
 
 The tool assumes an export from your existing CMS that contains 1 file per page. The content needs to be structured such that the Migration Tool can pull content out using `id`s, `class`es and/or XPath expressions.
 
@@ -12,15 +12,15 @@ You can download the binary and source versions in the [releases area](https://g
 
 Due to an issue [#2](https://github.com/hannonhill/Universal-Migration-Tool/issues/2) with file paths on Windows, this tool should be run in a *nix environment.
 
-Oracle Java 1.6/1.7 JRE or JDK is required
+Oracle Java 1.8 JRE or JDK is required
 
-Cascade Server's [Web Service API](http://www.hannonhill.com/kb/Web-Services/) needs to be reachable from the server that is hosting the Migration Tool.
+Cascade Server's [Web Service API](https://www.hannonhill.com/cascadecms/8/kb/developing-in-cascade/soap-web-services-api/index.html) needs to be reachable from the server that is hosting the Migration Tool.
 
 ## Installation
 
 1. Download and unpack version of the tool that corresponds to the version of Cascade Server that you're running.
 1. Ensure that either `JRE_HOME` or `JAVA_HOME` is set in your `PATH` and points to your installed Oracle Java version, _or_
-1. Add a `JRE_HOME` or `JAVA_HOME` environment variable to `bin/catalina.sh` [around this line](https://github.com/hannonhill/Universal-Migration-Tool/blob/7f4f551f7c4f36c8155b48113ad2ad5fc37ffc8c/tomcat/bin/catalina.sh#L81)
+1. Add a `JRE_HOME` or `JAVA_HOME` environment variable to `bin/catalina.sh` after the comment block containing the license and environment variable options.
 1. Ensure that the `tomcat` directory contains a `logs` directory and create one if it does not exist
 1. Start Tomcat by running from a shell: `bin/startup.sh`
 1. Once you see `INFO: Server startup in 1676 ms` in the `logs/catalina.out` the tool should be reachable at: `http://localhost:8081` (or whatever hostname is used to reach this machine)
@@ -31,10 +31,10 @@ Cascade Server's [Web Service API](http://www.hannonhill.com/kb/Web-Services/) n
 This assumes use of Eclipse.
 ------------------------------------
 
-1. Add a tomcat v6.0 server to the Eclipse
+1. Add a tomcat v8.0 server to the Eclipse
   a) Open the "Servers" view
   b) In the "Servers" view, right click and select New -> Server
-  c) From the list, choose Tomcat v6.0 Server
+  c) From the list, choose Tomcat v8.0 Server
   d) In the Server runtime environment line, click "Add..."
   e) Click Browse and locate the "tomcat" folder inside of this Universal Migration Tool project
   f) Click Finish
