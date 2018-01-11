@@ -2603,6 +2603,10 @@
 
              <element maxOccurs="1" minOccurs="0" name="accessDefaultEditorConfiguration" type="xsd:boolean"/>
 
+        <!-- NOT REQUIRED - default false -->
+
+             <element maxOccurs="1" minOccurs="0" name="modifyDictionary" type="xsd:boolean"/>
+
           </sequence>
 
        </complexType>
@@ -2956,6 +2960,11 @@
             <!-- The site url REQUIRED-->
 
                    <element maxOccurs="1" minOccurs="1" name="url" type="xsd:string"/>
+
+
+            <!-- The SiteImprove url to use when sending url data to SiteImprove. NOT REQUIRED -->
+
+                   <element maxOccurs="1" minOccurs="0" name="siteImproveUrl" type="xsd:string"/>
 
 
             <!-- A comma separated list of extensions that should be stripped from cross-site links pointing to assets in this site.
