@@ -14,16 +14,24 @@ public class PublishInformation  implements java.io.Serializable {
 
     private java.lang.Boolean unpublish;
 
+    private java.lang.Boolean publishRelatedAssets;
+
+    private java.lang.Boolean publishRelatedPublishSet;
+
     public PublishInformation() {
     }
 
     public PublishInformation(
            com.hannonhill.www.ws.ns.AssetOperationService.Identifier identifier,
            com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] destinations,
-           java.lang.Boolean unpublish) {
+           java.lang.Boolean unpublish,
+           java.lang.Boolean publishRelatedAssets,
+           java.lang.Boolean publishRelatedPublishSet) {
            this.identifier = identifier;
            this.destinations = destinations;
            this.unpublish = unpublish;
+           this.publishRelatedAssets = publishRelatedAssets;
+           this.publishRelatedPublishSet = publishRelatedPublishSet;
     }
 
 
@@ -86,6 +94,46 @@ public class PublishInformation  implements java.io.Serializable {
         this.unpublish = unpublish;
     }
 
+
+    /**
+     * Gets the publishRelatedAssets value for this PublishInformation.
+     * 
+     * @return publishRelatedAssets
+     */
+    public java.lang.Boolean getPublishRelatedAssets() {
+        return publishRelatedAssets;
+    }
+
+
+    /**
+     * Sets the publishRelatedAssets value for this PublishInformation.
+     * 
+     * @param publishRelatedAssets
+     */
+    public void setPublishRelatedAssets(java.lang.Boolean publishRelatedAssets) {
+        this.publishRelatedAssets = publishRelatedAssets;
+    }
+
+
+    /**
+     * Gets the publishRelatedPublishSet value for this PublishInformation.
+     * 
+     * @return publishRelatedPublishSet
+     */
+    public java.lang.Boolean getPublishRelatedPublishSet() {
+        return publishRelatedPublishSet;
+    }
+
+
+    /**
+     * Sets the publishRelatedPublishSet value for this PublishInformation.
+     * 
+     * @param publishRelatedPublishSet
+     */
+    public void setPublishRelatedPublishSet(java.lang.Boolean publishRelatedPublishSet) {
+        this.publishRelatedPublishSet = publishRelatedPublishSet;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof PublishInformation)) return false;
@@ -106,7 +154,13 @@ public class PublishInformation  implements java.io.Serializable {
               java.util.Arrays.equals(this.destinations, other.getDestinations()))) &&
             ((this.unpublish==null && other.getUnpublish()==null) || 
              (this.unpublish!=null &&
-              this.unpublish.equals(other.getUnpublish())));
+              this.unpublish.equals(other.getUnpublish()))) &&
+            ((this.publishRelatedAssets==null && other.getPublishRelatedAssets()==null) || 
+             (this.publishRelatedAssets!=null &&
+              this.publishRelatedAssets.equals(other.getPublishRelatedAssets()))) &&
+            ((this.publishRelatedPublishSet==null && other.getPublishRelatedPublishSet()==null) || 
+             (this.publishRelatedPublishSet!=null &&
+              this.publishRelatedPublishSet.equals(other.getPublishRelatedPublishSet())));
         __equalsCalc = null;
         return _equals;
     }
@@ -135,6 +189,12 @@ public class PublishInformation  implements java.io.Serializable {
         if (getUnpublish() != null) {
             _hashCode += getUnpublish().hashCode();
         }
+        if (getPublishRelatedAssets() != null) {
+            _hashCode += getPublishRelatedAssets().hashCode();
+        }
+        if (getPublishRelatedPublishSet() != null) {
+            _hashCode += getPublishRelatedPublishSet().hashCode();
+        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -162,6 +222,20 @@ public class PublishInformation  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("unpublish");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "unpublish"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("publishRelatedAssets");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishRelatedAssets"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("publishRelatedPublishSet");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishRelatedPublishSet"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);

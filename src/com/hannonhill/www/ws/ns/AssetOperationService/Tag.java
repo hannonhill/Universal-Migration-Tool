@@ -1,5 +1,5 @@
 /**
- * XsltFormat.java
+ * Tag.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 12, 2007 (02:39:05 EDT) WSDL2Java emitter.
@@ -7,66 +7,41 @@
 
 package com.hannonhill.www.ws.ns.AssetOperationService;
 
-public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.FolderContainedAsset  implements java.io.Serializable {
-    private java.lang.String xml;
+public class Tag  implements java.io.Serializable {
+    private java.lang.String name;
 
-    public XsltFormat() {
+    public Tag() {
     }
 
-    public XsltFormat(
-           java.lang.String id,
-           java.lang.String name,
-           java.lang.String parentFolderId,
-           java.lang.String parentFolderPath,
-           java.lang.String path,
-           java.util.Calendar lastModifiedDate,
-           java.lang.String lastModifiedBy,
-           java.util.Calendar createdDate,
-           java.lang.String createdBy,
-           java.lang.String siteId,
-           java.lang.String siteName,
-           com.hannonhill.www.ws.ns.AssetOperationService.Tag[] tags,
-           java.lang.String xml) {
-        super(
-            id,
-            name,
-            parentFolderId,
-            parentFolderPath,
-            path,
-            lastModifiedDate,
-            lastModifiedBy,
-            createdDate,
-            createdBy,
-            siteId,
-            siteName,
-            tags);
-        this.xml = xml;
+    public Tag(
+           java.lang.String name) {
+           this.name = name;
     }
 
 
     /**
-     * Gets the xml value for this XsltFormat.
+     * Gets the name value for this Tag.
      * 
-     * @return xml
+     * @return name
      */
-    public java.lang.String getXml() {
-        return xml;
+    public java.lang.String getName() {
+        return name;
     }
 
 
     /**
-     * Sets the xml value for this XsltFormat.
+     * Sets the name value for this Tag.
      * 
-     * @param xml
+     * @param name
      */
-    public void setXml(java.lang.String xml) {
-        this.xml = xml;
+    public void setName(java.lang.String name) {
+        this.name = name;
     }
 
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
-        if (!(obj instanceof XsltFormat)) return false;
-        XsltFormat other = (XsltFormat) obj;
+        if (!(obj instanceof Tag)) return false;
+        Tag other = (Tag) obj;
         if (obj == null) return false;
         if (this == obj) return true;
         if (__equalsCalc != null) {
@@ -74,10 +49,10 @@ public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.
         }
         __equalsCalc = obj;
         boolean _equals;
-        _equals = super.equals(obj) && 
-            ((this.xml==null && other.getXml()==null) || 
-             (this.xml!=null &&
-              this.xml.equals(other.getXml())));
+        _equals = true && 
+            ((this.name==null && other.getName()==null) || 
+             (this.name!=null &&
+              this.name.equals(other.getName())));
         __equalsCalc = null;
         return _equals;
     }
@@ -88,9 +63,9 @@ public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.
             return 0;
         }
         __hashCodeCalc = true;
-        int _hashCode = super.hashCode();
-        if (getXml() != null) {
-            _hashCode += getXml().hashCode();
+        int _hashCode = 1;
+        if (getName() != null) {
+            _hashCode += getName().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -98,15 +73,16 @@ public class XsltFormat  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc =
-        new org.apache.axis.description.TypeDesc(XsltFormat.class, true);
+        new org.apache.axis.description.TypeDesc(Tag.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xsltFormat"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "tag"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("xml");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "xml"));
+        elemField.setFieldName("name");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "name"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setNillable(false);
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }
 

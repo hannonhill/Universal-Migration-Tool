@@ -42,6 +42,8 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
     private java.lang.Boolean indexAccessRights;
 
+    private java.lang.Boolean indexTags;
+
     private java.lang.Boolean indexUserInfo;
 
     private java.lang.Boolean indexWorkflowInfo;
@@ -69,6 +71,7 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
+           com.hannonhill.www.ws.ns.AssetOperationService.Tag[] tags,
            com.hannonhill.www.ws.ns.AssetOperationService.Metadata metadata,
            java.lang.String metadataSetId,
            java.lang.String metadataSetPath,
@@ -94,6 +97,7 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
            java.lang.Boolean indexSystemMetadata,
            java.lang.Boolean indexUserMetadata,
            java.lang.Boolean indexAccessRights,
+           java.lang.Boolean indexTags,
            java.lang.Boolean indexUserInfo,
            java.lang.Boolean indexWorkflowInfo,
            java.lang.Boolean appendCallingPageData,
@@ -112,6 +116,7 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
             createdBy,
             siteId,
             siteName,
+            tags,
             metadata,
             metadataSetId,
             metadataSetPath,
@@ -137,6 +142,7 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         this.indexSystemMetadata = indexSystemMetadata;
         this.indexUserMetadata = indexUserMetadata;
         this.indexAccessRights = indexAccessRights;
+        this.indexTags = indexTags;
         this.indexUserInfo = indexUserInfo;
         this.indexWorkflowInfo = indexWorkflowInfo;
         this.appendCallingPageData = appendCallingPageData;
@@ -487,6 +493,26 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
 
 
     /**
+     * Gets the indexTags value for this IndexBlock.
+     * 
+     * @return indexTags
+     */
+    public java.lang.Boolean getIndexTags() {
+        return indexTags;
+    }
+
+
+    /**
+     * Sets the indexTags value for this IndexBlock.
+     * 
+     * @param indexTags
+     */
+    public void setIndexTags(java.lang.Boolean indexTags) {
+        this.indexTags = indexTags;
+    }
+
+
+    /**
      * Gets the indexUserInfo value for this IndexBlock.
      * 
      * @return indexUserInfo
@@ -668,6 +694,9 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
             ((this.indexAccessRights==null && other.getIndexAccessRights()==null) || 
              (this.indexAccessRights!=null &&
               this.indexAccessRights.equals(other.getIndexAccessRights()))) &&
+            ((this.indexTags==null && other.getIndexTags()==null) || 
+             (this.indexTags!=null &&
+              this.indexTags.equals(other.getIndexTags()))) &&
             ((this.indexUserInfo==null && other.getIndexUserInfo()==null) || 
              (this.indexUserInfo!=null &&
               this.indexUserInfo.equals(other.getIndexUserInfo()))) &&
@@ -747,6 +776,9 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         }
         if (getIndexAccessRights() != null) {
             _hashCode += getIndexAccessRights().hashCode();
+        }
+        if (getIndexTags() != null) {
+            _hashCode += getIndexTags().hashCode();
         }
         if (getIndexUserInfo() != null) {
             _hashCode += getIndexUserInfo().hashCode();
@@ -889,6 +921,13 @@ public class IndexBlock  extends com.hannonhill.www.ws.ns.AssetOperationService.
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("indexAccessRights");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "indexAccessRights"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("indexTags");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "indexTags"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

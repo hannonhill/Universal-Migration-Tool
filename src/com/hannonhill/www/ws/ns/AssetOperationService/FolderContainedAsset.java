@@ -26,6 +26,8 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
 
     private java.lang.String siteName;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.Tag[] tags;
+
     public FolderContainedAsset() {
     }
 
@@ -40,7 +42,8 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
            java.util.Calendar createdDate,
            java.lang.String createdBy,
            java.lang.String siteId,
-           java.lang.String siteName) {
+           java.lang.String siteName,
+           com.hannonhill.www.ws.ns.AssetOperationService.Tag[] tags) {
         super(
             id,
             name);
@@ -53,6 +56,7 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         this.createdBy = createdBy;
         this.siteId = siteId;
         this.siteName = siteName;
+        this.tags = tags;
     }
 
 
@@ -235,6 +239,26 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         this.siteName = siteName;
     }
 
+
+    /**
+     * Gets the tags value for this FolderContainedAsset.
+     * 
+     * @return tags
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.Tag[] getTags() {
+        return tags;
+    }
+
+
+    /**
+     * Sets the tags value for this FolderContainedAsset.
+     * 
+     * @param tags
+     */
+    public void setTags(com.hannonhill.www.ws.ns.AssetOperationService.Tag[] tags) {
+        this.tags = tags;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof FolderContainedAsset)) return false;
@@ -273,7 +297,10 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
               this.siteId.equals(other.getSiteId()))) &&
             ((this.siteName==null && other.getSiteName()==null) || 
              (this.siteName!=null &&
-              this.siteName.equals(other.getSiteName())));
+              this.siteName.equals(other.getSiteName()))) &&
+            ((this.tags==null && other.getTags()==null) || 
+             (this.tags!=null &&
+              java.util.Arrays.equals(this.tags, other.getTags())));
         __equalsCalc = null;
         return _equals;
     }
@@ -311,6 +338,17 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         }
         if (getSiteName() != null) {
             _hashCode += getSiteName().hashCode();
+        }
+        if (getTags() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getTags());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getTags(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -384,6 +422,14 @@ public class FolderContainedAsset  extends com.hannonhill.www.ws.ns.AssetOperati
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("tags");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "tags"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "tag"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "tag"));
         typeDesc.addFieldDesc(elemField);
     }
 

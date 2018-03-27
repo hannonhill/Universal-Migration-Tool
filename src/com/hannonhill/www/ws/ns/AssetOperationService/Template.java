@@ -37,6 +37,7 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
+           com.hannonhill.www.ws.ns.AssetOperationService.Tag[] tags,
            java.lang.String targetId,
            java.lang.String targetPath,
            java.lang.String formatId,
@@ -55,7 +56,8 @@ public class Template  extends com.hannonhill.www.ws.ns.AssetOperationService.Fo
             createdDate,
             createdBy,
             siteId,
-            siteName);
+            siteName,
+            tags);
         this.targetId = targetId;
         this.targetPath = targetPath;
         this.formatId = formatId;
