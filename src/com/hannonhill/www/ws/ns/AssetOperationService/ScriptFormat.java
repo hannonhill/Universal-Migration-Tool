@@ -25,6 +25,7 @@ public class ScriptFormat  extends com.hannonhill.www.ws.ns.AssetOperationServic
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
+           com.hannonhill.www.ws.ns.AssetOperationService.Tag[] tags,
            java.lang.String script) {
         super(
             id,
@@ -37,7 +38,8 @@ public class ScriptFormat  extends com.hannonhill.www.ws.ns.AssetOperationServic
             createdDate,
             createdBy,
             siteId,
-            siteName);
+            siteName,
+            tags);
         this.script = script;
     }
 

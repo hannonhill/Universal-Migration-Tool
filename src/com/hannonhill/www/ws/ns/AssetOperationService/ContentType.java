@@ -24,6 +24,10 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
 
     private java.lang.String editorConfigurationPath;
 
+    private java.lang.String publishSetId;
+
+    private java.lang.String publishSetPath;
+
     private com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations;
 
     private com.hannonhill.www.ws.ns.AssetOperationService.InlineEditableField[] inlineEditableFields;
@@ -47,6 +51,8 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
            java.lang.String dataDefinitionPath,
            java.lang.String editorConfigurationId,
            java.lang.String editorConfigurationPath,
+           java.lang.String publishSetId,
+           java.lang.String publishSetPath,
            com.hannonhill.www.ws.ns.AssetOperationService.ContentTypePageConfiguration[] contentTypePageConfigurations,
            com.hannonhill.www.ws.ns.AssetOperationService.InlineEditableField[] inlineEditableFields) {
         super(
@@ -65,6 +71,8 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         this.dataDefinitionPath = dataDefinitionPath;
         this.editorConfigurationId = editorConfigurationId;
         this.editorConfigurationPath = editorConfigurationPath;
+        this.publishSetId = publishSetId;
+        this.publishSetPath = publishSetPath;
         this.contentTypePageConfigurations = contentTypePageConfigurations;
         this.inlineEditableFields = inlineEditableFields;
     }
@@ -231,6 +239,46 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
 
 
     /**
+     * Gets the publishSetId value for this ContentType.
+     * 
+     * @return publishSetId
+     */
+    public java.lang.String getPublishSetId() {
+        return publishSetId;
+    }
+
+
+    /**
+     * Sets the publishSetId value for this ContentType.
+     * 
+     * @param publishSetId
+     */
+    public void setPublishSetId(java.lang.String publishSetId) {
+        this.publishSetId = publishSetId;
+    }
+
+
+    /**
+     * Gets the publishSetPath value for this ContentType.
+     * 
+     * @return publishSetPath
+     */
+    public java.lang.String getPublishSetPath() {
+        return publishSetPath;
+    }
+
+
+    /**
+     * Sets the publishSetPath value for this ContentType.
+     * 
+     * @param publishSetPath
+     */
+    public void setPublishSetPath(java.lang.String publishSetPath) {
+        this.publishSetPath = publishSetPath;
+    }
+
+
+    /**
      * Gets the contentTypePageConfigurations value for this ContentType.
      * 
      * @return contentTypePageConfigurations
@@ -305,6 +353,12 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
             ((this.editorConfigurationPath==null && other.getEditorConfigurationPath()==null) || 
              (this.editorConfigurationPath!=null &&
               this.editorConfigurationPath.equals(other.getEditorConfigurationPath()))) &&
+            ((this.publishSetId==null && other.getPublishSetId()==null) || 
+             (this.publishSetId!=null &&
+              this.publishSetId.equals(other.getPublishSetId()))) &&
+            ((this.publishSetPath==null && other.getPublishSetPath()==null) || 
+             (this.publishSetPath!=null &&
+              this.publishSetPath.equals(other.getPublishSetPath()))) &&
             ((this.contentTypePageConfigurations==null && other.getContentTypePageConfigurations()==null) || 
              (this.contentTypePageConfigurations!=null &&
               java.util.Arrays.equals(this.contentTypePageConfigurations, other.getContentTypePageConfigurations()))) &&
@@ -345,6 +399,12 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         }
         if (getEditorConfigurationPath() != null) {
             _hashCode += getEditorConfigurationPath().hashCode();
+        }
+        if (getPublishSetId() != null) {
+            _hashCode += getPublishSetId().hashCode();
+        }
+        if (getPublishSetPath() != null) {
+            _hashCode += getPublishSetPath().hashCode();
         }
         if (getContentTypePageConfigurations() != null) {
             for (int i=0;
@@ -430,6 +490,20 @@ public class ContentType  extends com.hannonhill.www.ws.ns.AssetOperationService
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("editorConfigurationPath");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "editorConfigurationPath"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("publishSetId");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishSetId"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("publishSetPath");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "publishSetPath"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         elemField.setNillable(false);

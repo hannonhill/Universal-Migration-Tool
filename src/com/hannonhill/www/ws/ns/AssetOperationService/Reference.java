@@ -29,6 +29,7 @@ public class Reference  extends com.hannonhill.www.ws.ns.AssetOperationService.F
            java.lang.String createdBy,
            java.lang.String siteId,
            java.lang.String siteName,
+           com.hannonhill.www.ws.ns.AssetOperationService.Tag[] tags,
            java.lang.String referencedAssetId,
            java.lang.String referencedAssetPath,
            com.hannonhill.www.ws.ns.AssetOperationService.EntityTypeString referencedAssetType) {
@@ -43,7 +44,8 @@ public class Reference  extends com.hannonhill.www.ws.ns.AssetOperationService.F
             createdDate,
             createdBy,
             siteId,
-            siteName);
+            siteName,
+            tags);
         this.referencedAssetId = referencedAssetId;
         this.referencedAssetPath = referencedAssetPath;
         this.referencedAssetType = referencedAssetType;

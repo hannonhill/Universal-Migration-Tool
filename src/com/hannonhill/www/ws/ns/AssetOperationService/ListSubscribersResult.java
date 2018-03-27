@@ -10,17 +10,21 @@ package com.hannonhill.www.ws.ns.AssetOperationService;
 public class ListSubscribersResult  extends com.hannonhill.www.ws.ns.AssetOperationService.OperationResult  implements java.io.Serializable {
     private com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] subscribers;
 
+    private com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] manualSubscribers;
+
     public ListSubscribersResult() {
     }
 
     public ListSubscribersResult(
            java.lang.String success,
            java.lang.String message,
-           com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] subscribers) {
+           com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] subscribers,
+           com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] manualSubscribers) {
         super(
             success,
             message);
         this.subscribers = subscribers;
+        this.manualSubscribers = manualSubscribers;
     }
 
 
@@ -43,6 +47,26 @@ public class ListSubscribersResult  extends com.hannonhill.www.ws.ns.AssetOperat
         this.subscribers = subscribers;
     }
 
+
+    /**
+     * Gets the manualSubscribers value for this ListSubscribersResult.
+     * 
+     * @return manualSubscribers
+     */
+    public com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] getManualSubscribers() {
+        return manualSubscribers;
+    }
+
+
+    /**
+     * Sets the manualSubscribers value for this ListSubscribersResult.
+     * 
+     * @param manualSubscribers
+     */
+    public void setManualSubscribers(com.hannonhill.www.ws.ns.AssetOperationService.Identifier[] manualSubscribers) {
+        this.manualSubscribers = manualSubscribers;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ListSubscribersResult)) return false;
@@ -57,7 +81,10 @@ public class ListSubscribersResult  extends com.hannonhill.www.ws.ns.AssetOperat
         _equals = super.equals(obj) && 
             ((this.subscribers==null && other.getSubscribers()==null) || 
              (this.subscribers!=null &&
-              java.util.Arrays.equals(this.subscribers, other.getSubscribers())));
+              java.util.Arrays.equals(this.subscribers, other.getSubscribers()))) &&
+            ((this.manualSubscribers==null && other.getManualSubscribers()==null) || 
+             (this.manualSubscribers!=null &&
+              java.util.Arrays.equals(this.manualSubscribers, other.getManualSubscribers())));
         __equalsCalc = null;
         return _equals;
     }
@@ -80,6 +107,17 @@ public class ListSubscribersResult  extends com.hannonhill.www.ws.ns.AssetOperat
                 }
             }
         }
+        if (getManualSubscribers() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getManualSubscribers());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getManualSubscribers(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
+        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -93,6 +131,13 @@ public class ListSubscribersResult  extends com.hannonhill.www.ws.ns.AssetOperat
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("subscribers");
         elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "subscribers"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier"));
+        elemField.setNillable(false);
+        elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "assetIdentifier"));
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("manualSubscribers");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "manualSubscribers"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "identifier"));
         elemField.setNillable(false);
         elemField.setItemQName(new javax.xml.namespace.QName("http://www.hannonhill.com/ws/ns/AssetOperationService", "assetIdentifier"));
