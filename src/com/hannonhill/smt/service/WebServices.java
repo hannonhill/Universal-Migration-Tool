@@ -6,6 +6,7 @@
 package com.hannonhill.smt.service;
 
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,11 +73,11 @@ public class WebServices
     static
     {
         // Assign the identifiers
-        STANDARD_METADATA_FIELD_IDENTIFIERS = new ArrayList<String>();
+        STANDARD_METADATA_FIELD_IDENTIFIERS = new ArrayList<>();
         for (Field standardMetadataField : STANDARD_METADATA_FIELDS)
             STANDARD_METADATA_FIELD_IDENTIFIERS.add(standardMetadataField.getIdentifier());
 
-        LONG_METADATA_FIELDS = new ArrayList<String>();
+        LONG_METADATA_FIELDS = new ArrayList<>();
         LONG_METADATA_FIELDS.add("keywords");
         LONG_METADATA_FIELDS.add("summary");
         LONG_METADATA_FIELDS.add("teaser");
@@ -118,7 +119,7 @@ public class WebServices
                 projectInformation.getSiteName());
 
         // Recursively collect all ancestor content types
-        List<ContentType> contentTypes = new ArrayList<ContentType>();
+        List<ContentType> contentTypes = new ArrayList<>();
         collectContentTypes(projectInformation, site.getRootContentTypeContainerId(), contentTypes);
         return contentTypes;
     }
@@ -146,7 +147,7 @@ public class WebServices
         MetadataSet metadataSet = readResult.getAsset().getMetadataSet();
 
         // add all the standard fields
-        Map<String, MetadataSetField> resultMap = new HashMap<String, MetadataSetField>();
+        Map<String, MetadataSetField> resultMap = new HashMap<>();
         for (MetadataSetField field : STANDARD_METADATA_FIELDS)
             resultMap.put(field.getIdentifier(), field);
 
@@ -197,9 +198,10 @@ public class WebServices
      * @return Returns the created page's id.
      * @throws Exception
      */
-    public static CascadeAssetInformation createPage(java.io.File pageFile, ProjectInformation projectInformation) throws Exception
+    public static CascadeAssetInformation createPage(java.nio.file.Path pageFile, ProjectInformation projectInformation) throws Exception
     {
         String path = PathUtil.createPagePathFromFileSystemFile(pageFile, projectInformation);
+        path = path.replace(java.io.File.separator, "/");
         if (!XmlAnalyzer.allCharactersLegal(path))
             path = XmlAnalyzer.removeIllegalCharacters(path);
 
@@ -279,10 +281,11 @@ public class WebServices
      * @return
      * @throws Exception
      */
-    public static CascadeAssetInformation createXhtmlBlock(java.io.File file, ProjectInformation projectInformation, String metadataSetId)
+    public static CascadeAssetInformation createXhtmlBlock(java.nio.file.Path file, ProjectInformation projectInformation, String metadataSetId)
             throws Exception
     {
         String blockPath = PathUtil.createPagePathFromFileSystemFile(file, projectInformation);
+        blockPath = blockPath.replace(java.io.File.separator, "/");
         if (!XmlAnalyzer.allCharactersLegal(blockPath))
             blockPath = XmlAnalyzer.removeIllegalCharacters(blockPath);
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(blockPath);
@@ -290,7 +293,7 @@ public class WebServices
         // "_internal/blocks/static" folder
         if (parentFolderPath.equals("") || parentFolderPath.equals("/"))
             parentFolderPath = "_cascade/blocks/static";
-        String blockName = PathUtil.truncateExtension(file.getName());
+        String blockName = PathUtil.truncateExtension(file.getFileName().toString());
 
         String overwriteBehavior = projectInformation.getOverwriteBehavior();
         if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_SKIP_EXISTING))
@@ -332,7 +335,8 @@ public class WebServices
         block.setParentFolderPath(parentFolderPath);
         block.setSiteName(projectInformation.getSiteName());
         block.setMetadataSetId(metadataSetId);
-        block.setXhtml(LinkRewriter.rewriteLinksInXml(JTidy.tidyContentConditionally(FileSystem.getFileContents(file)), blockPath, projectInformation));
+        block.setXhtml(
+                LinkRewriter.rewriteLinksInXml(JTidy.tidyContentConditionally(FileSystem.getFileContents(file)), blockPath, projectInformation));
 
         Asset asset = new Asset();
         asset.setXhtmlDataDefinitionBlock(block);
@@ -354,8 +358,8 @@ public class WebServices
                     return createXhtmlBlock(file, projectInformation, metadataSetId);
                 }
 
-                throw new Exception("XHTML Block " + blockPath + " could not be created: " + createResult.getMessage()
-                        + " - Parent folder path is: -" + parentFolderPath + "-");
+                throw new Exception("XHTML Block " + blockPath + " could not be created: " + createResult.getMessage() + " - Parent folder path is: -"
+                        + parentFolderPath + "-");
             }
 
             projectInformation.getExistingCascadeXhtmlBlocks().put(blockPath.toLowerCase(), createResult.getCreatedAssetId());
@@ -389,34 +393,36 @@ public class WebServices
      * not exist. The path of the file is figured out using webViewUrl in linkFile.xml in current or ancestor
      * folders. If file with that path already exists, it is left as it is.
      * 
-     * @param filesystemFile
+     * @param folderFile
      * @param projectInformation
      * @param metadataSetId
      * @throws Exception
      */
-    public static void createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId) throws Exception
+    public static void createFile(java.nio.file.Path folderFile, ProjectInformation projectInformation, String metadataSetId) throws Exception
     {
-        createFile(filesystemFile, projectInformation, metadataSetId, true);
+        createFile(folderFile, projectInformation, metadataSetId, true);
     }
 
     /**
-     * See {@link #createFile(java.io.File, ProjectInformation, String)}
+     * See {@link #createFile(java.nio.file.Path, ProjectInformation, String)}
      * 
-     * @param filesystemFile
+     * @param folderFile
      * @param projectInformation
      * @param metadataSetId
      * @param logCreatingFile whether or not the "Creating file ..." message should be logged
      * @throws Exception
      */
-    private static void createFile(java.io.File filesystemFile, ProjectInformation projectInformation, String metadataSetId, boolean logCreatingFile)
-            throws Exception
+    private static void createFile(java.nio.file.Path folderFile, ProjectInformation projectInformation, String metadataSetId,
+            boolean logCreatingFile) throws Exception
     {
-        String filePath = PathUtil.getRelativePath(filesystemFile, projectInformation.getXmlDirectory());
+        String filePath = PathUtil.getRelativePath(folderFile, projectInformation.getXmlDirectory());
+        // Added for Windows Paths
+        filePath = filePath.replace(java.io.File.separator, "/");
         if (!XmlAnalyzer.allCharactersLegal(filePath))
             filePath = XmlAnalyzer.removeIllegalCharacters(filePath);
 
         String parentFolderPath = PathUtil.getParentFolderPathFromPath(filePath);
-        String fileName = filesystemFile.getName();
+        String fileName = folderFile.getFileName().toString();
 
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         if (logCreatingFile)
@@ -429,7 +435,7 @@ public class WebServices
             return;
         }
 
-        if (filesystemFile.length() > (MAX_FILE_SIZE_MB * 1024 * 1024))
+        if (Files.size(folderFile) > (MAX_FILE_SIZE_MB * 1024 * 1024))
             throw new Exception("File is too large. Maximum file size is " + MAX_FILE_SIZE_MB + " MB");
 
         // Set up the file object and assign it to the asset object
@@ -440,7 +446,7 @@ public class WebServices
         file.setMetadataSetId(metadataSetId);
         file.setShouldBeIndexed(true);
         file.setShouldBePublished(true);
-        file.setData(FileSystem.getBytesFromFile(filesystemFile));
+        file.setData(FileSystem.getBytesFromFile(folderFile));
 
         Asset asset = new Asset();
         asset.setFile(file);
@@ -457,7 +463,7 @@ public class WebServices
                     && message.contains("could not be found"))
             {
                 createFolder(parentFolderPath, projectInformation);
-                createFile(filesystemFile, projectInformation, metadataSetId, false);
+                createFile(folderFile, projectInformation, metadataSetId, false);
                 return;
             }
 
@@ -615,7 +621,7 @@ public class WebServices
     public static List<String> getSiteNames(String url, String username, String password) throws Exception
     {
         Authentication authentication = new Authentication(password, username);
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         ListSitesResult sitesResult;
         sitesResult = getServer(url).listSites(authentication);
 
@@ -716,9 +722,8 @@ public class WebServices
         Authentication authentication = getAuthentication(projectInformation);
         Identifier identifier = new Identifier(null, new Path(cachePath, null, siteName), EntityTypeString.page, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
-        if (!readResult.getSuccess().equals("true")
-                && (readResult.getMessage() == null || !readResult.getMessage().equals(
-                        "Unable to identify an entity based on provided entity path '" + cachePath + "' and type 'page'")))
+        if (!readResult.getSuccess().equals("true") && (readResult.getMessage() == null
+                || !readResult.getMessage().equals("Unable to identify an entity based on provided entity path '" + cachePath + "' and type 'page'")))
             throw new Exception("Error occured when reading a Page with path '" + path + "': " + readResult.getMessage());
 
         return readResult.getSuccess().equals("true") ? readResult.getAsset().getPage() : null;
@@ -738,9 +743,8 @@ public class WebServices
         Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()),
                 EntityTypeString.block_XHTML_DATADEFINITION, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
-        if (!readResult.getSuccess().equals("true")
-                && (readResult.getMessage() == null || !readResult.getMessage().equals(
-                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'block'")))
+        if (!readResult.getSuccess().equals("true") && (readResult.getMessage() == null
+                || !readResult.getMessage().equals("Unable to identify an entity based on provided entity path '" + path + "' and type 'block'")))
             throw new Exception("Error occured when reading a XHTML Block with path '" + path + "': " + readResult.getMessage());
 
         return readResult.getSuccess().equals("true") ? readResult.getAsset().getXhtmlDataDefinitionBlock() : null;
@@ -764,9 +768,8 @@ public class WebServices
         Authentication authentication = getAuthentication(projectInformation);
         Identifier identifier = new Identifier(null, new Path(cachePath, null, siteName), EntityTypeString.file, false);
         ReadResult readResult = getServer(projectInformation.getUrl()).read(authentication, identifier);
-        if (!readResult.getSuccess().equals("true")
-                && (readResult.getMessage() == null || !readResult.getMessage().equals(
-                        "Unable to identify an entity based on provided entity path '" + cachePath + "' and type 'file'")))
+        if (!readResult.getSuccess().equals("true") && (readResult.getMessage() == null
+                || !readResult.getMessage().equals("Unable to identify an entity based on provided entity path '" + cachePath + "' and type 'file'")))
             throw new Exception("Error occured when reading a Page with path '" + path + "': " + readResult.getMessage());
 
         return readResult.getSuccess().equals("true") ? readResult.getAsset().getFile() : null;
@@ -822,9 +825,8 @@ public class WebServices
         Identifier identifier = new Identifier(null, new Path(path, null, projectInformation.getSiteName()), EntityTypeString.page, false);
         OperationResult deleteResult = getServer(projectInformation.getUrl()).delete(authentication, identifier);
 
-        if (!deleteResult.getSuccess().equals("true")
-                && (deleteResult.getMessage() == null || !deleteResult.getMessage().equals(
-                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'page'")))
+        if (!deleteResult.getSuccess().equals("true") && (deleteResult.getMessage() == null
+                || !deleteResult.getMessage().equals("Unable to identify an entity based on provided entity path '" + path + "' and type 'page'")))
             throw new Exception("Error occured when deleting a Page with path '" + path + "': " + deleteResult.getMessage());
     }
 
@@ -843,9 +845,8 @@ public class WebServices
                 EntityTypeString.block_XHTML_DATADEFINITION, false);
         OperationResult deleteResult = getServer(projectInformation.getUrl()).delete(authentication, identifier);
 
-        if (!deleteResult.getSuccess().equals("true")
-                && (deleteResult.getMessage() == null || !deleteResult.getMessage().equals(
-                        "Unable to identify an entity based on provided entity path '" + path + "' and type 'block_XHTML_DATADEFINITION'")))
+        if (!deleteResult.getSuccess().equals("true") && (deleteResult.getMessage() == null || !deleteResult.getMessage()
+                .equals("Unable to identify an entity based on provided entity path '" + path + "' and type 'block_XHTML_DATADEFINITION'")))
             throw new Exception("Error occured when deleting an XHTML Block with path '" + path + "': " + deleteResult.getMessage());
     }
 

@@ -6,6 +6,7 @@
 package com.hannonhill.smt;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class ProjectInformation
     private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type
                                                               // information (with the available metadata and
                                                               // dd fields)
-    private final Set<File> filesToProcess; // All the files that need to be processed during migration -
+    private final Set<Path> filesToProcess; // All the files that need to be processed during migration -
                                             // it is a set to avoid duplicates and because order doesn't
                                             // really matter
     Set<String> gatheredExtensions = new HashSet<String>();
@@ -84,7 +85,7 @@ public class ProjectInformation
         migrationStatus = new MigrationStatus();
         linkCheckingStatus = new LinkCheckingStatus();
         currentTask = null;
-        filesToProcess = new HashSet<File>();
+        filesToProcess = new HashSet<Path>();
         contentTypes = new HashMap<String, ContentTypeInformation>();
         externalRootLevelFolderAssignemnts = new HashMap<String, ExternalRootLevelFolderAssignment>();
         existingCascadeFiles = new HashMap<String, String>();
@@ -245,7 +246,7 @@ public class ProjectInformation
     /**
      * @return Returns the filesToProcess.
      */
-    public Set<File> getFilesToProcess()
+    public Set<Path> getFilesToProcess()
     {
         return filesToProcess;
     }

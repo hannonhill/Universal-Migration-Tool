@@ -6,9 +6,12 @@
 package com.hannonhill.smt.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Node;
@@ -37,7 +40,7 @@ public class XmlAnalyzer
      * @param folder
      * @param assetTypes
      */
-    public static void analyzeFolder(File folder, ProjectInformation projectInformation)
+    public static void analyzeFolder(Path folder, ProjectInformation projectInformation)
     {
         // Skip files with invalid characters in their path
         String folderPath = PathUtil.getRelativePath(folder, projectInformation.getXmlDirectory());
@@ -50,9 +53,15 @@ public class XmlAnalyzer
             projectInformation.getExternalRootLevelFolderAssignemnts().put(folderPath, rootFolderAssignment);
         }
 
-        List<File> files = FileSystem.getFolderContents(folder);
-        for (File file : files)
-            analyzeFile(file, projectInformation);
+        try (DirectoryStream<Path> files = Files.newDirectoryStream(folder))
+        {
+            for (Path file : files)
+                analyzeFile(file, projectInformation);
+        }
+        catch (IOException x)
+        {
+            System.out.println(x);
+        }
     }
 
     /**
@@ -64,7 +73,7 @@ public class XmlAnalyzer
      */
     public static Map<String, DataDefinitionField> analyzeDataDefinitionXml(String xml) throws Exception
     {
-        Map<String, DataDefinitionField> returnMap = new HashMap<String, DataDefinitionField>();
+        Map<String, DataDefinitionField> returnMap = new HashMap<>();
         Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(xml)));
         NodeList children = rootNode.getChildNodes();
         analyzeDataDefinitionGroup(children, "", "", returnMap);
@@ -188,26 +197,33 @@ public class XmlAnalyzer
      * @param file
      * @param projectInformation
      */
-    private static void analyzeFile(File file, ProjectInformation projectInformation)
+    private static void analyzeFile(Path file, ProjectInformation projectInformation)
     {
         // Skip hidden files and folders
-        if (file.getName().startsWith("."))
+        if (file.getFileName().toString().startsWith("."))
             return;
 
         // Recursively analyze sub-folders
-        if (file.isDirectory())
+        try
         {
-            analyzeFolder(file, projectInformation);
-            return;
+            if ((Boolean) Files.getAttribute(file, "isDirectory"))
+            {
+                analyzeFolder(file, projectInformation);
+                return;
+            }
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         // Skip files with invalid characters in their name
-        String filePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
-        String fileName = PathUtil.getNameFromPath(filePath);
+        String fileName = file.getFileName().toString();
         if (!allCharactersLegal(fileName))
             return;
 
-        String fileNameWihtoutXmlExtension = PathUtil.truncateExtension(file.getName());
+        String fileNameWihtoutXmlExtension = PathUtil.truncateExtension(fileName);
         String extension = PathUtil.getExtension(fileNameWihtoutXmlExtension);
         projectInformation.getGatheredExtensions().add(extension);
         projectInformation.getFilesToProcess().add(file);

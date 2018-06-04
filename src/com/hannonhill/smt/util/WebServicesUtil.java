@@ -5,7 +5,7 @@
  */
 package com.hannonhill.smt.util;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,9 +51,10 @@ public class WebServicesUtil
      * @return
      * @throws Exception
      */
-    public static Page setupPageObject(File pageFile, ProjectInformation projectInformation) throws Exception
+    public static Page setupPageObject(Path pageFile, ProjectInformation projectInformation) throws Exception
     {
         String path = PathUtil.truncateExtension(PathUtil.getRelativePath(pageFile, projectInformation.getXmlDirectory()));
+        path = path.replace(java.io.File.separator, "/");
         if (!XmlAnalyzer.allCharactersLegal(path))
             path = XmlAnalyzer.removeIllegalCharacters(path);
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
@@ -172,7 +173,7 @@ public class WebServicesUtil
     {
         // Create the metadata object and the list of dynamic fields
         Metadata metadata = new Metadata();
-        List<DynamicMetadataField> dynamicFieldsList = new ArrayList<DynamicMetadataField>();
+        List<DynamicMetadataField> dynamicFieldsList = new ArrayList<>();
 
         // A web services bug work-around: supply all dynamic metadata field values as empty strings first
         for (String metadataFieldName : availableMetadataFieldNames)
@@ -316,7 +317,7 @@ public class WebServicesUtil
             textNode.setIdentifier(identifier);
             textNode.setText(fieldValue);
             textNode.setType(StructuredDataType.text);
-            List<StructuredDataNode> textNodes = new ArrayList<StructuredDataNode>();
+            List<StructuredDataNode> textNodes = new ArrayList<>();
             textNodes.add(textNode);
             currentNode.getContentFields().put(identifier, textNodes);
         }
@@ -327,7 +328,7 @@ public class WebServicesUtil
             fileNode.setFileId(fieldValue);
             fileNode.setType(StructuredDataType.asset);
             fileNode.setAssetType(StructuredDataAssetType.fromString("file"));
-            List<StructuredDataNode> fileNodes = new ArrayList<StructuredDataNode>();
+            List<StructuredDataNode> fileNodes = new ArrayList<>();
             fileNodes.add(fileNode);
             currentNode.getContentFields().put(identifier, fileNodes);
         }
@@ -355,7 +356,7 @@ public class WebServicesUtil
      */
     private static StructuredDataNode[] convertToStructuredDataNodes(StructuredDataGroup group)
     {
-        List<StructuredDataNode> result = new ArrayList<StructuredDataNode>();
+        List<StructuredDataNode> result = new ArrayList<>();
 
         for (String contentFieldIdentifier : group.getContentFields().keySet())
             for (StructuredDataNode structuredDataNode : group.getContentFields().get(contentFieldIdentifier))
@@ -384,10 +385,10 @@ public class WebServicesUtil
     private static class StructuredDataGroup
     {
         // the fields in the group with their values
-        private final Map<String, List<StructuredDataNode>> contentFields = new HashMap<String, List<StructuredDataNode>>();
+        private final Map<String, List<StructuredDataNode>> contentFields = new HashMap<>();
 
         // other groups in the group
-        private final Map<String, StructuredDataGroup> groups = new HashMap<String, StructuredDataGroup>();
+        private final Map<String, StructuredDataGroup> groups = new HashMap<>();
 
         /**
          * @return Returns the groups.

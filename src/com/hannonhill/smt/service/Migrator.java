@@ -6,6 +6,7 @@
 package com.hannonhill.smt.service;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 
@@ -98,12 +99,12 @@ public class Migrator
      */
     private static void createFiles(ProjectInformation projectInformation, String metadataSetId)
     {
-        for (File folderFile : projectInformation.getFilesToProcess())
+    	   for (Path folderFile : projectInformation.getFilesToProcess())    		     
         {
-            if (projectInformation.getMigrationStatus().isShouldStop())
-                return;
+    	        if (projectInformation.getMigrationStatus().isShouldStop())
+                    return;
 
-            String name = folderFile.getName();
+                String name = folderFile.getFileName().toString();
 
             // Skip hidden files and folders
             if (name.startsWith("."))
@@ -127,12 +128,12 @@ public class Migrator
      */
     public static void createXhtmlBlocks(ProjectInformation projectInformation, String metadataSetId)
     {
-        for (File file : projectInformation.getFilesToProcess())
-        {
+    	  for (Path file : projectInformation.getFilesToProcess())
+    	        {
             if (projectInformation.getMigrationStatus().isShouldStop())
                 return;
 
-            String extension = PathUtil.getExtension(file.getName());
+            String extension = PathUtil.getExtension(file.getFileName().toString());
             if (projectInformation.getBlockExtensions().contains(extension))
                 createXhtmlBlock(file, projectInformation, metadataSetId);
         }
@@ -145,7 +146,7 @@ public class Migrator
      * @param projectInformation
      * @param metadataSetId
      */
-    private static void createFile(File folderFile, ProjectInformation projectInformation, String metadataSetId)
+    private static void createFile(Path folderFile, ProjectInformation projectInformation, String metadataSetId)
     {
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         try
@@ -173,7 +174,7 @@ public class Migrator
      * @param projectInformation
      * @param metadataSetId
      */
-    private static void createXhtmlBlock(File file, ProjectInformation projectInformation, String metadataSetId)
+    private static void createXhtmlBlock(Path file, ProjectInformation projectInformation, String metadataSetId)
     {
         // web services create xhtml block
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
@@ -218,8 +219,8 @@ public class Migrator
      */
     public static void createPages(ProjectInformation projectInformation)
     {
-        Set<File> filesToProcess = projectInformation.getFilesToProcess();
-        MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
+    	 Set<Path> filesToProcess = projectInformation.getFilesToProcess();
+          MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         String metadataSetId = null;
 
         // Get site's default metadata set id
@@ -265,12 +266,12 @@ public class Migrator
         // Create XHTML Blocks
         createXhtmlBlocks(projectInformation, metadataSetId);
 
-        for (File file : filesToProcess)
+        for (Path file : filesToProcess)
         {
             if (migrationStatus.isShouldStop())
                 return;
 
-            String name = file.getName();
+            String name = file.getFileName().toString();
             String extension = PathUtil.getExtension(name);
 
             if (!projectInformation.getPageExtensions().contains(extension))
@@ -281,7 +282,7 @@ public class Migrator
                 // To build the file path that needs to be displayed, we show only the part of the abosute
                 // path after the xml directory
                 String relativePath = PathUtil.getRelativePath(file, projectInformation.getXmlDirectory());
-
+                relativePath = relativePath.replace(java.io.File.separator, "/");
                 if (!XmlAnalyzer.allCharactersLegal(relativePath))
                     relativePath = XmlAnalyzer.removeIllegalCharacters(relativePath);
 
