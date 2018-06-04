@@ -16,6 +16,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.nio.file.DirectoryIteratorException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -78,23 +83,9 @@ public class FileSystem
      * @return
      * @throws IOException
      */
-    public static byte[] getBytesFromFile(File file) throws IOException
-    {
-        InputStream is = new FileInputStream(file);
-        byte[] bytes = new byte[(int) file.length()];
-
-        // Read in the bytes
-        int offset = 0;
-        int numRead = 0;
-        while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0)
-            offset += numRead;
-
-        // Ensure all the bytes have been read in
-        if (offset < bytes.length)
-            throw new IOException("Could not completely read file " + file.getName());
-
-        // Close the input stream and return bytes
-        is.close();
+    public static byte[] getBytesFromFile(Path folderFile) throws IOException
+    {    	
+    	byte[] bytes = Files.readAllBytes(folderFile);
         return bytes;
     }
 
@@ -160,13 +151,21 @@ public class FileSystem
      * @param folder
      * @return
      */
-    public static List<File> getFolderContents(File folder)
+    public static List<Path> getFolderContents(Path folder)
     {
-        List<File> result = new ArrayList<File>();
-        for (String fileString : folder.list())
-            result.add(new File(folder.getAbsolutePath() + "/" + fileString));
-        return result;
-    }
+    	List<Path> result = new ArrayList<Path>();
+		 try(
+				 DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folder)){
+			 for(Path file : directoryStream){
+		           result.add(folder.toAbsolutePath());		           
+			 }			
+			 
+		 }
+		 catch(IOException | DirectoryIteratorException ex){
+			 ex.printStackTrace();
+		 }
+		 return result;
+    }   
 
     /**
      * Creates a folder with given path if it doesn't exist
@@ -201,17 +200,20 @@ public class FileSystem
      * @return
      * @throws Exception
      */
-    public static String getFileContents(File file) throws Exception
+    public static String getFileContents(Path pageFile) throws Exception
     {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line = null;
         StringBuilder stringBuilder = new StringBuilder();
         String ls = System.getProperty("line.separator");
-        while ((line = reader.readLine()) != null)
-        {
-            stringBuilder.append(line);
-            stringBuilder.append(ls);
-        }
+        Charset charset = Charset.forName("ISO-8859-1");
+        
+    	try(BufferedReader reader = Files.newBufferedReader(pageFile, charset)){
+    		String line = null;
+    		while((line = reader.readLine()) != null) {
+    			 stringBuilder.append(line);
+    	            stringBuilder.append(ls);
+    		}
+    	}
+ 
         return stringBuilder.toString();
     }
 
