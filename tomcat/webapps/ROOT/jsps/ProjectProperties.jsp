@@ -1,3 +1,4 @@
+
 <%@ taglib prefix="s" uri="/struts-tags" %>
 
 <!DOCTYPE html>
@@ -31,7 +32,7 @@
           <form action="/ProjectProperties" method="POST" class="form-horizontal">
             <fieldset>
               <div class="control-group">
-                <label class="control-label" for="url">Cascade CMS 8.10 URL</label>
+                <label class="control-label" for="url">Cascade CMS URL</label>
                 <div class="controls">
                   <input class="span4" type="text" id="url" placeholder="http://" name="url" value="<s:property value="url"/>" />
                 </div>

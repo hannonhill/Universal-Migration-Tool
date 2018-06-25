@@ -151,7 +151,7 @@
 			function addMappingByName(xPath, staticValue, cascade, cascadeType)
 			{
 				var cascadeIndex = null;
-				var cascadeTypeLetter = cascadeType=="com.hannonhill.smt.MetadataSetField" ? "m" : "d";
+				var cascadeTypeLetter = cascadeType=="com.hannonhill.umt.MetadataSetField" ? "m" : "d";
 				cascade = cascadeTypeLetter + cascade;
 				
 				var cascadeFieldNamesEl = document.getElementById("cascadeFieldNames");
