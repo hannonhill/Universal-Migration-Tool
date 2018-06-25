@@ -297,12 +297,12 @@
 
 			function closeEditorMigrationWarning()
 			{
-				return 'If you navigate away, you will not be able to see the migration progress or the log but the migration will continue running. The log is saved on the SMT server\'s filesystem.'
+				return 'If you navigate away, you will not be able to see the migration progress or the log but the migration will continue running. The log is saved on the UMT server\'s filesystem.'
 			}
 			
 			function closeEditorLinkCheckingWarning()
 			{
-				return 'If you navigate away, you will not be able to see the link checking progress or the log but the link checking will continue running. The log is saved on the SMT server\'s filesystem.'
+				return 'If you navigate away, you will not be able to see the link checking progress or the log but the link checking will continue running. The log is saved on the UMT server\'s filesystem.'
 			}
 
 			function enableButtons(goBack, stopMigration, stopLinkChecker, startOver, startLinkChecker, restartLinkChecker, restartMigration)
