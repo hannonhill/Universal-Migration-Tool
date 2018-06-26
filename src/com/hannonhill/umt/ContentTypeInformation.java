@@ -14,8 +14,8 @@ import com.hannonhill.umt.api.ContentType;
 import com.hannonhill.umt.service.RestApi;
 
 /**
- * Stores necessary information about Cascade Content Type. Also, reads that information through web services
- * when initialized.
+ * Stores necessary information about Cascade Content Type. Also, reads that information through REST API when
+ * initialized.
  * 
  * @author Artur Tomusiak
  * @since 1.0
@@ -30,7 +30,7 @@ public class ContentTypeInformation
 
     /**
      * Constructor. Reads the necessary information of given content type (Metadata Set, Data Definition)
-     * through web services and populates necessary fields
+     * through REST API and populates necessary fields
      */
     public ContentTypeInformation(ContentType contentType, ProjectInformation projectInformation) throws Exception
     {

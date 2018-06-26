@@ -32,12 +32,12 @@ import com.hannonhill.umt.service.RestApi;
 import com.hannonhill.umt.service.XmlAnalyzer;
 
 /**
- * Utility class with helper methods related to web services
+ * Utility class with helper methods related to REST API
  * 
  * @author Artur Tomusiak
  * @since 1.0
  */
-public class WebServicesUtil
+public class ApiUtil
 {
     /**
      * Creates a Page object based on the information provided in the projectInformation and the actual file
@@ -95,14 +95,7 @@ public class WebServicesUtil
     }
 
     /**
-     * Creates the page's structured data object with the values from the xmlPage uses the mappings from the
-     * assetType.
-     * 
-     * @param projectInformation
-     * @param fileContents
-     * @param assetPath
-     * @return
-     * @throws Exception
+     * Creates the page's structured data object with the values from the fileContents.
      */
     private static StructuredData createPageStructuredData(ProjectInformation projectInformation, String fileContents, String assetPath)
             throws Exception
@@ -119,27 +112,41 @@ public class WebServicesUtil
                 continue;
 
             DataDefinitionField ddField = (DataDefinitionField) field;
-            String fieldValue = XmlUtil.evaluateXPathExpression(fileContents, xPath);
+            List<String> fieldValues;
+            if (ddField.isMultiple())
+                fieldValues = XmlUtil.evaluateXPathExpressionForMultipleField(fileContents, xPath);
+            else
+                fieldValues = convertToList(XmlUtil.evaluateXPathExpression(fileContents, xPath));
             if (ddField.isWysiwyg())
-                fieldValue = LinkRewriter.rewriteLinksInXml(fieldValue, assetPath, projectInformation);
+            {
+                for (int i = 0; i < fieldValues.size(); i++)
+                    fieldValues.set(i, LinkRewriter.rewriteLinksInXml(fieldValues.get(i), assetPath, projectInformation));
+            }
             else if (ddField.getChooserType() == ChooserType.FILE)
             {
-                // For a file chooser, get the passed <img> tag, get path from its src attribute, convert the
-                // relative path to absolute, find an asset with corresponding path and use that asset's id as
-                // field value
-                fieldValue = JTidy.tidyContentConditionally(fieldValue);
-                String relativePath = XmlAnalyzer.getFirstSrcAttribute(fieldValue);
-
-                if (relativePath != null && !relativePath.trim().equals(""))
+                List<String> tempValues = new ArrayList<>(fieldValues);
+                fieldValues = new ArrayList<>();
+                for (String tempValue : tempValues)
                 {
-                    String absolutePath = PathUtil.convertRelativeToAbsolute(relativePath.trim(), assetPath);
-                    fieldValue = RestApi.getAssetId(absolutePath, projectInformation);
+                    // For a file chooser, get the passed <img> tag, get path from its src attribute, convert
+                    // the relative path to absolute, find an asset with corresponding path and use that
+                    // asset's id as field value
+                    tempValue = JTidy.tidyContentConditionally(tempValue);
+                    String relativePath = XmlAnalyzer.getFirstSrcAttribute(tempValue);
+
+                    if (relativePath != null && !relativePath.trim().equals(""))
+                    {
+                        String absolutePath = PathUtil.convertRelativeToAbsolute(relativePath.trim(), assetPath);
+                        String fileId = RestApi.getFileId(absolutePath, projectInformation);
+                        if (fileId != null)
+                            fieldValues.add(fileId);
+                        else
+                            System.out.println("File with path " + absolutePath + " not found");
+                    }
                 }
-                else
-                    fieldValue = null;
             }
 
-            assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
+            assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValues);
         }
 
         // For each static value field, assign the static value in structured data
@@ -148,10 +155,17 @@ public class WebServicesUtil
             {
                 // Escape ampersands to make it a valid xml
                 String fieldValue = projectInformation.getStaticValueMapping().get(field).replaceAll("&", "&amp;");
-                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, fieldValue, projectInformation);
+                assignAppropriateFieldValue(rootGroup, (DataDefinitionField) field, convertToList(fieldValue));
             }
 
         return convertToStructuredData(rootGroup);
+    }
+
+    private static List<String> convertToList(String value)
+    {
+        List<String> result = new ArrayList<>();
+        result.add(value);
+        return result;
     }
 
     /**
@@ -172,7 +186,7 @@ public class WebServicesUtil
         Metadata metadata = new Metadata();
         List<DynamicMetadataField> dynamicFieldsList = new ArrayList<>();
 
-        // A web services bug work-around: supply all dynamic metadata field values as empty strings first
+        // A REST API bug work-around: supply all dynamic metadata field values as empty strings first
         for (String metadataFieldName : availableMetadataFieldNames)
             if (!RestApi.STANDARD_METADATA_FIELD_IDENTIFIERS.contains(metadataFieldName))
                 dynamicFieldsList.add(new DynamicMetadataField(metadataFieldName));
@@ -268,16 +282,11 @@ public class WebServicesUtil
     }
 
     /**
-     * Assigns given fieldValue of given fieldName as the path to the actual field identifier to structured
+     * Assigns given fieldValues of given fieldName as the path to the actual field identifier to structured
      * data object forming a structural tree if necessary.
-     * 
-     * @param rootGroup
-     * @param field
-     * @param fieldValue
-     * @param projectInformation
      */
-    private static void assignAppropriateFieldValue(StructuredDataGroup rootGroup, DataDefinitionField field, String fieldValue,
-            ProjectInformation projectInformation) throws Exception
+    private static void assignAppropriateFieldValue(StructuredDataGroup rootGroup, DataDefinitionField field, List<String> fieldValues)
+            throws Exception
     {
         String fieldName = field.getIdentifier();
         int lastSlashIdx = fieldName.lastIndexOf('/');
@@ -303,24 +312,30 @@ public class WebServicesUtil
 
         if (field.getChooserType() == null)
         {
-            fieldValue = JTidy.tidyContentConditionally(fieldValue);
-            StructuredDataNode textNode = new StructuredDataNode();
-            textNode.setIdentifier(identifier);
-            textNode.setText(fieldValue);
-            textNode.setType("text");
             List<StructuredDataNode> textNodes = new ArrayList<>();
-            textNodes.add(textNode);
+            for (String fieldValue : fieldValues)
+            {
+                fieldValue = JTidy.tidyContentConditionally(fieldValue);
+                StructuredDataNode textNode = new StructuredDataNode();
+                textNode.setIdentifier(identifier);
+                textNode.setText(fieldValue);
+                textNode.setType("text");
+                textNodes.add(textNode);
+            }
             currentNode.getContentFields().put(identifier, textNodes);
         }
         else if (field.getChooserType() == ChooserType.FILE)
         {
-            StructuredDataNode fileNode = new StructuredDataNode();
-            fileNode.setIdentifier(identifier);
-            fileNode.setFileId(fieldValue);
-            fileNode.setType("asset");
-            fileNode.setAssetType("file");
             List<StructuredDataNode> fileNodes = new ArrayList<>();
-            fileNodes.add(fileNode);
+            for (String fieldValue : fieldValues)
+            {
+                StructuredDataNode fileNode = new StructuredDataNode();
+                fileNode.setIdentifier(identifier);
+                fileNode.setFileId(fieldValue);
+                fileNode.setType("asset");
+                fileNode.setAssetType("file");
+                fileNodes.add(fileNode);
+            }
             currentNode.getContentFields().put(identifier, fileNodes);
         }
     }
@@ -363,12 +378,8 @@ public class WebServicesUtil
     }
 
     /**
-     * Represents a StructuredDataNode of type group. Using this instead of
-     * {@link com.hannonhill.www.ws.ns.AssetOperationService.StructuredDataNode} of type group because we want
-     * to deal with Maps instead of arrays for easy and fast insert and search.
-     * 
-     * @author Artur Tomusiak
-     * @since 1.0
+     * Represents a StructuredDataNode of type group. Using this instead of {@link StructuredDataNode} of type
+     * group because we want to deal with Maps instead of lists for easy and fast insert and search.
      */
     private static class StructuredDataGroup
     {

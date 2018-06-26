@@ -202,7 +202,7 @@ public class LinkChecker
             validLink = false;
         else
         {
-            // If cache doesn't contain the link, check if it is a valid link through web services and then
+            // If cache doesn't contain the link, check if it is a valid link through REST API and then
             // add it to the cache
             validLink = RestApi.getAssetId(path, projectInformation) != null;
 

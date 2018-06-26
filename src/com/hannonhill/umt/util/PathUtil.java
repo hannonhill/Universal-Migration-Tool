@@ -165,18 +165,14 @@ public class PathUtil
     }
 
     /**
-     * Removes leading slashes (one or more) if they are there. Leaves leading slash if link is only the
-     * leading slash ("/").
-     * 
-     * @param link
-     * @return
+     * Recursively removes leading slashes (one or more) if they are there. Leaves leading slash if link is
+     * only the leading slash ("/").
      */
     public static String removeLeadingSlashes(String link)
     {
         if (link == null)
             return "";
-        return link.startsWith(File.separator) | link.startsWith("/") ? link.substring(1) : link;
-
+        return (link.startsWith(File.separator) || link.startsWith("/")) ? removeLeadingSlashes(link.substring(1)) : link;
     }
 
     /**

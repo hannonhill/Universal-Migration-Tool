@@ -42,8 +42,8 @@ import com.hannonhill.umt.api.MetadataSet;
 import com.hannonhill.umt.api.Page;
 import com.hannonhill.umt.api.Site;
 import com.hannonhill.umt.api.XhtmlDataDefinitionBlock;
+import com.hannonhill.umt.util.ApiUtil;
 import com.hannonhill.umt.util.PathUtil;
-import com.hannonhill.umt.util.WebServicesUtil;
 
 public class RestApi
 {
@@ -128,7 +128,7 @@ public class RestApi
             throw new Exception("Duplicate path found - asset with given path already got created during this migration: " + path.toLowerCase());
 
         // Set up the page object and assign it to the asset object
-        Page page = WebServicesUtil.setupPageObject(pageFile, projectInformation);
+        Page page = ApiUtil.setupPageObject(pageFile, projectInformation);
         JsonObject data = getDataWithAsset("page", page);
 
         // Check overwrite behavior. If overwrite behavior is to update existing, check if page with given
@@ -405,12 +405,6 @@ public class RestApi
         }
     }
 
-    public static void main(String[] args) throws Exception
-    {
-        List<String> siteNames = getSiteNames("https://c8.cascadecms.com", "hill", "hill");
-        siteNames.forEach(siteName -> System.out.println(siteName));
-    }
-
     private static ContentType readContentType(ProjectInformation projectInformation, String contentTypeId) throws Exception
     {
         JsonObject assetResult = readAsset(projectInformation, new Identifier(contentTypeId, "", "", "contenttype"));
@@ -477,15 +471,11 @@ public class RestApi
         wr.flush();
         wr.close();
 
-        System.out.println("Sending data " + data + " to URL " + url);
-
         int responseCode = con.getResponseCode();
         if (responseCode != 200)
             throw new Exception(responseCode + " response code");
 
         String response = CharStreams.toString(new InputStreamReader(con.getInputStream(), Charsets.UTF_8));
-        System.out.println("Got response: " + response);
-
         if (StringUtils.isEmpty(response) || "null".equals(response))
             return null;
 
@@ -537,6 +527,24 @@ public class RestApi
         {
             projectInformation.getExistingCascadeXhtmlBlocks().put(path, readBlock.getId());
             return readBlock.getId();
+        }
+
+        return null;
+    }
+
+    public static String getFileId(String path, ProjectInformation projectInformation) throws Exception
+    {
+        path = PathUtil.removeLeadingSlashes(path).toLowerCase();
+        // Check confirmed paths first
+        String fileId = projectInformation.getExistingCascadeFiles().get(path);
+        if (fileId != null)
+            return fileId;
+
+        File readFile = readFileByPath(path, projectInformation);
+        if (readFile != null)
+        {
+            projectInformation.getExistingCascadeFiles().put(path, readFile.getId());
+            return readFile.getId();
         }
 
         return null;
@@ -667,7 +675,7 @@ public class RestApi
     }
 
     /**
-     * Sends an edit request for given XHTML Block through web services
+     * Sends an edit request for given XHTML Block
      */
     private static void editXhtmlBlock(XhtmlDataDefinitionBlock block, ProjectInformation projectInformation) throws Exception
     {
@@ -724,7 +732,7 @@ public class RestApi
     }
 
     /**
-     * Sends an edit request for given page through web services
+     * Sends an edit request for given page
      */
     private static void editPage(Page page, ProjectInformation projectInformation) throws Exception
     {

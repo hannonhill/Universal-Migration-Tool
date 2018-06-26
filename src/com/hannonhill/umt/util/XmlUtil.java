@@ -6,6 +6,7 @@
 package com.hannonhill.umt.util;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -13,6 +14,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.jdom.Attribute;
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
@@ -93,23 +95,11 @@ public class XmlUtil
     }
 
     /**
-     * Evaluates given xPathExpression on given xmlContents
-     * 
-     * @param xmlContents
-     * @param xPathExpression
-     * @return
-     * @throws Exception
+     * Evaluates given xPathExpression on given xmlContents. Converts the result to a single String.
      */
     public static String evaluateXPathExpression(String xmlContents, String xPathExpression) throws Exception
     {
-        // JTidy adds a namespace, which causes many issues with xpath
-        xmlContents = xmlContents.replaceAll("xmlns=\"http://www.w3.org/1999/xhtml\"", "");
-
-        SAXBuilder builder = new SAXBuilder();
-        InputSource inputSource = new InputSource(new ByteArrayInputStream(xmlContents.getBytes("UTF-8")));
-        Document doc = builder.build(inputSource);
-
-        List<?> result = XPath.selectNodes(doc, xPathExpression);
+        List<?> result = selectNodesWithXpath(xmlContents, xPathExpression);
 
         if (result.size() == 0)
             return "";
@@ -132,6 +122,47 @@ public class XmlUtil
     }
 
     /**
+     * Evaluates given xPathExpression on given xmlContents. Converts the result to a list of Strings.
+     */
+    public static List<String> evaluateXPathExpressionForMultipleField(String xmlContents, String xPathExpression) throws Exception
+    {
+        List<String> result = new ArrayList<>();
+        List<?> nodes = selectNodesWithXpath(xmlContents, xPathExpression);
+
+        for (Object node : nodes)
+        {
+            String toAdd = null;
+            if (node instanceof String)
+                toAdd = (String) node;
+            else if (node instanceof Attribute)
+                toAdd = ((Attribute) node).getValue();
+            else if (node instanceof Text)
+                toAdd = ((Text) node).getText();
+            else if (node instanceof Element)
+                toAdd = new XMLOutputter().outputString((Element) node);
+            else
+                System.out.println("Encountered an unexpected type of node: " + node.getClass() + " - " + node);
+
+            if (toAdd != null)
+                result.add(toAdd);
+        }
+
+        return result;
+    }
+
+    private static List<?> selectNodesWithXpath(String xmlContents, String xPathExpression) throws Exception
+    {
+        // JTidy adds a namespace, which causes many issues with xpath
+        xmlContents = xmlContents.replaceAll("xmlns=\"http://www.w3.org/1999/xhtml\"", "");
+
+        SAXBuilder builder = new SAXBuilder();
+        InputSource inputSource = new InputSource(new ByteArrayInputStream(xmlContents.getBytes("UTF-8")));
+        Document doc = builder.build(inputSource);
+
+        return XPath.selectNodes(doc, xPathExpression);
+    }
+
+    /**
      * Converts a list of {@link Text} objects to String
      * 
      * @param texts
@@ -141,7 +172,7 @@ public class XmlUtil
     {
         StringBuilder builder = new StringBuilder();
         for (Object text : texts)
-            // Verify that this is an attribute first, if it is not, ignore it
+            // Verify that this is a text first, if it is not, ignore it
             if (text instanceof Text)
                 builder.append(((Text) text).getText());
 

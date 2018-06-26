@@ -5,7 +5,6 @@
  */
 package com.hannonhill.umt;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,12 +36,11 @@ public class ProjectInformation
     private String overwriteBehavior; // Matches one of the constants
                                       // ProjectInformation.OVERWRITE_BEHAVIOR_???
     private Map<String, ExternalRootLevelFolderAssignment> externalRootLevelFolderAssignemnts;
-    private final Map<String, Field> fieldMapping = new HashMap<String, Field>(); // a mapping from an XPath
-                                                                                  // to a Cascade field
-    private final Map<Field, String> staticValueMapping = new HashMap<Field, String>(); // this mapping maps
-                                                                                        // from a Cascade
-                                                                                        // field to its static
-                                                                                        // value it should get
+    private final Map<String, Field> fieldMapping = new HashMap<>(); // a mapping from an XPath to a Cascade
+                                                                     // field
+    private final Map<Field, String> staticValueMapping = new HashMap<>(); // this mapping maps from a Cascade
+                                                                           // field to its static value it
+                                                                           // should get
 
     // analyzed information
     private Map<String, ContentTypeInformation> contentTypes; // content type path and the actual content type
@@ -51,14 +49,13 @@ public class ProjectInformation
     private final Set<Path> filesToProcess; // All the files that need to be processed during migration -
                                             // it is a set to avoid duplicates and because order doesn't
                                             // really matter
-    Set<String> gatheredExtensions = new HashSet<String>();
+    Set<String> gatheredExtensions = new HashSet<>();
 
     // path to id map
     private final Map<String, String> existingCascadeFiles; // Used for Luminis file import and link checking
     private final Map<String, String> existingCascadeXhtmlBlocks;// performance reasons - file paths are
                                                                  // checked first
-    // to avoid having to check if file exists each time a new
-    // file is brought in
+    // to avoid having to check if file exists each time a new file is brought in
     private final Map<String, String> existingCascadePages; // Also used for link checking performance reasons
 
     private final Set<String> pageExtensions; // Extensions of files that need to be converted to pages
@@ -85,14 +82,14 @@ public class ProjectInformation
         migrationStatus = new MigrationStatus();
         linkCheckingStatus = new LinkCheckingStatus();
         currentTask = null;
-        filesToProcess = new HashSet<Path>();
-        contentTypes = new HashMap<String, ContentTypeInformation>();
-        externalRootLevelFolderAssignemnts = new HashMap<String, ExternalRootLevelFolderAssignment>();
-        existingCascadeFiles = new HashMap<String, String>();
-        existingCascadeXhtmlBlocks = new HashMap<String, String>();
-        existingCascadePages = new HashMap<String, String>();
-        pageExtensions = new HashSet<String>();
-        blockExtensions = new HashSet<String>();
+        filesToProcess = new HashSet<>();
+        contentTypes = new HashMap<>();
+        externalRootLevelFolderAssignemnts = new HashMap<>();
+        existingCascadeFiles = new HashMap<>();
+        existingCascadeXhtmlBlocks = new HashMap<>();
+        existingCascadePages = new HashMap<>();
+        pageExtensions = new HashSet<>();
+        blockExtensions = new HashSet<>();
 
         setDefaultExtensions();
     }
@@ -469,7 +466,7 @@ public class ProjectInformation
      */
     private Set<String> convertExtensionsToSet(String extensions)
     {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
 
         if (extensions == null || extensions.trim().equals(""))
             return result;

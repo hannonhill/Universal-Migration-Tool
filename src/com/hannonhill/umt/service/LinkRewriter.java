@@ -277,6 +277,7 @@ public class LinkRewriter
         int linkLevels = PathUtil.countLevelUps(link);
         // if there are same many link levels as the page path levels, it means the link goes to root
         boolean goesToRoot = linkLevels == deployPathLevels;
+        boolean crossSiteLink = false;
 
         // if it doesn't go to root, nothing more needs to be done
         if (goesToRoot)
@@ -300,9 +301,11 @@ public class LinkRewriter
                 newPath = "site://" + assignment.getCrossSiteAssignment() + newPath; // converts link
                                                                                      // /folder/page to
                                                                                      // site://sitename/folder/page
+                crossSiteLink = true;
             }
         }
 
-        return newPath;
+        // Ensure only one leading slash for non-cross-site links
+        return crossSiteLink ? newPath : ("/" + PathUtil.removeLeadingSlashes(newPath));
     }
 }

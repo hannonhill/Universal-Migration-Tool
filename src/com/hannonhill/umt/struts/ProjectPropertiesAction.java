@@ -61,7 +61,7 @@ public class ProjectPropertiesAction extends BaseAction
     }
 
     /**
-     * Reads available sites through web services if all the necessary properties have been provided
+     * Reads available sites through REST API if all the necessary properties have been provided
      * 
      * @return
      * @throws Exception
@@ -87,7 +87,7 @@ public class ProjectPropertiesAction extends BaseAction
         JSONArray siteNames = new JSONArray();
         List<String> availableSiteNames = null;
 
-        // Read the site names through web services
+        // Read the site names through REST API
         try
         {
             availableSiteNames = readAvailableSites();
@@ -157,7 +157,7 @@ public class ProjectPropertiesAction extends BaseAction
         ProjectInformation projectInformation = getProjectInformation();
         List<ContentType> contentTypes = null;
 
-        // Get all the content types from given site through web services
+        // Get all the content types from given site through REST API
         try
         {
             contentTypes = RestApi.getContentTypesFromSite(projectInformation);

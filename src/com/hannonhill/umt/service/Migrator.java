@@ -169,14 +169,9 @@ public class Migrator
 
     /**
      * Creates XHTML Block in Cascade with the content of the file put through JTidy.
-     * 
-     * @param file
-     * @param projectInformation
-     * @param metadataSetId
      */
     private static void createXhtmlBlock(Path file, ProjectInformation projectInformation, String metadataSetId)
     {
-        // web services create xhtml block
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
         try
         {
