@@ -5,6 +5,8 @@
  */
 package com.hannonhill.umt.struts;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,7 @@ import com.hannonhill.umt.ContentTypeInformation;
 import com.hannonhill.umt.Field;
 import com.hannonhill.umt.ProjectInformation;
 import com.hannonhill.umt.service.MappingPersister;
+import com.hannonhill.umt.util.XmlUtil;
 
 /**
  * Action responsible for assigning metadata and structured data fields.
@@ -25,12 +28,12 @@ public class AssignFieldsAction extends BaseAction
     private static final long serialVersionUID = -4363153939547280598L;
 
     // These are the available Cascade fields
-    private final List<Field> cascadeMetadataFields = new ArrayList<Field>(); // a list of available Cascade
-                                                                              // Metadata Set field
-                                                                              // identifiers
-    private final List<Field> cascadeDataDefinitionFields = new ArrayList<Field>(); // a list of available
-                                                                                    // Cascade Data
-                                                                                    // Definitnion field paths
+    private final List<Field> cascadeMetadataFields = new ArrayList<>(); // a list of available Cascade
+                                                                         // Metadata Set field
+                                                                         // identifiers
+    private final List<Field> cascadeDataDefinitionFields = new ArrayList<>(); // a list of available
+                                                                               // Cascade Data
+                                                                               // Definitnion field paths
 
     // These are the hidden fields that are generated automatically by javascript. For each assignment, all 4
     // arrays have one element added.
@@ -39,6 +42,10 @@ public class AssignFieldsAction extends BaseAction
     private String[] selectedCascadeMetadataFields = new String[0];
     private String[] selectedCascadeDataDefinitionFields = new String[0];
 
+    private String testXPath;
+    private String testXml;
+    private InputStream inputStream;
+
     @Override
     public String execute() throws Exception
     {
@@ -46,6 +53,23 @@ public class AssignFieldsAction extends BaseAction
             return processSubmit();
 
         return processView();
+    }
+
+    public String testXPath() throws Exception
+    {
+        // TODO: Check if field is multiple and output and call evaluateXPathExpressionForMultipleField in
+        // that case
+        String result = XmlUtil.evaluateXPathExpression(testXml, testXPath);
+        inputStream = new ByteArrayInputStream(result.getBytes("UTF-8"));
+        return SUCCESS;
+    }
+
+    /**
+     * @return Returns the input stream for AJAX
+     */
+    public InputStream getInputStream()
+    {
+        return inputStream;
     }
 
     /**
@@ -122,8 +146,8 @@ public class AssignFieldsAction extends BaseAction
         String cascadeFieldIdentifier = isDataDefinition ? cascadeDataDefinitionFieldIdentifier : cascadeMetadataFieldIdentifier;
 
         // Get the actual field from the content type
-        Field field = isDataDefinition ? contentType.getDataDefinitionFields().get(cascadeFieldIdentifier) : contentType.getMetadataFields().get(
-                cascadeFieldIdentifier);
+        Field field = isDataDefinition ? contentType.getDataDefinitionFields().get(cascadeFieldIdentifier)
+                : contentType.getMetadataFields().get(cascadeFieldIdentifier);
 
         if (field == null)
             throw new Exception("Data Definition or Metadata has been updated in meantime. Please re-assign Content Types again.");
@@ -230,4 +254,37 @@ public class AssignFieldsAction extends BaseAction
     {
         this.selectedXPaths = selectedXPaths;
     }
+
+    /**
+     * @return Returns the testXPath.
+     */
+    public String getTestXPath()
+    {
+        return testXPath;
+    }
+
+    /**
+     * @param testXPath the testXPath to set
+     */
+    public void setTestXPath(String testXPath)
+    {
+        this.testXPath = testXPath;
+    }
+
+    /**
+     * @return Returns the testXml.
+     */
+    public String getTestXml()
+    {
+        return testXml;
+    }
+
+    /**
+     * @param testXml the testXml to set
+     */
+    public void setTestXml(String testXml)
+    {
+        this.testXml = testXml;
+    }
+
 }

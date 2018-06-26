@@ -8,9 +8,7 @@ package com.hannonhill.umt.service;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,12 +40,6 @@ public class FileSystem
 {
     /**
      * Unzips the contents of the zip file to a new directory and returns the path of the directory.
-     * 
-     * @param zip
-     * @param zipFileName
-     * @param projectInformation
-     * @return
-     * @throws Exception
      */
     public static String unzip(File zip, String zipFileName, ProjectInformation projectInformation) throws Exception
     {
@@ -63,10 +55,10 @@ public class FileSystem
             ZipEntry entry = entries.nextElement();
 
             if (entry.isDirectory())
-                (new File(uploadDir + "/" + entry.getName())).mkdirs();
+                (new File(uploadDir + File.separator + entry.getName())).mkdirs();
             else
             {
-                (new File(uploadDir + "/" + PathUtil.getParentFolderPathFromPath(entry.getName()))).mkdirs();
+                (new File(uploadDir + File.separator + PathUtil.getParentFolderPathFilesystem(entry.getName()))).mkdirs();
                 copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(uploadDir + "/" + entry.getName())));
             }
         }
@@ -84,8 +76,8 @@ public class FileSystem
      * @throws IOException
      */
     public static byte[] getBytesFromFile(Path folderFile) throws IOException
-    {    	
-    	byte[] bytes = Files.readAllBytes(folderFile);
+    {
+        byte[] bytes = Files.readAllBytes(folderFile);
         return bytes;
     }
 
@@ -111,7 +103,7 @@ public class FileSystem
      */
     private static List<File> getAllFilesRecursive(File folder, String extension)
     {
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
         for (String fileString : folder.list())
         {
             File file = new File(folder.getAbsolutePath() + "/" + fileString);
@@ -132,8 +124,8 @@ public class FileSystem
      */
     private static List<File> removeDuplicatePaths(List<File> files)
     {
-        Set<String> paths = new HashSet<String>();
-        List<File> result = new ArrayList<File>();
+        Set<String> paths = new HashSet<>();
+        List<File> result = new ArrayList<>();
 
         for (File file : files)
             if (!paths.contains(file.getAbsolutePath().toLowerCase()))
@@ -153,19 +145,21 @@ public class FileSystem
      */
     public static List<Path> getFolderContents(Path folder)
     {
-    	List<Path> result = new ArrayList<Path>();
-		 try(
-				 DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folder)){
-			 for(Path file : directoryStream){
-		           result.add(folder.toAbsolutePath());		           
-			 }			
-			 
-		 }
-		 catch(IOException | DirectoryIteratorException ex){
-			 ex.printStackTrace();
-		 }
-		 return result;
-    }   
+        List<Path> result = new ArrayList<>();
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folder))
+        {
+            for (Path file : directoryStream)
+            {
+                result.add(folder.toAbsolutePath());
+            }
+
+        }
+        catch (IOException | DirectoryIteratorException ex)
+        {
+            ex.printStackTrace();
+        }
+        return result;
+    }
 
     /**
      * Creates a folder with given path if it doesn't exist
@@ -205,15 +199,17 @@ public class FileSystem
         StringBuilder stringBuilder = new StringBuilder();
         String ls = System.getProperty("line.separator");
         Charset charset = Charset.forName("ISO-8859-1");
-        
-    	try(BufferedReader reader = Files.newBufferedReader(pageFile, charset)){
-    		String line = null;
-    		while((line = reader.readLine()) != null) {
-    			 stringBuilder.append(line);
-    	            stringBuilder.append(ls);
-    		}
-    	}
- 
+
+        try (BufferedReader reader = Files.newBufferedReader(pageFile, charset))
+        {
+            String line = null;
+            while ((line = reader.readLine()) != null)
+            {
+                stringBuilder.append(line);
+                stringBuilder.append(ls);
+            }
+        }
+
         return stringBuilder.toString();
     }
 

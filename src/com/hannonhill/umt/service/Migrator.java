@@ -88,6 +88,23 @@ public class Migrator
         }
     }
 
+    private static void createFolders(ProjectInformation projectInformation) throws Exception
+    {
+        for (Path folderFile : projectInformation.getFilesToProcess())
+        {
+            if (projectInformation.getMigrationStatus().isShouldStop())
+                return;
+
+            String name = folderFile.getFileName().toString();
+
+            // Skip hidden files and folders
+            if (name.startsWith("."))
+                continue;
+
+            RestApi.createParentFolder(folderFile, projectInformation);
+        }
+    }
+
     /**
      * Creates files in Cascade that do not end with {@link XmlAnalyzer#FILE_TO_PAGE_EXTENSIONS} or
      * {@link XmlAnalyzer#FILE_TO_BLOCK_EXTENSIONS} extension and are not hidden (do not start with "."). Uses
@@ -245,6 +262,24 @@ public class Migrator
             Log.add("Reading Cascade folder structure...<br/>", migrationStatus);
             RestApi.populateExistingCascadeAssets(projectInformation);
 
+            // Create folders ahead of time so that the tool knows if there will be conflicts when creating
+            // pages (pages having same path as folders)
+            Log.add("Creating missing folders<br/>", projectInformation.getMigrationStatus());
+            createFolders(projectInformation);
+        }
+        catch (Exception e)
+        {
+            String message = e.getMessage();
+            if (message == null && e.getCause() != null)
+                message = e.getCause().getMessage();
+
+            Log.add("<span class=\"text-error\">Error: " + message + "</span><br/>", migrationStatus);
+            e.printStackTrace();
+            return;
+        }
+
+        try
+        {
             // Create files that do not exist in Cascade
             createFiles(projectInformation, metadataSetId);
         }

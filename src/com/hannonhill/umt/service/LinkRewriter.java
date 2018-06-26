@@ -7,7 +7,6 @@ package com.hannonhill.umt.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,38 +33,6 @@ import com.hannonhill.umt.util.XmlUtil;
  */
 public class LinkRewriter
 {
-    private static final String DEFAULT_FILES_FOLDER = "files"; // Used when there is no webViewUrl to decide
-                                                                // where a file should go
-
-    /**
-     * Recursively tries to figure out webViewUrl of a folder by looking for linkFile.xml in that folder and
-     * reading webViewUrl from there. If no linkFile.xml is present in that folder, ancestor folders will be
-     * checked. Once ancestor folder with linkFile.xml is found, the webViewUrl from that linkFile is
-     * retrieved and relative path to <code>folder</code> is appended to it. For example, if folder="/a/b/c"
-     * and linkFile.xml is present at /a/b/linkFile.xml, and the linkfile's webViewUrl is "/images", then the
-     * returned string from this function will be "/images/c"
-     * 
-     * @param folder
-     * @param linkFileToUrlMap
-     * @return
-     */
-    public static String getWebViewUrl(String folder, Map<String, String> linkFileToUrlMap)
-    {
-        String parentFolder = PathUtil.getParentFolderPathFromPath(folder);
-        if (!parentFolder.equals("/"))
-        {
-            String webViewUrl = getWebViewUrl(parentFolder, linkFileToUrlMap);
-            if (!webViewUrl.equals(DEFAULT_FILES_FOLDER))
-                return webViewUrl + "/" + PathUtil.getNameFromPath(folder);
-        }
-
-        String webViewUrl = linkFileToUrlMap.get(folder + "/linkFile.xml");
-        if (webViewUrl != null)
-            return webViewUrl;
-
-        return DEFAULT_FILES_FOLDER;
-    }
-
     /**
      * Rewrites all the file and page links in the xml. If it is a page link (ends with any of the
      * {@link XmlAnalyzer#FILE_TO_PAGE_EXTENSIONS} extension and is a relative), the extension will be
@@ -270,8 +237,12 @@ public class LinkRewriter
     {
         String newPath = PathUtil.convertRelativeToAbsolute(link, pagePath);
         String extension = PathUtil.getExtension(newPath);
+
         if (projectInformation.getPageExtensions().contains(extension) || projectInformation.getBlockExtensions().contains(extension))
             newPath = PathUtil.truncateExtension(newPath);
+
+        if (projectInformation.getExistingCascadeFolders().get(newPath) != null)
+            newPath = newPath + "/index";
 
         int deployPathLevels = pagePath.split("/").length - 1;
         int linkLevels = PathUtil.countLevelUps(link);

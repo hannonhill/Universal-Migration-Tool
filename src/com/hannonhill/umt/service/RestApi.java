@@ -103,12 +103,13 @@ public class RestApi
      */
     public static CascadeAssetInformation createPage(java.nio.file.Path pageFile, ProjectInformation projectInformation) throws Exception
     {
-        String path = PathUtil.createPagePathFromFileSystemFile(pageFile, projectInformation);
-        path = path.replace(java.io.File.separator, "/");
-        if (!XmlAnalyzer.allCharactersLegal(path))
-            path = XmlAnalyzer.removeIllegalCharacters(path);
+        String path = PathUtil.convertFilesystemPathToCascade(pageFile, true, projectInformation);
 
-        String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
+        // Append "/index" to path if there is already a folder with that path
+        if (projectInformation.getExistingCascadeFolders().get(path) != null)
+            path = path + "/index";
+
+        String parentFolderPath = PathUtil.getParentFolderPathCascade(path);
         String contentTypePath = projectInformation.getContentTypePath();
 
         String overwriteBehavior = projectInformation.getOverwriteBehavior();
@@ -128,8 +129,8 @@ public class RestApi
             throw new Exception("Duplicate path found - asset with given path already got created during this migration: " + path.toLowerCase());
 
         // Set up the page object and assign it to the asset object
-        Page page = ApiUtil.setupPageObject(pageFile, projectInformation);
-        JsonObject data = getDataWithAsset("page", page);
+        Page page = ApiUtil.setupPageObject(pageFile, path, projectInformation);
+        JsonObject data = buildDataWithAsset("page", page);
 
         // Check overwrite behavior. If overwrite behavior is to update existing, check if page with given
         // path exists and if so, get its id
@@ -148,26 +149,16 @@ public class RestApi
             JsonObject createResult;
             try
             {
-                createResult = performApiRequest(projectInformation, "create/page", data);
+                createResult = performApiRequest(projectInformation, "create", data);
             }
             catch (Exception e)
             {
-                // If the page couldn't be created because parent folder doesn't exist, go ahead and create
-                // the parent folder and attempt to create the page again
-                String message = e.getMessage();
-                if (message != null && message.contains("folder with path/name: ") && message.contains(parentFolderPath.trim())
-                        && message.contains("could not be found"))
-                {
-                    RestApi.createFolder(parentFolderPath, projectInformation);
-                    return createPage(pageFile, projectInformation);
-                }
-
-                throw new Exception("Page " + path + " could not be created: " + message + " - Parent folder path is: -" + parentFolderPath + "-");
-
+                throw new Exception(
+                        "Page " + path + " could not be created: " + e.getMessage() + " - Parent folder path is: -" + parentFolderPath + "-");
             }
 
-            String createdAssetId = createResult.get("createdAssetId").getAsString();
-            projectInformation.getExistingCascadePages().put(path.toLowerCase(), createdAssetId);
+            String createdAssetId = getCreatedAssetId(createResult);
+            projectInformation.addExistingPage(path, createdAssetId);
             return new CascadeAssetInformation(createdAssetId, path);
         }
 
@@ -190,13 +181,8 @@ public class RestApi
     private static void createFile(java.nio.file.Path folderFile, ProjectInformation projectInformation, String metadataSetId,
             boolean logCreatingFile) throws Exception
     {
-        String filePath = PathUtil.getRelativePath(folderFile, projectInformation.getXmlDirectory());
-        // Added for Windows Paths
-        filePath = filePath.replace(java.io.File.separator, "/");
-        if (!XmlAnalyzer.allCharactersLegal(filePath))
-            filePath = XmlAnalyzer.removeIllegalCharacters(filePath);
-
-        String parentFolderPath = PathUtil.getParentFolderPathFromPath(filePath);
+        String filePath = PathUtil.convertFilesystemPathToCascade(folderFile, false, projectInformation);
+        String parentFolderPath = PathUtil.getParentFolderPathCascade(filePath);
         String fileName = folderFile.getFileName().toString();
 
         MigrationStatus migrationStatus = projectInformation.getMigrationStatus();
@@ -223,34 +209,22 @@ public class RestApi
         file.setShouldBePublished(true);
         file.setData(FileSystem.getBytesFromFile(folderFile));
 
-        JsonObject data = getDataWithAsset("file", file);
+        JsonObject data = buildDataWithAsset("file", file);
 
         JsonObject createResult;
         try
         {
-            createResult = performApiRequest(projectInformation, "create/file", data);
+            createResult = performApiRequest(projectInformation, "create", data);
         }
         catch (Exception e)
         {
-
-            // If the file couldn't be created because parent folder doesn't exist, go ahead and create the
-            // parent folder and attempt to create the file again
-            String message = e.getMessage();
-            if (message != null && message.contains("folder with path/name: ") && message.contains(parentFolderPath.trim())
-                    && message.contains("could not be found"))
-            {
-                createFolder(parentFolderPath, projectInformation);
-                createFile(folderFile, projectInformation, metadataSetId, false);
-                return;
-            }
-
             throw new Exception(
                     "File " + filePath + " could not be created: " + e.getMessage() + " - Parent folder path is: -" + parentFolderPath + "-");
         }
 
-        String createdAssetId = createResult.get("createdAssetId").getAsString();
+        String createdAssetId = getCreatedAssetId(createResult);
         Identifier cascadeFile = new Identifier(createdAssetId, filePath, projectInformation.getSiteName(), "file");
-        projectInformation.getExistingCascadeFiles().put(filePath.toLowerCase(), createdAssetId);
+        projectInformation.addExistingFile(filePath, createdAssetId);
 
         Log.add(PathUtil.generateFileLink(cascadeFile, projectInformation.getUrl()), migrationStatus);
 
@@ -259,42 +233,40 @@ public class RestApi
     }
 
     /**
-     * Creates a folder with given path. If the parent folder cannot be found, it will create it.
-     * 
-     * @param path
-     * @param projectInformation
-     * @throws Exception
+     * Creates a parent folder for given filesystem path.
      */
+    public static void createParentFolder(java.nio.file.Path filesystemPath, ProjectInformation projectInformation) throws Exception
+    {
+        String cascadePath = PathUtil.convertFilesystemPathToCascade(filesystemPath, false, projectInformation);
+        String folderPath = PathUtil.getParentFolderPathCascade(cascadePath);
+        createFolder(folderPath, projectInformation);
+    }
+
     public static void createFolder(String path, ProjectInformation projectInformation) throws Exception
     {
-        String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
+        if (projectInformation.getExistingAssetPaths().contains(path.toLowerCase()))
+            return;
+
+        Log.add("Creating folder " + path + "... ", projectInformation.getMigrationStatus());
+
+        String parentFolderPath = PathUtil.getParentFolderPathCascade(path);
+        if (!projectInformation.getExistingAssetPaths().contains(parentFolderPath.toLowerCase()))
+            createFolder(parentFolderPath, projectInformation);
 
         Folder folder = new Folder();
         folder.setName(PathUtil.getNameFromPath(path));
         folder.setParentFolderPath(parentFolderPath);
         folder.setSiteName(projectInformation.getSiteName());
 
-        JsonObject data = getDataWithAsset("folder", folder);
+        JsonObject data = buildDataWithAsset("folder", folder);
+        JsonObject createResult = performApiRequest(projectInformation, "create", data);
+        projectInformation.addExistingFolder(path, getCreatedAssetId(createResult));
+        Log.add("<span style=\"color: green;\">success.</span><br/>", projectInformation.getMigrationStatus());
+    }
 
-        try
-        {
-            performApiRequest(projectInformation, "create/file", data);
-        }
-        catch (Exception e)
-        {
-            // If the folder couldn't be created because parent folder doesn't exist, go ahead and create the
-            // parent folder and attempt to create the folder again
-            String message = e.getMessage();
-            if (message != null && message.contains("folder with path/name: ") && message.contains(parentFolderPath.trim())
-                    && message.contains("could not be found"))
-            {
-                createFolder(parentFolderPath, projectInformation);
-                createFolder(path, projectInformation);
-            }
-            else
-                throw new Exception("Parent folder " + path + " could not be created: " + e.getMessage() + " - Parent folder path is: -"
-                        + parentFolderPath + "-");
-        }
+    private static String getCreatedAssetId(JsonObject createResult)
+    {
+        return createResult.get("createdAssetId").getAsString();
     }
 
     /**
@@ -364,7 +336,7 @@ public class RestApi
      * Recursively reads all assets from given folder and its descendants and stores their paths in
      * {@link ProjectInformation#getExistingCascadeFiles()},
      * {@link ProjectInformation#getExistingCascadeXhtmlBlocks()} and
-     * {@link ProjectInformation#getExistingCascadePages()}
+     * {@link ProjectInformation#getExistingCascadePages()}. Also, stores the folder path itself
      */
     private static void populateExistingCascadeAssetsOfFolder(Identifier folderIdentifier, ProjectInformation projectInformation) throws Exception
     {
@@ -372,14 +344,16 @@ public class RestApi
             return;
 
         Folder folder = readFolder(projectInformation, folderIdentifier);
+        projectInformation.addExistingFolder(folder.getPath(), folder.getId());
+
         for (Identifier child : folder.getChildren())
         {
             if ("file".equals(child.getType()))
-                projectInformation.getExistingCascadeFiles().put(child.getPath().getPath().toLowerCase(), child.getId());
+                projectInformation.addExistingFile(child.getPath().getPath(), child.getId());
             else if ("block_XHTML_DATADEFINITION".equals(child.getType()))
-                projectInformation.getExistingCascadeXhtmlBlocks().put(child.getPath().getPath().toLowerCase(), child.getId());
+                projectInformation.addExistingXhtmlBlock(child.getPath().getPath(), child.getId());
             else if ("page".equals(child.getType()))
-                projectInformation.getExistingCascadePages().put(child.getPath().getPath().toLowerCase(), child.getId());
+                projectInformation.addExistingPage(child.getPath().getPath(), child.getId());
             else if ("folder".equals(child.getType()))
                 populateExistingCascadeAssetsOfFolder(child, projectInformation);
         }
@@ -507,27 +481,9 @@ public class RestApi
         if (pageId != null)
             return pageId;
 
-        // If not found, try reading the asset by path
-        Page readPage = readPageByPath(path, projectInformation);
-        if (readPage != null)
-        {
-            projectInformation.getExistingCascadePages().put(path, readPage.getId());
-            return readPage.getId();
-        }
-
-        File readFile = readFileByPath(path, projectInformation);
-        if (readFile != null)
-        {
-            projectInformation.getExistingCascadeFiles().put(path, readFile.getId());
-            return readFile.getId();
-        }
-
-        XhtmlDataDefinitionBlock readBlock = readXhtmlBlockByPath(path, projectInformation);
-        if (readBlock != null)
-        {
-            projectInformation.getExistingCascadeXhtmlBlocks().put(path, readBlock.getId());
-            return readBlock.getId();
-        }
+        String folderId = projectInformation.getExistingCascadeFolders().get(path);
+        if (folderId != null)
+            return folderId;
 
         return null;
     }
@@ -535,19 +491,19 @@ public class RestApi
     public static String getFileId(String path, ProjectInformation projectInformation) throws Exception
     {
         path = PathUtil.removeLeadingSlashes(path).toLowerCase();
-        // Check confirmed paths first
-        String fileId = projectInformation.getExistingCascadeFiles().get(path);
-        if (fileId != null)
-            return fileId;
+        return projectInformation.getExistingCascadeFiles().get(path);
+    }
 
-        File readFile = readFileByPath(path, projectInformation);
-        if (readFile != null)
-        {
-            projectInformation.getExistingCascadeFiles().put(path, readFile.getId());
-            return readFile.getId();
-        }
+    public static String getFolderId(String path, ProjectInformation projectInformation) throws Exception
+    {
+        path = PathUtil.removeLeadingSlashes(path).toLowerCase();
+        return projectInformation.getExistingCascadeFolders().get(path);
+    }
 
-        return null;
+    public static String getXhtmlBlockId(String path, ProjectInformation projectInformation) throws Exception
+    {
+        path = PathUtil.removeLeadingSlashes(path).toLowerCase();
+        return projectInformation.getExistingCascadeXhtmlBlocks().get(path);
     }
 
     /**
@@ -556,15 +512,17 @@ public class RestApi
     public static CascadeAssetInformation createXhtmlBlock(java.nio.file.Path file, ProjectInformation projectInformation, String metadataSetId)
             throws Exception
     {
-        String blockPath = PathUtil.createPagePathFromFileSystemFile(file, projectInformation);
-        blockPath = blockPath.replace(java.io.File.separator, "/");
-        if (!XmlAnalyzer.allCharactersLegal(blockPath))
-            blockPath = XmlAnalyzer.removeIllegalCharacters(blockPath);
-        String parentFolderPath = PathUtil.getParentFolderPathFromPath(blockPath);
+        String blockPath = PathUtil.convertFilesystemPathToCascade(file, true, projectInformation);
+        String parentFolderPath = PathUtil.getParentFolderPathCascade(blockPath);
         // Don't create static components in the root folder. Instead, create them in
         // "_internal/blocks/static" folder
         if (parentFolderPath.equals("") || parentFolderPath.equals("/"))
+        {
             parentFolderPath = "_cascade/blocks/static";
+            createFolder(parentFolderPath, projectInformation);
+            blockPath = parentFolderPath + "/" + blockPath;
+        }
+
         String blockName = PathUtil.truncateExtension(file.getFileName().toString());
 
         String overwriteBehavior = projectInformation.getOverwriteBehavior();
@@ -581,9 +539,9 @@ public class RestApi
         // Check for duplicate paths
         if (projectInformation.getMigrationStatus().getCreatedAssetPaths().contains(blockPath.toLowerCase()))
         {
-            blockPath = getUniquePath(blockPath, projectInformation.getMigrationStatus().getCreatedAssetPaths());
+            blockPath = getUniquePath(blockPath, projectInformation.getExistingAssetPaths());
             blockName = PathUtil.getNameFromPath(blockPath);
-            parentFolderPath = PathUtil.getParentFolderPathFromPath(blockPath);
+            parentFolderPath = PathUtil.getParentFolderPathCascade(blockPath);
         }
 
         String existingBlockId = null;
@@ -610,7 +568,7 @@ public class RestApi
         block.setXhtml(
                 LinkRewriter.rewriteLinksInXml(JTidy.tidyContentConditionally(FileSystem.getFileContents(file)), blockPath, projectInformation));
 
-        JsonObject data = getDataWithAsset("xhtmlDataDefinitionBlock", block);
+        JsonObject data = buildDataWithAsset("xhtmlDataDefinitionBlock", block);
 
         if (existingBlockId == null)
         {
@@ -621,24 +579,13 @@ public class RestApi
             }
             catch (Exception e)
             {
-                // If the page couldn't be created because parent folder doesn't exist, go ahead and create
-                // the parent folder and attempt to create the page again
-                String message = e.getMessage();
-                if (message != null && message.contains("folder with path/name: ") && message.contains(parentFolderPath.trim())
-                        && message.contains("could not be found"))
-                {
-                    RestApi.createFolder(parentFolderPath, projectInformation);
-                    return createXhtmlBlock(file, projectInformation, metadataSetId);
-                }
-
                 throw new Exception("XHTML Block " + blockPath + " could not be created: " + e.getMessage() + " - Parent folder path is: -"
                         + parentFolderPath + "-");
             }
 
-            String createdAssetId = createResult.get("createdAssetId").getAsString();
-            projectInformation.getExistingCascadeXhtmlBlocks().put(blockPath.toLowerCase(), createdAssetId);
+            String createdAssetId = getCreatedAssetId(createResult);
+            projectInformation.addExistingXhtmlBlock(blockPath, createdAssetId);
             return new CascadeAssetInformation(createdAssetId, blockPath);
-
         }
 
         // If block exists, edit it
@@ -679,7 +626,7 @@ public class RestApi
      */
     private static void editXhtmlBlock(XhtmlDataDefinitionBlock block, ProjectInformation projectInformation) throws Exception
     {
-        performApiRequest(projectInformation, "edit", getDataWithAsset("xhtmlDataDefinitionBlock", block));
+        performApiRequest(projectInformation, "edit", buildDataWithAsset("xhtmlDataDefinitionBlock", block));
     }
 
     /**
@@ -736,65 +683,7 @@ public class RestApi
      */
     private static void editPage(Page page, ProjectInformation projectInformation) throws Exception
     {
-        performApiRequest(projectInformation, "edit/page", getDataWithAsset("page", page));
-    }
-
-    /**
-     * Reads a block with given path and returns its id. If the block doesn't exist, returns null.
-     */
-    private static String getXhtmlBlockId(String path, ProjectInformation projectInformation) throws Exception
-    {
-        XhtmlDataDefinitionBlock existingBlock = readXhtmlBlockByPath(path, projectInformation);
-        if (existingBlock != null)
-            return existingBlock.getId();
-
-        return null;
-    }
-
-    /**
-     * Reads an XHTML Block with given path from Cascade Server. If the block doesn't exist, returns null.
-     */
-    private static XhtmlDataDefinitionBlock readXhtmlBlockByPath(String path, ProjectInformation projectInformation) throws Exception
-    {
-        try
-        {
-            JsonObject assetResult = performApiRequest(projectInformation, "read",
-                    getJsonObjectWithIdentifier(new Identifier(path, projectInformation.getSiteName(), "block_XHTML_DATADEFINITION")))
-                            .getAsJsonObject("asset");
-            return getProperty(assetResult, "xhtmlDataDefinitionBlock", XhtmlDataDefinitionBlock.class);
-        }
-        catch (Exception e)
-        {
-            if (e.getMessage() == null
-                    || !e.getMessage().equals("Unable to identify an entity based on provided entity path '" + path + "' and type 'block'"))
-                throw new Exception("Error occured when reading a XHTML Block with path '" + path + "': " + e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Reads a file with given path from Cascade Server. If the file doesn't exist, returns null.
-     */
-    private static File readFileByPath(String path, ProjectInformation projectInformation) throws Exception
-    {
-        String cachePath = PathUtil.getCachePathFromPath(path);
-        String siteName = PathUtil.getSiteNameFromPath(path);
-        if (siteName == null)
-            siteName = projectInformation.getSiteName();
-
-        try
-        {
-            JsonObject assetResult = performApiRequest(projectInformation, "read",
-                    getJsonObjectWithIdentifier(new Identifier(cachePath, siteName, "file"))).getAsJsonObject("asset");
-            return getProperty(assetResult, "file", File.class);
-        }
-        catch (Exception e)
-        {
-            if (e.getMessage() == null
-                    || !e.getMessage().equals("Unable to identify an entity based on provided entity path '" + cachePath + "' and type 'file'"))
-                throw new Exception("Error occured when reading a Page with path '" + path + "': " + e.getMessage());
-            return null;
-        }
+        performApiRequest(projectInformation, "edit/page", buildDataWithAsset("page", page));
     }
 
     /**
@@ -840,7 +729,7 @@ public class RestApi
                 return lowerCasePath + i;
     }
 
-    private static JsonObject getDataWithAsset(String assetType, FolderContainedAsset assetObject)
+    private static JsonObject buildDataWithAsset(String assetType, FolderContainedAsset assetObject)
     {
         JsonObject data = new JsonObject();
         JsonObject asset = new JsonObject();

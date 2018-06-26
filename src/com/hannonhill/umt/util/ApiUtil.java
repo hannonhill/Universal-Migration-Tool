@@ -42,20 +42,11 @@ public class ApiUtil
     /**
      * Creates a Page object based on the information provided in the projectInformation and the actual file
      * from which the Page needs to be created.
-     * 
-     * @param pageFile
-     * @param projectInformation
-     * @return
-     * @throws Exception
      */
-    public static Page setupPageObject(Path pageFile, ProjectInformation projectInformation) throws Exception
+    public static Page setupPageObject(Path pageFile, String path, ProjectInformation projectInformation) throws Exception
     {
-        String path = PathUtil.truncateExtension(PathUtil.getRelativePath(pageFile, projectInformation.getXmlDirectory()));
-        path = path.replace(java.io.File.separator, "/");
-        if (!XmlAnalyzer.allCharactersLegal(path))
-            path = XmlAnalyzer.removeIllegalCharacters(path);
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
-        String parentFolderPath = PathUtil.getParentFolderPathFromPath(path);
+        String parentFolderPath = PathUtil.getParentFolderPathCascade(path);
         String pageFileContents = JTidy.tidyContentConditionallyFullHtml(FileSystem.getFileContents(pageFile));
         if (parentFolderPath.equals(""))
             parentFolderPath = "/";

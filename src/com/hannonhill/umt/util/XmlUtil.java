@@ -143,7 +143,7 @@ public class XmlUtil
             else
                 System.out.println("Encountered an unexpected type of node: " + node.getClass() + " - " + node);
 
-            if (toAdd != null)
+            if (toAdd != null && !"".equals(toAdd.trim()))
                 result.add(toAdd);
         }
 

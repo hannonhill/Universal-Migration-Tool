@@ -52,11 +52,11 @@ public class ProjectInformation
     Set<String> gatheredExtensions = new HashSet<>();
 
     // path to id map
-    private final Map<String, String> existingCascadeFiles; // Used for Luminis file import and link checking
-    private final Map<String, String> existingCascadeXhtmlBlocks;// performance reasons - file paths are
-                                                                 // checked first
-    // to avoid having to check if file exists each time a new file is brought in
-    private final Map<String, String> existingCascadePages; // Also used for link checking performance reasons
+    private final Map<String, String> existingCascadeFiles;
+    private final Map<String, String> existingCascadeXhtmlBlocks;
+    private final Map<String, String> existingCascadePages;
+    private final Map<String, String> existingCascadeFolders;
+    private final Set<String> existingAssetPaths;
 
     private final Set<String> pageExtensions; // Extensions of files that need to be converted to pages
     private final Set<String> blockExtensions; // Extensions of files that need to be converted to xhtml
@@ -88,6 +88,8 @@ public class ProjectInformation
         existingCascadeFiles = new HashMap<>();
         existingCascadeXhtmlBlocks = new HashMap<>();
         existingCascadePages = new HashMap<>();
+        existingCascadeFolders = new HashMap<>();
+        existingAssetPaths = new HashSet<>();
         pageExtensions = new HashSet<>();
         blockExtensions = new HashSet<>();
 
@@ -336,6 +338,13 @@ public class ProjectInformation
         return existingCascadeFiles;
     }
 
+    public void addExistingFile(String filePath, String fileId)
+    {
+        filePath = filePath.toLowerCase();
+        existingCascadeFiles.put(filePath, fileId);
+        existingAssetPaths.add(filePath);
+    }
+
     /**
      * @return Returns the existingCascadeXhtmlBlocks.
      */
@@ -344,12 +353,49 @@ public class ProjectInformation
         return existingCascadeXhtmlBlocks;
     }
 
+    public void addExistingXhtmlBlock(String blockPath, String blockId)
+    {
+        blockPath = blockPath.toLowerCase();
+        existingCascadeXhtmlBlocks.put(blockPath, blockId);
+        existingAssetPaths.add(blockPath);
+    }
+
     /**
      * @return Returns the existingCascadePages.
      */
     public Map<String, String> getExistingCascadePages()
     {
         return existingCascadePages;
+    }
+
+    public void addExistingPage(String pagePath, String pageId)
+    {
+        pagePath = pagePath.toLowerCase();
+        existingCascadePages.put(pagePath, pageId);
+        existingAssetPaths.add(pagePath);
+    }
+
+    /**
+     * @return Returns the existingCascadeFolders.
+     */
+    public Map<String, String> getExistingCascadeFolders()
+    {
+        return existingCascadeFolders;
+    }
+
+    public void addExistingFolder(String folderPath, String folderId)
+    {
+        folderPath = folderPath.toLowerCase();
+        existingCascadeFolders.put(folderPath, folderId);
+        existingAssetPaths.add(folderPath);
+    }
+
+    /**
+     * @return Returns the existingAssetPaths.
+     */
+    public Set<String> getExistingAssetPaths()
+    {
+        return existingAssetPaths;
     }
 
     /**

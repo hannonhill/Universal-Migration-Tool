@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import com.hannonhill.umt.CascadeAssetInformation;
 import com.hannonhill.umt.ProjectInformation;
 import com.hannonhill.umt.api.Identifier;
+import com.hannonhill.umt.service.XmlAnalyzer;
 
 /**
  * Utility methods related to path manipulations
@@ -72,18 +73,29 @@ public class PathUtil
     }
 
     /**
-     * Parses the path and returns the parent folder path part of it or '/' if the path is a the root level.
-     * 
-     * @param path
-     * @return
+     * Parses the path and returns the parent folder path part of it or {@link File#separator} if the path is
+     * a the root level.
      */
-    public static String getParentFolderPathFromPath(String path)
+    public static String getParentFolderPathFilesystem(String path)
     {
         if (path.contains(File.separator))
             return path.lastIndexOf(File.separator) == -1 ? File.separator
                     : removeLeadingSlashes(path.substring(0, path.lastIndexOf(File.separator)));
 
-        return path.lastIndexOf('/') == -1 ? "/" : removeLeadingSlashes(path.substring(0, path.lastIndexOf('/')));
+        return path.lastIndexOf(File.separator) == -1 ? File.separator : removeLeadingSlashes(path.substring(0, path.lastIndexOf('/')));
+    }
+
+    /**
+     * Parses the path and returns the parent folder path part of it or "/" if the path is a the root level.
+     */
+    public static String getParentFolderPathCascade(String path)
+    {
+        path = PathUtil.removeLeadingSlashes(path);
+        int lastSlashIndex = path.lastIndexOf('/');
+        if (lastSlashIndex == -1)
+            return "/";
+
+        return path.substring(0, lastSlashIndex);
     }
 
     /**
@@ -332,4 +344,14 @@ public class PathUtil
         return site.substring(site.indexOf('/') + 1);
     }
 
+    public static String convertFilesystemPathToCascade(Path filesystemPath, boolean truncateExtension, ProjectInformation projectInformation)
+    {
+        String path = truncateExtension ? PathUtil.createPagePathFromFileSystemFile(filesystemPath, projectInformation)
+                : PathUtil.getRelativePath(filesystemPath, projectInformation.getXmlDirectory());
+        path = path.replace(java.io.File.separator, "/");
+        if (!XmlAnalyzer.allCharactersLegal(path))
+            path = XmlAnalyzer.removeIllegalCharacters(path);
+
+        return path;
+    }
 }

@@ -72,8 +72,8 @@
 							  <table summary="Mappings" class="table table-striped">
 									<thead>
 										<tr>
-											<th style="width:35%">From</th>
-											<th style="width:35%">To Cascade Field</th>
+											<th style="width:32.5%">From</th>
+											<th style="width:32.5%">To Cascade Field</th>
 											<th style="width:20%">Type</th>
 											<th>&nbsp;</th>
 										</tr>
@@ -85,6 +85,14 @@
 						<button class="btn pull-left" onclick="window.location='/AssignContentType';return false;">Previous</button>
 					 	<button type="submit" name="submitButton" class="btn btn-primary pull-right">Save and Next</button>
 					</form>
+          <div style="margin-top: 50px;">
+            <p>Paste test XML</p>
+            <textarea style="width:100%;" rows="5" id="test-xml"></textarea>
+          </div>
+          <div>
+            <p>Result (press the play button next to XPath assignment)</p>
+            <textarea style="width:100%;" rows="5" id="test-result"></textarea>
+          </div>
 				</div>
 			</div>
 		</div>
@@ -104,6 +112,14 @@
 				$('table').on('click', '.js-remove-mapping', function() {
 					$(this).parents('tr').remove();
 				});
+				
+				$('table').on('click', '.js-test-xpath', function() {
+          var xpath = $(this).siblings('input[name="selectedXPaths"]').val(); 
+          var xml = $('#test-xml').val();
+          $.get('/TestXPath', {testXPath: xpath, testXml: xml}, function(resp) {
+            $('#test-result').val(resp);
+          })
+        });
 				
 				<s:iterator value="fieldMap.entrySet()">
 					addMappingByName("<s:property value="key" escapeJavaScript="true" escape="false"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
@@ -182,7 +198,8 @@
 							<input type='hidden' name='staticValues' value='" + staticValueEscaped + "'/> \
 							<input type='hidden' name='selectedCascadeMetadataFields' value='" + (cascadeFieldTypeLetter === "m" ? cascadeFieldIdentifier : "null") + "'/> \
 							<input type='hidden' name='selectedCascadeDataDefinitionFields' value='" + (cascadeFieldTypeLetter === "d" ? cascadeFieldIdentifier : "null") + "'/> \
-							<a class='btn btn-small js-remove-mapping' title='Remove'><i class='icon-remove-sign'></i></a> \
+              " + (xPath !== null ? "<a class='btn btn-small js-test-xpath' title='Text'><i class='icon-play'></i></a>" : "") +
+							"<a class='btn btn-small js-remove-mapping' title='Remove'><i class='icon-remove-sign'></i></a> \
 							</td> \
 						</tr>");
 

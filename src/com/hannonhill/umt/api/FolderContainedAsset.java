@@ -9,6 +9,7 @@ public class FolderContainedAsset
 {
     private String id;
     private String name;
+    private String path;
     private String parentFolderPath;
     private String siteName;
 
@@ -42,6 +43,22 @@ public class FolderContainedAsset
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    /**
+     * @return Returns the path.
+     */
+    public String getPath()
+    {
+        return path;
+    }
+
+    /**
+     * @param path the path to set
+     */
+    public void setPath(String path)
+    {
+        this.path = path;
     }
 
     /**
