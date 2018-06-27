@@ -48,12 +48,17 @@ public class PathUtil
         return removeLeadingSlashes(path.lastIndexOf('/') == -1 ? path : path.substring(path.lastIndexOf('/') + 1));
     }
 
+    public static String truncateExtensionConditionally(String name, boolean condition)
+    {
+        if (!condition)
+            return name;
+
+        return name.lastIndexOf('.') == -1 ? name : name.substring(0, name.lastIndexOf('.'));
+    }
+
     /**
      * Truncates the extension of the file name. For example x.html will return x. If there is no extension,
      * the full name will be returned.
-     * 
-     * @param name
-     * @return
      */
     public static String truncateExtension(String name)
     {
@@ -143,9 +148,6 @@ public class PathUtil
 
     /**
      * Returns true if the link is relative, meaning it doesn't start with "/" or protocol (like "http://")
-     * 
-     * @param link
-     * @return
      */
     public static boolean isLinkRelative(String link)
     {
@@ -163,6 +165,14 @@ public class PathUtil
             return false;
 
         return true;
+    }
+
+    public static boolean isLinkAbsolute(String link)
+    {
+        if (link.startsWith("/"))
+            return true;
+
+        return false;
     }
 
     /**
@@ -277,21 +287,14 @@ public class PathUtil
         return path.substring(path.indexOf('/'));
     }
 
-    /**
-     * Checks how many ../ are there in the link
-     * 
-     * @param link
-     * @return
-     */
-    public static int countLevelUps(String link)
+    public static String getRootLevelFolder(String absoluteLink)
     {
-        int counter = 0;
-        while (link.startsWith("../"))
-        {
-            counter++;
-            link = link.substring(3);
-        }
-        return counter;
+        String withoutLeadingSlash = removeLeadingSlashes(absoluteLink);
+        int firstSlashIndex = withoutLeadingSlash.indexOf('/');
+        if (firstSlashIndex == -1)
+            return ""; // Points to an asset in root folder, so there is no root level folder
+
+        return withoutLeadingSlash.substring(0, firstSlashIndex);
     }
 
     /**

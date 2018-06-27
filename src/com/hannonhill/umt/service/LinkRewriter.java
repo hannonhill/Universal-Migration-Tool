@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.lang.xwork.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -201,11 +202,15 @@ public class LinkRewriter
         String withoutAnchor = PathUtil.getPartWithoutAnchor(oldPath);
         String anchor = PathUtil.getAnchorPart(oldPath);
 
-        if (!PathUtil.isLinkRelative(withoutAnchor))
-            return;
+        if (PathUtil.isLinkRelative(withoutAnchor))
+        {
+            if (prependLevelUp)
+                withoutAnchor = "../" + withoutAnchor;
 
-        if (prependLevelUp)
-            withoutAnchor = "../" + withoutAnchor;
+            withoutAnchor = PathUtil.convertRelativeToAbsolute(withoutAnchor, pagePath);
+        }
+        else if (!PathUtil.isLinkAbsolute(withoutAnchor))
+            return;
 
         String newPath = rewriteLink(withoutAnchor, pagePath, projectInformation);
 
@@ -225,48 +230,51 @@ public class LinkRewriter
      */
     private static String rewriteLink(String link, String pagePath, ProjectInformation projectInformation)
     {
-        String newPath = PathUtil.convertRelativeToAbsolute(link, pagePath);
-        String extension = PathUtil.getExtension(newPath);
+        String extension = PathUtil.getExtension(link);
 
-        if (projectInformation.getPageExtensions().contains(extension) || projectInformation.getBlockExtensions().contains(extension))
-            newPath = PathUtil.truncateExtension(newPath);
+        boolean shouldTruncateExtension = projectInformation.getPageExtensions().contains(extension)
+                || projectInformation.getBlockExtensions().contains(extension);
 
-        if (projectInformation.getExistingCascadeFolders().get(newPath) != null)
-            newPath = newPath + "/index";
+        // Convert link to path for now - paths don't have leading slashes
+        String newPath = PathUtil.removeLeadingSlashes(link);
 
-        int deployPathLevels = pagePath.split("/").length - 1;
-        int linkLevels = PathUtil.countLevelUps(link);
-        // if there are same many link levels as the page path levels, it means the link goes to root
-        boolean goesToRoot = linkLevels == deployPathLevels;
-        boolean crossSiteLink = false;
+        // If after truncating extension this path points to an existing folder, append "/index" and do not
+        // require truncating extension again
+        if (projectInformation.getExistingCascadeFolders().get(PathUtil.truncateExtensionConditionally(newPath, shouldTruncateExtension)) != null)
+        {
+            newPath = PathUtil.truncateExtensionConditionally(newPath, shouldTruncateExtension) + "/index";
+            shouldTruncateExtension = false;
+        }
+
+        // Check if replacement path should be used
+        String replacementPath = projectInformation.getPathMapping().get(newPath);
+        if (replacementPath != null)
+            newPath = replacementPath;
+
+        String newPathRootLevelFolder = PathUtil.getRootLevelFolder(newPath);
+        String pagePathRootLevelFolder = PathUtil.getRootLevelFolder(pagePath);
+        boolean goesToRoot = !newPathRootLevelFolder.equals(pagePathRootLevelFolder) && StringUtils.isNotEmpty(newPathRootLevelFolder);
 
         // if it doesn't go to root, nothing more needs to be done
         if (goesToRoot)
         {
-            // check the root level folder and see if there is an assignment for it
-            String withoutLeadingSlash = newPath.length() > 0 ? newPath.substring(1) : newPath;
-            String rootLevelFolder = (withoutLeadingSlash.length() > 0 && withoutLeadingSlash.indexOf('/') != -1)
-                    ? withoutLeadingSlash.substring(0, withoutLeadingSlash.indexOf('/'))
-                    : "";
-            ExternalRootLevelFolderAssignment assignment = projectInformation.getExternalRootLevelFolderAssignemnts().get(rootLevelFolder);
+            ExternalRootLevelFolderAssignment assignment = projectInformation.getExternalRootLevelFolderAssignemnts().get(newPathRootLevelFolder);
 
             // if no assignment, leave it as it is, if there is an assignment, rewrite the link
             if (assignment != null)
             {
-                // if it is an external link, add the external url and return (skip adding extension)
+                String withoutRootLevelFolder = newPath.indexOf('/') == -1 ? newPath : newPath.substring(newPath.indexOf('/'));
+                // if it is an external link, add the external url and return (skip truncating extension)
                 if (assignment.getAssignmentType().equals(ExternalRootLevelFolderAssignment.ASSIGNMENT_TYPE_EXTERNAL_LINK))
-                    return assignment.getExternalLinkAssignment() + newPath; // converts link /folder/page to
-                                                                             // http://domain/com/folder/page
+                    return assignment.getExternalLinkAssignment() + withoutRootLevelFolder;
 
-                // if it is not an external link, do a cross site link and keep it for adding the extension
-                newPath = "site://" + assignment.getCrossSiteAssignment() + newPath; // converts link
-                                                                                     // /folder/page to
-                                                                                     // site://sitename/folder/page
-                crossSiteLink = true;
+                // if it is not an external link, do a cross site link
+                return PathUtil.truncateExtensionConditionally("site://" + assignment.getCrossSiteAssignment() + withoutRootLevelFolder,
+                        shouldTruncateExtension);
             }
         }
 
-        // Ensure only one leading slash for non-cross-site links
-        return crossSiteLink ? newPath : ("/" + PathUtil.removeLeadingSlashes(newPath));
+        // Convert back to link by adding a leading slash. Also, truncate extension if necessary.
+        return PathUtil.truncateExtensionConditionally("/" + newPath, shouldTruncateExtension);
     }
 }

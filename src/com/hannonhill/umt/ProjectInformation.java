@@ -70,6 +70,10 @@ public class ProjectInformation
     private final String uploadsDir;
     private final String logsDir;
 
+    // Original path and path the asset will be moved to (used for moving pages with conflicting paths by
+    // appending "/index" to their paths)
+    private final Map<String, String> pathMapping;
+
     /**
      * Constructor
      */
@@ -93,6 +97,7 @@ public class ProjectInformation
         existingAssetPaths = new HashSet<>();
         pageExtensions = new HashSet<>();
         blockExtensions = new HashSet<>();
+        pathMapping = new HashMap<>();
 
         setDefaultExtensions();
     }
@@ -523,5 +528,13 @@ public class ProjectInformation
             result.add(extension.trim());
 
         return result;
+    }
+
+    /**
+     * @return Returns the pathMapping.
+     */
+    public Map<String, String> getPathMapping()
+    {
+        return pathMapping;
     }
 }

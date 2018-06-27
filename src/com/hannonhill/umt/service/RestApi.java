@@ -109,7 +109,7 @@ public class RestApi
         boolean movedDeeper = false;
         if (projectInformation.getExistingCascadeFolders().get(path) != null)
         {
-            path = path + "/index"; // TODO: Prepend "../" to all the relative links
+            path = path + "/index";
             movedDeeper = true;
         }
 
@@ -251,11 +251,11 @@ public class RestApi
         if (projectInformation.getExistingAssetPaths().contains(path.toLowerCase()))
             return;
 
-        Log.add("Creating folder " + path + "... ", projectInformation.getMigrationStatus());
-
         String parentFolderPath = PathUtil.getParentFolderPathCascade(path);
         if (!projectInformation.getExistingAssetPaths().contains(parentFolderPath.toLowerCase()))
             createFolder(parentFolderPath, projectInformation);
+
+        Log.add("Creating folder " + path + "... ", projectInformation.getMigrationStatus());
 
         Folder folder = new Folder();
         folder.setName(PathUtil.getNameFromPath(path));

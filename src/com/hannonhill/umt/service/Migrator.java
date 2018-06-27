@@ -103,6 +103,27 @@ public class Migrator
 
             RestApi.createParentFolder(folderFile, projectInformation);
         }
+
+        // Find conflicting pages and collect them in link mapping
+        for (Path folderFile : projectInformation.getFilesToProcess())
+        {
+            if (projectInformation.getMigrationStatus().isShouldStop())
+                return;
+
+            String name = folderFile.getFileName().toString();
+
+            // Skip hidden files and folders
+            if (name.startsWith("."))
+                continue;
+
+            String path = PathUtil.convertFilesystemPathToCascade(folderFile, true, projectInformation);
+            if (projectInformation.getExistingCascadeFolders().get(path) != null)
+            {
+                String oldPath = path;
+                path = path + "/index";
+                projectInformation.getPathMapping().put(oldPath, path);
+            }
+        }
     }
 
     /**
@@ -255,7 +276,6 @@ public class Migrator
             return;
         }
 
-        // Create file assets
         try
         {
             // Store existing file paths first to speed up creation of files
