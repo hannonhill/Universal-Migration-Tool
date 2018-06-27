@@ -106,8 +106,12 @@ public class RestApi
         String path = PathUtil.convertFilesystemPathToCascade(pageFile, true, projectInformation);
 
         // Append "/index" to path if there is already a folder with that path
+        boolean movedDeeper = false;
         if (projectInformation.getExistingCascadeFolders().get(path) != null)
-            path = path + "/index";
+        {
+            path = path + "/index"; // TODO: Prepend "../" to all the relative links
+            movedDeeper = true;
+        }
 
         String parentFolderPath = PathUtil.getParentFolderPathCascade(path);
         String contentTypePath = projectInformation.getContentTypePath();
@@ -129,7 +133,7 @@ public class RestApi
             throw new Exception("Duplicate path found - asset with given path already got created during this migration: " + path.toLowerCase());
 
         // Set up the page object and assign it to the asset object
-        Page page = ApiUtil.setupPageObject(pageFile, path, projectInformation);
+        Page page = ApiUtil.setupPageObject(pageFile, path, movedDeeper, projectInformation);
         JsonObject data = buildDataWithAsset("page", page);
 
         // Check overwrite behavior. If overwrite behavior is to update existing, check if page with given
@@ -140,7 +144,7 @@ public class RestApi
         // If overwite existing is selected, we need to delete the existing page and ignore an error if it did
         // not exists and we attempted to delete it
         else if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING))
-            deletePage(path, projectInformation);
+            delete(path, "page", projectInformation);
 
         // If page doesn't exist or overwrite behavior is not to update existing, create the page and ancestor
         // folders if necessary
@@ -367,7 +371,7 @@ public class RestApi
             throws Exception
     {
         JsonObject readResult = performApiRequest(projectInformation, "read",
-                getJsonObjectWithIdentifier(new Identifier(containerId, null, null, "contenttypecontainer")));
+                getJsonObjectWithIdentifier(new Identifier(containerId, "contenttypecontainer")));
         JsonArray childIdentifiers = readResult.getAsJsonObject("asset").getAsJsonObject("contentTypeContainer").getAsJsonArray("children");
         for (JsonElement childIdentifierJson : childIdentifiers)
         {
@@ -381,19 +385,19 @@ public class RestApi
 
     private static ContentType readContentType(ProjectInformation projectInformation, String contentTypeId) throws Exception
     {
-        JsonObject assetResult = readAsset(projectInformation, new Identifier(contentTypeId, "", "", "contenttype"));
+        JsonObject assetResult = readAsset(projectInformation, new Identifier(contentTypeId, "contenttype"));
         return getProperty(assetResult, "contentType", ContentType.class);
     }
 
     private static MetadataSet readMetadataSet(ProjectInformation projectInformation, String metadataSetId) throws Exception
     {
-        JsonObject assetResult = readAsset(projectInformation, new Identifier(metadataSetId, "", "", "metadataset"));
+        JsonObject assetResult = readAsset(projectInformation, new Identifier(metadataSetId, "metadataset"));
         return getProperty(assetResult, "metadataSet", MetadataSet.class);
     }
 
     private static DataDefinition readDataDefinition(ProjectInformation projectInformation, String dataDefinitionId) throws Exception
     {
-        JsonObject assetResult = readAsset(projectInformation, new Identifier(dataDefinitionId, "", "", "datadefinition"));
+        JsonObject assetResult = readAsset(projectInformation, new Identifier(dataDefinitionId, "datadefinition"));
         return getProperty(assetResult, "dataDefinition", DataDefinition.class);
     }
 
@@ -405,13 +409,13 @@ public class RestApi
 
     public static Page readPage(String id, ProjectInformation projectInformation) throws Exception
     {
-        JsonObject assetResult = readAsset(projectInformation, new Identifier(id, "", "", "page"));
+        JsonObject assetResult = readAsset(projectInformation, new Identifier(id, "page"));
         return getProperty(assetResult, "page", Page.class);
     }
 
     public static XhtmlDataDefinitionBlock readXhtmlBlock(String id, ProjectInformation projectInformation) throws Exception
     {
-        JsonObject assetResult = readAsset(projectInformation, new Identifier(id, "", "", "block_XHTML_DATADEFINITION"));
+        JsonObject assetResult = readAsset(projectInformation, new Identifier(id, "block_XHTML_DATADEFINITION"));
         return getProperty(assetResult, "xhtmlDataDefinitionBlock", XhtmlDataDefinitionBlock.class);
     }
 
@@ -488,16 +492,19 @@ public class RestApi
         return null;
     }
 
+    /**
+     * Reads a page with given path and returns its id. If the page doesn't exist, returns null.
+     */
+    private static String getPageId(String path, ProjectInformation projectInformation) throws Exception
+    {
+        path = PathUtil.removeLeadingSlashes(path).toLowerCase();
+        return projectInformation.getExistingCascadePages().get(path);
+    }
+
     public static String getFileId(String path, ProjectInformation projectInformation) throws Exception
     {
         path = PathUtil.removeLeadingSlashes(path).toLowerCase();
         return projectInformation.getExistingCascadeFiles().get(path);
-    }
-
-    public static String getFolderId(String path, ProjectInformation projectInformation) throws Exception
-    {
-        path = PathUtil.removeLeadingSlashes(path).toLowerCase();
-        return projectInformation.getExistingCascadeFolders().get(path);
     }
 
     public static String getXhtmlBlockId(String path, ProjectInformation projectInformation) throws Exception
@@ -556,7 +563,7 @@ public class RestApi
         else if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING))
         {
             if (projectInformation.getExistingCascadeXhtmlBlocks().keySet().contains(blockPath.toLowerCase()))
-                deleteXhtmlBlock(blockPath, projectInformation);
+                delete(blockPath, "block_XHTML_DATADEFINITION", projectInformation);
         }
 
         // Set up the file object and assign it to the asset object
@@ -565,8 +572,8 @@ public class RestApi
         block.setParentFolderPath(parentFolderPath);
         block.setSiteName(projectInformation.getSiteName());
         block.setMetadataSetId(metadataSetId);
-        block.setXhtml(
-                LinkRewriter.rewriteLinksInXml(JTidy.tidyContentConditionally(FileSystem.getFileContents(file)), blockPath, projectInformation));
+        block.setXhtml(LinkRewriter.rewriteLinksInXml(JTidy.tidyContentConditionally(FileSystem.getFileContents(file)), blockPath, projectInformation,
+                false));
 
         JsonObject data = buildDataWithAsset("xhtmlDataDefinitionBlock", block);
 
@@ -596,10 +603,6 @@ public class RestApi
 
     /**
      * Reads and edits the page so that the links are realigned
-     * 
-     * @param id
-     * @param projectInformation
-     * @throws Exception
      */
     public static void realignLinks(String id, ProjectInformation projectInformation) throws Exception
     {
@@ -609,10 +612,6 @@ public class RestApi
 
     /**
      * Reads and edits the XHTML Block - fixes the links and makes them realigned
-     * 
-     * @param id
-     * @param projectInformation
-     * @throws Exception
      */
     public static void realignXhtmlBlockLinks(String id, ProjectInformation projectInformation) throws Exception
     {
@@ -621,100 +620,24 @@ public class RestApi
         editXhtmlBlock(block, projectInformation);
     }
 
-    /**
-     * Sends an edit request for given XHTML Block
-     */
-    private static void editXhtmlBlock(XhtmlDataDefinitionBlock block, ProjectInformation projectInformation) throws Exception
-    {
-        performApiRequest(projectInformation, "edit", buildDataWithAsset("xhtmlDataDefinitionBlock", block));
-    }
-
-    /**
-     * Asks Cascade Server to delete an XHTML Block with given path. If block didn't exist, the error will be
-     * ignored. If some other problem occurred, an exception will be thrown.
-     */
-    private static void deleteXhtmlBlock(String path, ProjectInformation projectInformation) throws Exception
-    {
-        try
-        {
-            performApiRequest(projectInformation, "delete",
-                    getJsonObjectWithIdentifier(new Identifier(path, projectInformation.getSiteName(), "block_XHTML_DATADEFINITION")));
-        }
-        catch (Exception e)
-        {
-            if (e.getMessage() == null || !e.getMessage()
-                    .equals("Unable to identify an entity based on provided entity path '" + path + "' and type 'block_XHTML_DATADEFINITION'"))
-                throw new Exception("Error occured when deleting an XHTML Block with path '" + path + "': " + e.getMessage());
-        }
-    }
-
-    /**
-     * Reads a page with given path from Cascade Server. If the page doesn't exist, returns null.
-     * 
-     * @param path
-     * @param projectInformation
-     * @return
-     * @throws Exception
-     */
-    private static Page readPageByPath(String path, ProjectInformation projectInformation) throws Exception
-    {
-        String cachePath = PathUtil.getCachePathFromPath(path);
-        String siteName = PathUtil.getSiteNameFromPath(path);
-        if (siteName == null)
-            siteName = projectInformation.getSiteName();
-        try
-        {
-            JsonObject assetResult = performApiRequest(projectInformation, "read",
-                    getJsonObjectWithIdentifier(new Identifier(cachePath, siteName, "page"))).getAsJsonObject("asset");
-            return getProperty(assetResult, "page", Page.class);
-        }
-        catch (Exception e)
-        {
-            if (e.getMessage() == null
-                    || !e.getMessage().equals("Unable to identify an entity based on provided entity path '" + cachePath + "' and type 'page'"))
-                throw new Exception("Error occured when reading a Page with path '" + path + "': " + e.getMessage());
-
-            return null;
-        }
-    }
-
-    /**
-     * Sends an edit request for given page
-     */
     private static void editPage(Page page, ProjectInformation projectInformation) throws Exception
     {
-        performApiRequest(projectInformation, "edit/page", buildDataWithAsset("page", page));
+        edit(buildDataWithAsset("page", page), projectInformation);
     }
 
-    /**
-     * Reads a page with given path and returns its id. If the page doesn't exist, returns null.
-     */
-    private static String getPageId(String path, ProjectInformation projectInformation) throws Exception
+    private static void editXhtmlBlock(XhtmlDataDefinitionBlock block, ProjectInformation projectInformation) throws Exception
     {
-        Page existingPage = readPageByPath(path, projectInformation);
-        if (existingPage != null)
-            return existingPage.getId();
-
-        return null;
+        edit(buildDataWithAsset("xhtmlDataDefinitionBlock", block), projectInformation);
     }
 
-    /**
-     * Asks Cascade Server to delete a page with given path. If page didn't exist, the error will be ignored.
-     * If some other problem occured, an exception will be thrown.
-     */
-    private static void deletePage(String path, ProjectInformation projectInformation) throws Exception
+    private static void edit(JsonObject data, ProjectInformation projectInformation) throws Exception
     {
-        try
-        {
-            performApiRequest(projectInformation, "delete",
-                    getJsonObjectWithIdentifier(new Identifier(path, projectInformation.getSiteName(), "page")));
-        }
-        catch (Exception e)
-        {
-            if (e.getMessage() == null
-                    || !e.getMessage().equals("Unable to identify an entity based on provided entity path '" + path + "' and type 'page'"))
-                throw new Exception("Error occured when deleting a Page with path '" + path + "': " + e.getMessage());
-        }
+        performApiRequest(projectInformation, "edit", data);
+    }
+
+    private static void delete(String path, String type, ProjectInformation projectInformation) throws Exception
+    {
+        performApiRequest(projectInformation, "delete", getJsonObjectWithIdentifier(new Identifier(path, projectInformation.getSiteName(), type)));
     }
 
     /**

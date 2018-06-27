@@ -12,17 +12,23 @@ public class Identifier
     private String type;
     private boolean recycled;
 
-    public Identifier(String id, String path, String siteName, String type)
+    public Identifier(String id, String type)
     {
         this.id = id;
+        this.type = type;
+    }
+
+    public Identifier(String path, String siteName, String type)
+    {
         this.path = new Path();
         this.path.setPath(path);
         this.path.setSiteName(siteName);
         this.type = type;
     }
 
-    public Identifier(String path, String siteName, String type)
+    public Identifier(String id, String path, String siteName, String type)
     {
+        this.id = id;
         this.path = new Path();
         this.path.setPath(path);
         this.path.setSiteName(siteName);

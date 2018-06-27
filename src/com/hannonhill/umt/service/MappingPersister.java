@@ -7,6 +7,7 @@ package com.hannonhill.umt.service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Node;
@@ -16,6 +17,7 @@ import com.hannonhill.umt.ContentTypeInformation;
 import com.hannonhill.umt.DataDefinitionField;
 import com.hannonhill.umt.ExternalRootLevelFolderAssignment;
 import com.hannonhill.umt.Field;
+import com.hannonhill.umt.FieldMapping;
 import com.hannonhill.umt.MetadataSetField;
 import com.hannonhill.umt.MigrationStatus;
 import com.hannonhill.umt.ProjectInformation;
@@ -34,7 +36,7 @@ public class MappingPersister
     private static final String MAPPED_CONTENT_TYPE_PATH_TAG = "mappedContentTypePath";
     private static final String FIELD_MAPPINGS_TAG = "fieldMappings";
     private static final String FIELD_MAPPING_TAG = "fieldMapping";
-    private static final String FIELD_NAME_TAG = "fieldName";
+    private static final String X_PATH_TAG = "xPath";
     private static final String CASCADE_METADATA_FIELD_TAG = "cascadeMetadataField";
     private static final String CASCADE_DATA_DEFINITION_FIELD_TAG = "cascadeDataDefinitionFieldtag";
     private static final String STATIC_VALUE_MAPPINGS_TAG = "staticValueMappings";
@@ -50,9 +52,6 @@ public class MappingPersister
 
     /**
      * Saves the mappings from the projectInformation into the server's file system
-     * 
-     * @param projectInformation
-     * @throws Exception
      */
     public static void persistMappings(ProjectInformation projectInformation) throws Exception
     {
@@ -64,8 +63,8 @@ public class MappingPersister
             content.append("<" + MAPPED_CONTENT_TYPE_PATH_TAG + ">" + contentTypePath + "</" + MAPPED_CONTENT_TYPE_PATH_TAG + ">");
 
         content.append("<" + FIELD_MAPPINGS_TAG + ">");
-        for (String metadataFieldName : projectInformation.getFieldMapping().keySet())
-            persistFieldMapping(content, projectInformation.getFieldMapping(), metadataFieldName);
+        for (FieldMapping fieldMapping : projectInformation.getFieldMappings())
+            persistFieldMapping(content, fieldMapping);
         content.append("</" + FIELD_MAPPINGS_TAG + ">");
 
         content.append("<" + STATIC_VALUE_MAPPINGS_TAG + ">");
@@ -94,8 +93,8 @@ public class MappingPersister
 
     /**
      * Loads the mappings from the file system and assigns them to the projectInformation object. If there is
-     * a problem with loading the saved mappings,
-     * nothing significant will happen - no mappings will be loaded and the stack trace will be in the output.
+     * a problem with loading the saved mappings, nothing significant will happen - no mappings will be loaded
+     * and the stack trace will be in the output.
      * 
      * @param projectInformation
      */
@@ -108,7 +107,7 @@ public class MappingPersister
 
             // Clear existing values
             projectInformation.setContentTypePath(null);
-            projectInformation.getFieldMapping().clear();
+            projectInformation.getFieldMappings().clear();
             projectInformation.getStaticValueMapping().clear();
             projectInformation.setDefaultExtensions();
             projectInformation.getExternalRootLevelFolderAssignemnts().clear();
@@ -132,7 +131,7 @@ public class MappingPersister
                 else if (node.getNodeName().equals(ROOT_LEVEL_FOLDERS_TAG))
                     loadRootLevelFolders(projectInformation, node);
                 else if (node.getNodeName().equals(FIELD_MAPPINGS_TAG))
-                    loadFieldMappings(node, projectInformation.getFieldMapping(), contentType);
+                    loadFieldMappings(node, projectInformation.getFieldMappings(), contentType);
                 else if (node.getNodeName().equals(STATIC_VALUE_MAPPINGS_TAG))
                     loadStaticValueMappings(node, projectInformation.getStaticValueMapping(), contentType);
                 else if (node.getNodeName().equals(PAGE_EXTENSIONS_TAG))
@@ -193,14 +192,9 @@ public class MappingPersister
 
     /**
      * Assigns the static value mappings from each &lt;fieldMapping&gt; child to the mappings. Finds the field
-     * object by its identifier in the content type.
-     * If the field object could not be found, it gets ignored.
-     * 
-     * @param mappingsNode
-     * @param mappings
-     * @param contentType
+     * object by its identifier in the content type. If the field object could not be found, it gets ignored.
      */
-    private static void loadFieldMappings(Node mappingsNode, Map<String, Field> mappings, ContentTypeInformation contentType)
+    private static void loadFieldMappings(Node mappingsNode, List<FieldMapping> mappings, ContentTypeInformation contentType)
     {
         for (int i = 0; i < mappingsNode.getChildNodes().getLength(); i++)
         {
@@ -212,24 +206,19 @@ public class MappingPersister
 
     /**
      * Assigns the field mappings from given node to the mappings. Finds the field object by its identifier in
-     * the content type.
-     * If the field object could not be found, it gets ignored.
-     * 
-     * @param mappingNode
-     * @param mappings
-     * @param contentType
+     * the content type. If the field object could not be found, it gets ignored.
      */
-    private static void loadFieldMapping(Node mappingNode, Map<String, Field> mappings, ContentTypeInformation contentType)
+    private static void loadFieldMapping(Node mappingNode, List<FieldMapping> mappings, ContentTypeInformation contentType)
     {
-        String fieldName = null;
+        String xPath = null;
         String cascadeMetadataField = null;
         String cascadeDataDefinitionField = null;
         for (int i = 0; i < mappingNode.getChildNodes().getLength(); i++)
         {
             Node node = mappingNode.getChildNodes().item(i);
             String nodeName = node.getNodeName();
-            if (nodeName.equals(FIELD_NAME_TAG))
-                fieldName = node.getTextContent();
+            if (nodeName.equals(X_PATH_TAG))
+                xPath = node.getTextContent();
             else if (nodeName.equals(CASCADE_METADATA_FIELD_TAG))
                 cascadeMetadataField = node.getTextContent();
             else if (nodeName.equals(CASCADE_DATA_DEFINITION_FIELD_TAG))
@@ -237,7 +226,7 @@ public class MappingPersister
         }
 
         // Quit if the field name wasn't provided or neither metadata nor data definition field was provided
-        if ((fieldName == null) || (cascadeMetadataField == null && cascadeDataDefinitionField == null))
+        if ((xPath == null) || (cascadeMetadataField == null && cascadeDataDefinitionField == null))
             return;
 
         // Quit if the field with given identifier does not exist anymore - it's possible that the metadata
@@ -246,13 +235,13 @@ public class MappingPersister
         if (field == null)
             return;
 
-        mappings.put(fieldName, field);
+        mappings.add(new FieldMapping(xPath, field));
     }
 
     /**
      * Assigns the static value mappings from each &lt;staticValueMapping&gt; child to the mappings. Finds the
-     * field object by its identifier in the content type.
-     * If the field object could not be found, it gets ignored.
+     * field object by its identifier in the content type. If the field object could not be found, it gets
+     * ignored.
      * 
      * @param mappingsNode
      * @param mappings
@@ -270,8 +259,7 @@ public class MappingPersister
 
     /**
      * Assigns the static value mappings from given node to the mappings. Finds the field object by its
-     * identifier in the content type.
-     * If the field object could not be found, it gets ignored.
+     * identifier in the content type. If the field object could not be found, it gets ignored.
      * 
      * @param mappingNode
      * @param mappings
@@ -309,9 +297,8 @@ public class MappingPersister
 
     /**
      * If cascadeMetadataField is not null, returns a metadata field from the content type that matches the
-     * cascadeMetadataField identifier.
-     * If not, returns a data definition field from the content type that matches the
-     * cascadeDataDefinitionField identifier.
+     * cascadeMetadataField identifier. If not, returns a data definition field from the content type that
+     * matches the cascadeDataDefinitionField identifier.
      * 
      * @param contentType
      * @param cascadeMetadataField
@@ -320,8 +307,8 @@ public class MappingPersister
      */
     private static Field getField(ContentTypeInformation contentType, String cascadeMetadataField, String cascadeDataDefinitionField)
     {
-        return cascadeMetadataField != null ? contentType.getMetadataFields().get(cascadeMetadataField) : contentType.getDataDefinitionFields().get(
-                cascadeDataDefinitionField);
+        return cascadeMetadataField != null ? contentType.getMetadataFields().get(cascadeMetadataField)
+                : contentType.getDataDefinitionFields().get(cascadeDataDefinitionField);
     }
 
     /**
@@ -358,16 +345,12 @@ public class MappingPersister
     /**
      * Adds the &lt;fieldMapping&gt; tag to the content with information about the xml field name mapping to a
      * Cascade field
-     * 
-     * @param content
-     * @param mapping
-     * @param fieldName
      */
-    private static void persistFieldMapping(StringBuilder content, Map<String, Field> mapping, String fieldName)
+    private static void persistFieldMapping(StringBuilder content, FieldMapping mapping)
     {
         content.append("<" + FIELD_MAPPING_TAG + ">");
-        content.append("<" + FIELD_NAME_TAG + ">" + fieldName + "</" + FIELD_NAME_TAG + ">");
-        persistCascadeField(content, mapping.get(fieldName));
+        content.append("<" + X_PATH_TAG + ">" + mapping.getXPath() + "</" + X_PATH_TAG + ">");
+        persistCascadeField(content, mapping.getField());
         content.append("</" + FIELD_MAPPING_TAG + ">");
     }
 
@@ -383,15 +366,14 @@ public class MappingPersister
     {
         content.append("<" + STATIC_VALUE_MAPPING_TAG + ">");
         persistCascadeField(content, field);
-        content.append("<" + STATIC_VALUE_TAG + ">" + mapping.get(field).replaceAll("&", "&amp;").replaceAll("<", "&lt;") + "</" + STATIC_VALUE_TAG
-                + ">");
+        content.append(
+                "<" + STATIC_VALUE_TAG + ">" + mapping.get(field).replaceAll("&", "&amp;").replaceAll("<", "&lt;") + "</" + STATIC_VALUE_TAG + ">");
         content.append("</" + STATIC_VALUE_MAPPING_TAG + ">");
     }
 
     /**
      * Adds the &lt;cascadeMetadataField&gt; tag or &lt;cascadeDataDefinitionField&gt; tag depending on the
-     * field type to the content
-     * with the identifier of the field
+     * field type to the content with the identifier of the field
      * 
      * @param content
      * @param cascadeField
@@ -401,7 +383,7 @@ public class MappingPersister
         if (cascadeField instanceof MetadataSetField)
             content.append("<" + CASCADE_METADATA_FIELD_TAG + ">" + cascadeField.getIdentifier() + "</" + CASCADE_METADATA_FIELD_TAG + ">");
         else if (cascadeField instanceof DataDefinitionField)
-            content.append("<" + CASCADE_DATA_DEFINITION_FIELD_TAG + ">" + cascadeField.getIdentifier() + "</" + CASCADE_DATA_DEFINITION_FIELD_TAG
-                    + ">");
+            content.append(
+                    "<" + CASCADE_DATA_DEFINITION_FIELD_TAG + ">" + cascadeField.getIdentifier() + "</" + CASCADE_DATA_DEFINITION_FIELD_TAG + ">");
     }
 }

@@ -13,7 +13,9 @@ import java.util.Map;
 
 import com.hannonhill.umt.ContentTypeInformation;
 import com.hannonhill.umt.Field;
+import com.hannonhill.umt.FieldMapping;
 import com.hannonhill.umt.ProjectInformation;
+import com.hannonhill.umt.service.JTidy;
 import com.hannonhill.umt.service.MappingPersister;
 import com.hannonhill.umt.util.XmlUtil;
 
@@ -44,6 +46,7 @@ public class AssignFieldsAction extends BaseAction
 
     private String testXPath;
     private String testXml;
+    private Boolean testMultiple;
     private InputStream inputStream;
 
     @Override
@@ -57,9 +60,14 @@ public class AssignFieldsAction extends BaseAction
 
     public String testXPath() throws Exception
     {
-        // TODO: Check if field is multiple and output and call evaluateXPathExpressionForMultipleField in
-        // that case
-        String result = XmlUtil.evaluateXPathExpression(testXml, testXPath);
+        String result;
+        String cleanXml = JTidy.tidyContentConditionallyFullHtml(testXml);
+        if (testMultiple == null || testMultiple == false)
+            result = XmlUtil.evaluateXPathExpression(cleanXml, testXPath);
+        else
+            result = String.join("\r\n\r\n-----------------------------------\r\n\r\n",
+                    XmlUtil.evaluateXPathExpressionForMultipleField(cleanXml, testXPath));
+
         inputStream = new ByteArrayInputStream(result.getBytes("UTF-8"));
         return SUCCESS;
     }
@@ -82,7 +90,7 @@ public class AssignFieldsAction extends BaseAction
         ProjectInformation projectInformation = getProjectInformation();
 
         // Clear out the old information
-        projectInformation.getFieldMapping().clear();
+        projectInformation.getFieldMappings().clear();
         projectInformation.getStaticValueMapping().clear();
 
         String contentTypePath = projectInformation.getContentTypePath();
@@ -154,7 +162,7 @@ public class AssignFieldsAction extends BaseAction
 
         // Similar way, by checking which field is "null", we can add the mapping to correct type of map
         if (!isStaticValue)
-            projectInformation.getFieldMapping().put(selectedXPath, field);
+            projectInformation.getFieldMappings().add(new FieldMapping(selectedXPath, field));
         else
             projectInformation.getStaticValueMapping().put(field, staticValue);
     }
@@ -210,9 +218,9 @@ public class AssignFieldsAction extends BaseAction
     /**
      * @return Returns the fieldMap.
      */
-    public Map<String, Field> getFieldMap()
+    public List<FieldMapping> getFieldMappings()
     {
-        return getProjectInformation().getFieldMapping();
+        return getProjectInformation().getFieldMappings();
     }
 
     /**
@@ -285,6 +293,22 @@ public class AssignFieldsAction extends BaseAction
     public void setTestXml(String testXml)
     {
         this.testXml = testXml;
+    }
+
+    /**
+     * @return Returns the testMultiple.
+     */
+    public Boolean getTestMultiple()
+    {
+        return testMultiple;
+    }
+
+    /**
+     * @param testMultiple the testMultiple to set
+     */
+    public void setTestMultiple(Boolean testMultiple)
+    {
+        this.testMultiple = testMultiple;
     }
 
 }

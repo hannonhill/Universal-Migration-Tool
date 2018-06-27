@@ -55,7 +55,7 @@
 													</optgroup>
 													<optgroup label="-Data Definition-">
 														<s:iterator value="cascadeDataDefinitionFields">												
-															<option value="d<s:property value="identifier"/>">
+															<option value="d<s:property value="identifier"/>" data-multiple="<s:property value="multiple"/>">
 																<s:property value="label"/>
 															</option>
 														</s:iterator>
@@ -91,7 +91,7 @@
           </div>
           <div>
             <p>Result (press the play button next to XPath assignment)</p>
-            <textarea style="width:100%;" rows="5" id="test-result"></textarea>
+            <textarea style="width:100%;" rows="25" id="test-result"></textarea>
           </div>
 				</div>
 			</div>
@@ -114,15 +114,18 @@
 				});
 				
 				$('table').on('click', '.js-test-xpath', function() {
-          var xpath = $(this).siblings('input[name="selectedXPaths"]').val(); 
+				  var $selectedXPath = $(this).siblings('input[name="selectedXPaths"]');
+          var xpath = $selectedXPath.val(); 
+          var multiple = $selectedXPath.attr('data-multiple');
           var xml = $('#test-xml').val();
-          $.get('/TestXPath', {testXPath: xpath, testXml: xml}, function(resp) {
+          $.get('/TestXPath', {testXPath: xpath, testXml: xml, testMultiple: multiple}, function(resp) {
             $('#test-result').val(resp);
+            $('#test-result')[0].scrollIntoView()
           })
         });
 				
-				<s:iterator value="fieldMap.entrySet()">
-					addMappingByName("<s:property value="key" escapeJavaScript="true" escape="false"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
+				<s:iterator value="fieldMappings">
+					addMappingByName("<s:property value="xPath" escapeJavaScript="true" escape="false"/>", null, "<s:property value="field.identifier"/>", "<s:property value="field.class.name"/>");
 				</s:iterator>
 				<s:iterator value="staticValueMap.entrySet()">
 					addMappingByName(null, "<s:property value="value" escapeJavaScript="true" escape="false"/>", "<s:property value="key.identifier"/>", "<s:property value="key.class.name"/>");
@@ -185,6 +188,7 @@
 						xPathEscaped = xPath === null ? null : xPath.entityEncode(),
 						cascadeFieldNamesEl = document.getElementById("cascadeFieldNames"),
 						cascadeFieldName = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].text,
+						isMultiple = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].getAttribute('data-multiple');
 						cascadeFieldIdentifierFull = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].value,
 						cascadeFieldTypeLetter = cascadeFieldIdentifierFull.charAt(0),
 						cascadeFieldIdentifier = cascadeFieldIdentifierFull.substring(1),
@@ -194,7 +198,7 @@
 							<td>" + cascadeFieldName + "</td> \
 							<td>" + cascadeFieldType + "</td> \
 							<td> \
-							<input type='hidden' name='selectedXPaths' value='" + (xPath !== null ? xPathEscaped : "null") + "' /> \
+							<input type='hidden' name='selectedXPaths' value='" + (xPath !== null ? xPathEscaped : "null") + "' data-multiple='" + isMultiple + "'/> \
 							<input type='hidden' name='staticValues' value='" + staticValueEscaped + "'/> \
 							<input type='hidden' name='selectedCascadeMetadataFields' value='" + (cascadeFieldTypeLetter === "m" ? cascadeFieldIdentifier : "null") + "'/> \
 							<input type='hidden' name='selectedCascadeDataDefinitionFields' value='" + (cascadeFieldTypeLetter === "d" ? cascadeFieldIdentifier : "null") + "'/> \

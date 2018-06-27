@@ -6,8 +6,10 @@
 package com.hannonhill.umt;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,8 +38,7 @@ public class ProjectInformation
     private String overwriteBehavior; // Matches one of the constants
                                       // ProjectInformation.OVERWRITE_BEHAVIOR_???
     private Map<String, ExternalRootLevelFolderAssignment> externalRootLevelFolderAssignemnts;
-    private final Map<String, Field> fieldMapping = new HashMap<>(); // a mapping from an XPath to a Cascade
-                                                                     // field
+    private final List<FieldMapping> fieldMappings = new ArrayList<>();
     private final Map<Field, String> staticValueMapping = new HashMap<>(); // this mapping maps from a Cascade
                                                                            // field to its static value it
                                                                            // should get
@@ -415,11 +416,11 @@ public class ProjectInformation
     }
 
     /**
-     * @return Returns the fieldMapping.
+     * @return Returns the fieldMappings.
      */
-    public Map<String, Field> getFieldMapping()
+    public List<FieldMapping> getFieldMappings()
     {
-        return fieldMapping;
+        return fieldMappings;
     }
 
     /**

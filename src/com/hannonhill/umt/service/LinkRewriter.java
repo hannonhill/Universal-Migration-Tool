@@ -37,14 +37,9 @@ public class LinkRewriter
      * Rewrites all the file and page links in the xml. If it is a page link (ends with any of the
      * {@link XmlAnalyzer#FILE_TO_PAGE_EXTENSIONS} extension and is a relative), the extension will be
      * stripped.
-     * 
-     * @param xml
-     * @param assetPath
-     * @param projectInformation
-     * @return
-     * @throws Exception
      */
-    public static String rewriteLinksInXml(String xml, String assetPath, ProjectInformation projectInformation) throws Exception
+    public static String rewriteLinksInXml(String xml, String assetPath, ProjectInformation projectInformation, boolean prependLevelUp)
+            throws Exception
     {
         // To make things faster, if it's an empty string, just quit
         if (xml == null || xml.equals(""))
@@ -61,7 +56,7 @@ public class LinkRewriter
         Document document = builder.parse(new InputSource(inputStream));
 
         Node rootNode = document.getChildNodes().item(0);
-        rewriteLinkInNode(rootNode, assetPath, projectInformation);
+        rewriteLinkInNode(rootNode, assetPath, projectInformation, prependLevelUp);
 
         // convert document to string
         DOMSource domSource = new DOMSource(document);
@@ -125,25 +120,21 @@ public class LinkRewriter
      * Rewrites the file and page link in the xml tag node and all ancestor nodes. If it is a page link (ends
      * with any of the {@link XmlAnalyzer#FILE_TO_PAGE_EXTENSIONS} extension and is a relative), the extension
      * will be stripped.
-     * 
-     * @param node
-     * @param pagePath
-     * @param projectInformation
      */
-    private static void rewriteLinkInNode(Node node, String pagePath, ProjectInformation projectInformation)
+    private static void rewriteLinkInNode(Node node, String pagePath, ProjectInformation projectInformation, boolean prependLevelUp)
     {
         if (node.getNodeName().equals("img"))
-            rewriteLink(node, "src", pagePath, projectInformation);
+            rewriteLink(node, "src", pagePath, projectInformation, prependLevelUp);
         if (node.getNodeName().equals("script"))
-            rewriteLink(node, "src", pagePath, projectInformation);
+            rewriteLink(node, "src", pagePath, projectInformation, prependLevelUp);
         else if (node.getNodeName().equals("a"))
-            rewriteLink(node, "href", pagePath, projectInformation);
+            rewriteLink(node, "href", pagePath, projectInformation, prependLevelUp);
         else if (node.getNodeName().equals("link"))
-            rewriteLink(node, "href", pagePath, projectInformation);
+            rewriteLink(node, "href", pagePath, projectInformation, prependLevelUp);
 
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++)
-            rewriteLinkInNode(children.item(i), pagePath, projectInformation);
+            rewriteLinkInNode(children.item(i), pagePath, projectInformation, prependLevelUp);
     }
 
     /**
@@ -196,13 +187,9 @@ public class LinkRewriter
      * Rewrites a file or page link in the xml tag node's attribute of given attributeName if it is a relative
      * link. If it is a page link (ends with any of the {@link XmlAnalyzer#FILE_TO_PAGE_EXTENSIONS} extension
      * and is a relative), the extension will be stripped. Keeps the anchor.
-     * 
-     * @param element
-     * @param attributeName
-     * @param pagePath
-     * @param projectInformation
      */
-    private static void rewriteLink(Node element, String attributeName, String pagePath, ProjectInformation projectInformation)
+    private static void rewriteLink(Node element, String attributeName, String pagePath, ProjectInformation projectInformation,
+            boolean prependLevelUp)
     {
         Node attribute = element.getAttributes().getNamedItem(attributeName);
         if (attribute == null)
@@ -216,6 +203,9 @@ public class LinkRewriter
 
         if (!PathUtil.isLinkRelative(withoutAnchor))
             return;
+
+        if (prependLevelUp)
+            withoutAnchor = "../" + withoutAnchor;
 
         String newPath = rewriteLink(withoutAnchor, pagePath, projectInformation);
 

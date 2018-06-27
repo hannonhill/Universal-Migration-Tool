@@ -16,6 +16,7 @@ import com.hannonhill.umt.ChooserType;
 import com.hannonhill.umt.ContentTypeInformation;
 import com.hannonhill.umt.DataDefinitionField;
 import com.hannonhill.umt.Field;
+import com.hannonhill.umt.FieldMapping;
 import com.hannonhill.umt.MetadataSetField;
 import com.hannonhill.umt.ProjectInformation;
 import com.hannonhill.umt.TaskStatus;
@@ -43,13 +44,11 @@ public class ApiUtil
      * Creates a Page object based on the information provided in the projectInformation and the actual file
      * from which the Page needs to be created.
      */
-    public static Page setupPageObject(Path pageFile, String path, ProjectInformation projectInformation) throws Exception
+    public static Page setupPageObject(Path pageFile, String path, boolean movedDeeper, ProjectInformation projectInformation) throws Exception
     {
         String pageName = PathUtil.truncateExtension(PathUtil.getNameFromPath(path));
         String parentFolderPath = PathUtil.getParentFolderPathCascade(path);
         String pageFileContents = JTidy.tidyContentConditionallyFullHtml(FileSystem.getFileContents(pageFile));
-        if (parentFolderPath.equals(""))
-            parentFolderPath = "/";
 
         String contentTypePath = projectInformation.getContentTypePath();
         ContentTypeInformation contentType = projectInformation.getContentTypes().get(contentTypePath);
@@ -63,7 +62,8 @@ public class ApiUtil
         page.setMetadata(createPageMetadata(projectInformation, pageFileContents, metadataFieldNames, projectInformation.getMigrationStatus()));
 
         // Create the structured data object with the tree of structured data nodes
-        StructuredData structuredData = createPageStructuredData(projectInformation, pageFileContents, parentFolderPath + "/" + pageName);
+        StructuredData structuredData = createPageStructuredData(projectInformation, pageFileContents, parentFolderPath + "/" + pageName,
+                movedDeeper);
 
         // If page uses data definition, assign it to the page object
         if (contentType.isUsesDataDefinition())
@@ -88,16 +88,17 @@ public class ApiUtil
     /**
      * Creates the page's structured data object with the values from the fileContents.
      */
-    private static StructuredData createPageStructuredData(ProjectInformation projectInformation, String fileContents, String assetPath)
-            throws Exception
+    private static StructuredData createPageStructuredData(ProjectInformation projectInformation, String fileContents, String assetPath,
+            boolean movedDeeper) throws Exception
     {
         // Create the root group object to which all the information will be attached
         StructuredDataGroup rootGroup = new StructuredDataGroup();
 
         // For each field mapping assign appropriate value in structured data
-        for (String xPath : projectInformation.getFieldMapping().keySet())
+        for (FieldMapping fieldMapping : projectInformation.getFieldMappings())
         {
-            Field field = projectInformation.getFieldMapping().get(xPath);
+            String xPath = fieldMapping.getXPath();
+            Field field = fieldMapping.getField();
 
             if (field == null || !(field instanceof DataDefinitionField))
                 continue;
@@ -111,7 +112,7 @@ public class ApiUtil
             if (ddField.isWysiwyg())
             {
                 for (int i = 0; i < fieldValues.size(); i++)
-                    fieldValues.set(i, LinkRewriter.rewriteLinksInXml(fieldValues.get(i), assetPath, projectInformation));
+                    fieldValues.set(i, LinkRewriter.rewriteLinksInXml(fieldValues.get(i), assetPath, projectInformation, movedDeeper));
             }
             else if (ddField.getChooserType() == ChooserType.FILE)
             {
@@ -127,6 +128,8 @@ public class ApiUtil
 
                     if (relativePath != null && !relativePath.trim().equals(""))
                     {
+                        if (movedDeeper)
+                            relativePath = "../" + relativePath;
                         String absolutePath = PathUtil.convertRelativeToAbsolute(relativePath.trim(), assetPath);
                         String fileId = RestApi.getFileId(absolutePath, projectInformation);
                         if (fileId != null)
@@ -162,13 +165,6 @@ public class ApiUtil
     /**
      * Creates the page's metadata object with the values from the xmlPage uses the mappings from the
      * assetType.
-     * 
-     * @param projectInformation
-     * @param fileContents
-     * @param availableMetadataFieldNames
-     * @param taskStatus
-     * @return
-     * @throws Exception
      */
     private static Metadata createPageMetadata(ProjectInformation projectInformation, String fileContents, Set<String> availableMetadataFieldNames,
             TaskStatus taskStatus) throws Exception
@@ -183,9 +179,10 @@ public class ApiUtil
                 dynamicFieldsList.add(new DynamicMetadataField(metadataFieldName));
 
         // For each field mapping assign appropriate value in metadata
-        for (String xPath : projectInformation.getFieldMapping().keySet())
+        for (FieldMapping fieldMapping : projectInformation.getFieldMappings())
         {
-            Field field = projectInformation.getFieldMapping().get(xPath);
+            String xPath = fieldMapping.getXPath();
+            Field field = fieldMapping.getField();
 
             if (field == null)
                 continue;
@@ -240,12 +237,6 @@ public class ApiUtil
     /**
      * Assigns given fieldValue of given fieldName to metadata object if it is a standard metadata field or
      * adds it to the list of dynamicFields.
-     * 
-     * @param metadata
-     * @param dynamicFields
-     * @param field
-     * @param fieldValue
-     * @throws Exception
      */
     private static void assignAppropriateFieldValue(Metadata metadata, List<DynamicMetadataField> dynamicFields, MetadataSetField field,
             String fieldValue) throws Exception
