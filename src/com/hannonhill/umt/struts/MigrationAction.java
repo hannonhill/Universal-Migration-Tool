@@ -147,8 +147,7 @@ public class MigrationAction extends BaseAction
 
         if (MigrationTask.TASK_NAME.equals(currentTask) && !projectInformation.getMigrationStatus().isCompleted())
             return SUCCESS;
-
-        new MigrationTask(getProjectInformation()).start();
+        new MigrationTask(projectInformation).start();
         return SUCCESS;
     }
 

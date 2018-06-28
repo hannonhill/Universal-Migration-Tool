@@ -13,9 +13,8 @@ import com.hannonhill.umt.service.Migrator;
 /**
  * The background migration task
  * 
- * @author  Artur Tomusiak
- * @version $Id$
- * @since   1.0
+ * @author Artur Tomusiak
+ * @since 1.0
  */
 public class MigrationTask extends Thread
 {
@@ -29,6 +28,13 @@ public class MigrationTask extends Thread
      */
     public MigrationTask(ProjectInformation projectInformation)
     {
+
+        projectInformation.getExistingAssetPaths().clear();
+        projectInformation.getExistingCascadeFiles().clear();
+        projectInformation.getExistingCascadeFolders().clear();
+        projectInformation.getExistingCascadePages().clear();
+        projectInformation.getExistingCascadeXhtmlBlocks().clear();
+
         this.projectInformation = projectInformation;
     }
 

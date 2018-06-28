@@ -248,8 +248,11 @@ public class RestApi
 
     public static void createFolder(String path, ProjectInformation projectInformation) throws Exception
     {
-        if (projectInformation.getExistingAssetPaths().contains(path.toLowerCase()))
+        if (projectInformation.getExistingCascadeFolders().containsKey(path.toLowerCase()))
             return;
+
+        if (projectInformation.getExistingAssetPaths().contains(path.toLowerCase()))
+            throw new Exception("Folder with path " + path + " needs to be created. However, another asset already exists with the same path.");
 
         String parentFolderPath = PathUtil.getParentFolderPathCascade(path);
         if (!projectInformation.getExistingAssetPaths().contains(parentFolderPath.toLowerCase()))
