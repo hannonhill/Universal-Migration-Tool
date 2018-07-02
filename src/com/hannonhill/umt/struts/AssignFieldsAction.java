@@ -60,12 +60,14 @@ public class AssignFieldsAction extends BaseAction
 
     public String testXPath() throws Exception
     {
-        String result;
+        String result = "";
         String cleanXml = JTidy.tidyContentConditionallyFullHtml(testXml);
+        if (!cleanXml.equals(testXml))
+            result = "TIDIED XHTML:\r\n" + cleanXml + "\r\n\r\n-----------------------------------\r\n\r\nRESULT:\r\n";
         if (testMultiple == null || testMultiple == false)
-            result = XmlUtil.evaluateXPathExpression(cleanXml, testXPath);
+            result += XmlUtil.evaluateXPathExpression(cleanXml, testXPath);
         else
-            result = String.join("\r\n\r\n-----------------------------------\r\n\r\n",
+            result += String.join("\r\n\r\n-----------------------------------\r\n\r\n",
                     XmlUtil.evaluateXPathExpressionForMultipleField(cleanXml, testXPath));
 
         inputStream = new ByteArrayInputStream(result.getBytes("UTF-8"));

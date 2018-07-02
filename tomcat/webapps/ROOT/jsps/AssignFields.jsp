@@ -118,7 +118,7 @@
           var xpath = $selectedXPath.val(); 
           var multiple = $selectedXPath.attr('data-multiple');
           var xml = $('#test-xml').val();
-          $.get('/TestXPath', {testXPath: xpath, testXml: xml, testMultiple: multiple}, function(resp) {
+          $.post('/TestXPath', {testXPath: xpath, testXml: xml, testMultiple: multiple}, function(resp) {
             $('#test-result').val(resp);
             $('#test-result')[0].scrollIntoView()
           })
