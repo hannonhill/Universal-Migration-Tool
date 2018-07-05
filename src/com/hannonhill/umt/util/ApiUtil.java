@@ -109,6 +109,10 @@ public class ApiUtil
                 fieldValues = XmlUtil.evaluateXPathExpressionForMultipleField(fileContents, xPath);
             else
                 fieldValues = convertToList(XmlUtil.evaluateXPathExpression(fileContents, xPath));
+
+            if (fieldValues.size() == 0)
+                continue;
+
             if (ddField.isWysiwyg())
             {
                 for (int i = 0; i < fieldValues.size(); i++)
