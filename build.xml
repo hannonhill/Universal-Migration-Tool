@@ -48,17 +48,6 @@
 		</war>
 	</target>
     
-  <target name="generate-stubs" depends="clean">
-		<taskdef name="wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask" classpathref="classpath" />
-		<mkdir dir="${src.dir}"/>
-		<wsdl2java
-			url="${wsdl.dir}/asset-operation.wsdl"
-			debug="false"
-			all="true"
-			output="${src.dir}"
-		/>
-	</target>
-    
   <target name="clean">
       <echo>Cleaning the project</echo>
       <delete dir="${classes.com.dir}" />

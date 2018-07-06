@@ -55,7 +55,7 @@
 													</optgroup>
 													<optgroup label="-Data Definition-">
 														<s:iterator value="cascadeDataDefinitionFields">												
-															<option value="d<s:property value="identifier"/>">
+															<option value="d<s:property value="identifier"/>" data-multiple="<s:property value="multiple"/>">
 																<s:property value="label"/>
 															</option>
 														</s:iterator>
@@ -72,8 +72,8 @@
 							  <table summary="Mappings" class="table table-striped">
 									<thead>
 										<tr>
-											<th style="width:35%">From</th>
-											<th style="width:35%">To Cascade Field</th>
+											<th style="width:32.5%">From</th>
+											<th style="width:32.5%">To Cascade Field</th>
 											<th style="width:20%">Type</th>
 											<th>&nbsp;</th>
 										</tr>
@@ -85,6 +85,14 @@
 						<button class="btn pull-left" onclick="window.location='/AssignContentType';return false;">Previous</button>
 					 	<button type="submit" name="submitButton" class="btn btn-primary pull-right">Save and Next</button>
 					</form>
+          <div style="margin-top: 50px;">
+            <p>Paste test XML</p>
+            <textarea style="width:100%;" rows="5" id="test-xml"></textarea>
+          </div>
+          <div>
+            <p>Result (press the play button next to XPath assignment)</p>
+            <textarea style="width:100%;" rows="25" id="test-result"></textarea>
+          </div>
 				</div>
 			</div>
 		</div>
@@ -105,8 +113,19 @@
 					$(this).parents('tr').remove();
 				});
 				
-				<s:iterator value="fieldMap.entrySet()">
-					addMappingByName("<s:property value="key" escapeJavaScript="true" escape="false"/>", null, "<s:property value="value.identifier"/>", "<s:property value="value.class.name"/>");
+				$('table').on('click', '.js-test-xpath', function() {
+				  var $selectedXPath = $(this).siblings('input[name="selectedXPaths"]');
+          var xpath = $selectedXPath.val(); 
+          var multiple = $selectedXPath.attr('data-multiple');
+          var xml = $('#test-xml').val();
+          $.post('/TestXPath', {testXPath: xpath, testXml: xml, testMultiple: multiple}, function(resp) {
+            $('#test-result').val(resp);
+            $('#test-result')[0].scrollIntoView()
+          })
+        });
+				
+				<s:iterator value="fieldMappings">
+					addMappingByName("<s:property value="xPath" escapeJavaScript="true" escape="false"/>", null, "<s:property value="field.identifier"/>", "<s:property value="field.class.name"/>");
 				</s:iterator>
 				<s:iterator value="staticValueMap.entrySet()">
 					addMappingByName(null, "<s:property value="value" escapeJavaScript="true" escape="false"/>", "<s:property value="key.identifier"/>", "<s:property value="key.class.name"/>");
@@ -151,7 +170,7 @@
 			function addMappingByName(xPath, staticValue, cascade, cascadeType)
 			{
 				var cascadeIndex = null;
-				var cascadeTypeLetter = cascadeType=="com.hannonhill.smt.MetadataSetField" ? "m" : "d";
+				var cascadeTypeLetter = cascadeType=="com.hannonhill.umt.MetadataSetField" ? "m" : "d";
 				cascade = cascadeTypeLetter + cascade;
 				
 				var cascadeFieldNamesEl = document.getElementById("cascadeFieldNames");
@@ -169,6 +188,7 @@
 						xPathEscaped = xPath === null ? null : xPath.entityEncode(),
 						cascadeFieldNamesEl = document.getElementById("cascadeFieldNames"),
 						cascadeFieldName = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].text,
+						isMultiple = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].getAttribute('data-multiple');
 						cascadeFieldIdentifierFull = cascadeFieldNamesEl.options[cascadeFieldSelectedIndex].value,
 						cascadeFieldTypeLetter = cascadeFieldIdentifierFull.charAt(0),
 						cascadeFieldIdentifier = cascadeFieldIdentifierFull.substring(1),
@@ -178,11 +198,12 @@
 							<td>" + cascadeFieldName + "</td> \
 							<td>" + cascadeFieldType + "</td> \
 							<td> \
-							<input type='hidden' name='selectedXPaths' value='" + (xPath !== null ? xPathEscaped : "null") + "' /> \
+							<input type='hidden' name='selectedXPaths' value='" + (xPath !== null ? xPathEscaped : "null") + "' data-multiple='" + isMultiple + "'/> \
 							<input type='hidden' name='staticValues' value='" + staticValueEscaped + "'/> \
 							<input type='hidden' name='selectedCascadeMetadataFields' value='" + (cascadeFieldTypeLetter === "m" ? cascadeFieldIdentifier : "null") + "'/> \
 							<input type='hidden' name='selectedCascadeDataDefinitionFields' value='" + (cascadeFieldTypeLetter === "d" ? cascadeFieldIdentifier : "null") + "'/> \
-							<a class='btn btn-small js-remove-mapping' title='Remove'><i class='icon-remove-sign'></i></a> \
+              " + (xPath !== null ? "<a class='btn btn-small js-test-xpath' title='Text'><i class='icon-play'></i></a>" : "") +
+							"<a class='btn btn-small js-remove-mapping' title='Remove'><i class='icon-remove-sign'></i></a> \
 							</td> \
 						</tr>");
 

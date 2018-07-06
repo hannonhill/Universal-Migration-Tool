@@ -52,7 +52,7 @@
 					</table>
 				</div>
 				<div style="text-align: center;padding-top: 20px;">
-					<a class="btn" onclick="window.location='/MigrationSummary';return false;" id="goBack" style="display:none;">Go Back</a>
+					<div style="display: none;"><%-- TODO: Fix a bug where going back and then proceeding forward does not restart the migration --%><a class="btn" onclick="window.location='/MigrationSummary';return false;" id="goBack" style="display:none;">Go Back</a></div> 
 					<a class="btn" onclick="callStop();return false;" id="stopMigration">Stop Migration</a>
 					<a class="btn" onclick="callStop();return false;" id="stopLinkChecker" style="display:none;">Stop Link Checker</a>
 					<a class="btn" onclick="window.location='/StartFromBeginning';return false;" id="startOver">Start From Beginning</a>
@@ -297,12 +297,12 @@
 
 			function closeEditorMigrationWarning()
 			{
-				return 'If you navigate away, you will not be able to see the migration progress or the log but the migration will continue running. The log is saved on the SMT server\'s filesystem.'
+				return 'If you navigate away, you will not be able to see the migration progress or the log but the migration will continue running. The log is saved on the UMT server\'s filesystem.'
 			}
 			
 			function closeEditorLinkCheckingWarning()
 			{
-				return 'If you navigate away, you will not be able to see the link checking progress or the log but the link checking will continue running. The log is saved on the SMT server\'s filesystem.'
+				return 'If you navigate away, you will not be able to see the link checking progress or the log but the link checking will continue running. The log is saved on the UMT server\'s filesystem.'
 			}
 
 			function enableButtons(goBack, stopMigration, stopLinkChecker, startOver, startLinkChecker, restartLinkChecker, restartMigration)

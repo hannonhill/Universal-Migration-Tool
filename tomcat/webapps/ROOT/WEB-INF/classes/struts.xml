@@ -12,95 +12,102 @@
     <package name="default" namespace="/" extends="struts-default">
         <default-action-ref name="ProjectProperties" />
         
-        <action name="ProjectProperties" class="com.hannonhill.smt.struts.ProjectPropertiesAction">
+        <action name="ProjectProperties" class="com.hannonhill.umt.struts.ProjectPropertiesAction">
         	<result name="input">/jsps/ProjectProperties.jsp</result>
         	<result name="success" type="redirectAction">
         		<param name="actionName">UploadZip</param>
         	</result>
         </action>
         
-        <action name="ProjectPropertiesGetAvailableSiteNamesAjax" class="com.hannonhill.smt.struts.ProjectPropertiesAction" method="getAvailableSiteNamesByAjax">
+        <action name="ProjectPropertiesGetAvailableSiteNamesAjax" class="com.hannonhill.umt.struts.ProjectPropertiesAction" method="getAvailableSiteNamesByAjax">
         	<result type="stream">
 		    	<param name="contentType">application/json</param>
 		    	<param name="inputName">inputStream</param>
 		  	</result>
         </action>
         
-        <action name="UploadZip" class="com.hannonhill.smt.struts.UploadZipAction">
+        <action name="UploadZip" class="com.hannonhill.umt.struts.UploadZipAction">
         	<result name="input">/jsps/UploadZip.jsp</result>
         	<result name="success" type="redirectAction">
         		<param name="actionName">AnalyzeInformation</param>
         	</result>
         </action>
         
-        <action name="AnalyzeInformation" class="com.hannonhill.smt.struts.AnalyzeInformationAction">
+        <action name="AnalyzeInformation" class="com.hannonhill.umt.struts.AnalyzeInformationAction">
         	<result name="input">/jsps/AnalyzeInformation.jsp</result>
         	<result name="success" type="redirectAction">
         		<param name="actionName">AssignRootLevelFolders</param>
         	</result>
         </action>
         
-		<action name="AssignRootLevelFolders" class="com.hannonhill.smt.struts.AssignRootLevelFoldersAction">
+		<action name="AssignRootLevelFolders" class="com.hannonhill.umt.struts.AssignRootLevelFoldersAction">
 			<result name="input">/jsps/AssignRootLevelFolders.jsp</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">AssignContentType</param>
 			</result>
 		</action> 
         
-        <action name="AssignContentType" class="com.hannonhill.smt.struts.AssignContentTypeAction">
+        <action name="AssignContentType" class="com.hannonhill.umt.struts.AssignContentTypeAction">
         	<result name="input">/jsps/AssignContentType.jsp</result>
         	<result name="success" type="redirectAction">
         		<param name="actionName">AssignFields</param>
         	</result>
         </action>
         
-        <action name="AssignFields" class="com.hannonhill.smt.struts.AssignFieldsAction">
+        <action name="AssignFields" class="com.hannonhill.umt.struts.AssignFieldsAction">
         	<result name="input">/jsps/AssignFields.jsp</result>
         	<result name="success" type="redirectAction">
         		<param name="actionName">MigrationSummary</param>
         	</result>
         </action>
+        
+        <action name="TestXPath" class="com.hannonhill.umt.struts.AssignFieldsAction" method="testXPath">
+          <result type="stream">
+            <param name="contentType">text/html</param>
+            <param name="inputName">inputStream</param>
+          </result>
+        </action>
 
-        <action name="MigrationSummary" class="com.hannonhill.smt.struts.MigrationSummaryAction">
+        <action name="MigrationSummary" class="com.hannonhill.umt.struts.MigrationSummaryAction">
         	<result name="input">/jsps/MigrationSummary.jsp</result>
         	<result name="success" type="redirectAction">
         		<param name="actionName">Migration</param>
         	</result>
         </action>
 
-        <action name="Migration" class="com.hannonhill.smt.struts.MigrationAction">
+        <action name="Migration" class="com.hannonhill.umt.struts.MigrationAction">
         	<result>/jsps/Migration.jsp</result>
         </action>
         
-        <action name="MigrationAjax" class="com.hannonhill.smt.struts.MigrationAction" method="getTaskStatusByAjax">
+        <action name="MigrationAjax" class="com.hannonhill.umt.struts.MigrationAction" method="getTaskStatusByAjax">
        		<result type="stream">
 		    	<param name="contentType">text/html</param>
 		    	<param name="inputName">inputStream</param>
 		  	</result>
         </action>
 
-        <action name="MigrationStopTaskAjax" class="com.hannonhill.smt.struts.MigrationAction" method="stopTaskByAjax">
+        <action name="MigrationStopTaskAjax" class="com.hannonhill.umt.struts.MigrationAction" method="stopTaskByAjax">
        		<result type="stream">
 		    	<param name="contentType">text/html</param>
 		    	<param name="inputName">inputStream</param>
 		  	</result>
         </action>
 
-        <action name="MigrationStartLinkCheckerAjax" class="com.hannonhill.smt.struts.MigrationAction" method="startLinkCheckerByAjax">
+        <action name="MigrationStartLinkCheckerAjax" class="com.hannonhill.umt.struts.MigrationAction" method="startLinkCheckerByAjax">
        		<result type="stream">
 		    	<param name="contentType">text/html</param>
 		    	<param name="inputName">inputStream</param>
 		  	</result>
         </action>
 
-        <action name="MigrationRestartMigrationAjax" class="com.hannonhill.smt.struts.MigrationAction" method="restartMigrationByAjax">
+        <action name="MigrationRestartMigrationAjax" class="com.hannonhill.umt.struts.MigrationAction" method="restartMigrationByAjax">
        		<result type="stream">
 		    	<param name="contentType">text/html</param>
 		    	<param name="inputName">inputStream</param>
 		  	</result>
         </action>
         
-        <action name="StartFromBeginning" class="com.hannonhill.smt.struts.StartFromBeginningAction">
+        <action name="StartFromBeginning" class="com.hannonhill.umt.struts.StartFromBeginningAction">
         	<result name="success" type="redirectAction">
         		<param name="actionName">ProjectProperties</param>
         	</result>
