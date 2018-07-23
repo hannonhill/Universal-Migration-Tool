@@ -69,7 +69,7 @@ public class AssignFieldsAction extends BaseAction
                     XmlUtil.evaluateXPathExpressionForMultipleField(cleanXml, testXPath));
 
         if (!cleanXml.equals(testXml))
-            result = "\r\n\r\n-----------------------------------\r\n\r\nTIDIED XHTML:\r\n" + cleanXml;
+            result += "\r\n\r\n-----------------------------------\r\n\r\nTIDIED XHTML:\r\n" + cleanXml;
 
         inputStream = new ByteArrayInputStream(result.getBytes("UTF-8"));
         return SUCCESS;
