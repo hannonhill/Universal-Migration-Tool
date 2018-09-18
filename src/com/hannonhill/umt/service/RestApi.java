@@ -5,8 +5,10 @@
  */
 package com.hannonhill.umt.service;
 
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
@@ -447,11 +449,13 @@ public class RestApi
         authentication.addProperty("password", password);
         data.add("authentication", authentication);
 
+        
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(data.toString());
-        wr.flush();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(wr, "UTF-8"));
+        writer.write(data.toString());
+        writer.close();
         wr.close();
-
+        
         int responseCode = con.getResponseCode();
         if (responseCode != 200)
             throw new Exception(responseCode + " response code");

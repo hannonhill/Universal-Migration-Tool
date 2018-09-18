@@ -198,7 +198,7 @@ public class FileSystem
     {
         StringBuilder stringBuilder = new StringBuilder();
         String ls = System.getProperty("line.separator");
-        Charset charset = Charset.forName("ISO-8859-1");
+        Charset charset = Charset.forName("UTF-8");
 
         try (BufferedReader reader = Files.newBufferedReader(pageFile, charset))
         {
