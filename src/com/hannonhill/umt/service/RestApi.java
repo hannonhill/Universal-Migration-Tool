@@ -109,7 +109,7 @@ public class RestApi
 
         // Append "/index" to path if there is already a folder with that path
         boolean movedDeeper = false;
-        if (projectInformation.getExistingCascadeFolders().get(path) != null)
+        if (projectInformation.getExistingCascadeFolders().get(path.toLowerCase()) != null)
         {
             path = path + "/index";
             movedDeeper = true;
