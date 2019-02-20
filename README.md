@@ -6,15 +6,14 @@ The tool assumes an export from your existing CMS that contains 1 file per page.
 
 ## Downloads
 
-You can download the binary and source versions in the [releases area](https://github.com/hannonhill/Universal-Migration-Tool/releases)
+You can download the binary and source versions in the [releases area](https://github.com/hannonhill/Universal-Migration-Tool/releases).
 
-## Requirements
+## Requirements/Notes
 
-Due to an issue [#2](https://github.com/hannonhill/Universal-Migration-Tool/issues/2) with file paths on Windows, this tool should be run in a *nix environment.
-
-Oracle Java 1.8 JRE or JDK is required
-
-Cascade Server's [Web Service API](https://www.hannonhill.com/cascadecms/8/kb/developing-in-cascade/soap-web-services-api/index.html) needs to be reachable from the server that is hosting the Migration Tool.
+* Due to an issue [#2](https://github.com/hannonhill/Universal-Migration-Tool/issues/2) with file paths on Windows, this tool should be run in a *nix environment.
+* Oracle Java 1.8 JRE or JDK is required.
+* Cascade Server's [Web Services API](https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html) needs to be reachable from the server that is hosting the Migration Tool.
+* Migration of content to [Shared Fields](https://www.hannonhill.com/cascadecms/latest/design-in-cascade/data-definitions/shared-fields.html) is not currently supported.
 
 ## Installation
 
