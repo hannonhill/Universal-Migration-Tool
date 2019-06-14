@@ -145,8 +145,11 @@ public class RestApi
             existingPageId = getPageId(path, projectInformation);
         // If overwite existing is selected, we need to delete the existing page and ignore an error if it did
         // not exists and we attempted to delete it
-        else if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING))
-            delete(path, "page", projectInformation);
+        else if (overwriteBehavior.equals(ProjectInformation.OVERWRITE_BEHAVIOR_OVERWRITE_EXISTING)) {
+            String existingPageIdToDelete = getPageId(path, projectInformation);
+            if (existingPageIdToDelete != null)
+                delete(path, "page", projectInformation);
+        }
 
         // If page doesn't exist or overwrite behavior is not to update existing, create the page and ancestor
         // folders if necessary
