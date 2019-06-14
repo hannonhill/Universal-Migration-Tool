@@ -8,6 +8,10 @@ The tool assumes an export from your existing CMS that contains 1 file per page.
 
 You can download the binary and source versions in the [releases area](https://github.com/hannonhill/Universal-Migration-Tool/releases).
 
+## Overview Documentation
+
+An overview of using the migration tool can be [found on our Knowledge Base](https://www.hannonhill.com/cascadecms/latest/cascade-administration/cascade-setup/how-do-i-migrate-content-to-cascade-cms.html).
+
 ## Requirements/Notes
 
 * Due to an issue [#2](https://github.com/hannonhill/Universal-Migration-Tool/issues/2) with file paths on Windows, this tool should be run in a *nix environment.
