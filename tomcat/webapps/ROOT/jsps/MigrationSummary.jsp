@@ -70,14 +70,14 @@
 							</table>
 						</s:if>
 						<h3>Mapping</h3>	
-						<s:if test="projectInformation.fieldMapping.size()>0">							
+						<s:if test="projectInformation.fieldMappings.size()>0">
 							<table class="table table-striped">
 								<thead>
 									<tr><th colspan="3">XPath</th></tr>
 								</thead>
 								<tbody>						
-								<s:iterator value="projectInformation.fieldMapping.entrySet()">
-									<tr><td style="width:40%"><s:property value="key"/></td><td class="arrow" style="width:20%"><i class="icon-arrow-right"></i></td><td style="width:40%"><s:property value="value.label"/></td></tr>
+								<s:iterator value="projectInformation.fieldMappings">
+									<tr><td style="width:40%"><s:property value="xPath"/></td><td class="arrow" style="width:20%"><i class="icon-arrow-right"></i></td><td style="width:40%"><s:property value="field.label"/></td></tr>
 								</s:iterator>
 								</tbody>
 							</table>
