@@ -1,6 +1,6 @@
 /*
  * Created on Jun 25, 2018 by tomusiaka
- * 
+ *
  * Copyright(c) 2000-2010 Hannon Hill Corporation.  All rights reserved.
  */
 package com.hannonhill.umt.service;
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.hannonhill.umt.api.SharedField;
 import org.apache.commons.lang.xwork.StringUtils;
 
 import com.google.common.base.Charsets;
@@ -283,7 +284,7 @@ public class RestApi
 
     /**
      * Gets all content types from given site
-     * 
+     *
      * @param projectInformation
      * @return
      * @throws Exception
@@ -330,7 +331,7 @@ public class RestApi
             ContentType contentType) throws Exception
     {
         DataDefinition dataDefinition = readDataDefinition(projectInformation, contentType.getDataDefinitionId());
-        return XmlAnalyzer.analyzeDataDefinitionXml(dataDefinition.getXml());
+        return XmlAnalyzer.analyzeDataDefinitionXml(dataDefinition.getXml(), projectInformation);
     }
 
     /**
@@ -427,6 +428,12 @@ public class RestApi
         return getProperty(assetResult, "xhtmlDataDefinitionBlock", XhtmlDataDefinitionBlock.class);
     }
 
+    public static SharedField readSharedField(String id, ProjectInformation projectInformation) throws Exception
+    {
+        JsonObject assetResult = readAsset(projectInformation, new Identifier(id, "sharedField"));
+        return getProperty(assetResult, "sharedField", SharedField.class);
+    }
+
     private static JsonObject readAsset(ProjectInformation projectInformation, Identifier identifier) throws Exception
     {
         return performApiRequest(projectInformation, "read", getJsonObjectWithIdentifier(identifier)).getAsJsonObject("asset");
@@ -452,13 +459,13 @@ public class RestApi
         authentication.addProperty("password", password);
         data.add("authentication", authentication);
 
-        
+
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(wr, "UTF-8"));
         writer.write(data.toString());
         writer.close();
         wr.close();
-        
+
         int responseCode = con.getResponseCode();
         if (responseCode != 200)
             throw new Exception(responseCode + " response code");

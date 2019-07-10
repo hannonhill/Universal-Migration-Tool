@@ -1,6 +1,6 @@
 /*
  * Created on Nov 20, 2009 by Artur Tomusiak
- * 
+ *
  * Copyright(c) 2000-2009 Hannon Hill Corporation. All rights reserved.
  */
 package com.hannonhill.umt.service;
@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.hannonhill.umt.api.SharedField;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -27,7 +28,7 @@ import com.hannonhill.umt.util.XmlUtil;
 
 /**
  * This class contains service methods for analyzing the xml file contents
- * 
+ *
  * @author Artur Tomusiak
  * @since 1.0
  */
@@ -36,7 +37,7 @@ public class XmlAnalyzer
     /**
      * Analyzes a folder by going through each file in the folder and subfolders using
      * {@link #analyzeFile(File, ProjectInformation)}.
-     * 
+     *
      * @param folder
      * @param assetTypes
      */
@@ -66,23 +67,23 @@ public class XmlAnalyzer
 
     /**
      * Analyzes the data definition xml and returns a map of text fields and file chooser fields
-     * 
+     *
      * @param xml
      * @return
      * @throws Exception
      */
-    public static Map<String, DataDefinitionField> analyzeDataDefinitionXml(String xml) throws Exception
+    public static Map<String, DataDefinitionField> analyzeDataDefinitionXml(String xml, ProjectInformation projectInformation) throws Exception
     {
         Map<String, DataDefinitionField> returnMap = new HashMap<>();
         Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(xml)));
         NodeList children = rootNode.getChildNodes();
-        analyzeDataDefinitionGroup(children, "", "", returnMap);
+        analyzeDataDefinitionGroup(children, "", "", returnMap, projectInformation);
         return returnMap;
     }
 
     /**
      * Returns the value of the first "src" attribute found in given xml
-     * 
+     *
      * @param xml
      * @return
      * @throws Exception
@@ -98,7 +99,7 @@ public class XmlAnalyzer
     /**
      * Checks if current node contains an src attribute and if not, then recursively checks all the ancestor
      * nodes and returns the values first one that contains.
-     * 
+     *
      * @param node
      * @return
      */
@@ -120,14 +121,14 @@ public class XmlAnalyzer
 
     /**
      * Adds all the text fields to the returnMap recursively
-     * 
+     *
      * @param children
      * @param identifierPrefix
      * @param labelPrefix
      * @param returnMap
      */
     private static void analyzeDataDefinitionGroup(NodeList children, String identifierPrefix, String labelPrefix,
-            Map<String, DataDefinitionField> returnMap)
+            Map<String, DataDefinitionField> returnMap, ProjectInformation projectInformation)
     {
         for (int i = 0; i < children.getLength(); i++)
         {
@@ -156,7 +157,7 @@ public class XmlAnalyzer
 
             // If group - go recursively, if text - add to the field list. Ignore asset choosers.
             if (node.getNodeName().equals("group"))
-                analyzeDataDefinitionGroup(node.getChildNodes(), identifierPrefix + identifier + "/", labelPrefix + label + "/", returnMap);
+                analyzeDataDefinitionGroup(node.getChildNodes(), identifierPrefix + identifier + "/", labelPrefix + label + "/", returnMap, projectInformation);
             else if (node.getNodeName().equals("text"))
                 returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, null, isMultiple(node), isWysiwyg(node)));
             else if (node.getNodeName().equals("asset") && node.getAttributes().getNamedItem("type") != null
@@ -165,12 +166,25 @@ public class XmlAnalyzer
             else if (node.getNodeName().equals("asset") && node.getAttributes().getNamedItem("type") != null
                     && node.getAttributes().getNamedItem("type").getTextContent().equals("block"))
                 returnMap.put(newIdentifier, new DataDefinitionField(newIdentifier, newLabel, ChooserType.BLOCK, isMultiple(node), false));
+            else if (node.getNodeName().equals("shared-field"))
+            {
+                try {
+                    SharedField sharedField = RestApi.readSharedField(node.getAttributes().getNamedItem("field-id").getNodeValue(), projectInformation);
+                    Node sharedFieldNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(sharedField.getXml())));
+
+                    analyzeDataDefinitionGroup(sharedFieldNode.getChildNodes(), identifierPrefix + identifier + "/", labelPrefix + label + "/", returnMap, projectInformation);
+                }
+                catch (Exception e)
+                {
+                    //Failed to retrieve shared field
+                }
+            }
         }
     }
 
     /**
      * Returns true if provided node has a multiple="true" attribute
-     * 
+     *
      * @param node
      * @return
      */
@@ -181,7 +195,7 @@ public class XmlAnalyzer
 
     /**
      * Returns true if provided node is a text node with wysiwyg="true" attribute
-     * 
+     *
      * @param node
      * @return
      */
@@ -193,7 +207,7 @@ public class XmlAnalyzer
 
     /**
      * Adds the file to the list of files to process and collects the extension
-     * 
+     *
      * @param file
      * @param projectInformation
      */
@@ -231,7 +245,7 @@ public class XmlAnalyzer
 
     /**
      * Returns true if all the characters in a name are legal
-     * 
+     *
      * @param name
      * @return
      */
@@ -250,7 +264,7 @@ public class XmlAnalyzer
 
     /**
      * Removes illegal characters from provided string
-     * 
+     *
      * @param name
      * @return
      */
@@ -267,7 +281,7 @@ public class XmlAnalyzer
 
     /**
      * Wrapper for easily changing how we identify a "legal" character.
-     * 
+     *
      * @param c
      * @return
      */
