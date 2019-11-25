@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.ibm.wsdl.extensions.mime.MIMEConstants;
 import org.apache.commons.lang.xwork.StringUtils;
 
 import com.google.common.base.Charsets;
@@ -46,6 +47,9 @@ import com.hannonhill.umt.api.Site;
 import com.hannonhill.umt.api.XhtmlDataDefinitionBlock;
 import com.hannonhill.umt.util.ApiUtil;
 import com.hannonhill.umt.util.PathUtil;
+import org.apache.tomcat.util.http.MimeHeaders;
+
+import javax.activation.MimeType;
 
 public class RestApi
 {
@@ -446,6 +450,7 @@ public class RestApi
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setDoOutput(true);
         con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 
         JsonObject authentication = new JsonObject();
         authentication.addProperty("username", username);
