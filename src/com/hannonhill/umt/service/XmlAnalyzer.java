@@ -5,14 +5,12 @@
  */
 package com.hannonhill.umt.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -35,10 +33,10 @@ public class XmlAnalyzer
 {
     /**
      * Analyzes a folder by going through each file in the folder and subfolders using
-     * {@link #analyzeFile(File, ProjectInformation)}.
+     * {@link XmlAnalyzer#analyzeFile(Path, ProjectInformation)}.
      * 
      * @param folder
-     * @param assetTypes
+     * @param projectInformation
      */
     public static void analyzeFolder(Path folder, ProjectInformation projectInformation)
     {
@@ -73,7 +71,7 @@ public class XmlAnalyzer
      */
     public static Map<String, DataDefinitionField> analyzeDataDefinitionXml(String xml) throws Exception
     {
-        Map<String, DataDefinitionField> returnMap = new HashMap<>();
+        Map<String, DataDefinitionField> returnMap = new LinkedHashMap<>();
         Node rootNode = XmlUtil.convertXmlToNodeStructure(new InputSource(new StringReader(xml)));
         NodeList children = rootNode.getChildNodes();
         analyzeDataDefinitionGroup(children, "", "", returnMap);
