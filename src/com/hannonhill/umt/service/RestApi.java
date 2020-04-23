@@ -12,11 +12,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang.xwork.StringUtils;
 
@@ -309,7 +305,7 @@ public class RestApi
         MetadataSet metadataSet = readMetadataSet(projectInformation, contentType.getMetadataSetId());
 
         // add all the standard fields
-        Map<String, MetadataSetField> resultMap = new HashMap<>();
+        Map<String, MetadataSetField> resultMap = new LinkedHashMap<>();
         for (MetadataSetField field : STANDARD_METADATA_FIELDS)
             resultMap.put(field.getIdentifier(), field);
 
