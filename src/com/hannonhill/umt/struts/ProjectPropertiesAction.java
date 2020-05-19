@@ -249,17 +249,17 @@ public class ProjectPropertiesAction extends BaseAction
         }
         catch (ServiceException e)
         {
-            addActionError("Could not locate Cascade Server with given URL.");
+            addActionError("Could not locate Cascade CMS with given URL.");
             return;
         }
         catch (RemoteException e)
         {
-            addActionError("A problem occured when connecting to Cascade Server: " + e.getMessage());
+            addActionError("A problem occurred when connecting to Cascade CMS: " + e.getMessage());
             return;
         }
         catch (Exception e)
         {
-            addActionError("An error occured when reading a site with given Site Name: " + e.getMessage());
+            addActionError("An error occurred when reading a site with given Site Name: " + e.getMessage());
             return;
         }
 

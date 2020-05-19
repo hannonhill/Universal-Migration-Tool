@@ -25,7 +25,7 @@ public class Migrator
 {
 
     /**
-     * Re-edits each page to align the links to make them tracked by Cascade Server
+     * Re-edits each page to align the links to make them tracked by Cascade CMS
      */
     public static void alignLinks(ProjectInformation projectInformation)
     {

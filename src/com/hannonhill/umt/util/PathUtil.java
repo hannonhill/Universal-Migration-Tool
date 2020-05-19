@@ -242,7 +242,7 @@ public class PathUtil
     }
 
     /**
-     * Generates a link to the page in Cascade Server
+     * Generates a link to the page in Cascade CMS
      * 
      * @param cascadePage
      * @param cascadeUrl

@@ -96,7 +96,7 @@ public class RestApi
     }
 
     /**
-     * Creates a page in Cascade Server based on the information provided in the projectInformation and the
+     * Creates a page in Cascade CMS based on the information provided in the projectInformation and the
      * actual file from which the Page needs to be created.
      */
     public static CascadeAssetInformation createPage(java.nio.file.Path pageFile, ProjectInformation projectInformation) throws Exception
@@ -174,7 +174,7 @@ public class RestApi
     }
 
     /**
-     * Creates a file asset in Cascade Server with contents from the <code>filesystemFile</code> if one does
+     * Creates a file asset in Cascade CMS with contents from the <code>filesystemFile</code> if one does
      * not exist. The path of the file is figured out using webViewUrl in linkFile.xml in current or ancestor
      * folders. If file with that path already exists, it is left as it is.
      */
