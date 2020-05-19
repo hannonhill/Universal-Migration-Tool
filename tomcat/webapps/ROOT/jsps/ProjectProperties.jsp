@@ -34,7 +34,7 @@
               <div class="control-group">
                 <label class="control-label" for="url">Cascade CMS URL</label>
                 <div class="controls">
-                  <input class="span4" type="text" id="url" placeholder="http://" name="url" value="<s:property value="url"/>" />
+                  <input class="span4" type="text" id="url" placeholder="https://" name="url" value="<s:property value="url"/>" />
                 </div>
               </div>
               <div class="control-group">

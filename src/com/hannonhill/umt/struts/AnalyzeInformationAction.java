@@ -5,7 +5,6 @@
  */
 package com.hannonhill.umt.struts;
 
-import java.io.File;
 import java.nio.file.FileSystems;
 import java.util.HashSet;
 
@@ -14,7 +13,7 @@ import com.hannonhill.umt.service.XmlAnalyzer;
 
 /**
  * This action is responsible for analyzing the project information - the contents of the selected xml folder
- * and Cascade Server's Site's contents.
+ * and Cascade CMS' Site's contents.
  * 
  * @author Artur Tomusiak
  * @since 1.0
