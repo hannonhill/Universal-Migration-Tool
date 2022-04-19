@@ -10,7 +10,7 @@ You can download the binary and source versions in the [releases area](https://g
 
 ## Overview Documentation
 
-An overview of using the migration tool can be [found on our Knowledge Base](https://www.hannonhill.com/cascadecms/latest/cascade-administration/cascade-setup/how-do-i-migrate-content-to-cascade-cms.html).
+An overview of using the migration tool can be [found on our Knowledge Base](https://www.hannonhill.com/cascadecms/latest/cascade-administration/installation-and-upgrades/migration-tool.html).
 
 ## Requirements/Notes
 
