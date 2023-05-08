@@ -14,7 +14,7 @@ An overview of using the migration tool can be [found on our Knowledge Base](htt
 
 ## Requirements/Notes
 
-* Oracle Java 1.8 JRE or JDK is required.
+* Oracle Java 1.8 or later JRE or JDK is required.
 * Cascade CMS's [Web Services API](https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html) needs to be reachable from the server that is hosting the Migration Tool.
 * Migration of content to [Shared Fields](https://www.hannonhill.com/cascadecms/latest/design-in-cascade/data-definitions/shared-fields.html) is not currently supported.
 
@@ -29,6 +29,12 @@ An overview of using the migration tool can be [found on our Knowledge Base](htt
 
 
 ### Deploying locally for development
+
+1. Clone the repository
+2. Ensure that you have a valid JDK available in VSCode, IDEA, Eclipse or other
+3. Build the project: `ant compile`
+4. Start Tomcat from command line: `tomcat/bin/startup.sh` or using a built-in Tomcat server in your IDE
+5. Once started, visit `http://localhost:8081` in your browser to access the tool 
 
 This assumes use of Eclipse.
 ------------------------------------

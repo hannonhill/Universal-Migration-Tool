@@ -1,5 +1,6 @@
 .DS_Store
 /bin
+.idea/workspace.xml
 tomcat/webapps/ROOT/WEB-INF/classes/com
 tomcat/work/Catalina
 dist
