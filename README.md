@@ -33,7 +33,7 @@ An overview of using the migration tool can be [found on our Knowledge Base](htt
 
 Prereequisites:
 - Ensure that you have a Java JDK installed
-- Ensure that you have NPM installed
+- Ensure that you have Node v14+ and NPM installed. You should be able to install both using a package manager like `homebrew` or by downloading them directly from Node.
 - Ensure that you have `ant` command tool installed. You should be able to install this via a package manager like `homebrew` or by downloading it directly from Apache.
 
 1. Clone this repository on this branch
