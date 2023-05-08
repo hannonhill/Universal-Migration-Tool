@@ -68,11 +68,11 @@
           <root url="file://$MODULE_DIR$/tomcat/webapps/ROOT" relative="/" />
         </webroots>
       </configuration>
-      <facet type="Struts2" name="Struts 2">
-        <configuration>
-          <propertiesKeys disabled="false" />
-        </configuration>
-      </facet>
+    </facet>
+    <facet type="Struts2" name="Struts 2">
+      <configuration>
+        <propertiesKeys disabled="false" />
+      </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager">
