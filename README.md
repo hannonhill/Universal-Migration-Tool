@@ -31,21 +31,22 @@ An overview of using the migration tool can be [found on our Knowledge Base](htt
 
 ### Deploying locally for development
 
+Prereequisites:
+- Ensure that you have a Java JDK installed
+- Ensure that you have NPM installed
+- Ensure that you have `ant` command tool installed. You should be able to install this via a package manager like `homebrew` or by downloading it directly from Apache.
+
 1. Clone this repository on this branch
 2. Ensure that you have a valid JDK available in VSCode, IDEA, Eclipse or other IDE
-3. Ensure that you have `ant` command tool installed
 3. Build the Java portion of the project: `ant compile`
-4. or the React portion, run `cd src/react-app` and then `npm install` and finally `npm run build`
-5. Start Tomcat from command line: `tomcat/bin/startup.sh` or using a built-in Tomcat server in your IDE
-5. Once started, visit `http://localhost:8081` in your browser to access the tool
-6. You should see "React app here" at the bottom of the main screen which confirms the React app was built and deployed correctly.
-7. If you make changes to the React app, you will need to run `npm run build` again and refresh the browser to see the changes.
-
-Developing the Struts application...
-TODO: Add instructions for developing the Struts application
-
-Developing the React application...
-TODO: Add instructions for developing the React application
+4. Ensure that either `JRE_HOME` or `JAVA_HOME` is set in your `PATH` and points to the installed Java JDK
+5. Add a `JRE_HOME` or `JAVA_HOME` environment variable to `bin/catalina.sh` after the comment block containing the license and environment variable options.
+6. For the React portion, run `cd src/react-app` and then `npm install` and finally `npm run build`
+7. Start Tomcat from command line: `tomcat/bin/startup.sh` or using a built-in Tomcat server in your IDE
+8. Once started, visit `http://localhost:8081` in your browser to access the tool
+9. You should see "React app here" at the bottom of the main screen which confirms the React app was built and deployed correctly.
+10. For changes to the Java application, run `ant compile` to deploy your changes which may require restarting Tomcat: `tomcat/bin/shutdown.sh` and then `tomcat/bin/startup.sh`
+11. For changes to the React app, you will need to run `npm run build` again and refresh the browser to see the changes.
 
 #### OLD: Eclipse
 
