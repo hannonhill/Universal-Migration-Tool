@@ -31,11 +31,12 @@ An overview of using the migration tool can be [found on our Knowledge Base](htt
 
 ### Deploying locally for development
 
-Prereequisites:
+Prerequisites:
 - Ensure that you have a Java JDK installed
 - Ensure that you have Node v14+ and NPM installed. You should be able to install both using a package manager like `homebrew` or by downloading them directly from Node.
 - Ensure that you have `ant` command tool installed. You should be able to install this via a package manager like `homebrew` or by downloading it directly from Apache.
 
+Steps:
 1. Clone this repository on this branch
 2. Ensure that you have a valid JDK available in VSCode, IDEA, Eclipse or other IDE
 3. Build the Java portion of the project: `ant compile`
