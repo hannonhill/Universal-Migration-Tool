@@ -24,6 +24,8 @@ An overview of using the migration tool can be [found on our Knowledge Base](htt
 1. Ensure that either `JRE_HOME` or `JAVA_HOME` is set in your `PATH` and points to your installed Oracle Java version, _or_
 1. Add a `JRE_HOME` or `JAVA_HOME` environment variable to `bin/catalina.sh` after the comment block containing the license and environment variable options.
 1. Ensure that the `tomcat` directory contains a `logs` directory and create one if it does not exist.
+1. Run `cd src/react-app` and then `npm install` and finally `npm run build`, then return back `cd ../..`
+1. Ensure you have `ant` command tool installed. Then, run `ant compile`.
 1. Start Tomcat by running from a shell: `bin/startup.sh`
 1. Once you see `INFO: Server startup in 1676 ms` in the `logs/catalina.out` the tool should be reachable at: `http://localhost:8081` (or whatever hostname is used to reach this machine).
 

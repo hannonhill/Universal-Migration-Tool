@@ -4,3 +4,5 @@ tomcat/webapps/ROOT/WEB-INF/classes/com
 tomcat/work/Catalina
 dist
 uploads
+/tomcat/webapps/ROOT/css/react.css
+/tomcat/webapps/ROOT/javascript/react.js

@@ -12,6 +12,7 @@
 		<link href="/css/styles.css?t=<s:property value="time"/>" type="text/css" rel="stylesheet" />
 
 		<script type="text/javascript" src="/javascript/jquery-1.9.0.js"></script>
+        <link href="/css/react.css" rel="stylesheet">
 	</head>
 	<body>
 		<div class="mt-header">
@@ -58,6 +59,7 @@
               <button type="submit" name="submitButton" class="btn btn-primary pull-right">Save and Next</button>
             </fieldset>
           </form>
+          <div id="react-root"></div>
         </div>
       </div>
     </div>
@@ -140,6 +142,8 @@
 					resetSiteNames();
 				}
 			});		
-		</script>		
+		</script>
+
+        <script type="text/javascript" src="/javascript/react.js"></script>
 	</body>
 </html>
