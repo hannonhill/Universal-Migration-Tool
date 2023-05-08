@@ -24,7 +24,6 @@ An overview of using the migration tool can be [found on our Knowledge Base](htt
 1. Ensure that either `JRE_HOME` or `JAVA_HOME` is set in your `PATH` and points to your installed Oracle Java version, _or_
 1. Add a `JRE_HOME` or `JAVA_HOME` environment variable to `bin/catalina.sh` after the comment block containing the license and environment variable options.
 1. Ensure that the `tomcat` directory contains a `logs` directory and create one if it does not exist.
-1. Run `cd src/react-app` and then `npm install` and finally `npm run build`, then return back `cd ../..`
 1. Ensure you have `ant` command tool installed. Then, run `ant compile`.
 1. Start Tomcat by running from a shell: `bin/startup.sh`
 1. Once you see `INFO: Server startup in 1676 ms` in the `logs/catalina.out` the tool should be reachable at: `http://localhost:8081` (or whatever hostname is used to reach this machine).
@@ -32,8 +31,25 @@ An overview of using the migration tool can be [found on our Knowledge Base](htt
 
 ### Deploying locally for development
 
-This assumes use of Eclipse.
-------------------------------------
+1. Clone this repository on this branch
+2. Ensure that you have a valid JDK available in VSCode, IDEA, Eclipse or other IDE
+3. Ensure that you have `ant` command tool installed
+3. Build the Java portion of the project: `ant compile`
+4. or the React portion, run `cd src/react-app` and then `npm install` and finally `npm run build`
+5. Start Tomcat from command line: `tomcat/bin/startup.sh` or using a built-in Tomcat server in your IDE
+5. Once started, visit `http://localhost:8081` in your browser to access the tool
+6. You should see "React app here" at the bottom of the main screen which confirms the React app was built and deployed correctly.
+7. If you make changes to the React app, you will need to run `npm run build` again and refresh the browser to see the changes.
+
+Developing the Struts application...
+TODO: Add instructions for developing the Struts application
+
+Developing the React application...
+TODO: Add instructions for developing the React application
+
+#### OLD: Eclipse
+
+This assumes use of Eclipse as the IDE
 
 1. Add a tomcat v8.0 server to the Eclipse
   a) Open the "Servers" view
