@@ -106,7 +106,7 @@
 #                   signals. Default is "false" unless running on HP-UX in which
 #                   case the default is "true"
 # -----------------------------------------------------------------------------
-
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/
 # OS specific support.  $var _must_ be set to either true or false.
 cygwin=false
 darwin=false

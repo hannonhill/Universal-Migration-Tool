@@ -36,6 +36,9 @@
                 <label class="control-label" for="url">Cascade CMS URL</label>
                 <div class="controls">
                   <input class="span4" type="text" id="url" placeholder="https://" name="url" value="<s:property value="url"/>" />
+                  <select id="savedUrls" class="span4">
+                    <!-- Dynamically added from the CRUD form via react -->
+                  </select>
                 </div>
               </div>
               <div class="control-group">
