@@ -281,9 +281,9 @@ public class ProjectPropertiesAction extends BaseAction
     }
 
     public String updateUrl() {
-        String[] parts = url.split(",");
-        urls.remove(parts[0]);
-        urls.add(parts[1]);
+        String[] parts = url.split(" ");
+        urls.remove(parts[0].trim());
+        urls.add(parts[1].trim());
         return toJson();
     }
 
