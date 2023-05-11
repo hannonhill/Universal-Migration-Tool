@@ -25,6 +25,8 @@
 		    	<param name="inputName">inputStream</param>
 		  	</result>
         </action>
+
+
         
         <action name="UploadZip" class="com.hannonhill.umt.struts.UploadZipAction">
         	<result name="input">/jsps/UploadZip.jsp</result>
@@ -113,4 +115,20 @@
         	</result>
         </action>
     </package>
+
+	<package name="default" extends="json-default" namespace="/">
+		<action name="UrlManager" class="com.hannonhill.umt.struts.ProjectPropertiesAction" method="addUrl">
+		</action>
+		<action name="UrlManager" class="com.hannonhill.umt.struts.ProjectPropertiesAction" method="getUrls">
+			<result name="success" type="stream">
+				<param name="contentType">application/json</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
+
+		<action name="UrlManager" class="com.hannonhill.umt.struts.ProjectPropertiesAction" method="updateUrl">
+		</action>
+		<action name="UrlManager" class="com.hannonhill.umt.struts.ProjectPropertiesAction" method="deleteUrl">
+		</action>
+	</package>
 </struts>

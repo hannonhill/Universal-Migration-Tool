@@ -8,6 +8,7 @@ package com.hannonhill.umt.struts;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang.xwork.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +37,8 @@ import com.hannonhill.umt.util.PathUtil;
 public class ProjectPropertiesAction extends BaseAction
 {
     private static final long serialVersionUID = -845484679818107782L;
+
+    private static final List<String> urls = new ArrayList<>();
 
     private String url = "";
     private String username = "";
@@ -266,6 +270,35 @@ public class ProjectPropertiesAction extends BaseAction
         if (site == null)
             addActionError("Could not read a site for unknown reason");
     }
+
+    public String addUrl() {
+        urls.add(url);
+        return toJson();
+    }
+
+    public String getUrls() {
+        return toJson();
+    }
+
+    public String updateUrl() {
+        String[] parts = url.split(",");
+        urls.remove(parts[0]);
+        urls.add(parts[1]);
+        return toJson();
+    }
+
+    public String deleteUrl() {
+        urls.remove(url);
+        return toJson();
+    }
+
+    private String toJson() {
+        Gson gson = new Gson();
+        String json = gson.toJson(ProjectPropertiesAction.urls);
+        inputStream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
+        return SUCCESS;
+    }
+
 
     /**
      * @return Returns the url.

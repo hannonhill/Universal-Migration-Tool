@@ -1,0 +1,38 @@
+10-May-2023 21:05:52.057 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/8.5.24
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Nov 27 2017 13:05:30 UTC
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         8.5.24.0
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Mac OS X
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            13.3.1
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          x86_64
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             /Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home/jre
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_371-b11
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         /Users/wg/forkedRepo/Universal-Migration-Tool/tomcat
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         /Users/wg/forkedRepo/Universal-Migration-Tool/tomcat
+10-May-2023 21:05:52.064 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=/Users/wg/forkedRepo/Universal-Migration-Tool/tomcat/conf/logging.properties
+10-May-2023 21:05:52.065 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+10-May-2023 21:05:52.065 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+10-May-2023 21:05:52.065 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+10-May-2023 21:05:52.065 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+10-May-2023 21:05:52.065 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=/Users/wg/forkedRepo/Universal-Migration-Tool/tomcat
+10-May-2023 21:05:52.065 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=/Users/wg/forkedRepo/Universal-Migration-Tool/tomcat
+10-May-2023 21:05:52.065 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=/Users/wg/forkedRepo/Universal-Migration-Tool/tomcat/temp
+10-May-2023 21:05:52.065 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/Users/wg/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
+10-May-2023 21:05:52.303 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8081"]
+10-May-2023 21:05:52.322 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+10-May-2023 21:05:52.330 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8010"]
+10-May-2023 21:05:52.332 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+10-May-2023 21:05:52.333 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 727 ms
+10-May-2023 21:05:52.484 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+10-May-2023 21:05:52.484 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.5.24
+10-May-2023 21:05:52.489 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [/Users/wg/forkedRepo/Universal-Migration-Tool/tomcat/webapps/ROOT]
+10-May-2023 21:05:53.967 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+10-May-2023 21:05:54.147 INFO [localhost-startStop-1] com.opensymphony.xwork2.util.logging.commons.CommonsLogger.info Parsing configuration file [struts-default.xml]
+10-May-2023 21:05:54.247 INFO [localhost-startStop-1] com.opensymphony.xwork2.util.logging.commons.CommonsLogger.info Unable to locate configuration files of the name struts-plugin.xml, skipping
+10-May-2023 21:05:54.248 INFO [localhost-startStop-1] com.opensymphony.xwork2.util.logging.commons.CommonsLogger.info Parsing configuration file [struts-plugin.xml]
+10-May-2023 21:05:54.278 INFO [localhost-startStop-1] com.opensymphony.xwork2.util.logging.commons.CommonsLogger.info Parsing configuration file [struts.xml]
+10-May-2023 21:05:54.458 SEVERE [localhost-startStop-1] com.opensymphony.xwork2.util.logging.commons.CommonsLogger.error Unable to find parent packages json-default
+10-May-2023 21:05:54.486 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [/Users/wg/forkedRepo/Universal-Migration-Tool/tomcat/webapps/ROOT] has finished in [1,997] ms
+10-May-2023 21:05:54.488 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8081"]
+10-May-2023 21:05:54.567 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["ajp-nio-8010"]
+10-May-2023 21:05:54.570 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 2236 ms
