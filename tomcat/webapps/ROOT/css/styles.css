@@ -28,24 +28,26 @@ h3 {
 .brand {
 	float: left;
 	display: block;
-	padding: 10px 20px 10px 55px;
+	padding: 10px 20px 10px 85px;
 	margin-left: -40px;
 	margin-top: 10px;
 	background: url(images/icon-cascade.png) no-repeat 20px 50%;
 	color: #fff;
 	font-size: 24px;
 	font-weight: 200;
+	line-height: 1.25;
 }
 
 .brand span {
 	color: #ddd;
 	font-size: 18px;
+	display: block;
 }
 
 #page {
 	min-height: 400px;
 	margin-bottom: 4em;
-	margin-top: 7em;
+	margin-top: 6em;
 	padding: 40px 20px 20px 20px;
 	position: relative;
 	z-index: 1;

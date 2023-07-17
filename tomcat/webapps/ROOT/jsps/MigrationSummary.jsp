@@ -15,7 +15,7 @@
 	<body>
 		<div class="mt-header">
       <div class="container">
-        <h1 class="brand">Cascade Server <span>Universal Migration Tool</span></h1>
+		  <h1 class="brand">Cascade CMS <span>Universal Migration Tool</span></h1>
       </div>
     </div>
     <div id="page" class="container">
@@ -29,9 +29,9 @@
 					</div>
 					
 					<form action="/MigrationSummary" method="POST">
-						<h3>Cascade Server Information</h3>
+						<h3>Cascade CMS Information</h3>
 						<div class="row">
-							<div class="span3">Cascade Server URL</div>
+							<div class="span3">Cascade CMS URL</div>
 							<div class="span7"><strong><s:property value="projectInformation.url"/></strong></div>
 						</div>
 						<div class="row">

@@ -10,23 +10,22 @@ You can download the binary and source versions in the [releases area](https://g
 
 ## Overview Documentation
 
-An overview of using the migration tool can be [found on our Knowledge Base](https://www.hannonhill.com/cascadecms/latest/cascade-administration/cascade-setup/how-do-i-migrate-content-to-cascade-cms.html).
+An overview of using the migration tool can be [found on our Knowledge Base](https://www.hannonhill.com/cascadecms/latest/cascade-administration/installation-and-upgrades/migration-tool.html).
 
 ## Requirements/Notes
 
-* Due to an issue [#2](https://github.com/hannonhill/Universal-Migration-Tool/issues/2) with file paths on Windows, this tool should be run in a *nix environment.
 * Oracle Java 1.8 JRE or JDK is required.
-* Cascade Server's [Web Services API](https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html) needs to be reachable from the server that is hosting the Migration Tool.
+* Cascade CMS's [Web Services API](https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html) needs to be reachable from the server that is hosting the Migration Tool.
 * Migration of content to [Shared Fields](https://www.hannonhill.com/cascadecms/latest/design-in-cascade/data-definitions/shared-fields.html) is not currently supported.
 
 ## Installation
 
-1. Download and unpack version of the tool that corresponds to the version of Cascade Server that you're running.
+1. Download and unpack the [latest version](https://github.com/hannonhill/Universal-Migration-Tool/releases) of the tool.
 1. Ensure that either `JRE_HOME` or `JAVA_HOME` is set in your `PATH` and points to your installed Oracle Java version, _or_
 1. Add a `JRE_HOME` or `JAVA_HOME` environment variable to `bin/catalina.sh` after the comment block containing the license and environment variable options.
-1. Ensure that the `tomcat` directory contains a `logs` directory and create one if it does not exist
+1. Ensure that the `tomcat` directory contains a `logs` directory and create one if it does not exist.
 1. Start Tomcat by running from a shell: `bin/startup.sh`
-1. Once you see `INFO: Server startup in 1676 ms` in the `logs/catalina.out` the tool should be reachable at: `http://localhost:8081` (or whatever hostname is used to reach this machine)
+1. Once you see `INFO: Server startup in 1676 ms` in the `logs/catalina.out` the tool should be reachable at: `http://localhost:8081` (or whatever hostname is used to reach this machine).
 
 
 ### Deploying locally for development

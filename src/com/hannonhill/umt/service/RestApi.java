@@ -12,11 +12,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.hannonhill.umt.api.SharedField;
 import org.apache.commons.lang.xwork.StringUtils;
@@ -101,7 +97,7 @@ public class RestApi
     }
 
     /**
-     * Creates a page in Cascade Server based on the information provided in the projectInformation and the
+     * Creates a page in Cascade CMS based on the information provided in the projectInformation and the
      * actual file from which the Page needs to be created.
      */
     public static CascadeAssetInformation createPage(java.nio.file.Path pageFile, ProjectInformation projectInformation) throws Exception
@@ -179,7 +175,7 @@ public class RestApi
     }
 
     /**
-     * Creates a file asset in Cascade Server with contents from the <code>filesystemFile</code> if one does
+     * Creates a file asset in Cascade CMS with contents from the <code>filesystemFile</code> if one does
      * not exist. The path of the file is figured out using webViewUrl in linkFile.xml in current or ancestor
      * folders. If file with that path already exists, it is left as it is.
      */
@@ -310,7 +306,7 @@ public class RestApi
         MetadataSet metadataSet = readMetadataSet(projectInformation, contentType.getMetadataSetId());
 
         // add all the standard fields
-        Map<String, MetadataSetField> resultMap = new HashMap<>();
+        Map<String, MetadataSetField> resultMap = new LinkedHashMap<>();
         for (MetadataSetField field : STANDARD_METADATA_FIELDS)
             resultMap.put(field.getIdentifier(), field);
 
@@ -453,6 +449,7 @@ public class RestApi
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setDoOutput(true);
         con.setRequestMethod("POST");
+        con.setRequestProperty("Content-Type", "application/json; utf-8");
 
         JsonObject authentication = new JsonObject();
         authentication.addProperty("username", username);
